@@ -1,20 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { APP_PATHS } from './shared/app-paths';
+import { APP_PATHS } from 'src/app/shared/app-paths';
 
-const DEFAULT_PATH: string = APP_PATHS.main.root;
+const PATHS = APP_PATHS.main;
+const DEFAULT_PATH: string = PATHS.chat;
 
 const routes: Routes = [
   {
     path: DEFAULT_PATH,
-    loadChildren: () => import("./pages/main/main-routing.module").then(m => m.MainRoutingModule)
+    loadChildren: () => import("./chat-page/chat-page.module").then(m => m.ChatPageModule)
   },
   { path: "", redirectTo: DEFAULT_PATH, pathMatch: "full" },
   { path: "**", redirectTo: DEFAULT_PATH }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class MainRoutingModule { }
