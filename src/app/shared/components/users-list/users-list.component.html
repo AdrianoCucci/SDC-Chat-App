@@ -2,21 +2,21 @@
   <span class="header">Users</span>
 
   <div class="lists-wrapper">
-    <div class="users online">
+    <div *ngIf="getOnlineUsers() as users" class="users online">
       <span class="list-header">Online</span>
 
       <ul>
-        <li *ngFor="let user of getOnlineUsers()" class="user-item online">
+        <li *ngFor="let user of users" class="user-item online">
           <ng-container *ngTemplateOutlet="userTemplate; context: { $implicit: user }"></ng-container>
         </li>
       </ul>
     </div>
 
-    <div class="users offline">
+    <div *ngIf="getOfflineUsers() as users" class="users offline">
       <span class="list-header">Offline</span>
 
       <ul>
-        <li *ngFor="let user of getOfflineUsers()" class="user-item offline">
+        <li *ngFor="let user of users" class="user-item offline">
           <ng-container *ngTemplateOutlet="userTemplate; context: { $implicit: user }"></ng-container>
         </li>
       </ul>
