@@ -5,6 +5,8 @@
 </ul>
 
 <div class="input-wrapper">
-  <app-input-textarea #textInput class="user-input" [autoResize]="true"></app-input-textarea>
-  <button class="send-button" (click)="onSendMessage(textInput.value)">Send</button>
+  <app-input-textarea #textInput class="user-input" placeholder="Type your message..." [autoResize]="true"
+    (keydown.enter)="onInputEnter(textInput)">
+  </app-input-textarea>
+  <button class="send-button" (click)="sendMessage(textInput.value)">Send</button>
 </div>

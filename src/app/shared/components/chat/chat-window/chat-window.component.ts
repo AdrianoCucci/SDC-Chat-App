@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Message } from 'src/app/core/models/messages/message';
 import { ChatService } from 'src/app/core/services/chat.service';
+import { InputTextarea } from '../../input/input-textarea/input-textarea.component';
 
 @Component({
   selector: 'app-chat-window',
@@ -24,7 +25,20 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     this._chatSubscription = null;
   }
 
-  onSendMessage(text: string): void {
+  onInputEnter(textArea: InputTextarea): void {
+    const value: string = textArea.value;
+
+    if(value) {
+      this.sendMessage(value);
+    }
+
+    setTimeout(() => {
+      textArea.clear();
+      textArea.focus();
+    });
+  }
+
+  public sendMessage(text: string): void {
     const message: Message = {
       contents: text,
       datePosted: new Date(),
