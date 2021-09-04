@@ -15,14 +15,6 @@ export class ChatPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._subscription = this._chatService.onMessage.subscribe((message: Message) => this.onMessageReceived(message));
-
-    const message: Message = {
-      contents: "This is the message body",
-      datePosted: new Date(),
-      senderUserId: 1
-    };
-
-    this._chatService.sendMessage(message);
   }
 
   ngOnDestroy(): void {
