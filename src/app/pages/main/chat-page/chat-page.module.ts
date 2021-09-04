@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ChatPageRoutingModule } from './chat-page-routing.module';
+
+import { ChatModule } from 'src/app/shared/components/chat/chat.module';
+
 import { ChatPageComponent } from './chat-page.component';
-import { ChatService } from 'src/app/core/services/chat.service';
 
 @NgModule({
   declarations: [ChatPageComponent],
   imports: [
     CommonModule,
-    ChatPageRoutingModule
-  ],
-  providers: [ChatService]
+    ChatPageRoutingModule,
+    ChatModule
+  ]
 })
 export class ChatPageModule { }
