@@ -5,6 +5,6 @@
 </ul>
 
 <div class="input-wrapper">
-  <textarea #textInput cols="30" rows="1"></textarea>
-  <button (click)="onSendMessage(textInput.value)">Send</button>
+  <app-input-textarea #textInput class="user-input" [autoResize]="true"></app-input-textarea>
+  <button class="send-button" (click)="onSendMessage(textInput.value)">Send</button>
 </div>

@@ -37,11 +37,11 @@
     padding: 0.5rem;
     background-color: var(--input-wrapper-background);
 
-    textarea {
+    .user-input {
       flex-grow: 1;
     }
 
-    button {
+    .send-button {
       flex-shrink: 0;
     }
   }

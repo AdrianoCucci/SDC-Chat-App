@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { InputTextareaModule } from '../input/input-textarea/input-textarea.module';
 
 import { ChatService } from 'src/app/core/services/chat.service';
 
@@ -12,7 +13,10 @@ const components = [
 ];
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    InputTextareaModule
+  ],
   providers: [ChatService],
   exports: components,
   declarations: components
