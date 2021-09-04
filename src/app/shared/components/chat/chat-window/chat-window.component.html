@@ -1,4 +1,4 @@
-<ul class="messages-list">
+<ul #messagesList class="messages-list">
   <li *ngFor="let message of messages">
     <app-chat-message [message]="message" class="message"></app-chat-message>
   </li>
@@ -6,7 +6,7 @@
 
 <div class="input-wrapper">
   <app-input-textarea #textInput class="user-input" placeholder="Type your message..." [autoResize]="true"
-    (keydown.enter)="onInputEnter(textInput)">
+    (keydown.enter)="onSendMessage(textInput)">
   </app-input-textarea>
-  <button class="send-button" (click)="sendMessage(textInput.value)">Send</button>
+  <button class="send-button" (click)="onSendMessage(textInput)">Send</button>
 </div>
