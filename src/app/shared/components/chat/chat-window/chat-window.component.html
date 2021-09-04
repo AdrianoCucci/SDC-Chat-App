@@ -1,1 +1,10 @@
-<p>chat-window works!</p>
+<ul class="messages-list">
+  <li *ngFor="let message of messages">
+    <app-chat-message [message]="message" class="message"></app-chat-message>
+  </li>
+</ul>
+
+<div class="input-wrapper">
+  <textarea #textInput cols="30" rows="1"></textarea>
+  <button (click)="onSendMessage(textInput.value)">Send</button>
+</div>

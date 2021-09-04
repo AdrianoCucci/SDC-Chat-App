@@ -1,1 +1,10 @@
-<p>chat-message works!</p>
+<ng-container *ngIf="message">
+  <div class="header">
+    <span class="sender">{{senderName}}</span>
+    <span class="date">{{message.datePosted | date:'short'}}</span>
+  </div>
+
+  <div class="body">
+    <p class="message-contents">{{message.contents}}</p>
+  </div>
+</ng-container>
