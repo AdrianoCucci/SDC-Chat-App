@@ -1,1 +1,30 @@
-<p>users-list works!</p>
+<ng-container *ngIf="users">
+  <span class="header">Users</span>
+
+  <div class="users online">
+    <span class="list-header">Online</span>
+
+    <ul>
+      <li *ngFor="let user of getOnlineUsers()" class="user-item online">
+        <ng-container *ngTemplateOutlet="userTemplate; context: { $implicit: user }"></ng-container>
+      </li>
+    </ul>
+  </div>
+
+  <div class="users offline">
+    <span class="list-header">Offline</span>
+
+    <ul>
+      <li *ngFor="let user of getOfflineUsers()" class="user-item offline">
+        <ng-container *ngTemplateOutlet="userTemplate; context: { $implicit: user }"></ng-container>
+      </li>
+    </ul>
+  </div>
+</ng-container>
+
+<ng-template #userTemplate let-user>
+  <div class="initials-chip-wrapper">
+    <span class="initials-chip">{{getUserInitials(user)}}</span>
+  </div>
+  <span class="full-name">{{getUserFullName(user)}}</span>
+</ng-template>
