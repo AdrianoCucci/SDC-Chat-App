@@ -4,7 +4,8 @@
   --initials-background: #779c77;
   --initials-color: unset;
 
-  display: block;
+  display: flex;
+  flex-direction: column;
   background-color: #aec6ae;
 
   span.header {
@@ -16,45 +17,51 @@
     font-weight: 600;
   }
 
-  div.users {
-    padding: 1rem;
+  div.lists-wrapper {
+    overflow: auto;
 
-    span.list-header {
-      display: block;
-      margin-bottom: 1rem;
-      font-size: 1.12rem;
-      font-weight: 600;
-    }
+    div.users {
+      padding: 1rem;
 
-    ul {
-      margin: 0;
-      padding: 0;
+      span.list-header {
+        display: block;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: solid var(--header-background) 1px;
+        font-size: 1.12rem;
+        font-weight: 600;
+      }
 
-      li {
-        display: flex;
-        align-items: center;
+      ul {
+        margin: 0;
+        padding: 0;
 
-        &:not(:last-of-type) {
-          margin-bottom: 0.5rem;
-        }
+        li {
+          display: flex;
+          align-items: center;
 
-        &.offline {
-          opacity: 0.5;
-        }
+          &:not(:last-of-type) {
+            margin-bottom: 0.5rem;
+          }
 
-        div.initials-chip-wrapper {
-          margin-right: 0.5rem;
+          &.offline {
+            opacity: 0.5;
+          }
 
-          span.initials-chip {
-            display: inline-flex;
-            background-color: var(--initials-background);
-            color: var(--initials-color);
-            border-radius: 100%;
-            width: 40px;
-            height: 40px;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+          div.initials-chip-wrapper {
+            margin-right: 0.5rem;
+
+            span.initials-chip {
+              display: inline-flex;
+              background-color: var(--initials-background);
+              color: var(--initials-color);
+              border-radius: 100%;
+              width: 40px;
+              height: 40px;
+              align-items: center;
+              justify-content: center;
+              font-weight: bold;
+            }
           }
         }
       }
