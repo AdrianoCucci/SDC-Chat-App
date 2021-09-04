@@ -19,4 +19,14 @@ export class ChatMessageComponent {
       ? `${this.sender.firstName} ${this.sender.lastName}`.trim()
       : "User";
   }
+
+  public get messageContents(): string {
+    let contents: string = null;
+
+    if(this.message != null) {
+      contents = this.message.contents.replace(/\n/g, '<br/>');
+    }
+
+    return contents;
+  }
 }

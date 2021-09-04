@@ -2,6 +2,7 @@
   --message-list-background: #8b9c8b;
   --message-background: #9cab9c;
   --input-wrapper-background: #738573;
+  --input-background: #dfebdf;
 
   display: flex;
   flex-direction: column;
@@ -21,6 +22,7 @@
       margin-bottom: 1rem;
       border-bottom: solid var(--message-background) 1px;
       transition: 0.16s;
+      animation: messageIntro 0.25s;
 
       &:hover {
         background-color: var(--message-background);
@@ -36,10 +38,22 @@
 
     .user-input {
       flex-grow: 1;
+      background-color: var(--input-background);
     }
 
     .send-button {
       flex-shrink: 0;
     }
+  }
+}
+
+@keyframes messageIntro {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0%);
   }
 }

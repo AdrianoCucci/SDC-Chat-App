@@ -32,7 +32,7 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onSendMessage(textArea: InputTextarea): void {
-    const value: string = textArea.value;
+    const value: string = textArea.value.trim();
 
     if(value) {
       this.sendMessage(value);
