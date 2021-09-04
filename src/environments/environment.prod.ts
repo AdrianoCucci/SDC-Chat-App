@@ -7,6 +7,7 @@ export const environment = {
   },
 
   server: {
-    url: ""
+    url: "",
+    apiPrefix: "api"
   }
 };
