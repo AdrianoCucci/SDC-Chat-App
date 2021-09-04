@@ -1,8 +1,8 @@
 import { User } from "../user";
 
 export interface Message {
-  messageId: number;
-  body: string;
+  messageId?: number;
+  contents: string;
   datePosted: Date | string;
   senderUserId: number;
 
