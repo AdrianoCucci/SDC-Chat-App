@@ -1,1 +1,17 @@
-<p>login-page works!</p>
+<div class="logo-wrapper"></div>
+
+<div class="form-wrapper">
+  <app-form>
+    <app-input-text class="block" name="username" label="Username" [validations]="{ required: true }"
+      [(value)]="username">
+    </app-input-text>
+
+    <app-input-text class="block" name="password" type="password" label="Password" [validations]="{ required: true }"
+      [(value)]="password">
+    </app-input-text>
+
+    <div slot="footer">
+      <app-button type="submit" text="Login" [block]="true"></app-button>
+    </div>
+  </app-form>
+</div>
