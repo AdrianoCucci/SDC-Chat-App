@@ -1,9 +1,10 @@
+@import "../base/form-input.scss";
+
 :host {
   --auto-resize-lines: unset;
   --padding: 0.5rem;
   --line-height: 1.25rem;
 
-  display: inline-flex;
   border-radius: 0.5rem;
   background-color: white;
   overflow: auto;

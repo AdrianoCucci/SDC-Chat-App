@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChi
 import { Subscription } from 'rxjs';
 import { Message } from 'src/app/core/models/messages/message';
 import { ChatService } from 'src/app/core/services/chat.service';
-import { InputTextarea } from '../../input/input-textarea/input-textarea.component';
+import { InputTextarea } from '../../forms/inputs/input-textarea/input-textarea.component';
 
 @Component({
   selector: 'app-chat-window',
