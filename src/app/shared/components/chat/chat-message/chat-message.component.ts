@@ -15,9 +15,7 @@ export class ChatMessageComponent {
   }
 
   public get senderName(): string {
-    return this.sender != null
-      ? `${this.sender.firstName} ${this.sender.lastName}`.trim()
-      : "User";
+    return this.sender.displayName ?? this.sender.username;
   }
 
   public get messageContents(): string {

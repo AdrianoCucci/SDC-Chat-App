@@ -18,10 +18,19 @@ export class UsersList {
   }
 
   public getUserInitials(user: User): string {
-    return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.trim().toUpperCase();
+    let initials: string = "";
+
+    const displayName: string = this.getUserDisplayName(user).toUpperCase();
+    const split: string[] = displayName.split(' ');
+
+    for(let i = 0; i < split.length; i++) {
+      initials += split[i].charAt(0);
+    }
+
+    return initials;
   }
 
-  public getUserFullName(user: User): string {
-    return `${user.firstName} ${user.lastName}`.trim();
+  public getUserDisplayName(user: User): string {
+    return user.displayName ?? user.username;
   }
 }
