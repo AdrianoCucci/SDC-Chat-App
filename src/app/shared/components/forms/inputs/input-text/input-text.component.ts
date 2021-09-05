@@ -15,12 +15,12 @@ export class InputText extends FormInput {
 
   @ViewChild("input") private readonly _inputRef: ElementRef;
 
-  public clearErrors() {
+  public clearErrors(): void {
     super.clearErrors();
     (this._inputRef.nativeElement as HTMLInputElement).classList.remove("ng-dirty", "ng-invalid");
   }
 
-  protected onValidate(value: string, validations: InputTextValidations, errors: string[], inputName: string) {
+  protected onValidate(value: string, validations: InputTextValidations, errors: string[], inputName: string): void {
     if(validations.pattern && value.match(validations.pattern) == null) {
       errors.push(`${inputName} is an invalid format.`);
     }

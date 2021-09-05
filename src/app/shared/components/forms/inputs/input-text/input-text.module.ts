@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { InputText } from './input-text.component';
 
+import { InputText } from './input-text.component';
 const component = [InputText];
 
 @NgModule({

@@ -63,7 +63,7 @@ export abstract class FormInput<T = any> implements AfterViewInit {
     return this._errors;
   }
 
-  protected onValidate(value: T, validations: FormInputValidations, errors: string[], inputName: string) { }
+  protected onValidate(value: T, validations: FormInputValidations, errors: string[], inputName: string): void { }
 
   public clearValue(): void {
     this.value = null;
