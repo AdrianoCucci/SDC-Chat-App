@@ -43,4 +43,15 @@
   &.block {
     display: block;
   }
+
+  &.outline button {
+    background-color: transparent;
+    border: solid var(--background) 2px;
+    --color: var(--background);
+  }
+
+  &.text button {
+    background-color: transparent;
+    --color: var(--background);
+  }
 }

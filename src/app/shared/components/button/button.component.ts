@@ -12,7 +12,6 @@ export class Button {
   @Input() public routerLink: string | any[];
   @Input() public routerLinkActive: string;
   @Input() @HostBinding("class.disabled") public disabled: boolean = false;
-  @Input() @HostBinding("class.block") public block: boolean = false;
 
   public get renderType(): RenderType {
     let type: RenderType;
