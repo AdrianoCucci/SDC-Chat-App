@@ -5,6 +5,7 @@ import { LoginPageRoutingModule } from './login-page-routing.module';
 import { FormModule } from 'src/app/shared/components/forms/form/form.module';
 import { InputTextModule } from 'src/app/shared/components/forms/inputs/input-text/input-text.module';
 import { ButtonModule } from 'src/app/shared/components/button/button.module';
+import { LoaderModule } from 'src/app/shared/components/loader/loader.module';
 
 import { LoginPageComponent } from './login-page.component';
 
@@ -15,7 +16,8 @@ import { LoginPageComponent } from './login-page.component';
     LoginPageRoutingModule,
     FormModule,
     InputTextModule,
-    ButtonModule
+    ButtonModule,
+    LoaderModule
   ]
 })
 export class LoginPageModule { }

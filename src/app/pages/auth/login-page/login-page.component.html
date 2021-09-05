@@ -1,7 +1,7 @@
 <div class="logo-wrapper"></div>
 
 <div class="form-wrapper">
-  <app-form>
+  <app-form (onSubmit)="onFormSubmit($event)">
     <app-input-text class="block" name="username" label="Username" [validations]="{ required: true }"
       [(value)]="username">
     </app-input-text>
@@ -14,4 +14,6 @@
       <app-button type="submit" text="Login" [block]="true"></app-button>
     </div>
   </app-form>
+
+  <app-loader text="Logging in..." [visible]="isLoggingIn" [fullscreen]="true"></app-loader>
 </div>
