@@ -1,0 +1,15 @@
+<ng-container *ngIf="contentVisible">
+  <div class="dialog-backdrop" (click)="onBackdropClick()"></div>
+
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <ng-content select="[slot=header]"></ng-content>
+    </div>
+    <div class="dialog-body">
+      <ng-content select="[slot=body]"></ng-content>
+    </div>
+    <div class="dialog-footer">
+      <ng-content select="[slot=footer]"></ng-content>
+    </div>
+  </div>
+</ng-container>
