@@ -7,7 +7,7 @@
 
       <ul>
         <li *ngFor="let user of users" class="user-item online">
-          <ng-container *ngTemplateOutlet="userTemplate; context: { $implicit: user }"></ng-container>
+          <span class="display-name">{{getUserDisplayName(user)}}</span>
         </li>
       </ul>
     </div>
@@ -17,16 +17,9 @@
 
       <ul>
         <li *ngFor="let user of users" class="user-item offline">
-          <ng-container *ngTemplateOutlet="userTemplate; context: { $implicit: user }"></ng-container>
+          <span class="display-name">{{getUserDisplayName(user)}}</span>
         </li>
       </ul>
     </div>
   </div>
 </ng-container>
-
-<ng-template #userTemplate let-user>
-  <div class="initials-chip-wrapper">
-    <span class="initials-chip">{{getUserInitials(user)}}</span>
-  </div>
-  <span class="full-name">{{getUserFullName(user)}}</span>
-</ng-template>

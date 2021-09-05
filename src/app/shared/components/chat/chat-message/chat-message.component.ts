@@ -15,7 +15,17 @@ export class ChatMessageComponent {
   }
 
   public get senderName(): string {
-    return this.sender.displayName ?? this.sender.username;
+    let name: string;
+    const sender: User = this.sender;
+
+    if(sender != null) {
+      name = sender.displayName ?? sender.username;
+    }
+    else {
+      name = "User";
+    }
+
+    return name;
   }
 
   public get messageContents(): string {
