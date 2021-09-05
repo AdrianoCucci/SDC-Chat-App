@@ -18,6 +18,7 @@
 
   display: inline-block;
   opacity: 0;
+  pointer-events: none;
   transition: var(--visible-transition);
 
   div.spinner-content {
@@ -43,6 +44,7 @@
 
   &.visible {
     opacity: 1;
+    pointer-events: all;
 
     div.spinner-content {
       animation: spinnerContentShowing var(--visible-transition);
