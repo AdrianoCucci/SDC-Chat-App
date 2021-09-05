@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { APP_PATHS } from 'src/app/shared/app-paths';
 
 const PATHS = APP_PATHS.main;
-const DEFAULT_PATH: string = PATHS.chat;
+const DEFAULT_PATH: string = PATHS.children.chat;
 
 const routes: Routes = [
   {
