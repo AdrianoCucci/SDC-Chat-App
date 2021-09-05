@@ -1,11 +1,11 @@
 import { Component, EventEmitter, HostBinding, Input, OnInit, Output, TemplateRef } from '@angular/core';
 
 @Component({
-  selector: 'app-loading-spinner',
-  templateUrl: './loading-spinner.component.html',
-  styleUrls: ['./loading-spinner.component.scss'],
+  selector: 'app-loader',
+  templateUrl: './loader.component.html',
+  styleUrls: ['./loader.component.scss'],
 })
-export class LoadingSpinner implements OnInit {
+export class Loader implements OnInit {
   @Output() public readonly visibleChange = new EventEmitter<boolean>();
   @Output() public readonly onShow = new EventEmitter<void>();
   @Output() public readonly onHide = new EventEmitter<void>();
