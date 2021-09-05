@@ -1,7 +1,7 @@
 @import "../base/form-input.scss";
 
 :host {
-  --border-color: var(--color-medium);
+  --border-color: var(--surface-400);
   --border: solid var(--border-color) 1px;
   --border-radius: 0.25rem;
 
@@ -20,6 +20,6 @@
   }
 
   &.has-errors {
-    --border-color: var(--color-danger);
+    --border-color: var(--pink-400);
   }
 }
