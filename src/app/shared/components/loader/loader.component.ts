@@ -37,7 +37,7 @@ export class Loader implements OnInit {
     return this._visible;
   }
   @Input() public set visible(value: boolean) {
-    if(this._visible != value) {
+    if(this._visible !== value) {
       this._visible = value;
       this.visibleChange.emit(this._visible);
 
