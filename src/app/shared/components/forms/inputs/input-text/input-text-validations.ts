@@ -1,4 +1,4 @@
-import { FormInputValidations } from "../../base/form-input-validations";
+import { FormInputValidations } from "../base/form-input-validations";
 
 export interface InputTextValidations extends FormInputValidations {
   pattern?: RegExp | string;

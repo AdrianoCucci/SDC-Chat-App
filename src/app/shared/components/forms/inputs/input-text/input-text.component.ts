@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { FormInput } from '../../base/form-input';
+import { FormInput } from '../base/form-input';
 import { InputTextValidations } from './input-text-validations';
 
 @Component({
