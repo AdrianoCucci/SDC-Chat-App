@@ -1,0 +1,19 @@
+<ng-template #buttonTemplate>
+  <button [type]="type" [disabled]="disabled">
+    <span *ngIf="text" class="button-text">{{text}}</span>
+  </button>
+</ng-template>
+
+<ng-container [ngSwitch]="renderType">
+  <a *ngSwitchCase="'router-link'" [routerLink]="routerLink" [routerLinkActive]="routerLinkActive">
+    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+  </a>
+
+  <a *ngSwitchCase="'anchor'" [href]="href" target="_blank" rel="noopener noreferrer">
+    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+  </a>
+
+  <ng-container *ngSwitchDefault>
+    <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
+  </ng-container>
+</ng-container>
