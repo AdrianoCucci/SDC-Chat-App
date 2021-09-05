@@ -1,0 +1,16 @@
+<ng-container *ngIf="contentVisible">
+  <div *ngIf="fullscreen" class="fullscreen-backdrop"></div>
+
+  <div class="spinner-content">
+    <ng-container *ngIf="!template; else customTemplate">
+      <div class="spinner"></div>
+      <div *ngIf="text" class="spinner-text">
+        <span>{{text}}</span>
+      </div>
+    </ng-container>
+
+    <ng-template #customTemplate>
+      <ng-container *ngTemplateOutlet="template"></ng-container>
+    </ng-template>
+  </div>
+</ng-container>
