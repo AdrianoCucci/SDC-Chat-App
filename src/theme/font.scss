@@ -1,0 +1,31 @@
+@for $i from 0 to 21 {
+  .fs-#{$i} {
+    font-size: #{($i / 4)}rem;
+  }
+}
+
+.txt-left {
+  text-align: left;
+}
+.txt-right {
+  text-align: right;
+}
+.txt-center {
+  text-align: center;
+}
+.txt-justify {
+  text-align: justify;
+}
+
+.txt-semi-bold {
+  font-weight: 600;
+}
+.txt-bold {
+  font-weight: bold;
+}
+.txt-italic {
+  font-style: italic;
+}
+.txt-underline {
+  text-decoration: underline;
+}
