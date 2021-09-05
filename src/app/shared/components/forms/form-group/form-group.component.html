@@ -1,0 +1,7 @@
+<div *ngIf="header" [class]="('group-header ' + headerClass).trim()">
+  <span>{{header}}</span>
+</div>
+
+<div [class]="('group-content ' + contentClass).trim()">
+  <ng-content></ng-content>
+</div>
