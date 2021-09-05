@@ -1,6 +1,8 @@
+@use "sass:math";
+
 @for $i from 0 to 21 {
   .fs-#{$i} {
-    font-size: #{($i / 4)}rem;
+    font-size: #{math.div($i, 4)}rem;
   }
 }
 

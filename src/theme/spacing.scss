@@ -1,5 +1,7 @@
+@use "sass:math";
+
 @for $i from 0 to 51 {
-  $spacing: ($i / 4);
+  $spacing: math.div($i, 4);
 
   .m-#{$i} {
     margin: #{$spacing}rem;
