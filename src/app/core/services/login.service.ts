@@ -47,11 +47,19 @@ export class LoginService {
     return token;
   }
 
+  private getSessionLogin(): AuthResponse {
+    return this._storageService.getSessionDecrypted(this._storageKey);
+  }
+
   public get user(): User {
     return this._currentUser;
   }
 
   public get isLoggedIn(): boolean {
+    if(this._currentUser == null) {
+      this._currentUser = this.getSessionLogin()?.user;
+    }
+
     return this._currentUser != null;
   }
 }
