@@ -39,4 +39,19 @@ export class StorageService {
 
     return value;
   }
+
+  public deleteSession(key: string): boolean {
+    let didDelete: boolean = false;
+
+    if(window.sessionStorage.getItem(key) != null) {
+      window.sessionStorage.removeItem(key);
+      didDelete = true;
+    }
+
+    return didDelete;
+  }
+
+  public clearSession() {
+    window.sessionStorage.clear();
+  }
 }
