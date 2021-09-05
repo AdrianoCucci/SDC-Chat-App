@@ -14,7 +14,7 @@ import { TokenInterceptorService } from './core/services/token-interceptor.servi
     HttpClientModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService }
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }
   ],
   bootstrap: [AppComponent]
 })
