@@ -1,0 +1,31 @@
+<div class="logo-wrapper"></div>
+
+<div class="form-wrapper">
+  <app-form (onSubmit)="onFormSubmit($event)">
+    <app-input-text class="block" name="username" label="Username" [validations]="{ required: true }"
+      [(value)]="username">
+    </app-input-text>
+
+    <app-input-text class="block" name="password" type="password" label="Password" [validations]="{ required: true }"
+      [(value)]="password">
+    </app-input-text>
+
+    <div slot="footer">
+      <app-button class="block" type="submit" text="Login"></app-button>
+    </div>
+  </app-form>
+
+  <app-loader text="Logging in..." [visible]="isLoggingIn" [fullscreen]="true"></app-loader>
+</div>
+
+<app-dialog #errorDialog [backdropDismiss]="true" [(visible)]="errorVisible">
+  <div slot="header">
+    <span>Failed to Login</span>
+  </div>
+  <p slot="body" class="flex flex-align-center flex-justify-center h-percent-100 m-0">
+    {{loginError}}
+  </p>
+  <div slot="footer" class="txt-right">
+    <app-button class="text" text="OK" (click)="errorDialog.hide()"></app-button>
+  </div>
+</app-dialog>

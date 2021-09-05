@@ -1,0 +1,74 @@
+$tabletMinSize: 768px;
+$pcMinSize: 1024px;
+
+//MOBILE DEVICE SCREEN SIZES--------------------------------------------------------------------------------------------------------------
+
+@mixin mobileSize() {
+  @media (max-width: $tabletMinSize - 1), (max-height: $tabletMinSize - 1) {
+    @content;
+  }
+}
+
+@mixin mobileWidth() {
+  @media (max-width: $tabletMinSize - 1) {
+    @content;
+  }
+}
+
+@mixin mobileHeight() {
+  @media (max-height: $tabletMinSize - 1) {
+    @content;
+  }
+}
+
+//TABLET DEVICE SCREEN SIZES--------------------------------------------------------------------------------------------------------------
+
+@mixin tabletSize() {
+  @media (min-width: $tabletMinSize) and (max-width: $pcMinSize - 1) and (min-height: $tabletMinSize) and (max-height: $pcMinSize - 1) {
+    @content;
+  }
+}
+
+@mixin tabletWidth() {
+  @media (min-width: $tabletMinSize) and (max-width: $pcMinSize - 1) {
+    @content;
+  }
+}
+
+@mixin tabletHeight() {
+  @media (min-height: $tabletMinSize) and (max-height: $pcMinSize - 1) {
+    @content;
+  }
+}
+
+//LAPTOP/DESKTOP DEVICE SCREEN SIZES--------------------------------------------------------------------------------------------------------------
+
+@mixin pcSize() {
+  @media (min-width: $pcMinSize), (min-height: $pcMinSize) {
+    @content;
+  }
+}
+
+@mixin pcWidth() {
+  @media (min-width: $pcMinSize) {
+    @content;
+  }
+}
+
+@mixin pcHeight() {
+  @media (min-height: $pcMinSize) {
+    @content;
+  }
+}
+
+@mixin belowPcWidth() {
+  @media (max-width: $pcMinSize - 1) {
+    @content;
+  }
+}
+
+@mixin belowPcHeight() {
+  @media (max-height: $pcMinSize - 1) {
+    @content;
+  }
+}

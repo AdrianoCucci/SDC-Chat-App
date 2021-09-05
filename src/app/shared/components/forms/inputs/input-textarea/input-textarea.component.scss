@@ -1,0 +1,39 @@
+@import "../base/form-input.scss";
+
+:host {
+  --auto-resize-lines: unset;
+  --padding: 0.5rem;
+  --line-height: 1.25rem;
+
+  border-radius: 0.5rem;
+  background-color: white;
+  overflow: hidden;
+
+  div.input-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+
+    textarea {
+      display: block;
+      padding: var(--padding);
+      margin: 0;
+      background-color: transparent;
+      border: none;
+      font: inherit;
+      line-height: var(--line-height);
+      outline: none;
+      resize: none;
+      transition: 0.075s;
+    }
+  }
+
+  &.resizable div.input-wrapper textarea {
+    resize: initial;
+  }
+
+  &.auto-resize div.input-wrapper textarea {
+    height: calc(var(--auto-resize-lines) * var(--line-height));
+  }
+}

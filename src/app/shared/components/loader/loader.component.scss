@@ -1,0 +1,117 @@
+:host {
+  --visible-transition: 0.16s;
+
+  --spinner-size: 50px;
+  --spinner-thickness: 6px;
+  --spinner-color: var(--green-800);
+  --spinner-color-accent: var(--green-400);
+  --spinner-speed: 0.65s;
+  --spinner-easing: linear;
+
+  --backdrop-background: var(--surface-800);
+  --backdrop-opacity: 0.5;
+
+  --content-padding: 1rem;
+  --content-background: var(--green-100);
+  --content-border-radius: 0.25rem;
+  --content-box-shadow: var(--surface-600) 0 0 10px;
+
+  display: inline-block;
+  opacity: 0;
+  pointer-events: none;
+  transition: var(--visible-transition);
+
+  div.spinner-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    div.spinner {
+      width: var(--spinner-size);
+      height: var(--spinner-size);
+      border: solid var(--spinner-thickness) var(--spinner-color);
+      border-top-color: var(--spinner-color-accent);
+      border-radius: 100%;
+      animation: spinnerAnimation var(--spinner-speed) var(--spinner-easing)
+        infinite;
+    }
+
+    div.spinner-text {
+      margin: 1rem;
+      font-weight: 600;
+    }
+  }
+
+  &.visible {
+    opacity: 1;
+    pointer-events: all;
+
+    div.spinner-content {
+      animation: spinnerContentShowing var(--visible-transition);
+    }
+  }
+
+  &:not(.visible) div.spinner-content {
+    animation: spinnerContentHiding var(--visible-transition);
+  }
+
+  &.fullscreen {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    div.fullscreen-backdrop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--backdrop-background);
+      opacity: var(--backdrop-opacity);
+    }
+
+    div.spinner-content {
+      padding: var(--content-padding);
+      background-color: var(--content-background);
+      border-radius: var(--content-border-radius);
+      box-shadow: var(--content-box-shadow);
+      z-index: 1;
+    }
+  }
+}
+
+@keyframes spinnerContentShowing {
+  from {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes spinnerContentHiding {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.75);
+    opacity: 0;
+  }
+}
+
+@keyframes spinnerAnimation {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}

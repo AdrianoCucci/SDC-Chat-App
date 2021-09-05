@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { APP_PATHS } from 'src/app/shared/app-paths';
+import { AUTH_PATHS } from 'src/app/shared/app-paths';
 
-const PATHS = APP_PATHS.main;
-const DEFAULT_PATH: string = PATHS.children.chat;
+const PATHS = AUTH_PATHS;
+const DEFAULT_PATH: string = PATHS.children.login;
 
 const routes: Routes = [
   {
     path: DEFAULT_PATH,
-    loadChildren: () => import("./chat-page/chat-page.module").then(m => m.ChatPageModule)
+    loadChildren: () => import("./login-page/login-page.module").then(m => m.LoginPageModule)
   },
   { path: "", redirectTo: DEFAULT_PATH, pathMatch: "full" },
   { path: "**", redirectTo: DEFAULT_PATH }
@@ -18,4 +18,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class MainRoutingModule { }
+export class AuthRoutingModule { }

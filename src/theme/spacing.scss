@@ -1,0 +1,53 @@
+@use "sass:math";
+
+@for $i from 0 to 51 {
+  $spacing: math.div($i, 4);
+
+  .m-#{$i} {
+    margin: #{$spacing}rem;
+  }
+  .m-x-#{$i} {
+    margin-left: #{$spacing}rem;
+    margin-right: #{$spacing}rem;
+  }
+  .m-y-#{$i} {
+    margin-top: #{$spacing}rem;
+    margin-bottom: #{$spacing}rem;
+  }
+  .m-t-#{$i} {
+    margin-top: #{$spacing}rem;
+  }
+  .m-b-#{$i} {
+    margin-bottom: #{$spacing}rem;
+  }
+  .m-l-#{$i} {
+    margin-left: #{$spacing}rem;
+  }
+  .m-r-#{$i} {
+    margin-right: #{$spacing}rem;
+  }
+
+  .p-#{$i} {
+    padding: #{$spacing}rem;
+  }
+  .p-x-#{$i} {
+    padding-left: #{$spacing}rem;
+    padding-right: #{$spacing}rem;
+  }
+  .p-y-#{$i} {
+    padding-top: #{$spacing}rem;
+    padding-bottom: #{$spacing}rem;
+  }
+  .p-t-#{$i} {
+    padding-top: #{$spacing}rem;
+  }
+  .p-b-#{$i} {
+    padding-bottom: #{$spacing}rem;
+  }
+  .p-l-#{$i} {
+    padding-left: #{$spacing}rem;
+  }
+  .p-r-#{$i} {
+    padding-right: #{$spacing}rem;
+  }
+}

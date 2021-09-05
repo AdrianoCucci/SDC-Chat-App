@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InputTextareaModule } from '../input/input-textarea/input-textarea.module';
+import { InputTextareaModule } from '../forms/inputs/input-textarea/input-textarea.module';
 
 import { ChatService } from 'src/app/core/services/chat.service';
 

@@ -1,9 +1,14 @@
 @import "./theme/variables.scss";
+@import "./theme/responsive.scss";
+@import "./theme/flex.scss";
+@import "./theme/sizing.scss";
+@import "./theme/spacing.scss";
+@import "./theme/font.scss";
 
 body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   overflow: hidden;
 }

@@ -1,0 +1,43 @@
+@use "sass:math";
+
+@for $i from 0 to 101 {
+  .w-percent-#{$i} {
+    width: math.percentage(math.div($i, 100));
+  }
+  .w-min-percent-#{$i} {
+    min-width: math.percentage(math.div($i, 100));
+  }
+  .w-max-percent-#{$i} {
+    max-width: math.percentage(math.div($i, 100));
+  }
+
+  .w-vw-#{$i} {
+    width: #{$i}vw;
+  }
+  .w-min-vw-#{$i} {
+    min-width: #{$i}vw;
+  }
+  .w-max-vw-#{$i} {
+    max-width: #{$i}vw;
+  }
+
+  .h-percent-#{$i} {
+    height: math.percentage(math.div($i, 100));
+  }
+  .h-min-percent-#{$i} {
+    min-height: math.percentage(math.div($i, 100));
+  }
+  .h-max-percent-#{$i} {
+    max-height: math.percentage(math.div($i, 100));
+  }
+
+  .h-vh-#{$i} {
+    height: #{$i}vh;
+  }
+  .h-min-vh-#{$i} {
+    min-height: #{$i}vh;
+  }
+  .h-max-vh-#{$i} {
+    max-height: #{$i}vh;
+  }
+}

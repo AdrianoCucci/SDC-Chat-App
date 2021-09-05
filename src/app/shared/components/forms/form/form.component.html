@@ -1,0 +1,11 @@
+<form (ngSubmit)="onFormSubmit()">
+  <div class="form-body">
+    <ng-content></ng-content>
+  </div>
+
+  <div class="form-footer">
+    <ng-content select="[slot=footer]"></ng-content>
+  </div>
+</form>
+
+<div *ngIf="disabled" class="disable-overlay"></div>

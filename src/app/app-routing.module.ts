@@ -1,12 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { APP_PATHS } from './shared/app-paths';
+import { AuthGuard } from './shared/guards/auth.guard';
 
-const DEFAULT_PATH: string = APP_PATHS.main.root;
+const PATHS = APP_PATHS;
+const DEFAULT_PATH: string = PATHS.auth.root;
 
 const routes: Routes = [
   {
     path: DEFAULT_PATH,
+    loadChildren: () => import("./pages/auth/auth-routing.module").then(m => m.AuthRoutingModule)
+  },
+  {
+    path: PATHS.main.root,
+    canActivate: [AuthGuard],
     loadChildren: () => import("./pages/main/main-routing.module").then(m => m.MainRoutingModule)
   },
   { path: "", redirectTo: DEFAULT_PATH, pathMatch: "full" },

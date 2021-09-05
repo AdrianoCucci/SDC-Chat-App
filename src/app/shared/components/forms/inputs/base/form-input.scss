@@ -1,0 +1,37 @@
+:host {
+  display: inline-flex;
+  flex-direction: column;
+  margin: 1rem;
+
+  div.input-wrapper {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column-reverse;
+    width: 100%;
+  }
+
+  ul.error-list {
+    max-height: 0px;
+    padding: 0px;
+    margin: 0px;
+    font-size: 0.8em;
+    overflow: hidden;
+    transition: 0.16s;
+
+    &.visible {
+      max-height: 50px;
+      padding: 4px;
+      overflow: auto;
+    }
+
+    li.error-message {
+      display: block;
+      color: var(--pink-500);
+      font-weight: 600;
+    }
+  }
+
+  &.block {
+    display: flex;
+  }
+}

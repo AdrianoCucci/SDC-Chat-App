@@ -1,0 +1,48 @@
+:host {
+  position: relative;
+  display: block;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+
+    div.form-body {
+      flex-grow: 1;
+      width: 100%;
+      overflow: auto;
+    }
+
+    div.form-footer {
+      flex-shrink: 0;
+      width: 100%;
+
+      &:empty {
+        display: none;
+      }
+    }
+  }
+
+  div.disable-overlay {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &.disabled {
+    form {
+      opacity: 0.65;
+      pointer-events: none;
+    }
+
+    div.disable-overlay {
+      display: block;
+      pointer-events: all;
+    }
+  }
+}
