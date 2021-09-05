@@ -8,6 +8,7 @@ import { ButtonModule } from 'src/app/shared/components/button/button.module';
 import { LoaderModule } from 'src/app/shared/components/loader/loader.module';
 
 import { LoginPageComponent } from './login-page.component';
+import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 
 @NgModule({
   declarations: [LoginPageComponent],
@@ -17,7 +18,8 @@ import { LoginPageComponent } from './login-page.component';
     FormModule,
     InputTextModule,
     ButtonModule,
-    LoaderModule
+    LoaderModule,
+    DialogModule
   ]
 })
 export class LoginPageModule { }

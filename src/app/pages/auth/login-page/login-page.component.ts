@@ -1,5 +1,5 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthRequest } from 'src/app/core/models/auth/auth-request';
 import { AuthResponse } from 'src/app/core/models/auth/auth-response';
@@ -17,7 +17,10 @@ export class LoginPageComponent {
   public username: string;
   public password: string;
 
+  public errorVisible: boolean = false;;
+
   private _isLoggingIn: boolean = false;
+  private _loginError: string;
 
   constructor(private _authService: AuthService, private _loginService: LoginService, private _router: Router) { }
 
@@ -39,7 +42,7 @@ export class LoginPageComponent {
       await this.onLoginSuccess(response.body);
     }
     catch(error) {
-      throw error;
+      this.onLoginFail(error as HttpErrorResponse);
     }
     finally {
       this._isLoggingIn = false;
@@ -51,7 +54,16 @@ export class LoginPageComponent {
     await this._router.navigateByUrl(MAIN_PATHS.root);
   }
 
+  private onLoginFail(httpError: HttpErrorResponse): void {
+    this._loginError = httpError.error.message ?? httpError.message;
+    this.errorVisible = true;
+  }
+
   public get isLoggingIn(): boolean {
     return this._isLoggingIn;
+  }
+
+  public get loginError(): string {
+    return this._loginError;
   }
 }
