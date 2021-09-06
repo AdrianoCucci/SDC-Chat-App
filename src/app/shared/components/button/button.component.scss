@@ -26,6 +26,10 @@
     font: inherit;
     cursor: inherit;
     transition: 0.1s;
+
+    span.button-text {
+      pointer-events: none;
+    }
   }
 
   &:hover {
