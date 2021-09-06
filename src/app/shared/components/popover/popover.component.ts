@@ -21,18 +21,27 @@ export class Popover implements OnInit {
     this._contentVisible = this._visible;
   }
 
-  public show(event: MouseEvent): void {
-    this._lastTarget = event.target as HTMLElement;
+  public show(event: any): void {
+    this._lastTarget = null;
 
-    this.setVisible(true);
-    setTimeout(() => this.alignToTarget(event));
+    if(event instanceof HTMLElement) {
+      this._lastTarget = event;
+    }
+    else if(event instanceof MouseEvent) {
+      this._lastTarget = event.target as HTMLElement;
+    }
+
+    if(this._lastTarget != null) {
+      this.setVisible(true);
+      setTimeout(() => this.alignToTarget(this._lastTarget));
+    }
   }
 
   public hide() {
     this.setVisible(false);
   }
 
-  public toggle(event: MouseEvent): void {
+  public toggle(event: any): void {
     if(this._visible) {
       this.hide();
     }
@@ -69,25 +78,27 @@ export class Popover implements OnInit {
     }
   };
 
-  private alignToTarget(event: MouseEvent): void {
+  private alignToTarget(target: HTMLElement): void {
     const hostEl: HTMLElement = this.nativeElement;
     const contentEl: HTMLElement = hostEl.querySelector(".popover-content");
-    const posOffset: number = 10;
 
-    let xPos: number = event.x + posOffset;
-    let yPos: number = event.y + posOffset;
+    const targetRect = target.getBoundingClientRect();
+    const posOffset: number = 5;
+
+    let xPos: number = targetRect.x;
+    let yPos: number = targetRect.bottom + posOffset;
     let xAnchor: string = "left";
     let yAnchor: string = "top";
 
     const halfWindowWidth: number = window.innerWidth / 2;
     const halfWindowHeight: number = window.innerHeight / 2;
 
-    if(xPos > halfWindowWidth) {
-      xPos -= contentEl.clientWidth + posOffset;
+    if(targetRect.x > halfWindowWidth) {
+      xPos -= contentEl.clientWidth - target.clientWidth;
       xAnchor = "right";
     }
-    if(yPos > halfWindowHeight) {
-      yPos -= contentEl.clientHeight + posOffset;
+    if(targetRect.y > halfWindowHeight) {
+      yPos = targetRect.top - contentEl.clientHeight - posOffset;
       yAnchor = "bottom"
     }
 
