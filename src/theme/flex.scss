@@ -46,3 +46,15 @@
 .flex-justify-even {
   justify-content: space-evenly;
 }
+
+@for $i from 0 to 11 {
+  .flex-g-#{$i} {
+    flex-grow: #{$i};
+  }
+  .flex-s-#{$i} {
+    flex-shrink: #{$i};
+  }
+  .flex-gs-#{$i} {
+    flex: $i;
+  }
+}
