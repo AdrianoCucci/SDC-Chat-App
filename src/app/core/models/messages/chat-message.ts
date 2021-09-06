@@ -1,6 +1,6 @@
 import { User } from "../user";
 
-export interface Message {
+export interface ChatMessage {
   messageId?: number;
   contents: string;
   datePosted: Date | string;

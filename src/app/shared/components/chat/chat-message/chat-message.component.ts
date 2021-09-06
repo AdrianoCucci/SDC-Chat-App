@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Message } from 'src/app/core/models/messages/message';
+import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/user';
 
 @Component({
@@ -8,7 +8,7 @@ import { User } from 'src/app/core/models/user';
   styleUrls: ['./chat-message.component.scss']
 })
 export class ChatMessageComponent {
-  @Input() public message: Message;
+  @Input() public message: ChatMessage;
 
   public get sender(): User {
     return this.message.sender;

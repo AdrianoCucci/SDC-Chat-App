@@ -1,20 +1,17 @@
-import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { Message } from 'src/app/core/models/messages/message';
+import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/user';
 import { ChatService } from 'src/app/core/services/chat.service';
-import { InputTextarea } from '../../forms/inputs/input-textarea/input-textarea.component';
 
 @Component({
   selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.scss']
 })
-export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ChatWindowComponent implements OnInit, OnDestroy {
   @Input() public clientUser: User;
-  @Input() public messages: Message[];
-
-  @ViewChild("messagesList") private readonly _messagesListRef: ElementRef;
+  @Input() public messages: ChatMessage[];
 
   private _chatSubscription: Subscription;
 
@@ -25,15 +22,11 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this._chatSubscription.add(this._chatService.onUserJoin.subscribe((user: User) => this.onUserJoin(user)));
     this._chatSubscription.add(this._chatService.onUserLeave.subscribe((user: User) => this.onUserLeave(user)));
-    this._chatSubscription.add(this._chatService.onMessage.subscribe((message: Message) => this.appendMessage(message)));
+    this._chatSubscription.add(this._chatService.onMessage.subscribe((message: ChatMessage) => this.appendMessage(message)));
 
     if(this.clientUser != null) {
       this._chatService.joinUser(this.clientUser);
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.scrollToBottom();
   }
 
   ngOnDestroy(): void {
@@ -53,54 +46,22 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     console.log("USER LEFT:", user);
   }
 
-  onSendMessage(textArea: InputTextarea): void {
-    const value: string = textArea.value.trim();
-
-    if(value) {
-      this.sendMessage(value);
-    }
-
-    setTimeout(() => {
-      textArea.clear();
-      textArea.focus();
-
-      if(value) {
-        this.scrollToBottom();
-      }
-    });
-  }
-
-  private sendMessage(text: string): void {
-    const message: Message = {
-      contents: text,
-      datePosted: new Date(),
-      senderUserId: 1,
-      sender: this.clientUser
-    };
+  onAddMessage(message: ChatMessage) {
+    message.senderUserId = this.clientUser.userId;
+    message.sender = this.clientUser;
 
     this.appendMessage(message);
     this._chatService.sendMessage(message);
   }
 
-  private appendMessage(message: Message): void {
+  private appendMessage(message: ChatMessage): void {
     if(this.messages == null) {
       this.messages = [message];
     }
     else {
       this.messages.push(message);
     }
-  }
-
-  public scrollToBottom() {
-    if(this._messagesListRef != null) {
-      const list: HTMLElement = this._messagesListRef.nativeElement;
-
-      list.scrollTo({
-        top: list.scrollHeight,
-        behavior: "smooth"
-      });
-    }
-  }
+  } 
 
   public get hasMessages(): boolean {
     return this.messages?.length > 0 ?? false;
