@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { User } from 'src/app/core/models/user';
 import { UsersService } from 'src/app/core/services/api/users-service';
+import { LoginService } from 'src/app/core/services/login.service';
 
 @Component({
   selector: 'app-chat-page',
@@ -9,9 +10,12 @@ import { UsersService } from 'src/app/core/services/api/users-service';
   styleUrls: ['./chat-page.component.scss']
 })
 export class ChatPageComponent {
+  public readonly loggedInUser: User;
   public users: User[];
 
-  constructor(private _usersService: UsersService) { }
+  constructor(private _usersService: UsersService, loginService: LoginService) { 
+    this.loggedInUser = loginService.user;
+  }
 
   ngOnInit() {
     this.loadUsers();

@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Message } from 'src/app/core/models/messages/message';
+import { User } from 'src/app/core/models/user';
 import { ChatService } from 'src/app/core/services/chat.service';
 import { InputTextarea } from '../../forms/inputs/input-textarea/input-textarea.component';
 
@@ -10,6 +11,7 @@ import { InputTextarea } from '../../forms/inputs/input-textarea/input-textarea.
   styleUrls: ['./chat-window.component.scss']
 })
 export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Input() public clientUser: User;
   @Input() public messages: Message[];
 
   @ViewChild("messagesList") private readonly _messagesListRef: ElementRef;
@@ -52,7 +54,8 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
     const message: Message = {
       contents: text,
       datePosted: new Date(),
-      senderUserId: 1
+      senderUserId: 1,
+      sender: this.clientUser
     };
 
     this.appendMessage(message);
