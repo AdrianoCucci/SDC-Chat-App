@@ -21,7 +21,15 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private _chatService: ChatService) { }
 
   ngOnInit(): void {
-    this._chatSubscription = this._chatService.onMessage.subscribe((message: Message) => this.appendMessage(message));
+    this._chatSubscription = new Subscription();
+
+    this._chatSubscription.add(this._chatService.onUserJoin.subscribe((user: User) => this.onUserJoin(user)));
+    this._chatSubscription.add(this._chatService.onUserLeave.subscribe((user: User) => this.onUserLeave(user)));
+    this._chatSubscription.add(this._chatService.onMessage.subscribe((message: Message) => this.appendMessage(message)));
+
+    if(this.clientUser != null) {
+      this._chatService.joinUser(this.clientUser);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -29,8 +37,20 @@ export class ChatWindowComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    if(this.clientUser != null) {
+      this._chatService.leaveUser(this.clientUser);
+    }
+
     this._chatSubscription?.unsubscribe();
     this._chatSubscription = null;
+  }
+
+  private onUserJoin(user: User): void {
+    console.log("USER JOINED:", user);
+  }
+
+  private onUserLeave(user: User): void {
+    console.log("USER LEFT:", user);
   }
 
   onSendMessage(textArea: InputTextarea): void {
