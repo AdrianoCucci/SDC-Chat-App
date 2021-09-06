@@ -7,7 +7,7 @@ import { InputTextarea } from '../../forms/inputs/input-textarea/input-textarea.
   templateUrl: './chat-message-list.component.html',
   styleUrls: ['./chat-message-list.component.scss']
 })
-export class ChatMessageList implements AfterViewInit {
+export class ChatMessageListComponent implements AfterViewInit {
   @Output() public readonly onAddMessage = new EventEmitter<ChatMessage>();
   @Input() public messages: ChatMessage[];
 

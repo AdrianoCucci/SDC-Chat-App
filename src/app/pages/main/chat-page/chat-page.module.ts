@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ChatPageRoutingModule } from './chat-page-routing.module';
 
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
-import { UsersListModule } from 'src/app/shared/components/users-list/users-list.module';
 
 import { ChatPageComponent } from './chat-page.component';
 
@@ -12,8 +11,7 @@ import { ChatPageComponent } from './chat-page.component';
   imports: [
     CommonModule,
     ChatPageRoutingModule,
-    ChatModule,
-    UsersListModule
+    ChatModule
   ]
 })
 export class ChatPageModule { }

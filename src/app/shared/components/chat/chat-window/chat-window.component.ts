@@ -10,8 +10,10 @@ import { ChatService } from 'src/app/core/services/chat.service';
   styleUrls: ['./chat-window.component.scss']
 })
 export class ChatWindowComponent implements OnInit, OnDestroy {
+  @Input() public allUsers: User[];
   @Input() public clientUser: User;
-  @Input() public messages: ChatMessage[];
+  
+  public messages: ChatMessage[];
 
   private _chatSubscription: Subscription;
 
