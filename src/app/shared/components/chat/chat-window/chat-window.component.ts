@@ -12,7 +12,7 @@ import { ChatService } from 'src/app/core/services/chat.service';
 export class ChatWindowComponent implements OnInit, OnDestroy {
   @Input() public allUsers: User[];
   @Input() public clientUser: User;
-  
+
   public messages: ChatMessage[];
 
   private _chatSubscription: Subscription;
@@ -27,6 +27,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     this._chatSubscription.add(this._chatService.onMessage.subscribe((message: ChatMessage) => this.appendMessage(message)));
 
     if(this.clientUser != null) {
+      this.onUserJoin(this.clientUser);
       this._chatService.joinUser(this.clientUser);
     }
   }
@@ -41,11 +42,27 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   }
 
   private onUserJoin(user: User): void {
-    console.log("USER JOINED:", user);
+    if(this.allUsers != null) {
+      const index: number = this.allUsers.findIndex(u => u.userId === user.userId);
+
+      if(index === -1) {
+        user.isOnline = true;
+        this.allUsers.push(user);
+      }
+      else {
+        this.allUsers[index].isOnline = true;
+      }
+    }
   }
 
   private onUserLeave(user: User): void {
-    console.log("USER LEFT:", user);
+    if(this.allUsers != null) {
+      const index: number = this.allUsers.findIndex(u => u.userId === user.userId);
+
+      if(index !== -1) {
+        this.allUsers[index].isOnline = false;
+      }
+    }
   }
 
   onAddMessage(message: ChatMessage) {
@@ -63,7 +80,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     else {
       this.messages.push(message);
     }
-  } 
+  }
 
   public get hasMessages(): boolean {
     return this.messages?.length > 0 ?? false;

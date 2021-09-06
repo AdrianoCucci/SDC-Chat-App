@@ -1,1 +1,1 @@
-<app-chat-window [allUsers]="users" [clientUser]="loggedInUser"></app-chat-window>
+<app-chat-window *ngIf="users" [allUsers]="users" [clientUser]="loggedInUser"></app-chat-window>
