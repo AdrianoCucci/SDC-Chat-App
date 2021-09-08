@@ -1,7 +1,5 @@
 :host {
   --background: var(--green-400);
-  --background-hover: var(--green-300);
-  --background-active: var(--green-500);
   --color: var(--surface-900);
   --border-radius: 0.25rem;
 
@@ -9,6 +7,7 @@
   font: inherit;
   font-weight: 600;
   cursor: pointer;
+  transition: 0.1s;
 
   a {
     text-decoration: none;
@@ -25,19 +24,10 @@
     border-radius: var(--border-radius);
     font: inherit;
     cursor: inherit;
-    transition: 0.1s;
 
     span.button-text {
       pointer-events: none;
     }
-  }
-
-  &:hover {
-    --background: var(--background-hover);
-  }
-
-  &:active {
-    --background: var(--background-active);
   }
 
   &.disabled {
@@ -48,14 +38,25 @@
     display: block;
   }
 
-  &.outline button {
-    background-color: transparent;
-    border: solid var(--background) 2px;
+  &.outline {
     --color: var(--background);
+  
+    button {
+      background-color: transparent;
+      border: solid var(--color) 2px;
+    }
   }
 
   &.text button {
     background-color: transparent;
     --color: var(--background);
+  }
+
+  &:hover {
+    filter: brightness(1.15);
+  }
+
+  &:active {
+    filter: brightness(0.85);
   }
 }
