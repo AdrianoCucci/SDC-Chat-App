@@ -14,6 +14,7 @@ export class Popover implements OnInit {
 
   private _contentVisible: boolean = false;
   private _lastTarget: HTMLElement;
+  private _currentTimeout: number;
 
   constructor(private _elementRef: ElementRef) { }
 
@@ -54,17 +55,19 @@ export class Popover implements OnInit {
     if(this._visible != value) {
       this._visible = value;
 
+      window.clearTimeout(this._currentTimeout);
+
       if(this._visible) {
         this.onShow.emit();
 
-        setTimeout(() => {
+        this._currentTimeout = window.setTimeout(() => {
           this._contentVisible = true;
           window.addEventListener("click", this.windowClickHandler);
         });
       }
       else {
         this.onHide.emit();
-        setTimeout(() => this._contentVisible = false, 160);
+        this._currentTimeout = window.setTimeout(() => this._contentVisible = false, 160);
         window.removeEventListener("click", this.windowClickHandler);
       }
     }
