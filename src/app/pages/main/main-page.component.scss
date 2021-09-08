@@ -1,0 +1,78 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    height: 2.5rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--green-100);
+
+    h1.app-name {
+      font-size: 1.65rem;
+      font-weight: 600;
+    }
+
+    div.user-options {
+      app-button.user-options-button {
+        min-width: 150px;
+        --color: var(--green-600);
+      }
+
+      app-popover {
+        --min-width: 200px;
+        --background: var(--gray-50);
+
+        ul.user-options-list {
+          margin: 0;
+          padding: 0;
+
+          li {
+            display: block;
+
+            &:not(:last-of-type) {
+              border-bottom: solid var(--green-200) 1px;
+            }
+
+            app-button {
+              padding: 0.5rem;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  main {
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  app-dialog.logout-dialog {
+    --footer-padding: 0;
+
+    div[slot="footer"] {
+      display: flex;
+      justify-content: space-between;
+
+      app-button {
+        flex: 1;
+        min-height: 3.25rem;
+
+        &.option-yes {
+          font-weight: bold;
+        }
+      }
+
+      div.divider {
+        width: 2px;
+        background-color: var(--surface-300);
+      }
+    }
+  }
+}
