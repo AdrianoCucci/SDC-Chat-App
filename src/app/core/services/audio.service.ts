@@ -10,18 +10,20 @@ export class AudioService {
     [AudioSound.ChatNotification, `${this._assetsPrefix}/sdc_chat_notification.wav`]
   ]);
 
-  private readonly _audio = new Audio();
+  private readonly _audio: HTMLAudioElement;
 
-  public async play(sound: AudioSound, volume: number = 1): Promise<void> {
+  constructor() {
+    this._audio = new Audio();
+    this._audio.load();
+  }
+
+  public play(sound: AudioSound, volume: number = 1): void {
     if(this._audioSourceMap.has(sound)) {
       this._audio.src = this._audioSourceMap.get(sound);
       this._audio.volume = this.clampVolume(volume);
 
-      this._audio.load();
-      await this._audio.play();
+      this._audio.play();
     }
-
-    return Promise.resolve();
   }
 
   private clampVolume(volume: number): number {
