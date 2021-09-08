@@ -7,6 +7,8 @@ import { PopoverModule } from 'src/app/shared/components/popover/popover.module'
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 
 import { MainPage } from './main-page.component';
+import { SocketIoModule } from 'ngx-socket-io';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [MainPage],
@@ -15,7 +17,8 @@ import { MainPage } from './main-page.component';
     MainPageRoutingModule,
     ButtonModule,
     PopoverModule,
-    DialogModule
+    DialogModule,
+    SocketIoModule.forRoot({ url: environment.server.url })
   ]
 })
 export class MainPageModule { }
