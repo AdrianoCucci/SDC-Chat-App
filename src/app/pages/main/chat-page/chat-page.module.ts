@@ -5,10 +5,10 @@ import { ChatPageRoutingModule } from './chat-page-routing.module';
 import { ChatModule } from 'src/app/shared/components/chat/chat.module';
 import { LoaderModule } from 'src/app/shared/components/loader/loader.module';
 
-import { ChatPageComponent } from './chat-page.component';
+import { ChatPage } from './chat-page.component';
 
 @NgModule({
-  declarations: [ChatPageComponent],
+  declarations: [ChatPage],
   imports: [
     CommonModule,
     ChatPageRoutingModule,

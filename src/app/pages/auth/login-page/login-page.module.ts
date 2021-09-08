@@ -8,10 +8,10 @@ import { ButtonModule } from 'src/app/shared/components/button/button.module';
 import { LoaderModule } from 'src/app/shared/components/loader/loader.module';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
 
-import { LoginPageComponent } from './login-page.component';
+import { LoginPage } from './login-page.component';
 
 @NgModule({
-  declarations: [LoginPageComponent],
+  declarations: [LoginPage],
   imports: [
     CommonModule,
     LoginPageRoutingModule,

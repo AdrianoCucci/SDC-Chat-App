@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { APP_PATHS } from 'src/app/shared/app-paths';
-import { MainPageComponent } from './main-page.component';
+import { MainPage } from './main-page.component';
 
 const PATHS = APP_PATHS.main;
 const DEFAULT_PATH: string = PATHS.children.chat;
 
 const routes: Routes = [{
   path: "",
-  component: MainPageComponent,
+  component: MainPage,
   children: [
     {
       path: DEFAULT_PATH,

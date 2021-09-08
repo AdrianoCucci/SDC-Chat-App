@@ -11,7 +11,7 @@ import { LoginService } from 'src/app/core/services/login.service';
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.scss']
 })
-export class ChatPageComponent {
+export class ChatPage {
   public readonly loggedInUser: User;
 
   public users: User[];

@@ -13,7 +13,7 @@ import { FormSubmitResult } from 'src/app/shared/components/forms/form/form-subm
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPageComponent {
+export class LoginPage {
   public username: string;
   public password: string;
 
