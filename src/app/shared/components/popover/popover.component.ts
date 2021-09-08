@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostBinding, OnInit, Output } from '@angular/core';
+import { Component, ComponentRef, ElementRef, EventEmitter, HostBinding, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-popover',
@@ -59,11 +59,8 @@ export class Popover implements OnInit {
 
       if(this._visible) {
         this.onShow.emit();
-
-        this._currentTimeout = window.setTimeout(() => {
-          this._contentVisible = true;
-          window.addEventListener("click", this.windowClickHandler);
-        });
+        this._contentVisible = true;
+        this._currentTimeout = window.setTimeout(() => window.addEventListener("click", this.windowClickHandler));
       }
       else {
         this.onHide.emit();
@@ -85,29 +82,39 @@ export class Popover implements OnInit {
     const hostEl: HTMLElement = this.nativeElement;
     const contentEl: HTMLElement = hostEl.querySelector(".popover-content");
 
-    const targetRect = target.getBoundingClientRect();
-    const posOffset: number = 5;
-
-    let xPos: number = targetRect.x;
-    let yPos: number = targetRect.bottom + posOffset;
-    let xAnchor: string = "left";
-    let yAnchor: string = "top";
-
     const halfWindowWidth: number = window.innerWidth / 2;
     const halfWindowHeight: number = window.innerHeight / 2;
+    const posOffset: number = 5;
 
-    if(targetRect.x > halfWindowWidth) {
-      xPos -= contentEl.clientWidth - target.clientWidth;
-      xAnchor = "right";
-    }
-    if(targetRect.y > halfWindowHeight) {
-      yPos = targetRect.top - contentEl.clientHeight - posOffset;
-      yAnchor = "bottom"
-    }
+    //This is here because sometimes the popover just decides to not align to the target element properly on just the first time showing.
+    const maxIntervals: number = 3;
+    let currentInterval: number = 0;
 
-    hostEl.style.left = `${xPos}px`;
-    hostEl.style.top = `${yPos}px`;
-    this._anchor = `${yAnchor} ${xAnchor}`;
+    const interval: number = setInterval(() => {
+      const targetRect = target.getBoundingClientRect();
+
+      let xPos: number = targetRect.x;
+      let yPos: number = targetRect.bottom + posOffset;
+      let xAnchor: string = "left";
+      let yAnchor: string = "top";
+
+      if(targetRect.x > halfWindowWidth) {
+        xPos -= contentEl.clientWidth - target.clientWidth;
+        xAnchor = "right";
+      }
+      if(targetRect.y > halfWindowHeight) {
+        yPos = targetRect.top - contentEl.clientHeight - posOffset;
+        yAnchor = "bottom"
+      }
+
+      this._anchor = `${yAnchor} ${xAnchor}`;
+      hostEl.style.left = `${xPos}px`;
+      hostEl.style.top = `${yPos}px`;
+
+      if(++currentInterval > maxIntervals) {
+        clearInterval(interval);
+      }
+    });
   }
 
   private get nativeElement(): HTMLElement {
