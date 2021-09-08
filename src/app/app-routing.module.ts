@@ -14,7 +14,7 @@ const routes: Routes = [
   {
     path: PATHS.main.root,
     canActivate: [AuthGuard],
-    loadChildren: () => import("./pages/main/main-routing.module").then(m => m.MainRoutingModule)
+    loadChildren: () => import("./pages/main/main-page.module").then(m => m.MainPageModule)
   },
   { path: "", redirectTo: DEFAULT_PATH, pathMatch: "full" },
   { path: "**", redirectTo: DEFAULT_PATH }
