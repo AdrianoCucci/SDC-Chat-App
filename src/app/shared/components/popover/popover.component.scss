@@ -1,20 +1,29 @@
 :host {
   --visible-transition: 0.16s;
 
-  --content-padding: 1rem;
-  --content-background: var(--green-50);
-  --content-border-radius: 0.25rem;
-  --content-box-shadow: var(--surface-800) 0 8px 25px;
+  --min-width: unset;
+  --max-width: unset;
+  --min-height: unset;
+  --max-height: unset;
+
+  --padding: 1rem;
+  --background: var(--green-50);
+  --border-radius: 0.25rem;
+  --box-shadow: var(--surface-800) 0 8px 25px;
 
   position: fixed;
   display: flex;
   z-index: 10;
 
   div.popover-content {
-    padding: var(--content-padding);
-    background-color: var(--content-background);
-    border-radius: var(--content-border-radius);
-    box-shadow: var(--content-box-shadow);
+    min-width: var(--min-width);
+    max-width: var(--max-width);
+    min-height: var(--min-height);
+    max-height: var(--max-height);
+    padding: var(--padding);
+    background-color: var(--background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
     transform-origin: center center;
   }
 
