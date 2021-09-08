@@ -1,6 +1,6 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { AuthResponse } from "../models/auth/auth-response";
-import { User } from "../models/user";
+import { User } from "../models/users/user";
 import { StorageService } from "./storage-service";
 
 @Injectable({

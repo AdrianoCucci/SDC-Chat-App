@@ -2,7 +2,7 @@ import { EventEmitter } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { ChatMessage } from '../models/messages/chat-message';
-import { User } from '../models/user';
+import { User } from '../models/users/user';
 
 @Injectable()
 export class ChatService {

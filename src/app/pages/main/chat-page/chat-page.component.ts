@@ -1,7 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
-import { User } from 'src/app/core/models/user';
+import { User } from 'src/app/core/models/users/user';
 import { ChatMessagesService } from 'src/app/core/services/api/chat-messages.service';
 import { UsersService } from 'src/app/core/services/api/users-service';
 import { LoginService } from 'src/app/core/services/login.service';

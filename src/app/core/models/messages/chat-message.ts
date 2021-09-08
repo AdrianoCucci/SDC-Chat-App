@@ -1,4 +1,4 @@
-import { User } from "../user";
+import { User } from "../users/user";
 
 export interface ChatMessage {
   messageId?: number;

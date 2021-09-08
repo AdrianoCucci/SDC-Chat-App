@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
-import { User } from 'src/app/core/models/user';
+import { User } from 'src/app/core/models/users/user';
 import { AudioService, AudioSound } from 'src/app/core/services/audio.service';
 import { ChatService } from 'src/app/core/services/chat.service';
 
@@ -43,7 +43,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 
   private onUserJoin(user: User): void {
     if(this.allUsers != null) {
-      const index: number = this.allUsers.findIndex(u => u.userId === user.userId);
+      const index: number = this.allUsers.findIndex(u => u.id === user.id);
 
       if(index === -1) {
         user.isOnline = true;
@@ -57,7 +57,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 
   private onUserLeave(user: User): void {
     if(this.allUsers != null) {
-      const index: number = this.allUsers.findIndex(u => u.userId === user.userId);
+      const index: number = this.allUsers.findIndex(u => u.id === user.id);
 
       if(index !== -1) {
         this.allUsers[index].isOnline = false;
@@ -66,7 +66,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   }
 
   onAddMessage(message: ChatMessage) {
-    message.senderUserId = this.clientUser.userId;
+    message.senderUserId = this.clientUser.id;
     message.sender = this.clientUser;
 
     this.appendMessage(message);
