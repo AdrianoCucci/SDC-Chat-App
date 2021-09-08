@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/user';
+import { AudioService, AudioSound } from 'src/app/core/services/audio.service';
 import { ChatService } from 'src/app/core/services/chat.service';
 
 @Component({
@@ -16,14 +17,14 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 
   private _chatSubscription: Subscription;
 
-  constructor(private _chatService: ChatService) { }
+  constructor(private _chatService: ChatService, private _audioService: AudioService) { }
 
   ngOnInit(): void {
     this._chatSubscription = new Subscription();
 
     this._chatSubscription.add(this._chatService.onUserJoin.subscribe((user: User) => this.onUserJoin(user)));
     this._chatSubscription.add(this._chatService.onUserLeave.subscribe((user: User) => this.onUserLeave(user)));
-    this._chatSubscription.add(this._chatService.onMessage.subscribe((message: ChatMessage) => this.appendMessage(message)));
+    this._chatSubscription.add(this._chatService.onMessage.subscribe((message: ChatMessage) => this.onMessageReceived(message)));
 
     if(this.clientUser != null) {
       this.onUserJoin(this.clientUser);
@@ -70,6 +71,11 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 
     this.appendMessage(message);
     this._chatService.sendMessage(message);
+  }
+
+  private onMessageReceived(message: ChatMessage): void {
+    this.appendMessage(message);
+    this._audioService.play(AudioSound.ChatNotification);
   }
 
   private appendMessage(message: ChatMessage): void {
