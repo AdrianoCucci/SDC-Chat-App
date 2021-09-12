@@ -1,7 +1,7 @@
 import { User } from "../users/user";
 
 export interface ChatMessage {
-  messageId?: number;
+  id?: number;
   contents: string;
   datePosted: Date | string;
   senderUserId: number;
