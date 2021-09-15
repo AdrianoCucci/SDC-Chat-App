@@ -7,5 +7,5 @@ export interface ChatMessage {
   senderUserId: number;
   organizationId?: number;
 
-  sender?: User;
+  senderUser?: User;
 }

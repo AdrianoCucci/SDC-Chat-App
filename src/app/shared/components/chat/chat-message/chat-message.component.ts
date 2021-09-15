@@ -11,7 +11,7 @@ export class ChatMessageComponent {
   @Input() public message: ChatMessage;
 
   public get sender(): User {
-    return this.message.sender;
+    return this.message.senderUser;
   }
 
   public get senderName(): string {

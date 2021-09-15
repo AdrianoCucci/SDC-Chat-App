@@ -68,7 +68,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   onAddMessage(message: ChatMessage) {
     message.senderUserId = this.clientUser.id;
     message.organizationId = this.clientUser.organizationId;
-    message.sender = this.clientUser;
+    message.senderUser = this.clientUser;
 
     this.appendMessage(message);
     this._chatService.sendMessage(message);
