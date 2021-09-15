@@ -5,6 +5,7 @@ export interface ChatMessage {
   contents: string;
   datePosted: Date | string;
   senderUserId: number;
+  organizationId?: number;
 
   sender?: User;
 }
