@@ -8,6 +8,15 @@ export class TableConfig<T = any> {
     this._settings = settings;
   }
 
+  public setCells(cells: TableCell[]) {
+    if(this._settings == null) {
+      this._settings = { cells };
+    }
+    else {
+      this._settings.cells = cells;
+    }
+  }
+
   public setData(data: T[]) {
     if(this._settings == null) {
       this._settings = { data };
