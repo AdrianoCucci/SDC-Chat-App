@@ -1,14 +1,15 @@
 :host {
   --border-collapse: collapse;
 
-  --th-background: #aaefff;
-  --th-background-hover: #77e6ff;
-  --th-color: #222222;
+  --th-background: var(--green-200);
+  --th-background-hover: var(--green-300);
+  --th-color: var(--surface-900);
   --th-border: unset;
   --th-font-weight: 600;
   --th-text-align: center;
 
-  --tr-border-bottom: solid #bce6f0 1px;
+  --tr-min-height: 50px;
+  --tr-border-bottom: solid var(--green-100) 1px;
 
   --td-border: unset;
   --td-text-align: left;
@@ -19,6 +20,13 @@
   flex-direction: column;
   width: 100%;
   max-height: 100%;
+
+  div.table-header,
+  div.table-footer {
+    &:empty {
+      display: none;
+    }
+  }
 
   .table-wrapper {
     width: 100%;
@@ -105,6 +113,8 @@
 
       tbody {
         tr {
+          align-items: center;
+          min-height: var(--tr-min-height);
           border-bottom: var(--tr-border-bottom);
         }
       }

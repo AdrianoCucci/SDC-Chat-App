@@ -1,5 +1,5 @@
 <div class="table-header">
-  HEADER
+  <ng-content select="[slot=header]"></ng-content>
 </div>
 
 <div *ngIf="config != null" class="table-wrapper">
@@ -43,7 +43,7 @@
 </div>
 
 <div class="table-footer">
-  FOOTER
+  <ng-content select="[slot=footer]"></ng-content>
 </div>
 
 <ng-template #thFilterTemplate let-cell>

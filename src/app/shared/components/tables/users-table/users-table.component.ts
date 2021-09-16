@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/core/models/users/user';
-import { TableCell } from '../table/table-cell';
 import { TableConfig } from '../table/table-config';
 
 @Component({
@@ -16,9 +15,9 @@ export class UsersTableComponent implements OnInit {
     cells: [
       { header: "Username", value: (u: User) => u.username, sortable: true, filterable: true },
       { header: "Display Name", value: (u: User) => u.displayName, sortable: true, filterable: true },
-      { header: "Role", value: (u: User) => u.role, sortable: true, filterable: true, hidden: !this.adminFeatures },
+      { header: "Role", value: (u: User) => u.role, sortable: true, filterable: true, hidden: this.adminFeatures },
       { header: "Is Online", value: (u: User) => u.isOnline, sortable: true, filterable: true, valueType: "boolean" },
-      { header: "Organization", value: (u: User) => u.organizationId, sortable: true, filterable: true, hidden: !this.adminFeatures }
+      { header: "Organization", value: (u: User) => u.organizationId, sortable: true, filterable: true, hidden: this.adminFeatures }
     ]
   });
 
