@@ -10,7 +10,7 @@
           <th *ngIf="!cell.hidden" [class]="cell.cssClass">
             <div class="cell-header-content" tabindex="-1"
               [ngClass]="{'sortable': cell.sortable, 'filterable': cell.filterable}">
-              <div class="cell-header-name" (click)="test()">
+              <div class="cell-header-name">
                 <span>{{cell.header}}</span>
 
                 <div *ngIf="cell.sortable" class="sort-icon">
