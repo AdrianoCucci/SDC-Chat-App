@@ -1,5 +1,5 @@
 <div class="input-wrapper">
-  <input #input [type]="type" [name]="name" [id]="name" [title]="label" [required]="required" [disabled]="disabled"
+  <input #input [type]="type" [name]="name" [attr.id]="name" [title]="label" [required]="required" [disabled]="disabled"
     [readonly]="readonly" [placeholder]="placeholder" [pattern]="pattern" [min]="min" [max]="max"
     [attr.minlength]="minLength" [attr.maxlength]="maxLength" (blur)="validateIfDirty()" [(ngModel)]="value">
 

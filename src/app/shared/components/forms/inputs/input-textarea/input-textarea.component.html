@@ -1,5 +1,5 @@
 <div class="input-wrapper">
-  <textarea #input [name]="name" [id]="name" [title]="label" [required]="required" [disabled]="disabled"
+  <textarea #input [name]="name" [attr.id]="name" [title]="label" [required]="required" [disabled]="disabled"
     [readonly]="readonly" [placeholder]="placeholder" [attr.minlength]="minLength" [attr.maxlength]="maxLength"
     [rows]="rows" [cols]="cols" [ngClass]="{'ng-dirty': hasErrors, 'ng-invalid': hasErrors}" (blur)="validateIfDirty()"
     [(ngModel)]="value"></textarea>
