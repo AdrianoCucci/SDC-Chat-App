@@ -6,10 +6,9 @@ import { TabMenuModule } from 'src/app/shared/components/menus/tab-menu/tab-menu
 import { ButtonModule } from 'src/app/shared/components/button/button.module';
 import { PopoverModule } from 'src/app/shared/components/popover/popover.module';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
+import { WebSocketModule } from 'src/app/shared/modules/web-socket.module';
 
 import { MainPage } from './main-page.component';
-import { SocketIoModule } from 'ngx-socket-io';
-import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [MainPage],
@@ -20,7 +19,7 @@ import { environment } from 'src/environments/environment';
     ButtonModule,
     PopoverModule,
     DialogModule,
-    SocketIoModule.forRoot({ url: environment.server.url })
+    WebSocketModule
   ]
 })
 export class MainPageModule { }

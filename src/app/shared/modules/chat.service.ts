@@ -1,11 +1,12 @@
 import { EventEmitter } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { ChatMessage } from '../models/messages/chat-message';
-import { User } from '../models/users/user';
+import { ChatMessage } from '../../core/models/messages/chat-message';
+import { User } from '../../core/models/users/user';
+import { WebSocketService } from './web-socket.service';
 
 @Injectable()
-export class ChatService {
+export class ChatService extends WebSocketService {
   public readonly onUserJoin = new EventEmitter<User>();
   public readonly onUserLeave = new EventEmitter<User>();
   public readonly onMessage = new EventEmitter<ChatMessage>();
@@ -16,8 +17,9 @@ export class ChatService {
     message: "message"
   };
 
-  constructor(private _socket: Socket) {
-    this.initializeEvents(_socket);
+  constructor(socket: Socket) {
+    super(socket);
+    this.initializeEvents(socket);
   }
 
   private initializeEvents(socket: Socket): void {

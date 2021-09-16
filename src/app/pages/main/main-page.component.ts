@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Event, NavigationStart, Router } from '@angular/router';
-import { Socket } from 'ngx-socket-io';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
 import { MenuItem } from 'src/app/shared/models/menu-item';
+import { WebSocketService } from 'src/app/shared/modules/web-socket.service';
 import { MainMenuItemsMapper } from 'src/app/shared/util/main-menu-items-mapper';
 import { environment } from 'src/environments/environment';
 
@@ -24,7 +24,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   private _navSubscription: Subscription;
 
-  constructor(private _loginService: LoginService, private _router: Router, private _socket: Socket) {
+  constructor(private _loginService: LoginService, private _router: Router, private _socketService: WebSocketService) {
     const user: User = _loginService.user;
 
     if(user != null) {
@@ -34,8 +34,6 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this._socket.connect();
-
     const rootPath: string = `/${MAIN_PATHS.root}`;
 
     if(this._router.url === rootPath) {
@@ -50,7 +48,7 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._socket.disconnect();
+    this._socketService.disconnect();
 
     this._navSubscription.unsubscribe();
     this._navSubscription = null;

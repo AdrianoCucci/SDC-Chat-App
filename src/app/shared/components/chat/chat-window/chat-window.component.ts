@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 import { AudioService, AudioSound } from 'src/app/core/services/audio.service';
-import { ChatService } from 'src/app/core/services/chat.service';
+import { ChatService } from 'src/app/shared/modules/chat.service';
 
 @Component({
   selector: 'app-chat-window',
@@ -20,6 +20,8 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   constructor(private _chatService: ChatService, private _audioService: AudioService) { }
 
   ngOnInit(): void {
+    this._chatService.connect();
+
     this._chatSubscription = new Subscription();
 
     this._chatSubscription.add(this._chatService.onUserJoin.subscribe((user: User) => this.onUserJoin(user)));
