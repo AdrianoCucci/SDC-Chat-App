@@ -48,7 +48,7 @@ export class TableConfig<T = any> {
     return this.dataKey != null;
   }
 
-  public get cells(): TableCell<T>[] {
+  public get cells(): TableCell[] {
     return this._settings?.cells ?? null;
   }
 
@@ -60,5 +60,5 @@ export class TableConfig<T = any> {
 interface TableConfigSettings<T = any> {
   dataKey?: any;
   data?: T[];
-  cells?: TableCell<T>[];
+  cells?: TableCell[];
 }

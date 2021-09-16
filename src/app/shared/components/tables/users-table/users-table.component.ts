@@ -13,11 +13,11 @@ export class UsersTableComponent implements OnInit {
   public readonly tableConfig = new TableConfig<User>({
     dataKey: "id",
     cells: [
-      { header: "Username", value: (u: User) => u.username, sortable: true, filterable: true },
-      { header: "Display Name", value: (u: User) => u.displayName, sortable: true, filterable: true },
-      { header: "Role", value: (u: User) => u.role, sortable: true, filterable: true, hidden: this.adminFeatures },
-      { header: "Is Online", value: (u: User) => u.isOnline, sortable: true, filterable: true, valueType: "boolean" },
-      { header: "Organization", value: (u: User) => u.organizationId, sortable: true, filterable: true, hidden: this.adminFeatures }
+      { header: "Username", valueField: "username", sortable: true, filterable: true },
+      { header: "Display Name", valueField: "displayName", sortable: true, filterable: true },
+      { header: "Role", valueField: "role", sortable: true, filterable: true, hidden: this.adminFeatures },
+      { header: "Is Online", valueField: "isOnline", sortable: true, filterable: true, valueType: "boolean" },
+      { header: "Organization", valueField: "organizationId", sortable: true, filterable: true, hidden: this.adminFeatures }
     ]
   });
 

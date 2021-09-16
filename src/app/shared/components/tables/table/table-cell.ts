@@ -1,7 +1,6 @@
-export interface TableCell<T = any> {
+export interface TableCell {
   header?: string;
-  value?: (data: T) => any;
-  displayValue?: (data: T) => any;
+  valueField?: string;
   valueType?: CellValueType;
   sortable?: boolean;
   filterable?: boolean;
