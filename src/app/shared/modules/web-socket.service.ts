@@ -3,8 +3,11 @@ import { Socket } from "ngx-socket-io";
 
 @Injectable()
 export class WebSocketService {
+  private static _errorCallback: Function;
+
   public readonly onConnect = new EventEmitter<void>();
   public readonly onDisconnect = new EventEmitter<void>();
+  public readonly onConnectError = new EventEmitter<any>();
 
   protected readonly _socket: Socket;
 
@@ -13,6 +16,11 @@ export class WebSocketService {
 
     if(this._socket == null) {
       throw new Error("[WebSocketService] > [Socket] dependency is null");
+    }
+
+    if(WebSocketService._errorCallback == null) {
+      WebSocketService._errorCallback = (error: any) => this.onConnectError.emit(error);
+      this._socket.on("connect_error", WebSocketService._errorCallback);
     }
   }
 
