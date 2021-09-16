@@ -51,11 +51,6 @@ export class MainMenuItemsMapper {
 
     return [
       {
-        routerLink: root + children.rooms,
-        label: "Rooms",
-        icon: faDoorOpen
-      },
-      {
         routerLink: root + children.chat,
         label: "Chat",
         icon: faComments
@@ -64,6 +59,16 @@ export class MainMenuItemsMapper {
         routerLink: root + children.pings,
         label: "Room Pings",
         icon: faExclamation
+      },
+      {
+        routerLink: root + children.rooms,
+        label: "Rooms",
+        icon: faDoorOpen
+      },
+      {
+        routerLink: root + children.users,
+        label: "Users",
+        icon: faUsers
       }
     ];
   }

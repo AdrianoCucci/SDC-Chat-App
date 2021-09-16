@@ -23,7 +23,7 @@ const routes: Routes = [
       {
         path: PATHS.children.users,
         canActivate: [RoleGuard],
-        data: { roles: [Role.Administrator] }
+        data: { roles: [Role.Administrator, Role.OrganizationAdmin] }
       },
       {
         path: PATHS.children.rooms,
