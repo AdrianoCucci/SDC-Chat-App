@@ -23,7 +23,8 @@ const routes: Routes = [
       {
         path: PATHS.children.users,
         canActivate: [RoleGuard],
-        data: { roles: [Role.Administrator, Role.OrganizationAdmin] }
+        data: { roles: [Role.Administrator, Role.OrganizationAdmin] },
+        loadChildren: () => import("./users-page/users-page.module").then(m => m.UsersPageModule)
       },
       {
         path: PATHS.children.rooms,
