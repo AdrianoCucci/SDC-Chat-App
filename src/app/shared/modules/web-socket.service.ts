@@ -27,12 +27,14 @@ export class WebSocketService {
   public connect(): void {
     if(!this.isConnected) {
       this._socket.connect();
+      this.onConnect.emit();
     }
   }
 
   public disconnect(): void {
     if(this.isConnected) {
       this._socket.disconnect();
+      this.onDisconnect.emit();
     }
   }
 
