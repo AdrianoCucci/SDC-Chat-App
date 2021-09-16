@@ -1,0 +1,61 @@
+<div class="table-header">
+  HEADER
+</div>
+
+<div *ngIf="config != null" class="table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <ng-container *ngFor="let cell of config.cells">
+          <th *ngIf="!cell.hidden" [class]="cell.cssClass">
+            <div class="cell-header-content" tabindex="-1"
+              [ngClass]="{'sortable': cell.sortable, 'filterable': cell.filterable}">
+              <div class="cell-header-name" (click)="test()">
+                <span>{{cell.header}}</span>
+
+                <div *ngIf="cell.sortable" class="sort-icon">
+                  <small>S</small>
+                </div>
+              </div>
+
+              <div *ngIf="cell.filterable" class="cell-header-filter">
+                <ng-container *ngTemplateOutlet="thFilterTemplate; context: { $implicit: cell }">
+                </ng-container>
+              </div>
+            </div>
+          </th>
+        </ng-container>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let row of config.data">
+        <ng-container *ngFor="let cell of config.cells">
+          <td *ngIf="!cell.hidden">
+            <div class="cell-body-content">
+              <ng-container *ngTemplateOutlet="tdTemplate; context: { $implicit: cell, row: row}"></ng-container>
+            </div>
+          </td>
+        </ng-container>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="table-footer">
+  FOOTER
+</div>
+
+<ng-template #thFilterTemplate let-cell>
+  <ng-container [ngSwitch]="cell.valueType">
+    <input *ngSwitchCase="'boolean'" type="checkbox">
+    <input *ngSwitchDefault [type]="type || text">
+  </ng-container>
+</ng-template>
+
+<ng-template #tdTemplate let-cell let-row="row">
+  <ng-container [ngSwitch]="cell.valueType">
+    <input *ngSwitchCase="'boolean'" class="readonly-value" type="checkbox" [checked]="cell.value(row)">
+    <span *ngSwitchDefault>{{cell.value(row)}}</span>
+  </ng-container>
+</ng-template>
