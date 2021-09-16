@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { AuthResponse } from "../models/auth/auth-response";
+import { Role } from "../models/auth/role";
 import { User } from "../models/users/user";
 import { StorageService } from "./storage-service";
 
@@ -25,6 +26,16 @@ export class LoginService {
     }
 
     return this._currentUser;
+  }
+
+  public userHasRole(...roles: Role[]): boolean {
+    let hasRole: boolean = false;
+
+    if(this.isLoggedIn && roles != null) {
+      hasRole = roles.includes(this._currentUser.role);
+    }
+
+    return hasRole;
   }
 
   public logout(): void {
