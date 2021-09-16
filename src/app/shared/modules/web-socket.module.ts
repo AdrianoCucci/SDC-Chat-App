@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 
 import { SocketIoModule } from "ngx-socket-io";
@@ -8,6 +9,7 @@ import { ChatService } from "./chat.service";
 
 @NgModule({
   imports: [
+    CommonModule,
     SocketIoModule.forRoot({ url: environment.server.url, options: { autoConnect: false } })
   ],
   providers: [
