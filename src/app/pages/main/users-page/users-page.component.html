@@ -1,1 +1,3 @@
-<p>users-page works!</p>
+<app-users-table [users]="users" [adminFeatures]="adminFeatures"></app-users-table>
+
+<app-loader [fullscreen]="true" [visible]="loadingVisible" [text]="loadingText"></app-loader>
