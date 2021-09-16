@@ -1,9 +1,9 @@
-import { RoleType } from "../auth/role-type";
+import { Role } from "../auth/role";
 import { Organization } from "../organizations/organization";
 
 export interface User {
   id: number;
-  role: RoleType;
+  role: Role;
   username: string;
   displayName?: string;
   isOnline: boolean;

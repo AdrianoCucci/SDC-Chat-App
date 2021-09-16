@@ -1,8 +1,8 @@
-import { RoleType } from "../auth/role-type";
+import { Role } from "../auth/role";
 
 export interface User {
   id?: number;
-  role: RoleType;
+  role: Role;
   username: string;
   displayName?: string;
   isOnline: boolean;
