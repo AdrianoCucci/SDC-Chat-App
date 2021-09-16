@@ -3,8 +3,6 @@ import { Socket } from "ngx-socket-io";
 
 @Injectable()
 export class WebSocketService {
-  private static _errorCallback: Function;
-
   public readonly onConnect = new EventEmitter<void>();
   public readonly onDisconnect = new EventEmitter<void>();
   public readonly onConnectError = new EventEmitter<any>();
@@ -18,23 +16,30 @@ export class WebSocketService {
       throw new Error("[WebSocketService] > [Socket] dependency is null");
     }
 
-    if(WebSocketService._errorCallback == null) {
-      WebSocketService._errorCallback = (error: any) => this.onConnectError.emit(error);
-      this._socket.on("connect_error", WebSocketService._errorCallback);
-    }
+    this.initializeEvents(socket);
+  }
+
+  protected initializeEvents(socket: Socket): void {
+    const events = this.socketEvents;
+
+    socket.on(events.connect, () => this.onConnect.emit());
+    socket.on(events.disconnect, () =>  this.onDisconnect.emit());
+    socket.on(events.connectError, (event: any) => this.onConnectError.emit(event));
   }
 
   public connect(): void {
-    if(!this.isConnected) {
-      this._socket.connect();
-      this.onConnect.emit();
-    }
+    this._socket.connect();
   }
 
   public disconnect(): void {
-    if(this.isConnected) {
-      this._socket.disconnect();
-      this.onDisconnect.emit();
+    this._socket.disconnect();
+  }
+
+  public get socketEvents() {
+    return {
+      connect: "connect",
+      disconnect: "disconnect",
+      connectError: "connect_error"
     }
   }
 

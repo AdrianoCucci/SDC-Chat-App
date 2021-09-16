@@ -19,7 +19,6 @@ const components = [
 @NgModule({
   imports: [
     CommonModule,
-    WebSocketModule,
     InputTextareaModule
   ],
   exports: components,
