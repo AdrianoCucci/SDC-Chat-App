@@ -8,8 +8,11 @@ export const AUTH_PATHS = {
 export const MAIN_PATHS = {
   root: "main",
   children: {
-    pings: "pings",
-    chat: "chat"
+    organizations: "organizations",
+    users: "users",
+    rooms: "rooms",
+    chat: "chat",
+    pings: "pings"
   }
 }
 
