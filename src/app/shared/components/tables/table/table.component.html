@@ -10,11 +10,13 @@
           <th *ngIf="!cell.hidden" [class]="cell.cssClass">
             <div class="cell-header-content" tabindex="-1"
               [ngClass]="{'sortable': cell.sortable, 'filterable': cell.filterable}">
-              <div class="cell-header-name">
+              <div #cellHeaderName class="cell-header-name" (click)="onSort(cell, cellHeaderName)">
                 <span>{{cell.header}}</span>
 
                 <div *ngIf="cell.sortable" class="sort-icon">
-                  <small>S</small>
+                  <fa-icon *ngIf="cellHeaderName.getAttribute('sort') == null" [icon]="sortIcon"></fa-icon>
+                  <fa-icon *ngIf="cellHeaderName.getAttribute('sort') === 'asc'" [icon]="sortIconUp"></fa-icon>
+                  <fa-icon *ngIf="cellHeaderName.getAttribute('sort') === 'desc'" [icon]="sortIconDown"></fa-icon>
                 </div>
               </div>
 
@@ -33,7 +35,8 @@
         <ng-container *ngFor="let cell of config.cells">
           <td *ngIf="!cell.hidden">
             <div class="cell-body-content">
-              <ng-container *ngTemplateOutlet="tdTemplate; context: { $implicit: cell, row: row}"></ng-container>
+              <ng-container *ngTemplateOutlet="tdTemplate; context: { $implicit: cell, value: row[cell.valueField] }">
+              </ng-container>
             </div>
           </td>
         </ng-container>
@@ -49,13 +52,13 @@
 <ng-template #thFilterTemplate let-cell>
   <ng-container [ngSwitch]="cell.valueType">
     <input *ngSwitchCase="'boolean'" type="checkbox">
-    <input *ngSwitchDefault type="text">
+    <app-input-text *ngSwitchDefault [type]="cell.valueType"></app-input-text>
   </ng-container>
 </ng-template>
 
-<ng-template #tdTemplate let-cell let-row="row">
+<ng-template #tdTemplate let-cell let-value="value">
   <ng-container [ngSwitch]="cell.valueType">
-    <input *ngSwitchCase="'boolean'" class="readonly-value" type="checkbox" [checked]="cell.value(row)">
-    <span *ngSwitchDefault>{{cell.value(row)}}</span>
+    <input *ngSwitchCase="'boolean'" class="readonly-value" type="checkbox" [checked]="value">
+    <span *ngSwitchDefault>{{value}}</span>
   </ng-container>
 </ng-template>
