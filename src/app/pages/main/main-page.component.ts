@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
+import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
+import { MenuItem } from 'src/app/shared/models/menu-item';
+import { MainMenuItemsMapper } from 'src/app/shared/util/main-menu-items-mapper';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -10,14 +13,20 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./main-page.component.scss']
 })
 export class MainPage implements OnInit, OnDestroy {
+  public readonly mainMenuItems: MenuItem[];
   public readonly appName: string = environment.app.name;
   public readonly appVersion: string = environment.app.version;
   public readonly userDisplayName: string;
 
   public logoutDialogVisible: boolean = false;
-  
-  constructor(private _loginService: LoginService, private _router: Router, private _socket: Socket) { 
-    this.userDisplayName = _loginService.user.displayName || _loginService.user.username;
+
+  constructor(private _loginService: LoginService, private _router: Router, private _socket: Socket) {
+    const user: User = _loginService.user;
+
+    if(user != null) {
+      this.mainMenuItems = new MainMenuItemsMapper().getMenuItemsByRole(user.role);
+      this.userDisplayName = user.displayName || user.username;
+    }
   }
 
   ngOnInit() {

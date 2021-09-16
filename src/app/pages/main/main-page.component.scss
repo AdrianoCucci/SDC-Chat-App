@@ -1,4 +1,6 @@
 :host {
+  --header-height: 4rem;
+
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -9,16 +11,27 @@
     align-items: center;
     justify-content: space-between;
     flex-shrink: 0;
-    height: 2.5rem;
-    padding: 0.5rem 1rem;
+    height: var(--header-height);
     background-color: var(--green-100);
 
     h1.app-name {
+      flex-shrink: 0;
+      margin: 0;
+      padding: 0.5rem 1rem;
       font-size: 1.65rem;
       font-weight: 600;
     }
 
+    app-tab-menu {
+      flex: 1;
+      margin: 0 1rem;
+      --list-justify: center;
+    }
+
     div.user-options {
+      flex-shrink: 0;
+      padding: 0.5rem 1rem;
+    
       app-button.user-options-button {
         min-width: 150px;
         --color: var(--green-600);
