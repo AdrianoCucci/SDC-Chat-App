@@ -10,6 +10,6 @@ export interface MenuItem {
   cssClass?: string;
   disabled?: boolean;
   data?: any;
-  onClick?: (context: any) => void;
+  onClick?: (context?: any) => void;
   children?: MenuItem[];
 }
