@@ -49,7 +49,7 @@
 <ng-template #thFilterTemplate let-cell>
   <ng-container [ngSwitch]="cell.valueType">
     <input *ngSwitchCase="'boolean'" type="checkbox">
-    <input *ngSwitchDefault [type]="type || text">
+    <input *ngSwitchDefault type="text">
   </ng-container>
 </ng-template>
 
