@@ -1,0 +1,21 @@
+<nav>
+  <ul>
+    <li *ngFor="let item of menuItems; index as i">
+      <a [routerLink]="item.routerLink" routerLinkActive="active" [id]="item.id"
+        [ngClass]="{ item.cssClass: true, 'menu-item': true, 'disabled': item.disabled, 'default-template': itemTemplate == null }"
+        (click)="onItemClickInternal(item)">
+
+        <ng-container *ngIf="itemTemplate == null; else customTemplate">
+          <fa-icon *ngIf="item.icon" class="icon" [icon]="item.icon"></fa-icon>
+          <span *ngIf="item.label" class="label">{{item.label}}</span>
+        </ng-container>
+
+        <ng-template #customTemplate>
+          <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item, index: i, allItems: menuItems }">
+          </ng-container>
+        </ng-template>
+
+      </a>
+    </li>
+  </ul>
+</nav>
