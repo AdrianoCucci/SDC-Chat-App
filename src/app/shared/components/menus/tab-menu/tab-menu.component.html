@@ -1,8 +1,8 @@
 <nav>
   <ul>
     <li *ngFor="let item of menuItems; index as i">
-      <a [routerLink]="item.routerLink" routerLinkActive="active" [id]="item.id"
-        [ngClass]="{ item.cssClass: true, 'menu-item': true, 'disabled': item.disabled, 'default-template': itemTemplate == null }"
+      <a [routerLink]="item.routerLink" routerLinkActive="active" [attr.id]="item.id" [class]="item.cssClass"
+        [ngClass]="{'menu-item': true, 'disabled': item.disabled, 'default-template': itemTemplate == null }"
         (click)="onItemClickInternal(item)">
 
         <ng-container *ngIf="itemTemplate == null; else customTemplate">
