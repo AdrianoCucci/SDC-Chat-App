@@ -8,6 +8,7 @@ export interface MenuItem {
   routerLinkActive?: string;
   id?: string;
   cssClass?: string;
+  disabled?: boolean;
   data?: any;
   onClick?: (context: any) => void;
   children?: MenuItem[];
