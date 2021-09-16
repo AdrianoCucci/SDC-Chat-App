@@ -2,6 +2,7 @@ import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Room } from "../../models/rooms/room";
+import { RoomParams } from "../../models/rooms/room-params";
 import { RoomRequest } from "../../models/rooms/room-request";
 import { WebApiService } from "./web-api.service";
 
@@ -15,8 +16,11 @@ export class RoomsService extends WebApiService {
     super(httpClient);
   }
 
-  public getAllRooms(): Observable<HttpResponse<Room[]>> {
-    return this.get(this._apiPrefix);
+  public getAllRooms(params?: RoomParams): Observable<HttpResponse<Room[]>> {
+    const query: string = this.buildOptionsQuery(params);
+    const url: string = `${this._apiPrefix}${query}`;
+
+    return this.get(url);
   }
 
   public getRoom(id: number): Observable<HttpResponse<Room>> {

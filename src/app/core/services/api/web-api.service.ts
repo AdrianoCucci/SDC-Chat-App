@@ -47,4 +47,26 @@ export abstract class WebApiService {
   protected appendQueryParam(query: string, paramName: string, paramValue: any): string {
     return query + `${(query.startsWith('?') ? '&' : '?')}${paramName}=${paramValue}`;
   }
+
+  protected buildOptionsQuery(...options: object[]): string {
+    let query: string = "";
+
+    if(options != null) {
+      for(let i = 0; i < options.length; i++) {
+        const option: object = options[i];
+
+        if(option != null) {
+          const entries: [string, any][] = Object.entries(option);
+
+          for(const [key, value] of entries) {
+            if(value != null) {
+              query = this.appendQueryParam(query, key, value);
+            }
+          }
+        }
+      }
+    }
+
+    return query;
+  }
 }

@@ -25,9 +25,11 @@ export class ChatPage {
 
   async ngOnInit() {
     try {
+      const organizationId: number = this.loggedInUser.organizationId;
+
       const data: [User[], ChatMessage[]] = await Promise.all([
-        this.loadUsers(),
-        this.loadMessages()
+        this.loadUsers(organizationId),
+        this.loadMessages(organizationId)
       ]);
 
       this.users = data[0];
@@ -40,10 +42,10 @@ export class ChatPage {
     }
   }
 
-  private loadUsers(): Promise<User[]> {
+  private loadUsers(organizationId?: number): Promise<User[]> {
     return new Promise<User[]>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<User[]> = await this._usersService.getAllUsers().toPromise();
+        const response: HttpResponse<User[]> = await this._usersService.getAllUsers({ organizationId }).toPromise();
         resolve(response.body);
       }
       catch(error) {
@@ -52,10 +54,10 @@ export class ChatPage {
     });
   }
 
-  private loadMessages(): Promise<ChatMessage[]> {
+  private loadMessages(organizationId?: number): Promise<ChatMessage[]> {
     return new Promise<ChatMessage[]>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessages().toPromise();
+        const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessages({ organizationId }).toPromise();
         resolve(response.body);
       }
       catch(error) {
