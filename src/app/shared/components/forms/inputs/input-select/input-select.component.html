@@ -1,0 +1,20 @@
+<div class="input-wrapper">
+  <div class="select-wrapper">
+    <select [name]="name" [attr.id]="name" [title]="label" [required]="required" [disabled]="disabled"
+      (blur)="validateIfDirty()" [(ngModel)]="value">
+
+      <option *ngFor="let option of options" [value]="valueKey ? option[valueKey] : option">
+        {{displayKey ? option[displayKey] : option}}
+      </option>
+    </select>
+  </div>
+
+  <label *ngIf="label" [for]="name">
+    <span *ngIf="required">*&nbsp;</span>
+    <span>{{label}}</span>
+  </label>
+</div>
+
+<ul class="error-list" [ngClass]="{'visible': showErrors && hasErrors}">
+  <li *ngFor="let error of errors" class="error-message">{{error}}</li>
+</ul>
