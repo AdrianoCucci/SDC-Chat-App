@@ -1,0 +1,112 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  ngx-datatable {
+    width: 100%;
+    height: 100%;
+
+    ::ng-deep div[role="table"] {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+
+      datatable-header {
+        flex-shrink: 0;
+
+        datatable-header-cell div.datatable-header-cell-template-wrap {
+          display: flex;
+        }
+      }
+
+      datatable-body {
+        width: 100%;
+        height: 100% !important;
+        overflow: auto;
+
+        datatable-scroller {
+          width: 100% !important;
+          overflow: hidden;
+        }
+      }
+
+      datatable-footer {
+        display: flex;
+        overflow: hidden;
+
+        div.page-count {
+          font-weight: 600;
+        }
+
+        div.datatable-footer-inner {
+          height: unset !important;
+          padding: 1rem;
+          border-top: solid var(--green-100) 1px;
+
+          datatable-pager ul li.pages {
+            a {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              width: 1.75rem;
+              height: 1.75rem;
+              margin: 0 0.25rem;
+              color: initial;
+              background-color: var(--green-50);
+              border-radius: 0.25rem;
+              text-decoration: none;
+            }
+
+            &.active a {
+              background-color: var(--green-300);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  div.cell {
+    &.cell-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1;
+      height: 3rem;
+      background-color: var(--green-200);
+      border-right: solid var(--green-300) 2px;
+      border-bottom: solid var(--green-300) 1px;
+
+      span.cell-header-name {
+        flex: 1;
+        padding-left: 1rem;
+        font-weight: 600;
+      }
+
+      span.sort-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 2.75rem;
+        cursor: pointer;
+        transition: 0.16s;
+
+        &:hover {
+          background-color: var(--green-300);
+        }
+      }
+    }
+
+    &.cell-data {
+      padding: 0.75rem 1rem;
+      border-bottom: solid var(--green-200) 1px;
+
+      .data-input {
+        pointer-events: none;
+      }
+    }
+  }
+}
