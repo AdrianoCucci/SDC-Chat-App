@@ -40,6 +40,10 @@
       (valueChange)="onFilter(cell, $event)">
     </app-input-toggle>
 
+    <app-input-select *ngSwitchCase="'select'" class="filter-input" [options]="cell.selectOptions?.options"
+      [displayKey]="cell.selectOptions?.displayKey" [valueKey]="cell.selectOptions?.valueKey"
+      (valueChange)="onFilter(cell, $event)"></app-input-select>
+
     <app-input-text *ngSwitchDefault class="filter-input" (valueChange)="onFilter(cell, $event)"></app-input-text>
   </ng-container>
 </ng-template>
