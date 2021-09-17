@@ -1,11 +1,8 @@
-export interface TableCell {
-  header?: string;
-  valueField?: string;
-  valueType?: CellValueType;
-  sortable?: boolean;
-  filterable?: boolean;
+import { TableColumn } from "@swimlane/ngx-datatable";
+
+export interface TableCell extends TableColumn {
+  type?: CellValueType;
   hidden?: boolean;
-  cssClass?: string;
 }
 
 type CellValueType = "text" | "number" | "boolean" | "date" | "time" | "datetime-local" | "select";

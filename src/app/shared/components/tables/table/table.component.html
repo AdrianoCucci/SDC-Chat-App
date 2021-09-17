@@ -1,64 +1,30 @@
-<div class="table-header">
-  <ng-content select="[slot=header]"></ng-content>
-</div>
+<ngx-datatable [rows]="data">
 
-<div *ngIf="config != null" class="table-wrapper">
-  <table>
-    <thead>
-      <tr>
-        <ng-container *ngFor="let cell of config.cells">
-          <th *ngIf="!cell.hidden" [class]="cell.cssClass">
-            <div class="cell-header-content" tabindex="-1"
-              [ngClass]="{'sortable': cell.sortable, 'filterable': cell.filterable}">
-              <div #cellHeaderName class="cell-header-name" (click)="onSort(cell, cellHeaderName)">
-                <span>{{cell.header}}</span>
+  <ng-container *ngFor="let cell of cells; index as i">
+    <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name">
 
-                <div *ngIf="cell.sortable" class="sort-icon">
-                  <fa-icon *ngIf="cellHeaderName.getAttribute('sort') == null" [icon]="sortIcon"></fa-icon>
-                  <fa-icon *ngIf="cellHeaderName.getAttribute('sort') === 'asc'" [icon]="sortIconUp"></fa-icon>
-                  <fa-icon *ngIf="cellHeaderName.getAttribute('sort') === 'desc'" [icon]="sortIconDown"></fa-icon>
-                </div>
-              </div>
+      <ng-template ngx-datatable-header-template let-sort="sortFn" let-sortDir="sortDir">
+        <div class="cell cell-header">
+          <span>{{cell.name}}</span>
 
-              <div *ngIf="cell.filterable" class="cell-header-filter">
-                <ng-container *ngTemplateOutlet="thFilterTemplate; context: { $implicit: cell }">
-                </ng-container>
-              </div>
-            </div>
-          </th>
-        </ng-container>
-      </tr>
-    </thead>
+          <span *ngIf="cell.sortable" class="sort-action" role="button" (click)="sort()">
+            <ng-container [ngSwitch]="sortDir">
+              <fa-icon *ngSwitchCase="'asc'" [icon]="sortAscIcon"></fa-icon>
+              <fa-icon *ngSwitchCase="'desc'" [icon]="sortDescIcon"></fa-icon>
+              <fa-icon *ngSwitchDefault [icon]="sortNoneIcon"></fa-icon>
+            </ng-container>
+          </span>
+        </div>
+      </ng-template>
 
-    <tbody>
-      <tr *ngFor="let row of config.data">
-        <ng-container *ngFor="let cell of config.cells">
-          <td *ngIf="!cell.hidden">
-            <div class="cell-body-content">
-              <ng-container *ngTemplateOutlet="tdTemplate; context: { $implicit: cell, value: row[cell.valueField] }">
-              </ng-container>
-            </div>
-          </td>
-        </ng-container>
-      </tr>
-    </tbody>
-  </table>
-</div>
+      <ng-template ngx-datatable-cell-template let-row="row">
+        <div [ngSwitch]="cell.type" class="cell cell-data">
+          <input *ngSwitchCase="'boolean'" type="checkbox" [checked]="row[cell.prop]">
+          <span *ngSwitchDefault>{{row[cell.prop]}}</span>
+        </div>
+      </ng-template>
 
-<div class="table-footer">
-  <ng-content select="[slot=footer]"></ng-content>
-</div>
-
-<ng-template #thFilterTemplate let-cell>
-  <ng-container [ngSwitch]="cell.valueType">
-    <input *ngSwitchCase="'boolean'" type="checkbox">
-    <app-input-text *ngSwitchDefault [type]="cell.valueType"></app-input-text>
+    </ngx-datatable-column>
   </ng-container>
-</ng-template>
 
-<ng-template #tdTemplate let-cell let-value="value">
-  <ng-container [ngSwitch]="cell.valueType">
-    <input *ngSwitchCase="'boolean'" class="readonly-value" type="checkbox" [checked]="value">
-    <span *ngSwitchDefault>{{value}}</span>
-  </ng-container>
-</ng-template>
+</ngx-datatable>

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/core/models/users/user';
-import { TableConfig } from '../table/table-config';
+import { TableCell } from '../table/table-cell';
 
 @Component({
   selector: 'app-users-table',
@@ -8,29 +8,19 @@ import { TableConfig } from '../table/table-config';
   styleUrls: ['./users-table.component.scss']
 })
 export class UsersTableComponent implements OnInit {
+  @Input() public users: User[];
   @Input() public adminFeatures: boolean = false;
 
-  public readonly tableConfig = new TableConfig<User>({
-    dataKey: "id",
-    cells: [
-      { header: "Username", valueField: "username", sortable: true, filterable: true },
-      { header: "Display Name", valueField: "displayName", sortable: true, filterable: true },
-      { header: "Role", valueField: "role", sortable: true, filterable: true, hidden: this.adminFeatures },
-      { header: "Is Online", valueField: "isOnline", sortable: true, filterable: true, valueType: "boolean" },
-      { header: "Organization", valueField: "organizationId", sortable: true, filterable: true, hidden: this.adminFeatures }
-    ]
-  });
+  public readonly cells: TableCell[] = [
+    { name: "Username", prop: "username", sortable: true },
+    { name: "Display Name", prop: "displayName", sortable: true },
+    { name: "Role", prop: "role", sortable: true },
+    { name: "Is Online", prop: "isOnline", sortable: true, type: "boolean" },
+    { name: "Organization", prop: "organizationId", sortable: true }
+  ];
 
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  public get users(): User[] {
-    return this.tableConfig.data;
-  }
-
-  @Input() public set users(value: User[]) {
-    this.tableConfig.setData(value);
   }
 }
