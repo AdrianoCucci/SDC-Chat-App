@@ -23,25 +23,26 @@ export class TableComponent {
   onFilter(cell: TableCell, filterValue: any): void {
     let filteredData: any[];
 
-    if(filterValue) {
-      filteredData = this.data.filter((data: any) => {
-        let result: boolean;
-        const dataValue: any = data[cell.prop];
+    filteredData = this.data.filter((data: any) => {
+      let result: boolean;
+      const dataValue: any = data[cell.prop];
 
-        switch(cell.type) {
-          case "number":
-          case "boolean":
-            result = dataValue === filterValue;
-            break;
+      switch(cell.type) {
+        case "number":
+          result = dataValue === filterValue;
+          break;
 
-          default:
-            result = `${dataValue}`.includes(filterValue);
-            break;
-        }
+        case "boolean":
+          result = filterValue != null ? dataValue === filterValue : true;
+          break;
 
-        return result;
-      });
-    }
+        default:
+          result = `${dataValue}`.includes(filterValue);
+          break;
+      }
+
+      return result;
+    });
 
     this._filteredData = filteredData ?? null;
   }

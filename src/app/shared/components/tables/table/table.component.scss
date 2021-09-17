@@ -31,6 +31,13 @@
           width: 100% !important;
           overflow: hidden;
         }
+
+        datatable-body-cell {
+          display: flex;
+          align-items: center;
+          padding: 0.75rem 1rem;
+          border-bottom: solid var(--green-200) 1px;
+        }
       }
 
       datatable-footer {
@@ -116,10 +123,11 @@
     }
 
     &.cell-data {
-      padding: 0.75rem 1rem;
-      border-bottom: solid var(--green-200) 1px;
-
+      display: flex;
+      align-items: center;
+      
       .data-input {
+        margin: 0;
         pointer-events: none;
       }
     }
