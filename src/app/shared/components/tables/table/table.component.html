@@ -1,12 +1,16 @@
-<ngx-datatable #table [rows]="data" [columnMode]="columnMode" [headerHeight]="-1" [rowHeight]="-1" [footerHeight]="1"
+<ngx-datatable #table [rows]="rows" [columnMode]="columnMode" [headerHeight]="-1" [rowHeight]="-1" [footerHeight]="1"
   [limit]="20">
 
   <ng-container *ngFor="let cell of cells; index as i">
     <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name">
 
-      <ng-template ngx-datatable-header-template let-sort="sortFn" let-sortDir="sortDir">
+      <ng-template ngx-datatable-header-template let-row="row" let-sort="sortFn" let-sortDir="sortDir">
         <div class="cell cell-header">
-          <span class="cell-header-name">{{cell.name}}</span>
+          <div class="cell-header-name-wrapper">
+            <span class="cell-header-name">{{cell.name}}</span>
+            <app-input-text *ngIf="cell.filterable" class="filter-input" (valueChange)="onFilter(cell, $event)">
+            </app-input-text>
+          </div>
 
           <span *ngIf="cell.sortable" class="sort-action" role="button" [ngSwitch]="sortDir" (click)="sort()">
             <fa-icon *ngSwitchCase="'asc'" [icon]="sortAscIcon"></fa-icon>

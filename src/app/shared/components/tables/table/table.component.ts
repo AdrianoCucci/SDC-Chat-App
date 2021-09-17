@@ -17,4 +17,36 @@ export class TableComponent {
   public readonly sortNoneIcon: IconDefinition = faSort;
   public readonly sortAscIcon: IconDefinition = faSortAmountUp;
   public readonly sortDescIcon: IconDefinition = faSortAmountDown;
+
+  private _filteredData: any[];
+
+  onFilter(cell: TableCell, filterValue: any): void {
+    let filteredData: any[];
+
+    if(filterValue) {
+      filteredData = this.data.filter((data: any) => {
+        let result: boolean;
+        const dataValue: any = data[cell.prop];
+
+        switch(cell.type) {
+          case "number":
+          case "boolean":
+            result = dataValue === filterValue;
+            break;
+
+          default:
+            result = `${dataValue}`.includes(filterValue);
+            break;
+        }
+
+        return result;
+      });
+    }
+
+    this._filteredData = filteredData ?? null;
+  }
+
+  public get rows(): any[] {
+    return this._filteredData ?? this.data;
+  }
 }

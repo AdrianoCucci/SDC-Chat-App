@@ -18,6 +18,7 @@
 
         datatable-header-cell div.datatable-header-cell-template-wrap {
           display: flex;
+          height: 100%;
         }
       }
 
@@ -71,18 +72,32 @@
   div.cell {
     &.cell-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
       flex: 1;
-      height: 3rem;
+      min-height: 3rem;
       background-color: var(--green-200);
       border-right: solid var(--green-300) 2px;
       border-bottom: solid var(--green-300) 1px;
 
-      span.cell-header-name {
+      div.cell-header-name-wrapper {
+        display: flex;
+        flex-direction: column;
         flex: 1;
+        height: 100%;
         padding-left: 1rem;
-        font-weight: 600;
+
+        span.cell-header-name {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          min-height: 2.5rem;
+          font-weight: 600;
+          flex: 1;
+        }
+
+        .filter-input {
+          margin: 0.25rem 0.5rem 0.5rem 0;
+        }
       }
 
       span.sort-action {

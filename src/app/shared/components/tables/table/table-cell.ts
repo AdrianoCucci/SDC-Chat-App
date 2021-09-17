@@ -2,6 +2,7 @@ import { TableColumn } from "@swimlane/ngx-datatable";
 
 export interface TableCell extends TableColumn {
   type?: CellValueType;
+  filterable?: boolean;
   hidden?: boolean;
 }
 
