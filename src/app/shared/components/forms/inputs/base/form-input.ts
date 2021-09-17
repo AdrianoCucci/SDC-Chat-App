@@ -7,8 +7,8 @@ import { InputValidationResult } from "./input-validation-result";
 export abstract class FormInput<T = any> implements AfterViewInit {
   @Output() public readonly valueChange = new EventEmitter<T>();
 
-  @Input() public name: string;
-  @Input() public label: string;
+  @Input() public name: string = "";
+  @Input() public label: string = "";
   @Input() @HostBinding("class.disabled") public disabled: boolean = false;
   @Input() @HostBinding("class.readonly") public readonly: boolean = false;
   @Input() public showErrors: boolean = true;
