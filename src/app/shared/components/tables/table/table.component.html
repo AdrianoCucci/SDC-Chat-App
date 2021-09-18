@@ -2,7 +2,7 @@
   [limit]="20">
 
   <ng-container *ngFor="let cell of cells; index as i">
-    <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name">
+    <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name" [prop]="cell.prop">
 
       <ng-template ngx-datatable-header-template let-sort="sortFn" let-sortDir="sortDir">
         <div class="cell cell-header">
@@ -22,15 +22,14 @@
         </div>
       </ng-template>
 
-      <ng-template ngx-datatable-cell-template let-row="row">
+      <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
         <div *ngIf="!cell.cellTemplate; else customCellTemplate" [ngSwitch]="cell.type" class="cell cell-data">
-          <app-input-toggle *ngSwitchCase="'boolean'" class="data-input" [value]="row[cell.prop]"></app-input-toggle>
-          <span *ngSwitchDefault>{{row[cell.prop] || '-'}}</span>
+          <app-input-toggle *ngSwitchCase="'boolean'" class="data-input" [value]="value"></app-input-toggle>
+          <span *ngSwitchDefault>{{value || '-'}}</span>
         </div>
 
         <ng-template #customCellTemplate>
-          <ng-container
-            *ngTemplateOutlet="cell.cellTemplate; context: { $implicit: cell, row: row, value: row[cell.prop] }">
+          <ng-container *ngTemplateOutlet="cell.cellTemplate; context: { $implicit: cell, row: row, value: value }">
           </ng-container>
         </ng-template>
       </ng-template>
