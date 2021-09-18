@@ -26,7 +26,6 @@ export class InputSelect extends FormInput {
       }
     }
 
-    console.log("NEW VALUE: ", newValue);
     return newValue;
   }
 }
