@@ -1,0 +1,14 @@
+<ng-template #formTemplate>
+  <app-form (onSubmit)="onFormSubmit($result)"></app-form>
+</ng-template>
+
+<app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
+  <div slot="header" [ngSwitch]="mode">
+    <span *ngSwitchCase="'add'">Add User</span>
+    <span *ngSwitchCase="'add'">Update User</span>
+  </div>
+
+  <div slot="body">
+    <ng-container *ngTemplateOutlet="formTemplate"></ng-container>
+  </div>
+</app-dialog>
