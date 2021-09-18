@@ -12,4 +12,21 @@ export class InputSelect extends FormInput {
   @Input() public displayKey: string;
   @Input() public valueKey: string;
   @Input() public clearable: boolean = false;
+
+  protected onValueSetting(newValue: any) {
+    if(newValue != null) {
+      if(!isNaN(newValue)) {
+        newValue = Number(newValue);
+      }
+      else if(newValue === "true") {
+        newValue = true;
+      }
+      else if(newValue === "false") {
+        newValue = false;
+      }
+    }
+
+    console.log("NEW VALUE: ", newValue);
+    return newValue;
+  }
 }

@@ -33,6 +33,7 @@ export class TableComponent {
           break;
 
         case "boolean":
+        case "select":
           result = filterValue != null ? dataValue === filterValue : true;
           break;
 
