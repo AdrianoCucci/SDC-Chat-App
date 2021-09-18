@@ -1,7 +1,14 @@
 :host {
+  --row-background: unset;
+  --row-background-odd: unset;
+  --row-background-even: var(--green-50);
+
   display: block;
   width: 100%;
   height: 100%;
+  border: solid var(--green-200) 1px;
+  border-radius: 0.5rem;
+  overflow: hidden;
 
   ngx-datatable {
     width: 100%;
@@ -30,13 +37,25 @@
         datatable-scroller {
           width: 100% !important;
           overflow: hidden;
-        }
 
-        datatable-body-cell {
-          display: flex;
-          align-items: center;
-          padding: 0.75rem 1rem;
-          border-bottom: solid var(--green-200) 1px;
+          datatable-row-wrapper {
+            background-color: var(--row-background);
+
+            &:nth-of-type(odd) {
+              background-color: var(--row-background-odd);
+            }
+
+            &:nth-of-type(even) {
+              background-color: var(--row-background-even);
+            }
+
+            datatable-body-cell {
+              display: flex;
+              align-items: center;
+              padding: 0.75rem 1rem;
+              border-bottom: solid var(--green-200) 1px;
+            }
+          }
         }
       }
 
@@ -116,7 +135,8 @@
         cursor: pointer;
         transition: 0.16s;
 
-        &:hover {
+        &:hover,
+        &.sort-active {
           background-color: var(--green-300);
         }
       }
@@ -125,7 +145,7 @@
     &.cell-data {
       display: flex;
       align-items: center;
-      
+
       .data-input {
         margin: 0;
         pointer-events: none;
