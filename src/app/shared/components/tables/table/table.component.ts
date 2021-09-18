@@ -19,20 +19,37 @@ export class TableComponent implements AfterViewInit {
   public readonly sortAscIcon: IconDefinition = faSortAmountUp;
   public readonly sortDescIcon: IconDefinition = faSortAmountDown;
 
-  @ContentChildren(TemplateDirective) private readonly _cellTemplates: QueryList<TemplateDirective>;
+  @ContentChildren(TemplateDirective) private readonly _templates: QueryList<TemplateDirective>;
+  private readonly _rowActionsTemplateName: string = "table-row-actions";
 
+  private _initialized: boolean;
   private _filteredData: any[];
+  private _rowActionsTemplate: TemplateRef<any>;
 
   ngAfterViewInit(): void {
-    if(this.cells?.length > 0) {
-      this._cellTemplates.forEach((td: TemplateDirective) => {
-        const prop: string = td.name;
-        const cell: TableCell = this.cells.find((cell: TableCell) => cell.prop === prop);
+    setTimeout(() => {
+      this.mapTemplates(this._templates.toArray(), this.cells);
+      this._initialized = true;
+    });
+  }
 
-        if(cell != null) {
-          cell.cellTemplate = td.template;
+  private mapTemplates(directives: TemplateDirective[], cells: TableCell[]): void {
+    for(let i = 0; i < directives.length; i++) {
+      const directive: TemplateDirective = directives[i];
+      const name: string = directive.name;
+
+      if(name) {
+        if(name === this._rowActionsTemplateName) {
+          this._rowActionsTemplate = directive.template;
         }
-      });
+        else {
+          const cell: TableCell = cells?.find((cell: TableCell) => cell.prop === name);
+
+          if(cell != null) {
+            cell.cellTemplate = directive.template;
+          }
+        }
+      }
     }
   }
 
@@ -64,7 +81,15 @@ export class TableComponent implements AfterViewInit {
     this._filteredData = filteredData ?? null;
   }
 
+  public get initialized(): boolean {
+    return this._initialized;
+  }
+
   public get rows(): any[] {
     return this._filteredData ?? this.data;
+  }
+
+  public get rowActionsTemplate(): TemplateRef<any> {
+    return this._rowActionsTemplate;
   }
 }

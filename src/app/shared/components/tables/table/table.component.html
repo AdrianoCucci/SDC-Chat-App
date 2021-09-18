@@ -1,5 +1,5 @@
-<ngx-datatable #table [rows]="rows" [columnMode]="columnMode" [headerHeight]="-1" [rowHeight]="-1" [footerHeight]="1"
-  [limit]="20">
+<ngx-datatable *ngIf="initialized" #table [rows]="rows" [columnMode]="columnMode" [headerHeight]="-1" [rowHeight]="-1"
+  [footerHeight]="1" [limit]="20">
 
   <ng-container *ngFor="let cell of cells; index as i">
     <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name" [prop]="cell.prop">
@@ -37,6 +37,16 @@
 
     </ngx-datatable-column>
   </ng-container>
+
+  <ngx-datatable-column *ngIf="rowActionsTemplate != null">
+    <ng-template ngx-datatable-header-template>
+      <div class="cell cell-header"></div>
+    </ng-template>
+
+    <ng-template ngx-datatable-cell-template let-row="row">
+      <ng-container *ngTemplateOutlet="rowActionsTemplate; context: { $implicit: row }"></ng-container>
+    </ng-template>
+  </ngx-datatable-column>
 
 </ngx-datatable>
 
