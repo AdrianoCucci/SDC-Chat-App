@@ -8,10 +8,6 @@ export class TemplateDirective {
 
   constructor(private _templateRef: TemplateRef<any>) { }
 
-  ngOnInit() {
-    console.log("DIRECTIVE: ", this.name);
-  }
-
   public get template(): TemplateRef<any> {
     return this._templateRef;
   }
