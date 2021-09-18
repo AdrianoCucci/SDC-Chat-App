@@ -17,6 +17,25 @@ export class Form {
   @ContentChildren(FormInput) private readonly _childInputs: QueryList<FormInput>;
   @ContentChildren(FormGroup) private readonly _childGroups: QueryList<FormGroup>;
 
+  public submit(): FormSubmitResult {
+    const inputs: FormInput[] = this.getInputs();
+    const inputValidations: InputValidationResult[] = [];
+
+    for(let i = 0; i < inputs.length; i++) {
+      inputValidations.push(inputs[i].validate());
+    }
+
+    const result: FormSubmitResult = {
+      form: this,
+      inputValidations,
+      isValid: !inputValidations.some(v => !v.isValid)
+    };
+
+    this.onSubmit.emit(result);
+
+    return result;
+  }
+
   public getInputs(): FormInput[] {
     let inputs: FormInput[] = this._childInputs.toArray();
     this._childGroups.forEach((group: FormGroup) => inputs = inputs.concat(group.getInputs()));
@@ -49,19 +68,6 @@ export class Form {
   }
 
   onFormSubmit(): void {
-    const inputs: FormInput[] = this.getInputs();
-    const inputValidations: InputValidationResult[] = [];
-
-    for(let i = 0; i < inputs.length; i++) {
-      inputValidations.push(inputs[i].validate());
-    }
-
-    const result: FormSubmitResult = {
-      form: this,
-      inputValidations,
-      isValid: !inputValidations.some(v => !v.isValid)
-    };
-
-    this.onSubmit.emit(result);
+    this.submit();
   }
 }
