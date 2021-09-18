@@ -13,16 +13,16 @@ import { LoginService } from 'src/app/core/services/login.service';
   styleUrls: ['./users-page.component.scss']
 })
 export class UsersPage implements OnInit {
-  public loadingVisible: boolean = false;
+  public readonly clientUser: User;
 
-  private readonly _clientUser: User;
+  public loadingVisible: boolean = false;
 
   private _users: User[];
   private _organizations: Organization[];
   private _initialized: boolean = false;
 
   constructor(private _usersService: UsersService, private _orgsService: OrganizationsService, loginService: LoginService) {
-    this._clientUser = loginService.user;
+    this.clientUser = loginService.user;
   }
 
   async ngOnInit(): Promise<void> {
@@ -30,7 +30,7 @@ export class UsersPage implements OnInit {
       this.loadingVisible = true;
 
       await Promise.all([
-        this.loadUsers(this.adminFeatures ? null : this._clientUser.organizationId),
+        this.loadUsers(this.adminFeatures ? null : this.clientUser.organizationId),
         this.adminFeatures ? this.loadOrganizations() : null
       ]);
     }
@@ -58,7 +58,7 @@ export class UsersPage implements OnInit {
   }
 
   public get adminFeatures(): boolean {
-    return this._clientUser?.role === Role.Administrator ?? false;
+    return this.clientUser?.role === Role.Administrator ?? false;
   }
 
   public get users(): User[] {
