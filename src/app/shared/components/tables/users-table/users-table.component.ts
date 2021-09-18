@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
@@ -11,9 +11,8 @@ import { TableCell } from '../table/table-cell';
   templateUrl: './users-table.component.html',
   styleUrls: ['./users-table.component.scss']
 })
-export class UsersTableComponent {
+export class UsersTableComponent implements OnInit {
   @Input() public users: User[];
-  @Input() public adminFeatures: boolean = false;
 
   public readonly rolePairs: Pair<string, Role>[] = enumToPairs(Role, true);
 
@@ -22,6 +21,7 @@ export class UsersTableComponent {
     prop: "organizationId",
     sortable: true,
     filterable: true,
+    cellClass: "admin-cell",
     type: "select",
     selectOptions: {
       displayKey: "name",
@@ -37,6 +37,7 @@ export class UsersTableComponent {
       prop: "role",
       sortable: true,
       filterable: true,
+      cellClass: "admin-cell",
       type: "select",
       selectOptions: {
         options: this.rolePairs,
@@ -48,7 +49,12 @@ export class UsersTableComponent {
     this._organizationCell
   ];
 
+  private _adminFeatures: boolean = false;
   private _organizations: Organization[];
+
+  ngOnInit(): void {
+    this.setAdminCellsHidden(!this._adminFeatures);
+  }
 
   public getRoleName(role: Role): string {
     return this.rolePairs.find((p: Pair<string, Role>) => p.value === role)?.key ?? '-';
@@ -56,6 +62,24 @@ export class UsersTableComponent {
 
   public getOrganizationName(organizationId: number): string {
     return this._organizations?.find((o: Organization) => o.id === organizationId)?.name ?? '-';
+  }
+
+  private setAdminCellsHidden(hidden: boolean) {
+    for(let i = 0; i < this.cells.length; i++) {
+      const cell: TableCell = this.cells[i];
+
+      if(cell.cellClass === "admin-cell") {
+        cell.hidden = hidden;
+      }
+    }
+  }
+
+  public get adminFeatures(): boolean {
+    return this._adminFeatures;
+  }
+  @Input() public set adminFeatures(value: boolean) {
+    this._adminFeatures = value;
+    this.setAdminCellsHidden(!this._adminFeatures);
   }
 
   public get organizations(): Organization[] {
