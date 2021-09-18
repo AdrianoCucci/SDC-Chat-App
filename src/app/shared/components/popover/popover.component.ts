@@ -60,12 +60,18 @@ export class Popover implements OnInit {
       if(this._visible) {
         this.onShow.emit();
         this._contentVisible = true;
-        this._currentTimeout = window.setTimeout(() => window.addEventListener("click", this.windowClickHandler));
+
+        this._currentTimeout = window.setTimeout(() => {
+          window.addEventListener("click", this.windowClickHandler);
+          window.addEventListener("resize", this.windowResizeHandler);
+        });
       }
       else {
         this.onHide.emit();
         this._currentTimeout = window.setTimeout(() => this._contentVisible = false, 160);
+
         window.removeEventListener("click", this.windowClickHandler);
+        window.removeEventListener("resize", this.windowResizeHandler);
       }
     }
   }
@@ -75,6 +81,12 @@ export class Popover implements OnInit {
 
     if(target !== this._lastTarget && !this.nativeElement.contains(target)) {
       this.setVisible(false);
+    }
+  };
+
+  private windowResizeHandler = () => {
+    if(this._visible && this._lastTarget != null) {
+      this.alignToTarget(this._lastTarget);
     }
   };
 
