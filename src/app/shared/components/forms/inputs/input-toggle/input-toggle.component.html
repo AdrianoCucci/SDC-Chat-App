@@ -2,10 +2,16 @@
   <div class="box-outer" role="checkbox" [tabindex]="!disabled && !readonly ? 0 : -1" (click)="onClick()"
     (keyup.enter)="onClick()" (keyup.space)="onClick()" (blur)="validateIfDirty()">
 
-    <div class="box-inner" [ngClass]="{'fill-background': value != null}">
+    <div *ngIf="!tristate; else tristateTemplate" class="box-inner" [ngClass]="{'fill-background': value}">
       <fa-icon *ngIf="value === true" [icon]="checkIcon"></fa-icon>
-      <fa-icon *ngIf="value === false" [icon]="timesIcon"></fa-icon>
     </div>
+
+    <ng-template #tristateTemplate>
+      <div class="box-inner" [ngClass]="{'fill-background': value != null}">
+        <fa-icon *ngIf="value === true" [icon]="checkIcon"></fa-icon>
+        <fa-icon *ngIf="value === false" [icon]="timesIcon"></fa-icon>
+      </div>
+    </ng-template>
   </div>
 
   <input type="hidden" [name]="name" [attr.id]="name" [required]="required" [disabled]="disabled" [readonly]="readonly"
