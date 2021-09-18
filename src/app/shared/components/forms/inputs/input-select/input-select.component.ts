@@ -11,4 +11,5 @@ export class InputSelect extends FormInput {
   @Input() public options: any[];
   @Input() public displayKey: string;
   @Input() public valueKey: string;
+  @Input() public clearable: boolean = false;
 }

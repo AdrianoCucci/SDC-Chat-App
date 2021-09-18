@@ -1,13 +1,13 @@
 <div class="input-wrapper">
-  <div class="select-wrapper">
-    <select [name]="name" [attr.id]="name" [title]="label" [required]="required" [disabled]="disabled"
-      (blur)="validateIfDirty()" [(ngModel)]="value">
+  <select [name]="name" [attr.id]="name" [title]="label" [required]="required" [disabled]="disabled"
+    (blur)="validateIfDirty()" [(ngModel)]="value">
 
-      <option *ngFor="let option of options" [value]="valueKey ? option[valueKey] : option">
-        {{displayKey ? option[displayKey] : option}}
-      </option>
-    </select>
-  </div>
+    <option *ngFor="let option of options" [value]="valueKey ? option[valueKey] : option">
+      <span class="option">{{displayKey ? option[displayKey] : option}}</span>
+    </option>
+  </select>
+
+  <app-button *ngIf="clearable && value" class="clear-button text" icon="times" (click)="value = null"></app-button>
 
   <label *ngIf="label" [for]="name">
     <span *ngIf="required">*&nbsp;</span>
