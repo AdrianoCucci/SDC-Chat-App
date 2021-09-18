@@ -1,4 +1,5 @@
 :host {
+  --padding: 0.4rem 0.8rem;
   --background: var(--green-400);
   --color: var(--surface-900);
   --border-radius: 0.25rem;
@@ -15,10 +16,11 @@
 
   button {
     display: flex;
+    align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
-    padding: 0.4rem 0.8rem;
+    padding: var(--padding);
     border: none;
     background-color: var(--background);
     color: var(--color);
@@ -28,10 +30,13 @@
     cursor: inherit;
 
     .button-icon {
-      margin: 0 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-self: center;
     }
 
     span.button-text {
+      margin: 0 0.5rem;
       pointer-events: none;
     }
 
