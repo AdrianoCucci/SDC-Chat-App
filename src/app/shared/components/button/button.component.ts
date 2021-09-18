@@ -1,4 +1,6 @@
 import { Component, HostBinding, Input } from '@angular/core';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { getCommonFaIcon } from '../../functions/get-common-fa-icon';
 
 @Component({
   selector: 'app-button',
@@ -12,6 +14,18 @@ export class Button {
   @Input() public routerLink: string | any[];
   @Input() public routerLinkActive: string;
   @Input() @HostBinding("class.disabled") public disabled: boolean = false;
+
+  private _icon: ButtonIcon;
+  private _iconDefinition: IconDefinition;
+
+  private updateIconDefinition(icon: ButtonIcon) {
+    if(typeof icon !== "string") {
+      this._iconDefinition = icon;
+    }
+    else {
+      this._iconDefinition = getCommonFaIcon(icon);
+    }
+  }
 
   public get renderType(): RenderType {
     let type: RenderType;
@@ -28,6 +42,19 @@ export class Button {
 
     return type;
   }
+
+  public get icon(): ButtonIcon {
+    return this._icon;
+  }
+  @Input() public set icon(value: ButtonIcon) {
+    this._icon = value;
+    this.updateIconDefinition(this._icon);
+  }
+
+  public get iconDefinition(): IconDefinition {
+    return this._iconDefinition;
+  }
 }
 
 type RenderType = "button" | "router-link" | "anchor";
+type ButtonIcon = IconDefinition | string;

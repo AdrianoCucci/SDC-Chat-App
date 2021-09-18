@@ -1,5 +1,6 @@
 <ng-template #buttonTemplate>
   <button [type]="type" [disabled]="disabled">
+    <fa-icon *ngIf="iconDefinition" [icon]="iconDefinition"></fa-icon>
     <span *ngIf="text" class="button-text">{{text}}</span>
   </button>
 </ng-template>
