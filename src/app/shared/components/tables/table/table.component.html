@@ -23,10 +23,16 @@
       </ng-template>
 
       <ng-template ngx-datatable-cell-template let-row="row">
-        <div [ngSwitch]="cell.type" class="cell cell-data">
+        <div *ngIf="!cell.cellTemplate; else customCellTemplate" [ngSwitch]="cell.type" class="cell cell-data">
           <app-input-toggle *ngSwitchCase="'boolean'" class="data-input" [value]="row[cell.prop]"></app-input-toggle>
           <span *ngSwitchDefault>{{row[cell.prop] || '-'}}</span>
         </div>
+
+        <ng-template #customCellTemplate>
+          <ng-container
+            *ngTemplateOutlet="cell.cellTemplate; context: { $implicit: cell, row: row, value: row[cell.prop] }">
+          </ng-container>
+        </ng-template>
       </ng-template>
 
     </ngx-datatable-column>
