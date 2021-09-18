@@ -13,6 +13,7 @@ export class Button {
   @Input() public href: string;
   @Input() public routerLink: string | any[];
   @Input() public routerLinkActive: string;
+  @Input() public iconPos: "start" | "end";
   @Input() @HostBinding("class.disabled") public disabled: boolean = false;
 
   private _icon: ButtonIcon;

@@ -14,7 +14,8 @@
   }
 
   button {
-    display: block;
+    display: flex;
+    justify-content: center;
     width: 100%;
     height: 100%;
     padding: 0.4rem 0.8rem;
@@ -26,8 +27,16 @@
     font: inherit;
     cursor: inherit;
 
+    .button-icon {
+      margin: 0 0.5rem;
+    }
+
     span.button-text {
       pointer-events: none;
+    }
+
+    &.icon-end {
+      flex-direction: row-reverse;
     }
   }
 
