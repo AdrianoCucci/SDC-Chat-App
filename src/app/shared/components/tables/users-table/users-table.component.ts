@@ -13,6 +13,7 @@ import { TableCell } from '../table/table-cell';
 })
 export class UsersTableComponent implements OnInit {
   @Input() public users: User[];
+  @Input() public clientUser: User;
 
   public readonly rolePairs: Pair<string, Role>[] = enumToPairs(Role, true);
 
@@ -54,6 +55,10 @@ export class UsersTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.setAdminCellsHidden(!this._adminFeatures);
+  }
+
+  public isClientUser(user: User): boolean {
+    return this.clientUser?.id === user?.id;
   }
 
   public getRoleName(role: Role): string {

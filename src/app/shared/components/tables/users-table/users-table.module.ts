@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { TableModule } from '../table/table.module';
 import { DirectivesModule } from 'src/app/shared/directives/directives-module';
+import { ButtonModule } from '../../button/button.module';
 
 import { UsersTableComponent } from './users-table.component';
 const component = [UsersTableComponent];
@@ -11,7 +12,8 @@ const component = [UsersTableComponent];
   imports: [
     CommonModule,
     TableModule,
-    DirectivesModule
+    DirectivesModule,
+    ButtonModule
   ],
   exports: component,
   declarations: component

@@ -1,4 +1,16 @@
 <app-table [cells]="cells" [data]="users">
   <ng-template app-template="role" let-value="value">{{getRoleName(value)}}</ng-template>
   <ng-template app-template="organizationId" let-value="value">{{getOrganizationName(value)}}</ng-template>
+
+  <ng-template app-template="table-row-actions" let-user>
+    <span *ngIf="isClientUser(user); else rowActionsTemplate">(You)</span>
+
+    <ng-template #rowActionsTemplate>
+      <div class="user-actions">
+        <app-button class="text reset-password" icon="key" title="Reset Password"></app-button>
+        <app-button class="text edit-user" icon="pen" title="Edit User"></app-button>
+        <app-button class="text delete-user" icon="trash" title="Delete User"></app-button>
+      </div>
+    </ng-template>
+  </ng-template>
 </app-table>
