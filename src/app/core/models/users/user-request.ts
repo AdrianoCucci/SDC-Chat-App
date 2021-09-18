@@ -1,6 +1,6 @@
 import { Role } from "../auth/role";
 
-export interface User {
+export interface UserRequest {
   id?: number;
   role: Role;
   username: string;
