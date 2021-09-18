@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TableModule } from '../table/table.module';
+import { DirectivesModule } from 'src/app/shared/directives/directives-module';
 
 import { UsersTableComponent } from './users-table.component';
 const component = [UsersTableComponent];
@@ -9,7 +10,8 @@ const component = [UsersTableComponent];
 @NgModule({
   imports: [
     CommonModule,
-    TableModule
+    TableModule,
+    DirectivesModule
   ],
   exports: component,
   declarations: component

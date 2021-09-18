@@ -1,1 +1,4 @@
-<app-table [cells]="cells" [data]="users"></app-table>
+<app-table [cells]="cells" [data]="users">
+  <ng-template app-template="role" let-value="value">{{getRoleName(value)}}</ng-template>
+  <ng-template app-template="organizationId" let-value="value">{{getOrganizationName(value)}}</ng-template>
+</app-table>
