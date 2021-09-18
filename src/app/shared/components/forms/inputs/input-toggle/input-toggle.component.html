@@ -1,8 +1,8 @@
 <div class="input-wrapper">
-  <div class="box-outer" role="checkbox" [tabindex]="!disabled && !readonly ? 0 : -1" (click)="onClick()" (keyup.enter)="onClick()"
-    (keyup.space)="onClick()" (blur)="validateIfDirty()">
+  <div class="box-outer" role="checkbox" [tabindex]="!disabled && !readonly ? 0 : -1" (click)="onClick()"
+    (keyup.enter)="onClick()" (keyup.space)="onClick()" (blur)="validateIfDirty()">
 
-    <div *ngIf="value != null" class="box-inner">
+    <div class="box-inner" [ngClass]="{'fill-background': value != null}">
       <fa-icon *ngIf="value === true" [icon]="checkIcon"></fa-icon>
       <fa-icon *ngIf="value === false" [icon]="timesIcon"></fa-icon>
     </div>
