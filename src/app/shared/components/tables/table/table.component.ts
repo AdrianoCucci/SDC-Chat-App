@@ -83,7 +83,7 @@ export class TableComponent implements AfterViewInit {
     return item;
   }
 
-  public addRow(item: any): void {
+  public addRow(item: any): any[] {
     if(item != null) {
       if(this.hasData) {
         this.data.push(item);
@@ -94,9 +94,11 @@ export class TableComponent implements AfterViewInit {
 
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public addManyRows(...items: any[]): void {
+  public addManyRows(...items: any[]): any[] {
     if(items) {
       for(let i = 0; i < items.length; i++) {
         const item: any = items[i];
@@ -113,30 +115,38 @@ export class TableComponent implements AfterViewInit {
 
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public setRow(index: number, item: any): void {
+  public setRow(index: number, item: any): any[] {
     if(this.hasData && index > -1 && index < this.data.length) {
       this.data[index] = item;
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public assignRow(index: number, item: any): void {
+  public assignRow(index: number, item: any): any[] {
     if(this.hasData && index > -1 && index < this.data.length) {
       Object.assign(this.data[index], item);
       this.data = [...this.data];
     }
+   
+    return this.data;
   }
 
-  public deleteRow(index: number): void {
+  public deleteRow(index: number): any[] {
     if(this.hasData && index > -1 && index < this.data.length) {
       this.data.splice(index, 1);
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public querySetRow(item: any, predicate: (item: any) => boolean): void {
+  public querySetRow(item: any, predicate: (item: any) => boolean): any[] {
     const row: any = this.findRow(predicate);
 
     if(row != null) {
@@ -144,9 +154,11 @@ export class TableComponent implements AfterViewInit {
       this.data[index] = item;
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public querySetAllRows(item: any, predicate: (item: any) => boolean): void {
+  public querySetAllRows(item: any, predicate: (item: any) => boolean): any[] {
     const rows: any[] = this.findAllRows(predicate);
 
     if(rows?.length > 0) {
@@ -158,9 +170,11 @@ export class TableComponent implements AfterViewInit {
 
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public queryAssignRow(item: any, predicate: (item: any) => boolean): void {
+  public queryAssignRow(item: any, predicate: (item: any) => boolean): any[] {
     const row: any = this.findRow(predicate);
 
     if(row != null) {
@@ -168,9 +182,11 @@ export class TableComponent implements AfterViewInit {
       Object.assign(this.data[index], item);
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public queryAssignAllRows(item: any, predicate: (item: any) => boolean): void {
+  public queryAssignAllRows(item: any, predicate: (item: any) => boolean): any[] {
     const rows: any[] = this.findAllRows(predicate);
 
     if(rows?.length > 0) {
@@ -182,9 +198,11 @@ export class TableComponent implements AfterViewInit {
 
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public queryDeleteRow(predicate: (item: any) => boolean): void {
+  public queryDeleteRow(predicate: (item: any) => boolean): any[] {
     const row: any = this.findRow(predicate);
 
     if(row != null) {
@@ -192,9 +210,11 @@ export class TableComponent implements AfterViewInit {
       this.data.splice(index, 1);
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
-  public queryDeleteAllRows(predicate: (item: any) => boolean): void {
+  public queryDeleteAllRows(predicate: (item: any) => boolean): any[] {
     const rows: any[] = this.findAllRows(predicate);
 
     if(rows?.length > 0) {
@@ -206,6 +226,8 @@ export class TableComponent implements AfterViewInit {
 
       this.data = [...this.data];
     }
+
+    return this.data;
   }
 
   onFilter(cell: TableCell, filterValue: any): void {
