@@ -1,4 +1,9 @@
 :host {
+  div.header-actions {
+    text-align: right;
+    margin-bottom: 1rem;
+  }
+
   app-table div.user-actions {
     app-button.delete-user {
       --background: var(--pink-600);

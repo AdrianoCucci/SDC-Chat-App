@@ -1,9 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
+import { UserRequest } from 'src/app/core/models/users/user-request';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
+import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
+import { UserForm } from '../../forms/app/user-form/user-form.component';
 import { TableCell } from '../table/table-cell';
 
 @Component({
@@ -50,6 +53,8 @@ export class UsersTableComponent implements OnInit {
     this._organizationCell
   ];
 
+  @ViewChild(UserForm) private readonly _userForm: UserForm;
+
   private _adminFeatures: boolean = false;
   private _organizations: Organization[];
 
@@ -77,6 +82,55 @@ export class UsersTableComponent implements OnInit {
         cell.hidden = hidden;
       }
     }
+  }
+
+  onAddUser(): void {
+    const request: UserRequest = {
+      username: "",
+      password: "",
+      role: null,
+      isOnline: false
+    };
+
+    this.showUserForm(request, "add");
+  }
+
+  onEditUser(user: UserRequest): void {
+    const request: UserRequest = { ...user };
+    this.showUserForm(request, "edit");
+  }
+
+  onUserFormSubmit(user: User): void {
+    this._userForm.dialogVisible = false;
+
+    switch(this._userForm.mode) {
+      case "add":
+        if(this.users == null) {
+          this.users = [user];
+        }
+        else {
+          this.users.push(user);
+        }
+        break;
+
+      case "edit":
+        const index: number = this.users?.findIndex((u: User) => u.id === user.id) ?? -1;
+
+        if(index !== -1) {
+          this.users[index] = user;
+        }
+        break;
+    }
+  }
+
+  private showUserForm(model: UserRequest, mode: FormMode) {
+    this._userForm.clear();
+
+    setTimeout(() => {
+      this._userForm.model = model;
+      this._userForm.mode = mode;
+      this._userForm.dialogVisible = true;
+    });
   }
 
   public get adminFeatures(): boolean {

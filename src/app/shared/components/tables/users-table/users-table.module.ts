@@ -6,6 +6,7 @@ import { DirectivesModule } from 'src/app/shared/directives/directives-module';
 import { ButtonModule } from '../../button/button.module';
 
 import { UsersTableComponent } from './users-table.component';
+import { UserFormModule } from '../../forms/app/user-form/user-form.module';
 const component = [UsersTableComponent];
 
 @NgModule({
@@ -13,7 +14,8 @@ const component = [UsersTableComponent];
     CommonModule,
     TableModule,
     DirectivesModule,
-    ButtonModule
+    ButtonModule,
+    UserFormModule
   ],
   exports: component,
   declarations: component

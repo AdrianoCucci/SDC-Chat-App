@@ -5,6 +5,16 @@
       [(value)]="model.username">
     </app-input-text>
 
+    <ng-container *ngIf="mode === 'add'">
+      <app-input-text #passInput class="block" type="password" name="password" label="Password"
+        [validations]="{ required: true }" [(value)]="model.password">
+      </app-input-text>
+
+      <app-input-text class="block" type="password" name="confirm-password" label="Confirm Password"
+        [validations]="{ required: true, matchInput: passInput }">
+      </app-input-text>
+    </ng-container>
+    
     <app-input-text class="block" name="display-name" label="Display Name" [(value)]="model.displayName">
     </app-input-text>
 
