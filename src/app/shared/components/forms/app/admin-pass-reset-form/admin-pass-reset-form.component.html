@@ -1,0 +1,28 @@
+<ng-template #formTemplate>
+  <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
+
+    <app-input-text class="block" name="username" label="Username" [readonly]="true" [value]="user?.username">
+    </app-input-text>
+
+    <app-input-text class="block" type="password" name="password" label="Password" [validations]="{ required: true }"
+      [(value)]="password">
+    </app-input-text>
+
+    <div slot="footer" class="form-footer">
+      <app-button class="block" type="submit" text="Submit" icon="check"></app-button>
+    </div>
+  </app-form>
+
+  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+</ng-template>
+
+<app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
+  <div slot="header" class="dialog-header" [ngSwitch]="mode">
+    <span>Reset User Password</span>
+    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
+  </div>
+
+  <div slot="body" class="dialog-body">
+    <ng-container *ngTemplateOutlet="formTemplate"></ng-container>
+  </div>
+</app-dialog>
