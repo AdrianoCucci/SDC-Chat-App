@@ -12,8 +12,8 @@
       [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
 
     <app-input-select *ngIf="organizationOptions != null" class="block" name="organization" label="Organization"
-      [options]="organizationOptions" displayKey="name" valueKey="id" [validations]="{ required: true }"
-      [(value)]="model.organizationId"></app-input-select>
+      [options]="organizationOptions" displayKey="name" valueKey="id" [(value)]="model.organizationId">
+    </app-input-select>
 
     <div slot="footer" class="form-footer">
       <app-button class="block" type="submit" text="Submit" icon="check"></app-button>
