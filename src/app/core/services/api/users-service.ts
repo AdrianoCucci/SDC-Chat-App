@@ -42,10 +42,10 @@ export class UsersService extends WebApiService {
   }
 
   public resetPassword(id: number, request: PassResetRequest): Observable<HttpResponse<void>> {
-    return this.put(`${this._apiPrefix}/${id}`, request);
+    return this.put(`${this._apiPrefix}/${id}/reset-password`, request);
   }
 
   public adminResetPassword(id: number, request: AdminPassResetRequest): Observable<HttpResponse<void>> {
-    return this.put(`${this._apiPrefix}/${id}`, request);
+    return this.put(`${this._apiPrefix}/${id}/admin-reset-password`, request);
   }
 }
