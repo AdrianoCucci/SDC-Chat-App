@@ -14,7 +14,7 @@ import { AppForm } from '../app-form';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
-export class UserFormComponent extends AppForm<UserRequest, User> {
+export class UserForm extends AppForm<UserRequest, User> {
   @Input() public organizationOptions: Organization[];
   @Input() public defaultOrganizationId?: number;
 
