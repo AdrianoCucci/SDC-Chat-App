@@ -1,5 +1,24 @@
 <ng-template #formTemplate>
-  <app-form (onSubmit)="onFormSubmit($result)"></app-form>
+  <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($result)">
+
+    <app-input-text name="username" label="Username" [validations]="{ required: true }" [(value)]="model.username">
+    </app-input-text>
+
+    <app-input-text name="display-name" label="Display Name" [(value)]="model.displayName"></app-input-text>
+
+    <app-input-select name="role" label="Role" [options]="roleOptions" displayKey="key" valueKey="value"
+      [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
+
+    <app-input-select *ngIf="organizationOptions != null" name="organization" label="Organization"
+      [options]="organizationOptions" displayKey="name" valueKey="id" [validations]="{ required: true }"
+      [(value)]="model.organizationId"></app-input-select>
+
+    <div slot="footer">
+      <app-button class="block" type="submit" text="Submit" icon="check"></app-button>
+    </div>
+  </app-form>
+
+  <app-loader text="Logging in..." [visible]="isLoggingIn" [fullscreen]="true"></app-loader>
 </ng-template>
 
 <app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">

@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { FormMode } from "src/app/shared/models/form-mode";
 import { FormSubmitResult } from "../form/form-submit-result";
 import { Form } from "../form/form.component";
 
 @Component({ template: '' })
-export abstract class AppForm<TModel = any, TResult = any> implements AfterViewInit {
+export abstract class AppForm<TModel = any, TResult = any> {
   @Output() public readonly onSubmitSuccess = new EventEmitter<TResult>();
 
   @Input() public model: TModel;
@@ -16,18 +16,12 @@ export abstract class AppForm<TModel = any, TResult = any> implements AfterViewI
 
   private _isSubmitting: boolean;
 
-  ngAfterViewInit(): void {
-    if(this._form == null) {
-      throw new Error("[AppForm] > Missing child Form component");
-    }
-  }
-
   public submit(): void {
-    this._form.submit();
+    this._form?.submit();
   }
 
   public clear(): void {
-    this._form.clearInputs();
+    this._form?.clearInputs();
   }
 
   async onFormSubmit(result: FormSubmitResult): Promise<void> {
