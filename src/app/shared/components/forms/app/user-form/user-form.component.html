@@ -14,12 +14,12 @@
         [validations]="{ required: true, matchInput: passInput }">
       </app-input-text>
     </ng-container>
-    
+
     <app-input-text class="block" name="display-name" label="Display Name" [(value)]="model.displayName">
     </app-input-text>
 
-    <app-input-select class="block" name="role" label="Role" [options]="roleOptions" displayKey="key" valueKey="value"
-      [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
+    <app-input-select *ngIf="showRoles" class="block" name="role" label="Role" [options]="roleOptions" displayKey="key"
+      valueKey="value" [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
 
     <app-input-select *ngIf="organizationOptions != null" class="block" name="organization" label="Organization"
       [options]="organizationOptions" displayKey="name" valueKey="id" [(value)]="model.organizationId">

@@ -20,7 +20,7 @@
   </ng-template>
 </app-table>
 
-<app-user-form [dialog]="true" [organizationOptions]="organizations"
+<app-user-form [dialog]="true" [organizationOptions]="organizations" [showRoles]="adminFeatures"
   [defaultOrganizationId]="clientUser?.organizationId" (onSubmitSuccess)="onUserFormSubmit($event)">
 </app-user-form>
 

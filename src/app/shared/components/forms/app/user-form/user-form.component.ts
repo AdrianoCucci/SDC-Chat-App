@@ -17,6 +17,7 @@ import { AppForm } from '../app-form';
 export class UserForm extends AppForm<UserRequest, User> {
   @Input() public organizationOptions: Organization[];
   @Input() public defaultOrganizationId?: number;
+  @Input() public showRoles?: boolean = true;
 
   public readonly roleOptions: Pair<string, Role>[] = enumToPairs(Role, true);
 

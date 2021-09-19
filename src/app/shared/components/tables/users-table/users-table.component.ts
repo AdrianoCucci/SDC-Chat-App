@@ -94,7 +94,7 @@ export class UsersTableComponent implements OnInit {
     const request: UserRequest = {
       username: "",
       password: "",
-      role: null,
+      role: this._adminFeatures ? null : Role.User,
       isOnline: false
     };
 
