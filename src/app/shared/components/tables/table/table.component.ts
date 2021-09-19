@@ -53,6 +53,161 @@ export class TableComponent implements AfterViewInit {
     }
   }
 
+  public getRow(index: number): any {
+    let item: any = null;
+
+    if(this.hasData && index > -1 && index < this.data.length) {
+      item = this.data[index];
+    }
+
+    return item;
+  }
+
+  public findRow(predicate: (item: any) => boolean): any {
+    let item: any = null;
+
+    if(this.hasData && predicate != null) {
+      item = this.data.find(predicate);
+    }
+
+    return item;
+  }
+
+  public findAllRows(predicate: (item: any) => boolean): any {
+    let item: any = null;
+
+    if(this.hasData && predicate != null) {
+      item = this.data.filter(predicate);
+    }
+
+    return item;
+  }
+
+  public addRow(item: any): void {
+    if(item != null) {
+      if(this.hasData) {
+        this.data.push(item);
+      }
+      else {
+        this.data = [item];
+      }
+
+      this.data = [...this.data];
+    }
+  }
+
+  public addManyRows(...items: any[]): void {
+    if(items) {
+      for(let i = 0; i < items.length; i++) {
+        const item: any = items[i];
+
+        if(item != null) {
+          if(this.hasData) {
+            this.data.push(item);
+          }
+          else {
+            this.data = [item];
+          }
+        }
+      }
+
+      this.data = [...this.data];
+    }
+  }
+
+  public setRow(index: number, item: any): void {
+    if(this.hasData && index > -1 && index < this.data.length) {
+      this.data[index] = item;
+      this.data = [...this.data];
+    }
+  }
+
+  public assignRow(index: number, item: any): void {
+    if(this.hasData && index > -1 && index < this.data.length) {
+      Object.assign(this.data[index], item);
+      this.data = [...this.data];
+    }
+  }
+
+  public deleteRow(index: number): void {
+    if(this.hasData && index > -1 && index < this.data.length) {
+      this.data.splice(index, 1);
+      this.data = [...this.data];
+    }
+  }
+
+  public querySetRow(item: any, predicate: (item: any) => boolean): void {
+    const row: any = this.findRow(predicate);
+
+    if(row != null) {
+      const index: number = this.data.indexOf(row);
+      this.data[index] = item;
+      this.data = [...this.data];
+    }
+  }
+
+  public querySetAllRows(item: any, predicate: (item: any) => boolean): void {
+    const rows: any[] = this.findAllRows(predicate);
+
+    if(rows?.length > 0) {
+      for(let i = 0; i < rows.length; i++) {
+        const row: any = rows[i];
+        const index: number = this.data.indexOf(row);
+        this.data[index] = item;
+      }
+
+      this.data = [...this.data];
+    }
+  }
+
+  public queryAssignRow(item: any, predicate: (item: any) => boolean): void {
+    const row: any = this.findRow(predicate);
+
+    if(row != null) {
+      const index: number = this.data.indexOf(row);
+      Object.assign(this.data[index], item);
+      this.data = [...this.data];
+    }
+  }
+
+  public queryAssignAllRows(item: any, predicate: (item: any) => boolean): void {
+    const rows: any[] = this.findAllRows(predicate);
+
+    if(rows?.length > 0) {
+      for(let i = 0; i < rows.length; i++) {
+        const row: any = rows[i];
+        const index: number = this.data.indexOf(row);
+        Object.assign(this.data[index], item);
+      }
+
+      this.data = [...this.data];
+    }
+  }
+
+  public queryDeleteRow(predicate: (item: any) => boolean): void {
+    const row: any = this.findRow(predicate);
+
+    if(row != null) {
+      const index: number = this.data.indexOf(row);
+      this.data.splice(index, 1);
+      this.data = [...this.data];
+    }
+  }
+
+  public queryDeleteAllRows(predicate: (item: any) => boolean): void {
+    const rows: any[] = this.findAllRows(predicate);
+
+    if(rows?.length > 0) {
+      for(let i = 0; i < rows.length; i++) {
+        const row: any = rows[i];
+        const index: number = this.data.indexOf(row);
+        this.data.splice(index, 1);
+      }
+
+      this.data = [...this.data];
+    }
+  }
+
   onFilter(cell: TableCell, filterValue: any): void {
     let filteredData: any[];
 
@@ -83,6 +238,10 @@ export class TableComponent implements AfterViewInit {
 
   public get initialized(): boolean {
     return this._initialized;
+  }
+
+  public get hasData(): boolean {
+    return this.data?.length > 0 ?? false;
   }
 
   public get rows(): any[] {
