@@ -11,14 +11,20 @@
 
     <ng-template #rowActionsTemplate>
       <div class="user-actions">
-        <app-button class="text reset-password" icon="key" title="Reset Password"></app-button>
+        <app-button class="text reset-password" icon="key" title="Reset Password" (click)="onResetUserPassword(user)">
+        </app-button>
+
         <app-button class="text edit-user" icon="pen" title="Edit User" (click)="onEditUser(user)"></app-button>
+
         <app-button class="text delete-user" icon="trash" title="Delete User" (click)="deleteDialog.show(user)">
         </app-button>
       </div>
     </ng-template>
   </ng-template>
 </app-table>
+
+<app-admin-pass-reset-form #passResetForm [dialog]="true" (onSubmitSuccess)="passResetForm.dialogVisible = false">
+</app-admin-pass-reset-form>
 
 <app-user-form [dialog]="true" [organizationOptions]="organizations" [showRoles]="adminFeatures"
   [defaultOrganizationId]="clientUser?.organizationId" (onSubmitSuccess)="onUserFormSubmit($event)">

@@ -7,6 +7,7 @@ import { UsersService } from 'src/app/core/services/api/users-service';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
+import { AdminPassResetForm } from '../../forms/app/admin-pass-reset-form/admin-pass-reset-form.component';
 import { UserForm } from '../../forms/app/user-form/user-form.component';
 import { TableCell } from '../table/table-cell';
 import { TableComponent } from '../table/table.component';
@@ -56,6 +57,7 @@ export class UsersTableComponent implements OnInit {
   ];
 
   @ViewChild(TableComponent) private readonly _table: TableComponent;
+  @ViewChild(AdminPassResetForm) private readonly _passResetForm: AdminPassResetForm;
   @ViewChild(UserForm) private readonly _userForm: UserForm;
 
   private _adminFeatures: boolean = false;
@@ -88,6 +90,16 @@ export class UsersTableComponent implements OnInit {
         cell.hidden = hidden;
       }
     }
+  }
+
+  onResetUserPassword(user: User): void {
+    this._passResetForm.clear();
+
+    setTimeout(() => {
+      this._passResetForm.user = user;
+      this._passResetForm.model = { newPassword: "" };
+      this._passResetForm.dialogVisible = true;
+    });
   }
 
   onAddUser(): void {
