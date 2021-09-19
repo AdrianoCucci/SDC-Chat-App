@@ -3,6 +3,7 @@ import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
 import { UserRequest } from 'src/app/core/models/users/user-request';
+import { UsersService } from 'src/app/core/services/api/users-service';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
@@ -59,6 +60,9 @@ export class UsersTableComponent implements OnInit {
 
   private _adminFeatures: boolean = false;
   private _organizations: Organization[];
+  private _isDeletingUser: boolean = false;
+
+  constructor(private _usersService: UsersService) { }
 
   ngOnInit(): void {
     this.setAdminCellsHidden(!this._adminFeatures);
@@ -117,6 +121,21 @@ export class UsersTableComponent implements OnInit {
     }
   }
 
+  async onDeleteUser(user: User): Promise<void> {
+    try {
+      this._isDeletingUser = true;
+
+      await this._usersService.deleteUser(user.id).toPromise();
+      this._table.queryDeleteRow((u: User) => u.id === user.id);
+    }
+    catch(error) {
+      console.error(error);
+    }
+    finally {
+      this._isDeletingUser = false;
+    }
+  }
+
   private showUserForm(model: UserRequest, mode: FormMode) {
     this._userForm.clear();
 
@@ -141,5 +160,9 @@ export class UsersTableComponent implements OnInit {
   @Input() public set organizations(value: Organization[]) {
     this._organizations = value;
     this._organizationCell.selectOptions.options = this._organizations;
+  }
+
+  public get isDeletingUser(): boolean {
+    return this._isDeletingUser;
   }
 }

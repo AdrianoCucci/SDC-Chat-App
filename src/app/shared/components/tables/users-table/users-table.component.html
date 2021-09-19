@@ -13,7 +13,8 @@
       <div class="user-actions">
         <app-button class="text reset-password" icon="key" title="Reset Password"></app-button>
         <app-button class="text edit-user" icon="pen" title="Edit User" (click)="onEditUser(user)"></app-button>
-        <app-button class="text delete-user" icon="trash" title="Delete User"></app-button>
+        <app-button class="text delete-user" icon="trash" title="Delete User" (click)="deleteDialog.show(user)">
+        </app-button>
       </div>
     </ng-template>
   </ng-template>
@@ -22,3 +23,22 @@
 <app-user-form [dialog]="true" [organizationOptions]="organizations"
   [defaultOrganizationId]="clientUser?.organizationId" (onSubmitSuccess)="onUserFormSubmit($event)">
 </app-user-form>
+
+<app-dialog #deleteDialog class="delete-dialog" [backdropDismiss]="true">
+  <div slot="header">
+    <span>Delete User</span>
+  </div>
+  <p *ngIf="deleteDialog.data" slot="body"
+    class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
+    <span>Are you sure you want to delete user:</span>
+    <span>"<b>{{deleteDialog.data.username}}</b>"?</span>
+  </p>
+  <div slot="footer" class="txt-right">
+    <app-button class="text option-no" text="No" (click)="deleteDialog.hide()"></app-button>
+
+    <app-button class="text option-yes" text="Yes" (click)="deleteDialog.hide(); onDeleteUser(deleteDialog.data)">
+    </app-button>
+  </div>
+</app-dialog>
+
+<app-loader [fullscreen]="true" text="Deleting user..." [visible]="isDeletingUser"></app-loader>

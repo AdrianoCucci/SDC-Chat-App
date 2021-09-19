@@ -4,9 +4,11 @@ import { CommonModule } from '@angular/common';
 import { TableModule } from '../table/table.module';
 import { DirectivesModule } from 'src/app/shared/directives/directives-module';
 import { ButtonModule } from '../../button/button.module';
+import { UserFormModule } from '../../forms/app/user-form/user-form.module';
+import { DialogModule } from '../../dialog/dialog.module';
+import { LoaderModule } from '../../loader/loader.module';
 
 import { UsersTableComponent } from './users-table.component';
-import { UserFormModule } from '../../forms/app/user-form/user-form.module';
 const component = [UsersTableComponent];
 
 @NgModule({
@@ -15,7 +17,9 @@ const component = [UsersTableComponent];
     TableModule,
     DirectivesModule,
     ButtonModule,
-    UserFormModule
+    UserFormModule,
+    DialogModule,
+    LoaderModule
   ],
   exports: component,
   declarations: component
