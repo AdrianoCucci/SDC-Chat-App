@@ -12,11 +12,6 @@
       border-radius: var(--border-radius);
       transition: 0.1s;
     }
-
-    label {
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-    }
   }
 
   &.has-errors {

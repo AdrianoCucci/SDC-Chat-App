@@ -8,6 +8,11 @@
     display: inline-flex;
     flex-direction: column-reverse;
     width: 100%;
+
+    label {
+      margin: 0.5rem;
+      font-weight: 600;
+    }
   }
 
   ul.error-list {
