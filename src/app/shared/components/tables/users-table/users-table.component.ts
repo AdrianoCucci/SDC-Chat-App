@@ -8,6 +8,7 @@ import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
 import { UserForm } from '../../forms/app/user-form/user-form.component';
 import { TableCell } from '../table/table-cell';
+import { TableComponent } from '../table/table.component';
 
 @Component({
   selector: 'app-users-table',
@@ -53,6 +54,7 @@ export class UsersTableComponent implements OnInit {
     this._organizationCell
   ];
 
+  @ViewChild(TableComponent) private readonly _table: TableComponent;
   @ViewChild(UserForm) private readonly _userForm: UserForm;
 
   private _adminFeatures: boolean = false;
@@ -105,20 +107,12 @@ export class UsersTableComponent implements OnInit {
 
     switch(this._userForm.mode) {
       case "add":
-        if(this.users == null) {
-          this.users = [user];
-        }
-        else {
-          this.users.push(user);
-        }
+        this.users = this._table.addRow(user);
         break;
 
       case "edit":
-        const index: number = this.users?.findIndex((u: User) => u.id === user.id) ?? -1;
-
-        if(index !== -1) {
-          this.users[index] = user;
-        }
+        this.users = this._table.querySetRow(user, (u: User) => u.id === user.id);
+        console.log(this.users);
         break;
     }
   }
