@@ -149,6 +149,7 @@
     &.cell-data {
       display: flex;
       align-items: center;
+      white-space: normal;
 
       .data-input {
         margin: 0;
