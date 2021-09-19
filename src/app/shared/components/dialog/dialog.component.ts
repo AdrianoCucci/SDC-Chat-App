@@ -11,6 +11,7 @@ export class Dialog implements OnInit {
   @Output() public readonly onHide = new EventEmitter<void>();
 
   @Input() public backdropDismiss: boolean = false;
+  @Input() public data?: any;
 
   @HostBinding("class.visible") private _visible: boolean = false;
   private _contentVisible: boolean = false;
@@ -25,16 +26,18 @@ export class Dialog implements OnInit {
     }
   }
 
-  public show(): void {
+  public show(data?: any): void {
     this.visible = true;
+    this.data = data;
   }
 
   public hide(): void {
     this.visible = false;
   }
 
-  public toggleVisible(): void {
+  public toggleVisible(data?: any): void {
     this.visible = !this.visible;
+    this.data = data;
   }
 
   public get visible(): boolean {
