@@ -1,0 +1,25 @@
+:host {
+  app-dialog {
+    div.dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    div.dialog-body {
+      height: 100%;
+
+      app-form {
+        min-width: 30vw;
+      }
+    }
+  }
+
+  app-form {
+    height: 100%;
+
+    div.form-footer {
+      margin-top: 40px;
+    }
+  }
+}

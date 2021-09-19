@@ -1,33 +1,37 @@
 <ng-template #formTemplate>
-  <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($result)">
+  <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
 
-    <app-input-text name="username" label="Username" [validations]="{ required: true }" [(value)]="model.username">
+    <app-input-text class="block" name="username" label="Username" [validations]="{ required: true }"
+      [(value)]="model.username">
     </app-input-text>
 
-    <app-input-text name="display-name" label="Display Name" [(value)]="model.displayName"></app-input-text>
+    <app-input-text class="block" name="display-name" label="Display Name" [(value)]="model.displayName">
+    </app-input-text>
 
-    <app-input-select name="role" label="Role" [options]="roleOptions" displayKey="key" valueKey="value"
+    <app-input-select class="block" name="role" label="Role" [options]="roleOptions" displayKey="key" valueKey="value"
       [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
 
-    <app-input-select *ngIf="organizationOptions != null" name="organization" label="Organization"
+    <app-input-select *ngIf="organizationOptions != null" class="block" name="organization" label="Organization"
       [options]="organizationOptions" displayKey="name" valueKey="id" [validations]="{ required: true }"
       [(value)]="model.organizationId"></app-input-select>
 
-    <div slot="footer">
+    <div slot="footer" class="form-footer">
       <app-button class="block" type="submit" text="Submit" icon="check"></app-button>
     </div>
   </app-form>
 
-  <app-loader text="Logging in..." [visible]="isLoggingIn" [fullscreen]="true"></app-loader>
+  <app-loader text="Logging in..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
 </ng-template>
 
 <app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
-  <div slot="header" [ngSwitch]="mode">
+  <div slot="header" class="dialog-header" [ngSwitch]="mode">
     <span *ngSwitchCase="'add'">Add User</span>
-    <span *ngSwitchCase="'add'">Update User</span>
+    <span *ngSwitchCase="'edit'">Update User</span>
+
+    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
   </div>
 
-  <div slot="body">
+  <div slot="body" class="dialog-body">
     <ng-container *ngTemplateOutlet="formTemplate"></ng-container>
   </div>
 </app-dialog>
