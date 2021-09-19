@@ -8,8 +8,8 @@ import { InputSelectModule } from '../../inputs/input-select/input-select.module
 import { ButtonModule } from '../../../button/button.module';
 import { LoaderModule } from '../../../loader/loader.module';
 
-import { UserFormComponent } from './user-form.component';
-const component = [UserFormComponent];
+import { UserForm } from './user-form.component';
+const component = [UserForm];
 
 @NgModule({
   imports: [
