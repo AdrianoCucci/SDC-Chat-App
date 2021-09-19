@@ -30,7 +30,7 @@
     </div>
   </app-form>
 
-  <app-loader text="Logging in..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
 </ng-template>
 
 <app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
