@@ -1,3 +1,5 @@
+@import "/src/theme/responsive.scss";
+
 :host {
   --visible-transition: 0.16s;
 
@@ -26,10 +28,9 @@
   justify-content: center;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
-  transition: var(--visible-transition);
   z-index: 10;
 
   div.dialog-backdrop {
@@ -55,6 +56,11 @@
     box-shadow: var(--content-box-shadow);
     overflow: hidden;
     z-index: 10;
+
+    @include belowPcWidth() {
+      width: 100%;
+      height: 100%;
+    }
 
     div.dialog-header {
       flex-shrink: 0;
