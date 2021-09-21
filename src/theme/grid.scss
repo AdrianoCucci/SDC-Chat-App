@@ -1,4 +1,5 @@
 @use "sass:math";
+@import "./responsive.scss";
 
 $totalCols: 12;
 
@@ -15,6 +16,10 @@ $totalCols: 12;
     .col-#{$i} {
       flex: 0 0 auto;
       width: math.percentage(math.div($i, $totalCols));
+
+      @include mobileWidth() {
+        width: 100%;
+      }
     }
   }
 }
