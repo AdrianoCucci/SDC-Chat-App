@@ -128,7 +128,6 @@ export class UsersTableComponent implements OnInit {
 
       case "edit":
         this.users = this._table.querySetRow(user, (u: User) => u.id === user.id);
-        console.log(this.users);
         break;
     }
   }
