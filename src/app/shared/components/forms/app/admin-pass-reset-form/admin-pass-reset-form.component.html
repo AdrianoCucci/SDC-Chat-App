@@ -10,7 +10,10 @@
 
     <div slot="footer" class="form-footer">
       <app-inline-alert class="block" type="error" [summary]="errors" [visible]="errors != null"></app-inline-alert>
-      <app-button class="block" type="submit" text="Submit" icon="check"></app-button>
+
+      <div class="txt-right">
+        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+      </div>
     </div>
   </app-form>
 
