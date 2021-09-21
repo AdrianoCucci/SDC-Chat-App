@@ -31,6 +31,10 @@
       animation: clearButtonAnimation 0.16s forwards;
     }
   }
+
+  &.has-errors {
+    --border-color: var(--pink-500);
+  }
 }
 
 @keyframes clearButtonAnimation {

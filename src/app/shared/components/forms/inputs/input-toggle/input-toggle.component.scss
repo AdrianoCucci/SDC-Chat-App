@@ -67,6 +67,10 @@
   &.readonly {
     pointer-events: none;
   }
+
+  &.has-errors {
+    --border-color: var(--pink-500);
+  }
 }
 
 @keyframes iconAnimation {
