@@ -1,7 +1,7 @@
 <app-users-table *ngIf="initialized" [users]="users" [clientUser]="clientUser" [organizations]="organizations"
   [adminFeatures]="adminFeatures"></app-users-table>
 
-<app-loader [fullscreen]="true" [visible]="loadingVisible" text="Please wait..."></app-loader>
+<app-loader [fullscreen]="true" [(visible)]="loadingVisible" text="Please wait..."></app-loader>
 
 <app-dialog class="error-dialog" [backdropDismiss]="true" [(visible)]="errorVisible">
   <div slot="header">
