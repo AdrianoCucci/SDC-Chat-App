@@ -5,6 +5,7 @@ import { DialogModule } from '../../../dialog/dialog.module';
 import { LoaderModule } from '../../../loader/loader.module';
 import { FormModule } from '../../form/form.module';
 import { InputTextModule } from '../../inputs/input-text/input-text.module';
+import { InlineAlertModule } from '../../../inline-alert/inline-alert.module';
 
 import { AdminPassResetForm } from './admin-pass-reset-form.component';
 const component = [AdminPassResetForm];
@@ -16,7 +17,8 @@ const component = [AdminPassResetForm];
     DialogModule,
     InputTextModule,
     ButtonModule,
-    LoaderModule
+    LoaderModule,
+    InlineAlertModule
   ],
   exports: component,
   declarations: component

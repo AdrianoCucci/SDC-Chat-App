@@ -19,7 +19,11 @@
     height: 100%;
 
     div.form-footer {
-      margin-top: 40px;
+      margin-top: 1rem;
+
+      app-inline-alert {
+        margin-bottom: 1rem;
+      }
     }
   }
 }

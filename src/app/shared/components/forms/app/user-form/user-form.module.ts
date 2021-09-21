@@ -7,6 +7,7 @@ import { InputTextModule } from '../../inputs/input-text/input-text.module';
 import { InputSelectModule } from '../../inputs/input-select/input-select.module';
 import { ButtonModule } from '../../../button/button.module';
 import { LoaderModule } from '../../../loader/loader.module';
+import { InlineAlertModule } from '../../../inline-alert/inline-alert.module';
 
 import { UserForm } from './user-form.component';
 const component = [UserForm];
@@ -19,7 +20,8 @@ const component = [UserForm];
     InputTextModule,
     InputSelectModule,
     ButtonModule,
-    LoaderModule
+    LoaderModule,
+    InlineAlertModule
   ],
   exports: component,
   declarations: component

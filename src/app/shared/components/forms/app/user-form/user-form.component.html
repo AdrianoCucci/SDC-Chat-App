@@ -26,6 +26,7 @@
     </app-input-select>
 
     <div slot="footer" class="form-footer">
+      <app-inline-alert class="block" type="error" [summary]="errors" [visible]="errors != null"></app-inline-alert>
       <app-button class="block" type="submit" text="Submit" icon="check"></app-button>
     </div>
   </app-form>
