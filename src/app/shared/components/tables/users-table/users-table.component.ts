@@ -137,7 +137,7 @@ export class UsersTableComponent implements OnInit {
       this._isDeletingUser = true;
 
       await this._usersService.deleteUser(user.id).toPromise();
-      this._table.queryDeleteRow((u: User) => u.id === user.id);
+      this.users = this._table.queryDeleteRow((u: User) => u.id === user.id);
     }
     catch(error) {
       console.error(error);
