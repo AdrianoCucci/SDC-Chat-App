@@ -4,7 +4,7 @@ export const parseHttpError = (httpError: HttpErrorResponse, noArray: boolean = 
   let message: any = httpError.error.message;
 
   if(!message) {
-    message = httpError.error.message;
+    message = httpError.message;
   }
   else if(noArray && Array.isArray(message)) {
     message = "A server error has occurred";
