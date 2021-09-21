@@ -3,6 +3,7 @@ import { Organization } from 'src/app/core/models/organizations/organization';
 import { OrganizationRequest } from 'src/app/core/models/organizations/organization-request';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
 import { FormMode } from 'src/app/shared/models/form-mode';
+import { OrganizationForm } from '../../forms/app/organization-form/organization-form.component';
 import { TableCell } from '../table/table-cell';
 import { TableComponent } from '../table/table.component';
 
@@ -22,6 +23,7 @@ export class OrganizationsTableComponent {
   ];
 
   @ViewChild(TableComponent) private readonly _table: TableComponent;
+  @ViewChild(OrganizationForm) private readonly _organizationForm: OrganizationForm;
 
   private _isDeletingOrganization: boolean = false;
 
@@ -36,17 +38,17 @@ export class OrganizationsTableComponent {
   }
 
   onOrganizationFormSubmit(organization: Organization): void {
-    // this._organizationForm.dialogVisible = false;
+    this._organizationForm.dialogVisible = false;
 
-    // switch(this._organizationForm.mode) {
-    //   case "add":
-    //     this.organizations = this._table.addRow(organization);
-    //     break;
+    switch(this._organizationForm.mode) {
+      case "add":
+        this.organizations = this._table.addRow(organization);
+        break;
 
-    //   case "edit":
-    //     this.organizations = this._table.querySetRow(organization, (u: Organization) => u.id === organization.id);
-    //     break;
-    // }
+      case "edit":
+        this.organizations = this._table.querySetRow(organization, (u: Organization) => u.id === organization.id);
+        break;
+    }
   }
 
   async onDeleteOrganization(organization: Organization): Promise<void> {
@@ -54,7 +56,7 @@ export class OrganizationsTableComponent {
       this._isDeletingOrganization = true;
 
       await this._orgsService.deleteOrganization(organization.id).toPromise();
-      this._table.queryDeleteRow((u: Organization) => u.id === organization.id);
+      this.organizations = this._table.queryDeleteRow((u: Organization) => u.id === organization.id);
     }
     catch(error) {
       console.error(error);
@@ -65,13 +67,13 @@ export class OrganizationsTableComponent {
   }
 
   private showOrganizationForm(model: OrganizationRequest, mode: FormMode) {
-    // this._organizationForm.clear();
+    this._organizationForm.clear();
 
-    // setTimeout(() => {
-    //   this._organizationForm.model = model;
-    //   this._organizationForm.mode = mode;
-    //   this._organizationForm.dialogVisible = true;
-    // });
+    setTimeout(() => {
+      this._organizationForm.model = model;
+      this._organizationForm.mode = mode;
+      this._organizationForm.dialogVisible = true;
+    });
   }
 
   constructor(private _orgsService: OrganizationsService) { }

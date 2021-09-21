@@ -15,6 +15,8 @@
   </ng-template>
 </app-table>
 
+<app-organization-form [dialog]="true" (onSubmitSuccess)="onOrganizationFormSubmit($event)"></app-organization-form>
+
 <app-dialog #deleteDialog class="delete-dialog" [backdropDismiss]="true">
   <div slot="header">
     <span>Delete Organization</span>
