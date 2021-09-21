@@ -1,0 +1,92 @@
+:host {
+  --background: var(--green-50);
+  --border-color: var(--green-300);
+  --icon-color: var(--green-700);
+  --header-color: var(--green-700);
+  --button-color: var(--green-700);
+
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  background-color: var(--background);
+  border-left: solid var(--border-color) 4px;
+  border-radius: 0.25rem 0.5rem 0.5rem 0.25rem;
+  transition: 0.16s;
+
+  .alert-icon {
+    margin: 0 1rem 0 0.5rem;
+    color: var(--icon-color);
+    font-size: 1.5rem;
+    transition: inherit;
+  }
+
+  div.alert-text {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 8rem;
+    transition: inherit;
+
+    div.alert-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+
+      span.header-text {
+        display: block;
+        font-weight: 600;
+        font-size: 1.16rem;
+        color: var(--header-color);
+      }
+
+      app-button.close-button {
+        --icon-transform: translateY(2px);
+        --background: var(--button-color);
+      }
+    }
+
+    p.alert-summary {
+      margin: 0.25rem 0.5rem 0.5rem 0;
+      overflow: auto;
+    }
+  }
+
+  &:not(.visible) {
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
+
+    .alert-icon {
+      font-size: 0;
+    }
+
+    div.alert-text {
+      max-height: 0;
+    }
+  }
+
+  &.info {
+    --background: var(--blue-50);
+    --border-color: var(--blue-300);
+    --icon-color: var(--blue-700);
+    --header-color: var(--blue-700);
+    --button-color: var(--blue-700);
+  }
+
+  &.warning {
+    --background: var(--yellow-50);
+    --border-color: var(--yellow-300);
+    --icon-color: var(--yellow-700);
+    --header-color: var(--yellow-700);
+    --button-color: var(--yellow-700);
+  }
+
+  &.error {
+    --background: var(--pink-50);
+    --border-color: var(--pink-300);
+    --icon-color: var(--pink-700);
+    --header-color: var(--pink-700);
+    --button-color: var(--pink-700);
+  }
+}

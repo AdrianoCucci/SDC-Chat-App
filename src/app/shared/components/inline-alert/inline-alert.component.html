@@ -1,0 +1,12 @@
+<ng-container *ngIf="contentVisible">
+  <fa-icon *ngIf="(icon || getTypeIcon()) as i" class="alert-icon" [icon]="i"></fa-icon>
+
+  <div class="alert-text">
+    <div class="alert-header">
+      <span class="header-text">{{header}}</span>
+      <app-button *ngIf="closeable" class="close-button text" icon="times" (click)="hide()"></app-button>
+    </div>
+
+    <p *ngIf="summary" class="alert-summary">{{summary}}</p>
+  </div>
+</ng-container>
