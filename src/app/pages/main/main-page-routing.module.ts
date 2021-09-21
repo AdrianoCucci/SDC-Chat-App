@@ -18,7 +18,8 @@ const routes: Routes = [
       {
         path: PATHS.children.organizations,
         canActivate: [RoleGuard],
-        data: { roles: [Role.Administrator] }
+        data: { roles: [Role.Administrator] },
+        loadChildren: () => import("./organizations-page/organizations-page.module").then(m => m.OrganizationsPageModule)
       },
       {
         path: PATHS.children.users,
