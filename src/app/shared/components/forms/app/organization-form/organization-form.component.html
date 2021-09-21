@@ -1,0 +1,52 @@
+<ng-template #formTemplate>
+  <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
+
+    <h2>General Info</h2>
+    <div class="grid">
+      <app-input-text class="col-4" name="name" label="Name" [validations]="{ required: true }" [(value)]="model.name">
+      </app-input-text>
+
+      <app-input-text class="col-4" type="email" name="email" label="Email" [(value)]="model.email"></app-input-text>
+
+      <app-input-text class="col-4" type="tel" name="phone-number" label="Phone Number" [(value)]="model.phoneNumber">
+      </app-input-text>
+    </div>
+
+    <h2>Address</h2>
+    <div class="grid">
+      <app-input-text class="col-6" name="street" label="Street" [(value)]="model.street"></app-input-text>
+
+      <app-input-text class="col-6" name="city" label="City" [(value)]="model.city"></app-input-text>
+
+      <app-input-text class="col-6" name="province" label="Province/State" [(value)]="model.province"></app-input-text>
+
+      <app-input-text class="col-6" name="country" label="Country" [(value)]="model.country"></app-input-text>
+
+      <app-input-text class="col-12" name="postal-code" label="Postal/Zip Code" [(value)]="model.postalCode">
+      </app-input-text>
+    </div>
+
+    <div slot="footer" class="form-footer">
+      <app-inline-alert type="error" [summary]="errors" [visible]="errors != null"></app-inline-alert>
+
+      <div class="txt-right">
+        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+      </div>
+    </div>
+  </app-form>
+
+  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+</ng-template>
+
+<app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
+  <div slot="header" class="dialog-header" [ngSwitch]="mode">
+    <span *ngSwitchCase="'add'">Add Organization</span>
+    <span *ngSwitchCase="'edit'">Update Organization</span>
+
+    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
+  </div>
+
+  <div slot="body" class="dialog-body">
+    <ng-container *ngTemplateOutlet="formTemplate"></ng-container>
+  </div>
+</app-dialog>
