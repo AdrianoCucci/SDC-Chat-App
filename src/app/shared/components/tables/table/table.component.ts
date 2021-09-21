@@ -133,7 +133,7 @@ export class TableComponent implements AfterViewInit {
       Object.assign(this.data[index], item);
       this.data = [...this.data];
     }
-   
+
     return this.data;
   }
 
@@ -248,7 +248,7 @@ export class TableComponent implements AfterViewInit {
           break;
 
         default:
-          result = `${dataValue}`.includes(filterValue);
+          result = `${dataValue}`.toLowerCase().includes(`${filterValue}`.toLowerCase());
           break;
       }
 
