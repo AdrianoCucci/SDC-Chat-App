@@ -3,6 +3,7 @@
   --background: var(--green-400);
   --color: var(--surface-900);
   --border-radius: 0.25rem;
+  --icon-transform: unset;
 
   display: inline-block;
   font: inherit;
@@ -33,6 +34,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transform: var(--icon-transform);
     }
 
     span.button-text {
