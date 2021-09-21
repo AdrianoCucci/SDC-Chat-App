@@ -1,33 +1,38 @@
 <ng-template #formTemplate>
   <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
 
-    <app-input-text class="block" name="username" label="Username" [validations]="{ required: true }"
-      [(value)]="model.username">
-    </app-input-text>
-
-    <ng-container *ngIf="mode === 'add'">
-      <app-input-text #passInput class="block" type="password" name="password" label="Password"
-        [validations]="{ required: true }" [(value)]="model.password">
+    <div class="grid">
+      <app-input-text class="col-6" name="username" label="Username" [validations]="{ required: true }"
+        [(value)]="model.username">
       </app-input-text>
 
-      <app-input-text class="block" type="password" name="confirm-password" label="Confirm Password"
-        [validations]="{ required: true, matchInput: passInput }">
+      <app-input-text class="col-6" name="display-name" label="Display Name" [(value)]="model.displayName">
       </app-input-text>
-    </ng-container>
 
-    <app-input-text class="block" name="display-name" label="Display Name" [(value)]="model.displayName">
-    </app-input-text>
+      <ng-container *ngIf="mode === 'add'">
+        <app-input-text #passInput class="col-6" type="password" name="password" label="Password"
+          [validations]="{ required: true }" [(value)]="model.password">
+        </app-input-text>
 
-    <app-input-select *ngIf="showRoles" class="block" name="role" label="Role" [options]="roleOptions" displayKey="key"
-      valueKey="value" [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
+        <app-input-text class="col-6" type="password" name="confirm-password" label="Confirm Password"
+          [validations]="{ required: true, matchInput: passInput }">
+        </app-input-text>
+      </ng-container>
 
-    <app-input-select *ngIf="organizationOptions != null" class="block" name="organization" label="Organization"
-      [options]="organizationOptions" displayKey="name" valueKey="id" [(value)]="model.organizationId">
-    </app-input-select>
+      <app-input-select *ngIf="showRoles" class="col-6" name="role" label="Role" [options]="roleOptions"
+        displayKey="key" valueKey="value" [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
+
+      <app-input-select *ngIf="organizationOptions != null" class="col-6" name="organization" label="Organization"
+        [options]="organizationOptions" displayKey="name" valueKey="id" [(value)]="model.organizationId">
+      </app-input-select>
+    </div>
 
     <div slot="footer" class="form-footer">
-      <app-inline-alert class="block" type="error" [summary]="errors" [visible]="errors != null"></app-inline-alert>
-      <app-button class="block" type="submit" text="Submit" icon="check"></app-button>
+      <app-inline-alert type="error" [summary]="errors" [visible]="errors != null"></app-inline-alert>
+
+      <div class="txt-right">
+        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+      </div>
     </div>
   </app-form>
 
