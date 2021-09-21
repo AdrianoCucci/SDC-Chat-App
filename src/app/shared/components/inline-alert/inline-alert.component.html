@@ -7,6 +7,14 @@
       <app-button *ngIf="closeable" class="close-button text" icon="times" (click)="hide()"></app-button>
     </div>
 
-    <p *ngIf="summary" class="alert-summary">{{summary}}</p>
+    <ng-container *ngIf="summary">
+      <p *ngIf="!isSummaryArray(); else summaryArrayTemplate" class="alert-summary">{{summary}}</p>
+
+      <ng-template #summaryArrayTemplate>
+        <ul class="alert-summary">
+          <li *ngFor="let item of summary">{{item}}</li>
+        </ul>
+      </ng-template>
+    </ng-container>
   </div>
 </ng-container>

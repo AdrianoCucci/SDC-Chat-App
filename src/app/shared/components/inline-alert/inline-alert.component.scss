@@ -14,6 +14,7 @@
   transition: 0.16s;
 
   .alert-icon {
+    flex-shrink: 0;
     margin: 0 1rem 0 0.5rem;
     color: var(--icon-color);
     font-size: 1.5rem;
@@ -23,8 +24,9 @@
   div.alert-text {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    max-height: 6rem;
     overflow: hidden;
-    max-height: 8rem;
     transition: inherit;
 
     div.alert-header {
@@ -46,10 +48,19 @@
       }
     }
 
-    p.alert-summary {
+    .alert-summary {
       margin: 0.25rem 0.5rem 0.5rem 0;
+      padding: 0;
       overflow: auto;
     }
+
+    ul.alert-summary {
+      list-style: inside;
+    }
+  }
+
+  &.block {
+    display: flex;
   }
 
   &:not(.visible) {

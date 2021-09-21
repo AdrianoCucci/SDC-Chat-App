@@ -15,7 +15,7 @@ export class InlineAlert {
 
   @Input() @HostBinding("class") public type: AlertType = "plain";
   @Input() public header: string;
-  @Input() public summary: string;
+  @Input() public summary: string | string[];
   @Input() public closeable: boolean = false;
 
   private readonly _typeIconMap = new Map<AlertType, IconDefinition>([
@@ -48,6 +48,10 @@ export class InlineAlert {
 
   public getTypeIcon(type?: AlertType): IconDefinition {
     return this._typeIconMap.get(type ?? this.type);
+  }
+
+  public isSummaryArray(): boolean {
+    return Array.isArray(this.summary);
   }
 
   public get icon(): IconDefinition {
