@@ -1,0 +1,20 @@
+@use "sass:math";
+
+$totalCols: 12;
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+
+  .col {
+    flex-grow: 1;
+    flex-basis: 0;
+  }
+
+  @for $i from 1 to $totalCols + 1 {
+    .col-#{$i} {
+      flex: 0 0 auto;
+      width: math.percentage(math.div($i, $totalCols));
+    }
+  }
+}
