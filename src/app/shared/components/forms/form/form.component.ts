@@ -1,5 +1,4 @@
 import { Component, ContentChildren, EventEmitter, HostBinding, Input, Output, QueryList } from '@angular/core';
-import { FormGroup } from '../form-group/form-group.component';
 import { FormInput } from '../inputs/base/form-input';
 import { InputValidationResult } from '../inputs/base/input-validation-result';
 import { FormSubmitResult } from './form-submit-result';
@@ -14,8 +13,7 @@ export class Form {
 
   @Input() @HostBinding("class.disabled") public disabled: boolean = false;
 
-  @ContentChildren(FormInput) private readonly _childInputs: QueryList<FormInput>;
-  @ContentChildren(FormGroup) private readonly _childGroups: QueryList<FormGroup>;
+  @ContentChildren(FormInput, { descendants: true }) private readonly _childInputs: QueryList<FormInput>;
 
   public submit(): FormSubmitResult {
     const inputs: FormInput[] = this.getInputs();
@@ -37,10 +35,7 @@ export class Form {
   }
 
   public getInputs(): FormInput[] {
-    let inputs: FormInput[] = this._childInputs.toArray();
-    this._childGroups.forEach((group: FormGroup) => inputs = inputs.concat(group.getInputs()));
-
-    return inputs;
+    return this._childInputs.toArray();
   }
 
   public clearInputs(): void {
