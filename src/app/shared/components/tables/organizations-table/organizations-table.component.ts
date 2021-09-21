@@ -1,7 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, ViewChild } from '@angular/core';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { OrganizationRequest } from 'src/app/core/models/organizations/organization-request';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
+import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { OrganizationForm } from '../../forms/app/organization-form/organization-form.component';
 import { TableCell } from '../table/table-cell';
@@ -21,6 +23,9 @@ export class OrganizationsTableComponent {
     { name: "Email", prop: "email", sortable: true, filterable: true },
     { name: "Phone Number", prop: "phoneNumber", sortable: true, filterable: true }
   ];
+
+  public errorDialogVisible: boolean = false;
+  public errorDialogText: string;
 
   @ViewChild(TableComponent) private readonly _table: TableComponent;
   @ViewChild(OrganizationForm) private readonly _organizationForm: OrganizationForm;
@@ -59,7 +64,8 @@ export class OrganizationsTableComponent {
       this.organizations = this._table.queryDeleteRow((u: Organization) => u.id === organization.id);
     }
     catch(error) {
-      console.error(error);
+      this.errorDialogText = parseHttpError(error as HttpErrorResponse, true) as string;
+      this.errorDialogVisible = true;
     }
     finally {
       this._isDeletingOrganization = false;

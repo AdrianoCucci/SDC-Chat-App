@@ -48,3 +48,15 @@
 </app-dialog>
 
 <app-loader [fullscreen]="true" text="Deleting user..." [visible]="isDeletingUser"></app-loader>
+
+<app-dialog class="delete-error-dialog" [backdropDismiss]="true" [(visible)]="errorDialogVisible">
+  <div slot="header">
+    <span>Failed to Delete User</span>
+  </div>
+  <p slot="body" class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
+    {{errorDialogText}}
+  </p>
+  <div slot="footer" class="txt-right">
+    <app-button class="text" text="OK" (click)="errorDialogVisible = false"></app-button>
+  </div>
+</app-dialog>

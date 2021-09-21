@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
@@ -5,6 +6,7 @@ import { User } from 'src/app/core/models/users/user';
 import { UserRequest } from 'src/app/core/models/users/user-request';
 import { UsersService } from 'src/app/core/services/api/users-service';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
+import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
 import { AdminPassResetForm } from '../../forms/app/admin-pass-reset-form/admin-pass-reset-form.component';
@@ -55,6 +57,9 @@ export class UsersTableComponent implements OnInit {
     { name: "Is Online", prop: "isOnline", sortable: true, type: "boolean", filterable: true },
     this._organizationCell
   ];
+
+  public errorDialogVisible: boolean = false;
+  public errorDialogText: string;
 
   @ViewChild(TableComponent) private readonly _table: TableComponent;
   @ViewChild(AdminPassResetForm) private readonly _passResetForm: AdminPassResetForm;
@@ -140,7 +145,8 @@ export class UsersTableComponent implements OnInit {
       this.users = this._table.queryDeleteRow((u: User) => u.id === user.id);
     }
     catch(error) {
-      console.error(error);
+      this.errorDialogText = parseHttpError(error as HttpErrorResponse, true) as string;
+      this.errorDialogVisible = true;
     }
     finally {
       this._isDeletingUser = false;
