@@ -6,7 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./organizations-page.component.scss']
 })
 export class OrganizationsPage implements OnInit {
-
+  public loadingVisible: boolean = false;
+  public loadError: string;
+  public errorVisible: boolean = false;
+  
   constructor() { }
 
   ngOnInit(): void {
