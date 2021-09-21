@@ -4,7 +4,7 @@
   <ng-container *ngFor="let cell of cells; index as i">
     <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name" [prop]="cell.prop">
 
-      <ng-template ngx-datatable-header-template let-sort="sortFn" let-sortDir="sortDir">
+      <ng-template ngx-datatable-header-template let-sortFunc="sortFn" let-sortDir="sortDir">
         <div class="cell cell-header">
           <div class="cell-header-name-wrapper">
             <span class="cell-header-name">{{cell.name}}</span>
@@ -15,7 +15,7 @@
           </div>
 
           <span *ngIf="cell.sortable" class="sort-action" role="button" [ngClass]="{'sort-active': sortDir != null}"
-            [ngSwitch]="sortDir" (click)="sort()">
+            [ngSwitch]="sortDir" (click)="onSort(sortFunc)">
             <fa-icon *ngSwitchCase="'asc'" [icon]="sortAscIcon"></fa-icon>
             <fa-icon *ngSwitchCase="'desc'" [icon]="sortDescIcon"></fa-icon>
             <fa-icon *ngSwitchDefault [icon]="sortNoneIcon"></fa-icon>

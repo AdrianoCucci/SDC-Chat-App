@@ -24,6 +24,7 @@ export class TableComponent implements AfterViewInit {
 
   private _initialized: boolean;
   private _filteredData: any[];
+  private _lastSortFunc: Function;
   private _rowActionsTemplate: TemplateRef<any>;
 
   ngAfterViewInit(): void {
@@ -93,6 +94,7 @@ export class TableComponent implements AfterViewInit {
       }
 
       this.data = [...this.data];
+      this.repeatLastSort();
     }
 
     return this.data;
@@ -114,6 +116,7 @@ export class TableComponent implements AfterViewInit {
       }
 
       this.data = [...this.data];
+      this.repeatLastSort();
     }
 
     return this.data;
@@ -123,6 +126,8 @@ export class TableComponent implements AfterViewInit {
     if(this.hasData && index > -1 && index < this.data.length) {
       this.data[index] = item;
       this.data = [...this.data];
+
+      this.repeatLastSort();
     }
 
     return this.data;
@@ -132,6 +137,8 @@ export class TableComponent implements AfterViewInit {
     if(this.hasData && index > -1 && index < this.data.length) {
       Object.assign(this.data[index], item);
       this.data = [...this.data];
+
+      this.repeatLastSort();
     }
 
     return this.data;
@@ -141,6 +148,8 @@ export class TableComponent implements AfterViewInit {
     if(this.hasData && index > -1 && index < this.data.length) {
       this.data.splice(index, 1);
       this.data = [...this.data];
+
+      this.repeatLastSort();
     }
 
     return this.data;
@@ -153,6 +162,8 @@ export class TableComponent implements AfterViewInit {
       const index: number = this.data.indexOf(row);
       this.data[index] = item;
       this.data = [...this.data];
+
+      this.repeatLastSort();
     }
 
     return this.data;
@@ -228,6 +239,17 @@ export class TableComponent implements AfterViewInit {
     }
 
     return this.data;
+  }
+
+  public repeatLastSort(): void {
+    if(this._lastSortFunc != null) {
+      this._lastSortFunc();
+    }
+  }
+
+  onSort(sortFunc: Function): void {
+    sortFunc();
+    this._lastSortFunc = sortFunc;
   }
 
   onFilter(cell: TableCell, filterValue: any): void {
