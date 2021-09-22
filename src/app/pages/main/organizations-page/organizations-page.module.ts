@@ -5,7 +5,7 @@ import { OrganizationsPageRoutingModule } from './organizations-page-routing.mod
 import { OrganizationsTableModule } from 'src/app/shared/components/tables/organizations-table/organizations-table.module';
 import { ButtonModule } from 'src/app/shared/components/button/button.module';
 import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
-import { LoaderModule } from 'src/app/shared/components/loader/loader.module';
+import { LoaderModule } from 'src/app/modules/shared/overlays/loader/loader.module';
 
 import { OrganizationsPage } from './organizations-page.component';
 

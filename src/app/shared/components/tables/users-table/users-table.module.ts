@@ -7,7 +7,7 @@ import { ButtonModule } from '../../button/button.module';
 import { UserFormModule } from '../../forms/app/user-form/user-form.module';
 import { AdminPassResetFormModule } from '../../forms/app/admin-pass-reset-form/admin-pass-reset-form.module';
 import { DialogModule } from '../../dialog/dialog.module';
-import { LoaderModule } from '../../loader/loader.module';
+import { LoaderModule } from '../../../../modules/shared/overlays/loader/loader.module';
 
 import { UsersTableComponent } from './users-table.component';
 const component = [UsersTableComponent];

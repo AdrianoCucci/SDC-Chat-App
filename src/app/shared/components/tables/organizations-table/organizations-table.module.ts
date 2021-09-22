@@ -6,7 +6,7 @@ import { DirectivesModule } from 'src/app/shared/directives/directives-module';
 import { OrganizationFormModule } from '../../forms/app/organization-form/organization-form.module';
 import { ButtonModule } from '../../button/button.module';
 import { DialogModule } from '../../dialog/dialog.module';
-import { LoaderModule } from '../../loader/loader.module';
+import { LoaderModule } from '../../../../modules/shared/overlays/loader/loader.module';
 
 import { OrganizationsTableComponent } from './organizations-table.component';
 const component = [OrganizationsTableComponent];
