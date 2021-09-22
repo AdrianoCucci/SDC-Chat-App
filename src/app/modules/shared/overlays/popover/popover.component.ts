@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { IVisibilityChangeable } from 'src/app/shared/interfaces/i-visibility-changeable';
 
 @Component({
@@ -12,8 +12,8 @@ export class Popover implements OnInit, IVisibilityChangeable {
   @Output() public readonly onHide = new EventEmitter<void>();
 
   @Input() public parent?: PopoverParent;
-
-  @ViewChild("content") private readonly _contentRef: ElementRef;
+  @Input() public offsetX: number = 0;
+  @Input() public offsetY: number = 0;
 
   @HostBinding("class.visible") private _visible: boolean = false;
   @HostBinding("attr.anchor") private _anchor: string;
@@ -75,6 +75,7 @@ export class Popover implements OnInit, IVisibilityChangeable {
     }
     else {
       this.setEventHandlersEnabled(false);
+      this._currentTarget = null;
 
       this._currentTimeout = window.setTimeout(() => {
         this._contentVisible = false;
@@ -98,13 +99,26 @@ export class Popover implements OnInit, IVisibilityChangeable {
     const halfWindowWidth: number = window.innerWidth / 2;
     const halfWindowHeight: number = window.innerHeight / 2;
 
-    this._anchor = targetRect.y < halfWindowHeight ? "top" : "bottom";
+    const anchorTop: boolean = targetRect.y < halfWindowHeight;
+    const anchorLeft: boolean = targetRect.x < halfWindowWidth;
 
-    host.style.top = this._anchor === "top" ? "100%" : `-${host.offsetHeight}px`;
-    host.style.left = targetRect.x < halfWindowWidth ? "0" : `calc(100% - ${host.offsetWidth}px)`;
+    const offsetX: number = this.offsetX || 0;
+    const offsetY: number = this.offsetY || 0;
 
-    // host.style.left = `${targetRect.x}px`;
-    // host.style.top = `${targetRect.y}px`;
+    let styleTop: string, styleLeft: string;
+
+    if(parent === "body" || parent === document.body) {
+      styleTop = anchorTop ? `${targetRect.bottom + offsetY}px` : `${targetRect.top - host.offsetHeight - offsetY}px`;
+      styleLeft = anchorLeft ? `${targetRect.x + offsetX}px` : `${(targetRect.x + targetRect.width) - host.offsetWidth - offsetX}px`;
+    }
+    else {
+      styleTop = anchorTop ? `calc(100% + ${offsetY}px)` : `-${host.offsetHeight + offsetY}px`;
+      styleLeft = anchorLeft ? `${offsetX}px` : `calc(100% - ${host.offsetWidth + offsetX}px)`;
+    }
+
+    this._anchor = `${anchorTop ? "top" : "bottom"} ${anchorLeft ? "left" : "right"}`;
+    host.style.top = styleTop;
+    host.style.left = styleLeft;
   }
 
   private setEventHandlersEnabled(enabled: boolean) {
@@ -153,6 +167,10 @@ export class Popover implements OnInit, IVisibilityChangeable {
 
   public get contentVisible(): boolean {
     return this._contentVisible;
+  }
+  
+  public get anchor(): string {
+    return this._anchor;
   }
 }
 

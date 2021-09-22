@@ -2,7 +2,7 @@
   --padding: 1rem;
   --background: var(--green-50);
   --border-radius: 0.5rem;
-  --box-shadow: var(--surface-500) 0 8px 25px;
+  --box-shadow: var(--surface-600) 0 8px 25px;
   --overflow: unset;
   --visible-transition: 0.16s;
 
@@ -26,6 +26,18 @@
   &[anchor="bottom"] div.popover-content {
     transform-origin: bottom center;
   }
+  &[anchor="top left"] div.popover-content {
+    transform-origin: top left;
+  }
+  &[anchor="top right"] div.popover-content {
+    transform-origin: top right;
+  }
+  &[anchor="bottom left"] div.popover-content {
+    transform-origin: bottom left;
+  }
+  &[anchor="bottom right"] div.popover-content {
+    transform-origin: bottom right;
+  }
 
   &:not(.visible) div.popover-content {
     animation: hideAnimation var(--visible-transition) forwards;
@@ -39,11 +51,11 @@
 @keyframes showAnimation {
   from {
     opacity: 0;
-    transform: scaleY(60%);
+    transform: scale(60%);
   }
   to {
     opacity: 1;
-    transform: scaleY(100%);
+    transform: scale(100%);
   }
 }
 
