@@ -6,6 +6,7 @@ export interface User {
   role: Role;
   username: string;
   displayName?: string;
+  isLocked: boolean;
   isOnline: boolean;
   organizationId?: number;
   

@@ -6,6 +6,7 @@ export interface UserRequest {
   username: string;
   password: string;
   displayName?: string;
-  isOnline: boolean;
+  isLocked?: boolean;
+  isOnline?: boolean;
   organizationId?: number;
 }

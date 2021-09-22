@@ -112,7 +112,6 @@ export class UsersTableComponent implements OnInit {
       username: "",
       password: "",
       role: this._adminFeatures ? null : Role.User,
-      isOnline: false
     };
 
     this.showUserForm(request, "add");
