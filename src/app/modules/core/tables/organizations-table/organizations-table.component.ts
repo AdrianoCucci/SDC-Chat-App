@@ -6,8 +6,8 @@ import { OrganizationsService } from 'src/app/core/services/api/organizations-se
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { OrganizationForm } from '../../forms/app/organization-form/organization-form.component';
-import { TableCell } from '../../../../modules/shared/table/table-cell';
-import { TableComponent } from '../../../../modules/shared/table/table.component';
+import { TableCell } from '../../../shared/table/table-cell';
+import { TableComponent } from '../../../shared/table/table.component';
 
 @Component({
   selector: 'app-organizations-table',
