@@ -1,7 +1,9 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { Socket } from "ngx-socket-io";
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class WebSocketService {
   public readonly onConnect = new EventEmitter<void>();
   public readonly onDisconnect = new EventEmitter<void>();

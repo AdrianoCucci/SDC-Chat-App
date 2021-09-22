@@ -1,11 +1,13 @@
 import { EventEmitter } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
-import { ChatMessage } from '../../core/models/messages/chat-message';
-import { User } from '../../core/models/users/user';
+import { ChatMessage } from '../../models/messages/chat-message';
+import { User } from '../../models/users/user';
 import { WebSocketService } from './web-socket.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ChatService extends WebSocketService {
   public readonly onUserJoin = new EventEmitter<User>();
   public readonly onUserLeave = new EventEmitter<User>();

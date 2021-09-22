@@ -6,7 +6,6 @@ import { TabMenuModule } from 'src/app/modules/shared/menus/tab-menu/tab-menu.mo
 import { ButtonModule } from 'src/app/modules/shared/button/button.module';
 import { PopoverModule } from 'src/app/modules/shared/overlays/popover/popover.module';
 import { DialogModule } from 'src/app/modules/shared/overlays/dialog/dialog.module';
-import { WebSocketModule } from 'src/app/shared/modules/web-socket.module';
 
 import { MainPage } from './main-page.component';
 
@@ -18,8 +17,7 @@ import { MainPage } from './main-page.component';
     TabMenuModule,
     ButtonModule,
     PopoverModule,
-    DialogModule,
-    WebSocketModule
+    DialogModule
   ]
 })
 export class MainPageModule { }

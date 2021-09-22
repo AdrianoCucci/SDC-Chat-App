@@ -3,7 +3,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
+import { SocketIoModule } from 'ngx-socket-io';
+
 import { TokenInterceptorService } from './core/services/token-interceptor.service';
+import { environment } from 'src/environments/environment';
 
 import { AppComponent } from './app.component';
 
@@ -12,7 +15,8 @@ import { AppComponent } from './app.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    SocketIoModule.forRoot({ url: environment.server.url, options: { autoConnect: false } })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }

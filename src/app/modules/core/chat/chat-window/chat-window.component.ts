@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 import { AudioService, AudioSound } from 'src/app/core/services/audio.service';
-import { ChatService } from 'src/app/shared/modules/chat.service';
+import { ChatService } from 'src/app/core/services/web-socket/chat.service';
 
 @Component({
   selector: 'app-chat-window',
