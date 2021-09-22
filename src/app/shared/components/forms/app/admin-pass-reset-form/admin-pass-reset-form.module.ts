@@ -5,7 +5,7 @@ import { DialogModule } from '../../../../../modules/shared/overlays/dialog/dial
 import { LoaderModule } from '../../../../../modules/shared/overlays/loader/loader.module';
 import { FormModule } from '../../../../../modules/shared/forms/form/form.module';
 import { InputTextModule } from '../../../../../modules/shared/forms/inputs/input-text/input-text.module';
-import { InlineAlertModule } from '../../../inline-alert/inline-alert.module';
+import { InlineAlertModule } from '../../../../../modules/shared/inline-alert/inline-alert.module';
 
 import { AdminPassResetForm } from './admin-pass-reset-form.component';
 const component = [AdminPassResetForm];

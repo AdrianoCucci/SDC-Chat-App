@@ -7,7 +7,7 @@ import { InputTextModule } from '../../../../../modules/shared/forms/inputs/inpu
 import { InputSelectModule } from '../../../../../modules/shared/forms/inputs/input-select/input-select.module';
 import { ButtonModule } from '../../../../../modules/shared/button/button.module';
 import { LoaderModule } from '../../../../../modules/shared/overlays/loader/loader.module';
-import { InlineAlertModule } from '../../../inline-alert/inline-alert.module';
+import { InlineAlertModule } from '../../../../../modules/shared/inline-alert/inline-alert.module';
 
 import { UserForm } from './user-form.component';
 const component = [UserForm];
