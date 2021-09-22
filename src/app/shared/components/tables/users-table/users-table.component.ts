@@ -5,12 +5,12 @@ import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
 import { UserRequest } from 'src/app/core/models/users/user-request';
 import { UsersService } from 'src/app/core/services/api/users-service';
+import { UserForm } from 'src/app/modules/core/forms/user-form/user-form.component';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
-import { AdminPassResetForm } from '../../forms/app/admin-pass-reset-form/admin-pass-reset-form.component';
-import { UserForm } from '../../forms/app/user-form/user-form.component';
+import { AdminPassResetForm } from '../../../../modules/core/forms/admin-pass-reset-form/admin-pass-reset-form.component';
 import { TableCell } from '../../../../modules/shared/table/table-cell';
 import { TableComponent } from '../../../../modules/shared/table/table.component';
 
