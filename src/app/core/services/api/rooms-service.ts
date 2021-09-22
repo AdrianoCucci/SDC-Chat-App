@@ -10,7 +10,7 @@ import { WebApiService } from "./web-api.service";
   providedIn: 'root'
 })
 export class RoomsService extends WebApiService {
-  private readonly _apiPrefix: string = "organizations";
+  private readonly _apiPrefix: string = "rooms";
 
   constructor(httpClient: HttpClient) {
     super(httpClient);
