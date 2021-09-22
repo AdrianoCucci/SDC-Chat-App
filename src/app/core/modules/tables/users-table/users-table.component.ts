@@ -5,7 +5,7 @@ import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
 import { UserRequest } from 'src/app/core/models/users/user-request';
 import { UsersService } from 'src/app/core/services/api/users-service';
-import { UserForm } from 'src/app/core/core/forms/user-form/user-form.component';
+import { UserForm } from 'src/app/core/modules/forms/user-form/user-form.component';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
