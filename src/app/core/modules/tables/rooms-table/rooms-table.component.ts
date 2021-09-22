@@ -13,6 +13,7 @@ import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
 import { TableCell } from 'src/app/shared/modules/table/table-cell';
 import { Table } from 'src/app/shared/modules/table/table.component';
+import { RoomForm } from '../../forms/room-form/room-form.component';
 
 @Component({
   selector: 'app-rooms-table',
@@ -47,6 +48,7 @@ export class RoomsTable {
   public errorDialogText: string;
 
   @ViewChild(Table) private readonly _table: Table;
+  @ViewChild(RoomForm) private readonly _roomForm: RoomForm;
 
   private _isDeletingRoom: boolean = false;
 
@@ -101,13 +103,17 @@ export class RoomsTable {
   }
 
   private showRoomForm(model: RoomRequest, mode: FormMode) {
-    // this._roomForm.clear();
+    this._roomForm.clear();
 
-    // setTimeout(() => {
-    //   this._roomForm.model = model;
-    //   this._roomForm.mode = mode;
-    //   this._roomForm.dialogVisible = true;
-    // });
+    setTimeout(() => {
+      this._roomForm.model = model;
+      this._roomForm.mode = mode;
+      
+      this._roomForm.organizationId = this.organizationId;
+      this._roomForm.pingSoundOptions = this.pingSoundPairs;
+     
+      this._roomForm.dialogVisible = true;
+    });
   }
 
   public get isDeletingRoom(): boolean {

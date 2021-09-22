@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TableModule } from 'src/app/shared/modules/table/table.module';
+import { RoomFormModule } from '../../forms/room-form/room-form.module';
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 import { DirectivesModule } from 'src/app/shared/modules/directives/directives-module';
 import { DialogModule } from 'src/app/shared/modules/overlays/dialog/dialog.module';
@@ -14,6 +15,7 @@ const component = [RoomsTable];
   imports: [
     CommonModule,
     TableModule,
+    RoomFormModule,
     DirectivesModule,
     ButtonModule,
     DialogModule,

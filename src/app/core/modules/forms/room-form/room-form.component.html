@@ -8,7 +8,8 @@
       <app-input-text class="col-6" type="number" name="number" label="Number" [(value)]="model.number">
       </app-input-text>
 
-      <app-input-textarea class="col-12" name="description" label="Description" [(value)]="model.description">
+      <app-input-textarea class="col-12" name="description" label="Description" [rows]="4"
+        [(value)]="model.description">
       </app-input-textarea>
 
       <app-input-select *ngIf="pingSoundOptions" class="col-12" name="ping-sound" label="Ping Sound"
