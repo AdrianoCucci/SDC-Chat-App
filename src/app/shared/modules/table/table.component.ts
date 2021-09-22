@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ContentChildren, Input, QueryList, TemplateRe
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faSort, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
 import { ColumnMode } from '@swimlane/ngx-datatable';
-import { TemplateDirective } from 'src/app/modules/shared/directives/template.directive';
+import { TemplateDirective } from '../directives/template.directive';
 import { TableCell } from './table-cell';
 
 @Component({
