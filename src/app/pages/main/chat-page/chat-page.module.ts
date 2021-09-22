@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ChatPageRoutingModule } from './chat-page-routing.module';
 
-import { ChatModule } from 'src/app/shared/components/chat/chat.module';
+import { ChatModule } from 'src/app/modules/core/chat/chat.module';
 import { LoaderModule } from 'src/app/modules/shared/overlays/loader/loader.module';
 
 import { ChatPage } from './chat-page.component';
