@@ -1,6 +1,6 @@
 import { Component, HostBinding, Input } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { getCommonFaIcon } from '../../../shared/functions/get-common-fa-icon';
+import { getCommonFaIcon } from '../../functions/get-common-fa-icon';
 
 @Component({
   selector: 'app-button',

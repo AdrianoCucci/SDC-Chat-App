@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ButtonModule } from '../../../../modules/shared/button/button.module';
+import { ButtonModule } from '../../../../shared/modules/button/button.module';
 import { DialogModule } from '../../../../modules/shared/overlays/dialog/dialog.module';
 import { LoaderModule } from '../../../../modules/shared/overlays/loader/loader.module';
 import { FormModule } from '../../../../modules/shared/forms/form/form.module';

@@ -4,7 +4,7 @@ import { LoginPageRoutingModule } from './login-page-routing.module';
 
 import { FormModule } from 'src/app/modules/shared/forms/form/form.module';
 import { InputTextModule } from 'src/app/modules/shared/forms/inputs/input-text/input-text.module';
-import { ButtonModule } from 'src/app/modules/shared/button/button.module';
+import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 import { LoaderModule } from 'src/app/modules/shared/overlays/loader/loader.module';
 import { DialogModule } from 'src/app/modules/shared/overlays/dialog/dialog.module';
 

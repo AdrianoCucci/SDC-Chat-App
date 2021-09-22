@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { OrganizationsPageRoutingModule } from './organizations-page-routing.module';
 
 import { OrganizationsTableModule } from 'src/app/core/core/tables/organizations-table/organizations-table.module';
-import { ButtonModule } from 'src/app/modules/shared/button/button.module';
+import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 import { DialogModule } from 'src/app/modules/shared/overlays/dialog/dialog.module';
 import { LoaderModule } from 'src/app/modules/shared/overlays/loader/loader.module';
 
