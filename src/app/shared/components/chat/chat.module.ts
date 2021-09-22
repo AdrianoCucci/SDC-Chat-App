@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { InputTextareaModule } from '../forms/inputs/input-textarea/input-textarea.module';
+import { InputTextareaModule } from '../../../modules/shared/forms/inputs/input-textarea/input-textarea.module';
 import { WebSocketModule } from '../../modules/web-socket.module';
 
 import { ChatWindowComponent } from './chat-window/chat-window.component';

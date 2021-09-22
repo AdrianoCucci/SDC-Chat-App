@@ -6,7 +6,7 @@ import { DialogModule } from '../../../../../modules/shared/overlays/dialog/dial
 import { InlineAlertModule } from '../../../inline-alert/inline-alert.module';
 import { LoaderModule } from '../../../../../modules/shared/overlays/loader/loader.module';
 import { FormModule } from '../../../../../modules/shared/forms/form/form.module';
-import { InputTextModule } from '../../inputs/input-text/input-text.module';
+import { InputTextModule } from '../../../../../modules/shared/forms/inputs/input-text/input-text.module';
 
 import { OrganizationForm } from './organization-form.component';
 const component = [OrganizationForm];
