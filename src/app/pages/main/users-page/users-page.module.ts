@@ -4,7 +4,7 @@ import { UsersPageRoutingModule } from './users-page-routing.module';
 
 import { UsersTableModule } from 'src/app/shared/components/tables/users-table/users-table.module';
 import { LoaderModule } from 'src/app/modules/shared/overlays/loader/loader.module';
-import { DialogModule } from 'src/app/shared/components/dialog/dialog.module';
+import { DialogModule } from 'src/app/modules/shared/overlays/dialog/dialog.module';
 import { ButtonModule } from 'src/app/shared/components/button/button.module';
 
 import { UsersPage } from './users-page.component';

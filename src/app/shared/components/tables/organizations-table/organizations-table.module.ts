@@ -5,7 +5,7 @@ import { TableModule } from '../table/table.module';
 import { DirectivesModule } from 'src/app/shared/directives/directives-module';
 import { OrganizationFormModule } from '../../forms/app/organization-form/organization-form.module';
 import { ButtonModule } from '../../button/button.module';
-import { DialogModule } from '../../dialog/dialog.module';
+import { DialogModule } from '../../../../modules/shared/overlays/dialog/dialog.module';
 import { LoaderModule } from '../../../../modules/shared/overlays/loader/loader.module';
 
 import { OrganizationsTableComponent } from './organizations-table.component';
