@@ -21,6 +21,7 @@ export class Table implements AfterViewInit {
 
   @ContentChildren(TemplateDirective) private readonly _templates: QueryList<TemplateDirective>;
   private readonly _rowActionsTemplateName: string = "table-row-actions";
+  private readonly _activeFiltersMap = new Map<TableCell, any>();
 
   private _initialized: boolean;
   private _filteredData: any[];
@@ -253,31 +254,44 @@ export class Table implements AfterViewInit {
   }
 
   onFilter(cell: TableCell, filterValue: any): void {
-    let filteredData: any[];
+    if(filterValue == null || (typeof filterValue === "string" && !filterValue)) {
+      this._activeFiltersMap.delete(cell);
+    }
+    else {
+      this._activeFiltersMap.set(cell, filterValue);
+    }
 
-    filteredData = this.data.filter((data: any) => {
-      let result: boolean;
-      const dataValue: any = data[cell.prop];
-
-      switch(cell.type) {
-        case "number":
-          result = dataValue === filterValue;
-          break;
-
-        case "boolean":
-        case "select":
-          result = filterValue != null ? dataValue === filterValue : true;
-          break;
-
-        default:
-          result = `${dataValue}`.toLowerCase().includes(`${filterValue}`.toLowerCase());
-          break;
-      }
-
-      return result;
-    });
+    const filteredData: any[] = this.applyActiveFilters(this.data);
 
     this._filteredData = filteredData ?? null;
+  }
+
+  private applyActiveFilters(data: any[]): any[] {
+    let filteredData: any[] = data;
+
+    this._activeFiltersMap.forEach((filterValue: any, cell: TableCell) => {
+      filteredData = filteredData.filter((row: any) => this.filterDataRow(cell, row[cell.prop], filterValue));
+    });
+
+    return filteredData ?? [];
+  }
+
+  private filterDataRow(cell: TableCell, rowValue: any, filterValue: any): boolean {
+    let result: boolean;
+
+    switch(cell.type) {
+      case "number":
+      case "boolean":
+      case "select":
+        result = filterValue != null ? rowValue === filterValue : true;
+        break;
+
+      default:
+        result = `${rowValue}`.toLowerCase().includes(`${filterValue}`.toLowerCase());
+        break;
+    }
+
+    return result;
   }
 
   public get initialized(): boolean {
