@@ -54,7 +54,7 @@ export class UsersTableComponent implements OnInit {
         valueKey: "value"
       }
     },
-    { name: "Is Locked", prop: "isLocked", sortable: true, type: "boolean", filterable: true },
+    { name: "Account Locked", prop: "isLocked", sortable: true, type: "boolean", filterable: true },
     this._organizationCell
   ];
 
