@@ -73,17 +73,17 @@ export class RoomsTable {
   }
 
   onRoomFormSubmit(room: Room): void {
-    // this._roomForm.dialogVisible = false;
+    this._roomForm.dialogVisible = false;
 
-    // switch(this._roomForm.mode) {
-    //   case "add":
-    //     this.rooms = this._table.addRow(room);
-    //     break;
+    switch(this._roomForm.mode) {
+      case "add":
+        this.rooms = this._table.addRow(room);
+        break;
 
-    //   case "edit":
-    //     this.rooms = this._table.querySetRow(room, (u: Room) => u.id === room.id);
-    //     break;
-    // }
+      case "edit":
+        this.rooms = this._table.querySetRow(room, (u: Room) => u.id === room.id);
+        break;
+    }
   }
 
   async onDeleteRoom(room: Room): Promise<void> {
