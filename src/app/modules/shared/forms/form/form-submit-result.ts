@@ -1,4 +1,4 @@
-import { InputValidationResult } from "../inputs/base/input-validation-result";
+import { InputValidationResult } from "../../../../shared/components/forms/inputs/base/input-validation-result";
 import { Form } from "./form.component";
 
 export interface FormSubmitResult {

@@ -1,6 +1,6 @@
 import { Component, ContentChildren, EventEmitter, HostBinding, Input, Output, QueryList } from '@angular/core';
-import { FormInput } from '../inputs/base/form-input';
-import { InputValidationResult } from '../inputs/base/input-validation-result';
+import { FormInput } from '../../../../shared/components/forms/inputs/base/form-input';
+import { InputValidationResult } from '../../../../shared/components/forms/inputs/base/input-validation-result';
 import { FormSubmitResult } from './form-submit-result';
 
 @Component({

@@ -6,7 +6,7 @@ import { AuthResponse } from 'src/app/core/models/auth/auth-response';
 import { AuthService } from 'src/app/core/services/api/auth-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
-import { FormSubmitResult } from 'src/app/shared/components/forms/form/form-submit-result';
+import { FormSubmitResult } from 'src/app/modules/shared/forms/form/form-submit-result';
 
 @Component({
   selector: 'app-login-page',

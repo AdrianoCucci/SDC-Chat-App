@@ -5,7 +5,7 @@ import { ButtonModule } from '../../../button/button.module';
 import { DialogModule } from '../../../../../modules/shared/overlays/dialog/dialog.module';
 import { InlineAlertModule } from '../../../inline-alert/inline-alert.module';
 import { LoaderModule } from '../../../../../modules/shared/overlays/loader/loader.module';
-import { FormModule } from '../../form/form.module';
+import { FormModule } from '../../../../../modules/shared/forms/form/form.module';
 import { InputTextModule } from '../../inputs/input-text/input-text.module';
 
 import { OrganizationForm } from './organization-form.component';
