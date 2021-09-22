@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ButtonModule } from '../../../button/button.module';
+import { ButtonModule } from '../../../../../modules/shared/button/button.module';
 import { DialogModule } from '../../../../../modules/shared/overlays/dialog/dialog.module';
 import { InlineAlertModule } from '../../../inline-alert/inline-alert.module';
 import { LoaderModule } from '../../../../../modules/shared/overlays/loader/loader.module';
