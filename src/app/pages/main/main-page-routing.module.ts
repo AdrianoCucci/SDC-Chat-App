@@ -30,7 +30,8 @@ const routes: Routes = [
       {
         path: PATHS.children.rooms,
         canActivate: [RoleGuard],
-        data: { roles: [Role.OrganizationAdmin] }
+        data: { roles: [Role.OrganizationAdmin] },
+        loadChildren: () => import("./rooms-page/rooms-page.module").then(m => m.RoomsPageModule)
       },
       {
         path: PATHS.children.chat,
