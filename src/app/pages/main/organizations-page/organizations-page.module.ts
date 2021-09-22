@@ -4,8 +4,8 @@ import { OrganizationsPageRoutingModule } from './organizations-page-routing.mod
 
 import { OrganizationsTableModule } from 'src/app/core/modules/tables/organizations-table/organizations-table.module';
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
-import { DialogModule } from 'src/app/modules/shared/overlays/dialog/dialog.module';
-import { LoaderModule } from 'src/app/modules/shared/overlays/loader/loader.module';
+import { DialogModule } from 'src/app/shared/modules/overlays/dialog/dialog.module';
+import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.module';
 
 import { OrganizationsPage } from './organizations-page.component';
 

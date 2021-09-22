@@ -11,8 +11,8 @@ import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
 import { AdminPassResetForm } from '../../forms/admin-pass-reset-form/admin-pass-reset-form.component';
-import { TableCell } from '../../../../modules/shared/table/table-cell';
-import { TableComponent } from '../../../../modules/shared/table/table.component';
+import { TableCell } from 'src/app/shared/modules/table/table-cell';
+import { TableComponent } from 'src/app/shared/modules/table/table.component';
 
 @Component({
   selector: 'app-users-table',

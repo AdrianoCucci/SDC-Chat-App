@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginPageRoutingModule } from './login-page-routing.module';
 
-import { FormModule } from 'src/app/modules/shared/forms/form/form.module';
-import { InputTextModule } from 'src/app/modules/shared/forms/inputs/input-text/input-text.module';
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
-import { LoaderModule } from 'src/app/modules/shared/overlays/loader/loader.module';
-import { DialogModule } from 'src/app/modules/shared/overlays/dialog/dialog.module';
+import { FormModule } from 'src/app/shared/modules/forms/form/form.module';
+import { InputTextModule } from 'src/app/shared/modules/forms/inputs/input-text/input-text.module';
+import { DialogModule } from 'src/app/shared/modules/overlays/dialog/dialog.module';
+import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.module';
 
 import { LoginPage } from './login-page.component';
 

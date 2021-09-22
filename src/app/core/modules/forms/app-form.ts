@@ -2,8 +2,8 @@ import { HttpErrorResponse } from "@angular/common/http";
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { parseHttpError } from "src/app/shared/functions/parse-http-error";
 import { FormMode } from "src/app/shared/models/form-mode";
-import { FormSubmitResult } from "../../../../modules/shared/forms/form/form-submit-result";
-import { Form } from "../../../../modules/shared/forms/form/form.component";
+import { FormSubmitResult } from "src/app/shared/modules/forms/form/form-submit-result";
+import { Form } from "src/app/shared/modules/forms/form/form.component";
 
 @Component({ template: '' })
 export abstract class AppForm<TModel = any, TResult = any> {

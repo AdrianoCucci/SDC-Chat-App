@@ -5,9 +5,9 @@ import { OrganizationRequest } from 'src/app/core/models/organizations/organizat
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
-import { OrganizationForm } from '../../forms/app/organization-form/organization-form.component';
-import { TableCell } from '../../../../modules/shared/table/table-cell';
-import { TableComponent } from '../../../../modules/shared/table/table.component';
+import { TableCell } from 'src/app/shared/modules/table/table-cell';
+import { TableComponent } from 'src/app/shared/modules/table/table.component';
+import { OrganizationForm } from '../../forms/organization-form/organization-form.component';
 
 @Component({
   selector: 'app-organizations-table',

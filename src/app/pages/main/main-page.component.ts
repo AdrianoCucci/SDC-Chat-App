@@ -3,9 +3,9 @@ import { Event, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
+import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
 import { MenuItem } from 'src/app/shared/models/menu-item';
-import { WebSocketService } from 'src/app/shared/modules/web-socket.service';
 import { MainMenuItemsMapper } from 'src/app/shared/util/main-menu-items-mapper';
 import { environment } from 'src/environments/environment';
 
