@@ -1,0 +1,57 @@
+:host {
+  --padding: 1rem;
+  --background: var(--green-50);
+  --border-radius: 0.5rem;
+  --box-shadow: var(--surface-500) 0 8px 25px;
+  --overflow: unset;
+  --visible-transition: 0.16s;
+
+  position: absolute;
+  display: flex;
+  z-index: 10;
+
+  div.popover-content {
+    min-width: 100%;
+    min-height: 100%;
+    padding: var(--padding);
+    background-color: var(--background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: var(--overflow);
+  }
+
+  &[anchor="top"] div.popover-content {
+    transform-origin: top center;
+  }
+  &[anchor="bottom"] div.popover-content {
+    transform-origin: bottom center;
+  }
+
+  &:not(.visible) div.popover-content {
+    animation: hideAnimation var(--visible-transition) forwards;
+  }
+
+  &.visible div.popover-content {
+    animation: showAnimation var(--visible-transition) forwards;
+  }
+}
+
+@keyframes showAnimation {
+  from {
+    opacity: 0;
+    transform: scaleY(60%);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(100%);
+  }
+}
+
+@keyframes hideAnimation {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
