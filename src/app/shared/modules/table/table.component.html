@@ -2,7 +2,9 @@
   [footerHeight]="1" [limit]="20">
 
   <ng-container *ngFor="let cell of cells; index as i">
-    <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name" [prop]="cell.prop">
+    <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name" [prop]="cell.prop" [headerClass]="cell.headerClass"
+      [cellClass]="cell.cellClass" [width]="cell.width" [minWidth]="cell.minWidth" [maxWidth]="cell.maxWidth"
+      [flexGrow]="cell.flexGrow">
 
       <ng-template ngx-datatable-header-template let-sortFunc="sortFn" let-sortDir="sortDir">
         <div class="cell cell-header">

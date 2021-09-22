@@ -25,7 +25,7 @@ export class RoomsTable {
   public readonly cells: TableCell[] = [
     { name: "Name", prop: "name", sortable: true, filterable: true },
     { name: "Number", prop: "number", type: "number", sortable: true, filterable: true },
-    { name: "Description", prop: "description", sortable: true, filterable: true },
+    { name: "Description", prop: "description", width: 800, sortable: true, filterable: true },
     {
       name: "Ping Sound",
       prop: "pingSound",
