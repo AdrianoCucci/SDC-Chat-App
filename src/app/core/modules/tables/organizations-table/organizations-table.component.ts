@@ -32,6 +32,8 @@ export class OrganizationsTable {
 
   private _isDeletingOrganization: boolean = false;
 
+  constructor(private _orgsService: OrganizationsService) { }
+
   onAddOrganization(): void {
     const request: OrganizationRequest = {} as any;
     this.showOrganizationForm(request, "add");
@@ -81,8 +83,6 @@ export class OrganizationsTable {
       this._organizationForm.dialogVisible = true;
     });
   }
-
-  constructor(private _orgsService: OrganizationsService) { }
 
   public get isDeletingOrganization(): boolean {
     return this._isDeletingOrganization;
