@@ -1,12 +1,12 @@
+import { AudioSound } from "src/app/shared/models/audio-sound";
 import { Organization } from "../organizations/organization";
-import { RoomPingSound } from "./room-ping-sound";
 
 export interface Room {
   id: number;
   name: string;
   number?: number;
   description?: string;
-  pingSound?: RoomPingSound;
+  pingSound?: AudioSound;
   organizationId: number;
 
   organization?: Organization;
