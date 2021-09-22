@@ -3,11 +3,13 @@
 :host {
   --auto-resize-lines: unset;
   --padding: 0.5rem;
+  --background: var(--surface-50);
+  --border-color: var(--surface-400);
+  --border: solid var(--border-color) 1px;
+  --border-radius: 0.25rem;
   --line-height: 1.25rem;
 
-  padding: 0;
   border-radius: 0.5rem;
-  background-color: white;
   overflow: hidden;
 
   div.input-wrapper {
@@ -24,8 +26,9 @@
       height: 100%;
       margin: 0;
       padding: var(--padding);
-      background-color: transparent;
-      border: none;
+      background-color: var(--background);
+      border: var(--border);
+      border-radius: var(--border-radius);
       font: inherit;
       line-height: var(--line-height);
       outline: none;

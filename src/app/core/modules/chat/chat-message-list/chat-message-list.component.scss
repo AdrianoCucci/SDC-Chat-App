@@ -33,17 +33,14 @@
   div.input-wrapper {
     display: flex;
     flex-shrink: 0;
-    padding: 0.5rem;
     background-color: var(--input-wrapper-background);
 
-    .user-input {
+    app-input-textarea.user-input {
       flex-grow: 1;
       margin: 0;
-      background-color: var(--input-background);
-    }
-
-    .send-button {
-      flex-shrink: 0;
+      --background: var(--input-background);
+      --border: none;
+      --border-radius: 0.5rem;
     }
   }
 }
