@@ -54,8 +54,8 @@ export class UsersTable implements OnInit {
         valueKey: "value"
       }
     },
-    { name: "Account Locked", prop: "isLocked", sortable: true, type: "boolean", filterable: true },
-    this._organizationCell
+    this._organizationCell,
+    { name: "Account Locked", prop: "isLocked", sortable: true, type: "boolean", filterable: true }
   ];
 
   public errorDialogVisible: boolean = false;
