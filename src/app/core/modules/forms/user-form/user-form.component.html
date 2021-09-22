@@ -26,6 +26,8 @@
         [options]="organizationOptions" displayKey="name" valueKey="id" [clearable]="true"
         [(value)]="model.organizationId">
       </app-input-select>
+
+      <app-input-toggle class="col-12" name="locked" label="Locked" [(value)]="model.isLocked"></app-input-toggle>
     </div>
 
     <div slot="footer" class="form-footer">
