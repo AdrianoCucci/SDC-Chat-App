@@ -4,11 +4,13 @@
   --color: var(--surface-900);
   --border-radius: 0.25rem;
   --icon-transform: unset;
+  --justify-content: center;
 
   display: inline-block;
   font: inherit;
   font-weight: 600;
   cursor: pointer;
+  overflow: hidden;
   transition: 0.1s;
 
   a {
@@ -18,7 +20,7 @@
   button {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: var(--justify-content);
     width: 100%;
     height: 100%;
     padding: var(--padding);
