@@ -1,0 +1,41 @@
+:host {
+  app-dialog {
+    div.dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    div.dialog-body {
+      height: 100%;
+
+      app-form {
+        min-width: 30vw;
+      }
+    }
+  }
+
+  app-form {
+    height: 100%;
+
+    h2 {
+      margin: 0 0 1rem 0;
+      padding-bottom: 0.5rem;
+      border-bottom: solid var(--surface-300) 1px;
+      font-size: 1.25rem;
+      font-weight: normal;
+    }
+
+    div.grid:not(:last-of-type) {
+      margin-bottom: 2rem;
+    }
+
+    div.form-footer {
+      margin-top: 1rem;
+
+      app-inline-alert {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+<ng-template #formTemplate>
+  <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
+
+    <div class="grid">
+      <app-input-text class="col-6" name="name" label="Name" [validations]="{ required: true }" [(value)]="model.name">
+      </app-input-text>
+
+      <app-input-text class="col-6" type="number" name="number" label="Number" [(value)]="model.number">
+      </app-input-text>
+
+      <app-input-textarea class="col-12" name="description" label="Description" [(value)]="model.description">
+      </app-input-textarea>
+
+      <app-input-select *ngIf="pingSoundOptions" class="col-12" name="ping-sound" label="Ping Sound"
+        [options]="pingSoundOptions" displayKey="key" valueKey="value" [(value)]="model.pingSound"></app-input-select>
+    </div>
+
+    <div slot="footer" class="form-footer">
+      <app-inline-alert class="block" type="error" [summary]="errors" [visible]="errors != null"></app-inline-alert>
+
+      <div class="txt-right">
+        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+      </div>
+    </div>
+  </app-form>
+
+  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+</ng-template>
+
+<app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
+  <div slot="header" class="dialog-header" [ngSwitch]="mode">
+    <span *ngSwitchCase="'add'">Add Room</span>
+    <span *ngSwitchCase="'edit'">Update Room</span>
+
+    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
+  </div>
+
+  <div slot="body" class="dialog-body">
+    <ng-container *ngTemplateOutlet="formTemplate"></ng-container>
+  </div>
+</app-dialog>
