@@ -16,7 +16,6 @@ export class AudioService {
       const audio: HTMLAudioElement = this._audioSourceMap.get(sound)();
 
       audio.volume = this.clampVolume(volume);
-      audio.load();
       audio.play();
     }
   }
