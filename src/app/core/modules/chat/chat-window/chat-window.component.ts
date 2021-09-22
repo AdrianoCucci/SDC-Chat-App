@@ -2,8 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
-import { AudioService, AudioSound } from 'src/app/core/services/audio.service';
+import { AudioService } from 'src/app/core/services/audio.service';
 import { ChatService } from 'src/app/core/services/web-socket/chat.service';
+import { AudioSound } from 'src/app/shared/models/audio-sound';
 
 @Component({
   selector: 'app-chat-window',

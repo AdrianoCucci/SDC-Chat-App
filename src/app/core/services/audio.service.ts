@@ -1,4 +1,5 @@
 import { Injectable } from "@angular/core";
+import { AudioSound } from "src/app/shared/models/audio-sound";
 
 @Injectable({
   providedIn: 'root'
@@ -6,31 +7,21 @@ import { Injectable } from "@angular/core";
 export class AudioService {
   private readonly _assetsPrefix: string = "assets/audio";
 
-  private readonly _audioSourceMap = new Map<AudioSound, string>([
-    [AudioSound.ChatNotification, `${this._assetsPrefix}/sdc_chat_notification.wav`]
+  private readonly _audioSourceMap = new Map<AudioSound, () => HTMLAudioElement>([
+    [AudioSound.ChatNotification, () => new Audio(`${this._assetsPrefix}/sdc_chat_notification.wav`)]
   ]);
-
-  private readonly _audio: HTMLAudioElement;
-
-  constructor() {
-    this._audio = new Audio();
-    this._audio.load();
-  }
 
   public play(sound: AudioSound, volume: number = 1): void {
     if(this._audioSourceMap.has(sound)) {
-      this._audio.src = this._audioSourceMap.get(sound);
-      this._audio.volume = this.clampVolume(volume);
+      const audio: HTMLAudioElement = this._audioSourceMap.get(sound)();
 
-      this._audio.play();
+      audio.volume = this.clampVolume(volume);
+      audio.load();
+      audio.play();
     }
   }
 
   private clampVolume(volume: number): number {
     return Math.min(Math.max(volume, 0), 1);
   }
-}
-
-export enum AudioSound {
-  ChatNotification
 }
