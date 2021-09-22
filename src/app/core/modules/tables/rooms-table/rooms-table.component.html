@@ -3,6 +3,15 @@
 </div>
 
 <app-table [cells]="cells" [data]="rooms">
+  <ng-template app-template="pingSound" let-value="value">
+    <ng-container [ngSwitch]="value">
+      <ng-container *ngSwitchCase="'' || null || undefined">-</ng-container>
+
+      <app-button *ngSwitchDefault class="ping-sound-preview-button block text" [text]="getPingSoundName(value)"
+        [icon]="pingSoundIcon" (click)="onPlayPingSound(value)"></app-button>
+    </ng-container>
+  </ng-template>
+
   <ng-template app-template="table-row-actions" let-room>
     <div class="room-actions">
       <app-button class="text edit-room" icon="pen" title="Edit Room" (click)="onEditRoom(room)"></app-button>

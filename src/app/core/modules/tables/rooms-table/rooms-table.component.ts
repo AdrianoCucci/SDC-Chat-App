@@ -1,8 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, ViewChild } from '@angular/core';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
+import { faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import { Room } from 'src/app/core/models/rooms/room';
 import { RoomRequest } from 'src/app/core/models/rooms/room-request';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
+import { AudioService } from 'src/app/core/services/audio.service';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
@@ -21,11 +24,11 @@ export class RoomsTable {
   @Input() public organizationId: number;
 
   public readonly pingSoundPairs: Pair<string, AudioSound>[] = enumToPairs(AudioSound, true);
-
+  public readonly pingSoundIcon: IconDefinition = faVolumeUp;
   public readonly cells: TableCell[] = [
     { name: "Name", prop: "name", sortable: true, filterable: true },
     { name: "Number", prop: "number", type: "number", sortable: true, filterable: true },
-    { name: "Description", prop: "description", width: 800, sortable: true, filterable: true },
+    { name: "Description", prop: "description", width: 700, sortable: true, filterable: true },
     {
       name: "Ping Sound",
       prop: "pingSound",
@@ -47,7 +50,15 @@ export class RoomsTable {
 
   private _isDeletingRoom: boolean = false;
 
-  constructor(private _roomsService: RoomsService) { }
+  constructor(private _roomsService: RoomsService, private _audioService: AudioService) { }
+
+  public getPingSoundName(audioSound: AudioSound) {
+    return this.pingSoundPairs.find((p: Pair<string, AudioSound>) => p.value === audioSound)?.key ?? null;
+  }
+
+  onPlayPingSound(audioSound: AudioSound): void {
+    this._audioService.play(audioSound);
+  }
 
   onAddRoom(): void {
     const request: RoomRequest = { organizationId: this.organizationId } as any;

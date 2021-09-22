@@ -9,7 +9,11 @@
 
   app-table {
     flex-grow: 1;
-    
+
+    app-button.ping-sound-preview-button {
+      --justify-content: space-between;
+    }
+
     div.room-actions {
       app-button.delete-room {
         --background: var(--pink-600);
