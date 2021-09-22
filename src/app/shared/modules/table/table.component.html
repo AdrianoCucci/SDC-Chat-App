@@ -15,7 +15,7 @@
           </div>
 
           <span *ngIf="cell.sortable" class="sort-action" role="button" [ngClass]="{'sort-active': sortDir != null}"
-            [ngSwitch]="sortDir" (click)="onSort(sortFunc)">
+            [ngSwitch]="sortDir" (click)="sortFunc()">
             <fa-icon *ngSwitchCase="'asc'" [icon]="sortAscIcon"></fa-icon>
             <fa-icon *ngSwitchCase="'desc'" [icon]="sortDescIcon"></fa-icon>
             <fa-icon *ngSwitchDefault [icon]="sortNoneIcon"></fa-icon>

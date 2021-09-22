@@ -25,7 +25,6 @@ export class Table implements AfterViewInit {
 
   private _initialized: boolean;
   private _filteredData: any[];
-  private _lastSortFunc: Function;
   private _rowActionsTemplate: TemplateRef<any>;
 
   ngAfterViewInit(): void {
@@ -52,6 +51,18 @@ export class Table implements AfterViewInit {
           }
         }
       }
+    }
+  }
+
+  public refresh(): void {
+    if(this.data != null) {
+      this.data = [...this.data];
+
+      if(this._filteredData != null) {
+        this._filteredData = [...this._filteredData];
+        this._filteredData = this.applyActiveFilters(this.data);
+      }
+
     }
   }
 
@@ -94,8 +105,7 @@ export class Table implements AfterViewInit {
         this.data = [item];
       }
 
-      this.data = [...this.data];
-      this.repeatLastSort();
+      this.refresh();
     }
 
     return this.data;
@@ -116,8 +126,7 @@ export class Table implements AfterViewInit {
         }
       }
 
-      this.data = [...this.data];
-      this.repeatLastSort();
+      this.refresh();
     }
 
     return this.data;
@@ -126,9 +135,7 @@ export class Table implements AfterViewInit {
   public setRow(index: number, item: any): any[] {
     if(this.hasData && index > -1 && index < this.data.length) {
       this.data[index] = item;
-      this.data = [...this.data];
-
-      this.repeatLastSort();
+      this.refresh();
     }
 
     return this.data;
@@ -137,9 +144,7 @@ export class Table implements AfterViewInit {
   public assignRow(index: number, item: any): any[] {
     if(this.hasData && index > -1 && index < this.data.length) {
       Object.assign(this.data[index], item);
-      this.data = [...this.data];
-
-      this.repeatLastSort();
+      this.refresh();
     }
 
     return this.data;
@@ -148,9 +153,7 @@ export class Table implements AfterViewInit {
   public deleteRow(index: number): any[] {
     if(this.hasData && index > -1 && index < this.data.length) {
       this.data.splice(index, 1);
-      this.data = [...this.data];
-
-      this.repeatLastSort();
+      this.refresh();
     }
 
     return this.data;
@@ -162,9 +165,8 @@ export class Table implements AfterViewInit {
     if(row != null) {
       const index: number = this.data.indexOf(row);
       this.data[index] = item;
-      this.data = [...this.data];
 
-      this.repeatLastSort();
+      this.refresh();
     }
 
     return this.data;
@@ -180,7 +182,7 @@ export class Table implements AfterViewInit {
         this.data[index] = item;
       }
 
-      this.data = [...this.data];
+      this.refresh();
     }
 
     return this.data;
@@ -192,7 +194,8 @@ export class Table implements AfterViewInit {
     if(row != null) {
       const index: number = this.data.indexOf(row);
       Object.assign(this.data[index], item);
-      this.data = [...this.data];
+
+      this.refresh();
     }
 
     return this.data;
@@ -208,7 +211,7 @@ export class Table implements AfterViewInit {
         Object.assign(this.data[index], item);
       }
 
-      this.data = [...this.data];
+      this.refresh();
     }
 
     return this.data;
@@ -220,7 +223,8 @@ export class Table implements AfterViewInit {
     if(row != null) {
       const index: number = this.data.indexOf(row);
       this.data.splice(index, 1);
-      this.data = [...this.data];
+
+      this.refresh();
     }
 
     return this.data;
@@ -236,21 +240,10 @@ export class Table implements AfterViewInit {
         this.data.splice(index, 1);
       }
 
-      this.data = [...this.data];
+      this.refresh();
     }
 
     return this.data;
-  }
-
-  public repeatLastSort(): void {
-    if(this._lastSortFunc != null) {
-      this._lastSortFunc();
-    }
-  }
-
-  onSort(sortFunc: Function): void {
-    sortFunc();
-    this._lastSortFunc = sortFunc;
   }
 
   onFilter(cell: TableCell, filterValue: any): void {
@@ -271,7 +264,7 @@ export class Table implements AfterViewInit {
       filteredData = filteredData.filter((row: any) => this.filterDataRow(cell, row[cell.prop], filterValue));
     });
 
-    return filteredData ?? [];
+    return filteredData;
   }
 
   private filterDataRow(cell: TableCell, rowValue: any, filterValue: any): boolean {
