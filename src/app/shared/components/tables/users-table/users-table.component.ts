@@ -11,8 +11,8 @@ import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
 import { AdminPassResetForm } from '../../forms/app/admin-pass-reset-form/admin-pass-reset-form.component';
 import { UserForm } from '../../forms/app/user-form/user-form.component';
-import { TableCell } from '../table/table-cell';
-import { TableComponent } from '../table/table.component';
+import { TableCell } from '../../../../modules/shared/table/table-cell';
+import { TableComponent } from '../../../../modules/shared/table/table.component';
 
 @Component({
   selector: 'app-users-table',

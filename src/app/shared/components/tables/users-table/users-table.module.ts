@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TableModule } from '../table/table.module';
+import { TableModule } from '../../../../modules/shared/table/table.module';
 import { DirectivesModule } from 'src/app/shared/directives/directives-module';
 import { ButtonModule } from '../../../../modules/shared/button/button.module';
 import { UserFormModule } from '../../forms/app/user-form/user-form.module';
