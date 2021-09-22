@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-direction: column;
+
+  div.header-actions {
+    text-align: right;
+    margin-bottom: 1rem;
+  }
+
+  app-table {
+    flex-grow: 1;
+    
+    div.room-actions {
+      app-button.delete-room {
+        --background: var(--pink-600);
+      }
+    }
+  }
+}
