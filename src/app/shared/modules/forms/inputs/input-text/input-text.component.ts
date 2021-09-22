@@ -33,8 +33,13 @@ export class InputText extends FormInput {
   }
 
   protected onValueSetting(newValue: any): any {
-    if(this.type === "number" && newValue != null) {
-      newValue = Number(newValue);
+    if(this.type === "number") {
+      if(newValue) {
+        newValue = Number(newValue);
+      }
+      else {
+        newValue = null;
+      }
     }
 
     return newValue;
