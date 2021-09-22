@@ -1,1 +1,47 @@
-<p>rooms-table works!</p>
+<div class="header-actions">
+  <app-button text="Add Room" icon="door-open" (click)="onAddRoom()"></app-button>
+</div>
+
+<app-table [cells]="cells" [data]="rooms">
+  <ng-template app-template="table-row-actions" let-room>
+    <div class="room-actions">
+      <app-button class="text edit-room" icon="pen" title="Edit Room" (click)="onEditRoom(room)"></app-button>
+
+      <app-button class="text delete-room" icon="trash" title="Delete Room" (click)="deleteDialog.show(room)">
+      </app-button>
+    </div>
+  </ng-template>
+</app-table>
+
+<!-- <app-room-form [dialog]="true" (onSubmitSuccess)="onRoomFormSubmit($event)"></app-room-form> -->
+
+<app-dialog #deleteDialog class="delete-dialog" [backdropDismiss]="true">
+  <div slot="header">
+    <span>Delete Room</span>
+  </div>
+  <p *ngIf="deleteDialog.data" slot="body"
+    class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
+    <span>Are you sure you want to delete room:</span>
+    <span>"<b>{{deleteDialog.data.name}}</b>"?</span>
+  </p>
+  <div slot="footer" class="txt-right">
+    <app-button class="text option-no" text="No" (click)="deleteDialog.hide()"></app-button>
+
+    <app-button class="text option-yes" text="Yes" (click)="deleteDialog.hide(); onDeleteRoom(deleteDialog.data)">
+    </app-button>
+  </div>
+</app-dialog>
+
+<app-loader [fullscreen]="true" text="Deleting room..." [visible]="isDeletingRoom"></app-loader>
+
+<app-dialog class="delete-error-dialog" [backdropDismiss]="true" [(visible)]="errorDialogVisible">
+  <div slot="header">
+    <span>Failed to Delete Room</span>
+  </div>
+  <p slot="body" class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
+    {{errorDialogText}}
+  </p>
+  <div slot="footer" class="txt-right">
+    <app-button class="text" text="OK" (click)="errorDialogVisible = false"></app-button>
+  </div>
+</app-dialog>
