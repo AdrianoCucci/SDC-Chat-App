@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
-import { InputTextarea } from '../../../shared/forms/inputs/input-textarea/input-textarea.component';
+import { InputTextarea } from '../../../../modules/shared/forms/inputs/input-textarea/input-textarea.component';
 
 @Component({
   selector: 'app-chat-message-list',

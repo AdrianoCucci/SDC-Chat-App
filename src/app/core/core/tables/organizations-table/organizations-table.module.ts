@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TableModule } from '../../../shared/table/table.module';
+import { TableModule } from '../../../../modules/shared/table/table.module';
 import { DirectivesModule } from 'src/app/modules/shared/directives/directives-module';
 import { OrganizationFormModule } from '../../forms/organization-form/organization-form.module';
-import { ButtonModule } from '../../../shared/button/button.module';
-import { DialogModule } from '../../../shared/overlays/dialog/dialog.module';
-import { LoaderModule } from '../../../shared/overlays/loader/loader.module';
+import { ButtonModule } from '../../../../modules/shared/button/button.module';
+import { DialogModule } from '../../../../modules/shared/overlays/dialog/dialog.module';
+import { LoaderModule } from '../../../../modules/shared/overlays/loader/loader.module';
 
 import { OrganizationsTableComponent } from './organizations-table.component';
 const component = [OrganizationsTableComponent];
