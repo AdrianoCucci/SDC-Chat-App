@@ -261,9 +261,7 @@ export class Table implements AfterViewInit {
       this._activeFiltersMap.set(cell, filterValue);
     }
 
-    const filteredData: any[] = this.applyActiveFilters(this.data);
-
-    this._filteredData = filteredData ?? null;
+    this._filteredData = this.applyActiveFilters(this.data);
   }
 
   private applyActiveFilters(data: any[]): any[] {
