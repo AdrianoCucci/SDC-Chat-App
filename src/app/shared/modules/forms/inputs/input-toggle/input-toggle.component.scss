@@ -9,42 +9,44 @@
   --icon-size: 0.9rem;
   --transition: 0.16s;
 
-  div.input-wrapper div.box-outer {
-    width: var(--input-size);
-    height: var(--input-size);
-    background-color: var(--background);
-    border: solid var(--border-color) 1px;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    overflow: hidden;
-    transition: var(--transition);
-
-    div.box-inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      height: 100%;
-      color: var(--surface-0);
+  div.input-wrapper {
+    div.box-outer {
+      width: var(--input-size);
+      height: var(--input-size);
+      background-color: var(--background);
+      border: solid var(--border-color) 1px;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      overflow: hidden;
       transition: var(--transition);
 
-      &.fill-background {
-        background-color: var(--fill);
-      }
-
-      fa-icon {
+      div.box-inner {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
         height: 100%;
-        font-size: var(--icon-size);
-        animation: iconAnimation var(--transition) forwards;
+        color: var(--surface-0);
+        transition: var(--transition);
+
+        &.fill-background {
+          background-color: var(--fill);
+        }
+
+        fa-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          font-size: var(--icon-size);
+          animation: iconAnimation var(--transition) forwards;
+        }
       }
     }
 
-    &:focus {
-      box-shadow: var(--fill) 0 0 2px 2px;
+    label {
+      cursor: pointer;
     }
   }
 
@@ -52,11 +54,16 @@
     div.input-wrapper {
       flex-direction: row;
       align-items: center;
-    }
 
-    label {
-      margin-left: 0.5rem;
+      label {
+        margin-bottom: 0;
+        margin-left: 0.5rem;
+      }
     }
+  }
+
+  &:focus-within div.input-wrapper div.box-outer {
+    box-shadow: var(--fill) 0 0 2px 2px;
   }
 
   &.disabled {

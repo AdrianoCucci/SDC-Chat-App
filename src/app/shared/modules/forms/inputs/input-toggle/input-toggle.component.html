@@ -1,5 +1,5 @@
 <div class="input-wrapper">
-  <div class="box-outer" role="checkbox" [tabindex]="!disabled && !readonly ? 0 : -1" (click)="onClick()"
+  <div #boxOuter class="box-outer" role="checkbox" [tabindex]="!disabled && !readonly ? 0 : -1" (click)="onClick()"
     (keyup.enter)="onClick()" (keyup.space)="onClick()" (blur)="validateIfDirty()">
 
     <div *ngIf="!tristate; else tristateTemplate" class="box-inner" [ngClass]="{'fill-background': value}">
@@ -17,7 +17,7 @@
   <input type="hidden" [name]="name" [attr.id]="name" [required]="required" [disabled]="disabled" [readonly]="readonly"
     [(ngModel)]="value">
 
-  <label *ngIf="label" [for]="name">
+  <label *ngIf="label" [for]="name" tabindex="-1" (click)="onClick(); boxOuter.focus();">
     <span *ngIf="required">*&nbsp;</span>
     <span>{{label}}</span>
   </label>
