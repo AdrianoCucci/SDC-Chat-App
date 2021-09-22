@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { TableModule } from '../../../shared/table/table.module';
-import { DirectivesModule } from 'src/app/shared/directives/directives-module';
+import { DirectivesModule } from 'src/app/modules/shared/directives/directives-module';
 import { OrganizationFormModule } from '../../forms/organization-form/organization-form.module';
 import { ButtonModule } from '../../../shared/button/button.module';
 import { DialogModule } from '../../../shared/overlays/dialog/dialog.module';
