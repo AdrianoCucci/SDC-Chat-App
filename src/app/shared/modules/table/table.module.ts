@@ -7,8 +7,8 @@ import { InputToggleModule } from '../forms/inputs/input-toggle/input-toggle.mod
 import { InputSelectModule } from '../forms/inputs/input-select/input-select.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import { TableComponent } from './table.component';
-const component = [TableComponent];
+import { Table } from './table.component';
+const component = [Table];
 
 @NgModule({
   imports: [

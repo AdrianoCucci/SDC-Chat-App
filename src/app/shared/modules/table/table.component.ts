@@ -10,7 +10,7 @@ import { TableCell } from './table-cell';
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements AfterViewInit {
+export class Table implements AfterViewInit {
   @Input() public cells: TableCell[];
   @Input() public data: any[];
   @Input() public columnMode = ColumnMode.force;

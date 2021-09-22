@@ -8,8 +8,8 @@ import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.modu
 import { TableModule } from 'src/app/shared/modules/table/table.module';
 import { OrganizationFormModule } from '../../forms/organization-form/organization-form.module';
 
-import { OrganizationsTableComponent } from './organizations-table.component';
-const component = [OrganizationsTableComponent];
+import { OrganizationsTable } from './organizations-table.component';
+const component = [OrganizationsTable];
 
 @NgModule({
   imports: [

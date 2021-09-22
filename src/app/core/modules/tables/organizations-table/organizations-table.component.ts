@@ -6,7 +6,7 @@ import { OrganizationsService } from 'src/app/core/services/api/organizations-se
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { TableCell } from 'src/app/shared/modules/table/table-cell';
-import { TableComponent } from 'src/app/shared/modules/table/table.component';
+import { Table } from 'src/app/shared/modules/table/table.component';
 import { OrganizationForm } from '../../forms/organization-form/organization-form.component';
 
 @Component({
@@ -14,7 +14,7 @@ import { OrganizationForm } from '../../forms/organization-form/organization-for
   templateUrl: './organizations-table.component.html',
   styleUrls: ['./organizations-table.component.scss']
 })
-export class OrganizationsTableComponent {
+export class OrganizationsTable {
   @Input() public organizations: Organization[];
 
   public readonly cells: TableCell[] = [
@@ -27,7 +27,7 @@ export class OrganizationsTableComponent {
   public errorDialogVisible: boolean = false;
   public errorDialogText: string;
 
-  @ViewChild(TableComponent) private readonly _table: TableComponent;
+  @ViewChild(Table) private readonly _table: Table;
   @ViewChild(OrganizationForm) private readonly _organizationForm: OrganizationForm;
 
   private _isDeletingOrganization: boolean = false;

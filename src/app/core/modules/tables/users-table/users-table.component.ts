@@ -12,14 +12,14 @@ import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
 import { AdminPassResetForm } from '../../forms/admin-pass-reset-form/admin-pass-reset-form.component';
 import { TableCell } from 'src/app/shared/modules/table/table-cell';
-import { TableComponent } from 'src/app/shared/modules/table/table.component';
+import { Table } from 'src/app/shared/modules/table/table.component';
 
 @Component({
   selector: 'app-users-table',
   templateUrl: './users-table.component.html',
   styleUrls: ['./users-table.component.scss']
 })
-export class UsersTableComponent implements OnInit {
+export class UsersTable implements OnInit {
   @Input() public users: User[];
   @Input() public clientUser: User;
 
@@ -61,7 +61,7 @@ export class UsersTableComponent implements OnInit {
   public errorDialogVisible: boolean = false;
   public errorDialogText: string;
 
-  @ViewChild(TableComponent) private readonly _table: TableComponent;
+  @ViewChild(Table) private readonly _table: Table;
   @ViewChild(AdminPassResetForm) private readonly _passResetForm: AdminPassResetForm;
   @ViewChild(UserForm) private readonly _userForm: UserForm;
 

@@ -9,8 +9,8 @@ import { TableModule } from 'src/app/shared/modules/table/table.module';
 import { AdminPassResetFormModule } from '../../forms/admin-pass-reset-form/admin-pass-reset-form.module';
 import { UserFormModule } from '../../forms/user-form/user-form.module';
 
-import { UsersTableComponent } from './users-table.component';
-const component = [UsersTableComponent];
+import { UsersTable } from './users-table.component';
+const component = [UsersTable];
 
 @NgModule({
   imports: [
