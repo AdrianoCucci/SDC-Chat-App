@@ -4,10 +4,11 @@
   <app-tab-menu class="main-menu" [menuItems]="mainMenuItems"></app-tab-menu>
 
   <div class="user-options">
-    <app-button class="user-options-button outline" [text]="userDisplayName" (click)="poUserOptions.toggle($event)">
+    <app-button class="user-options-button outline" [text]="userDisplayName"
+      (click)="poUserOptions.toggleVisible($event)">
     </app-button>
 
-    <app-popover #poUserOptions>
+    <app-popover #poUserOptions [offsetX]="20">
       <ul class="user-options-list">
         <li>
           <app-button class="block text" text="My Account" (click)="poUserOptions.hide()"></app-button>
