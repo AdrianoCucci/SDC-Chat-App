@@ -5,6 +5,8 @@
   --box-shadow: var(--surface-600) 0 8px 25px;
   --overflow: unset;
   --visible-transition: 0.16s;
+  --visible-scale-x: 60%;
+  --visible-scale-y: 60%;
 
   position: absolute;
   display: flex;
@@ -22,10 +24,22 @@
 
   &[anchor="top"] div.popover-content {
     transform-origin: top center;
+    --visible-scale-x: 100%;
   }
   &[anchor="bottom"] div.popover-content {
     transform-origin: bottom center;
+    --visible-scale-x: 100%;
   }
+
+  &[anchor="left"] div.popover-content {
+    transform-origin: center left;
+    --visible-scale-y: 100%;
+  }
+  &[anchor="right"] div.popover-content {
+    transform-origin: center right;
+    --visible-scale-y: 100%;
+  }
+
   &[anchor="top left"] div.popover-content {
     transform-origin: top left;
   }
@@ -51,7 +65,7 @@
 @keyframes showAnimation {
   from {
     opacity: 0;
-    transform: scale(60%);
+    transform: scale(var(--visible-scale-x), var(--visible-scale-y));
   }
   to {
     opacity: 1;

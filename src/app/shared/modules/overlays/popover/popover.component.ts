@@ -14,9 +14,12 @@ export class Popover implements OnInit, IVisibilityChangeable {
   @Input() public parent?: PopoverParent;
   @Input() public offsetX: number = 0;
   @Input() public offsetY: number = 0;
+  @Input() public anchorX: "left" | "right";
+  @Input() public anchorY: "top" | "bottom";
+  @Input() public autoAnchorX: boolean = true;
+  @Input() public autoAnchorY: boolean = true;
 
   @HostBinding("class.visible") private _visible: boolean = false;
-  @HostBinding("attr.anchor") private _anchor: string;
 
   private _nativeElement: HTMLElement;
   private _originalParent: HTMLElement;
@@ -116,9 +119,19 @@ export class Popover implements OnInit, IVisibilityChangeable {
       styleLeft = anchorLeft ? `${offsetX}px` : `calc(100% - ${host.offsetWidth + offsetX}px)`;
     }
 
-    this._anchor = `${anchorTop ? "top" : "bottom"} ${anchorLeft ? "left" : "right"}`;
     host.style.top = styleTop;
     host.style.left = styleLeft;
+
+    this.updateAnchors(anchorTop, anchorLeft);
+  }
+
+  private updateAnchors(anchorTop: boolean, anchorLeft: boolean): void {
+    if(this.autoAnchorX) {
+      this.anchorX = anchorLeft ? "left" : "right";
+    }
+    if(this.autoAnchorY) {
+      this.anchorY = anchorTop ? "top" : "bottom";
+    }
   }
 
   private setEventHandlersEnabled(enabled: boolean) {
@@ -168,9 +181,9 @@ export class Popover implements OnInit, IVisibilityChangeable {
   public get contentVisible(): boolean {
     return this._contentVisible;
   }
-  
-  public get anchor(): string {
-    return this._anchor;
+
+  @HostBinding("attr.anchor") public get anchor(): string {
+    return `${this.anchorY || ""} ${this.anchorX || ""}`.trim();
   }
 }
 
