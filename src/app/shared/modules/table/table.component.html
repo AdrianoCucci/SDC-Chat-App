@@ -60,6 +60,7 @@
       [displayKey]="cell.selectOptions?.displayKey" [valueKey]="cell.selectOptions?.valueKey" [clearable]="true"
       (valueChange)="onFilter(cell, $event)"></app-input-select>
 
-    <app-input-text *ngSwitchDefault class="filter-input" (valueChange)="onFilter(cell, $event)"></app-input-text>
+    <app-input-text *ngSwitchDefault class="filter-input" [type]="cell.type || 'text'"
+      (valueChange)="onFilter(cell, $event)"></app-input-text>
   </ng-container>
 </ng-template>
