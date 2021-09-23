@@ -1,0 +1,46 @@
+<div class="input-wrapper">
+  <div class="select-wrapper">
+    <div class="select-box" (click)="optionsPopover.toggleVisible($event)">
+      <span *ngIf="placeholder && !hasValue" class="placeholder">{{placeholder}}</span>
+
+      <div *ngIf="hasValue" class="value-wrapper">
+        <span *ngIf="displayValue != null && !multiple" class="value">{{displayValue}}</span>
+
+        <ng-container *ngIf="multiple">
+          <span *ngFor="let item of displayValue" class="value">{{item}}</span>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="select-widgets">
+      <app-button *ngIf="clearable && hasValue" class="clear-button text" icon="times" title="Clear value"
+        (click)="value = null">
+      </app-button>
+      <fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon>
+    </div>
+
+    <app-popover #optionsPopover class="select-options-popover" [autoAnchorX]="false">
+      <ul *ngIf="hasOptions; else noOptionsTemplate" class="select-options">
+        <li *ngFor="let option of options" class="select-option" [ngClass]="{'selected': isOptionSelected(option)}"
+          (click)="onOptionClick(option, optionsPopover)">
+          <span>{{getItemDisplay(option)}}</span>
+        </li>
+      </ul>
+
+      <ng-template #noOptionsTemplate>
+        <div class="no-options-wrapper">
+          <span>No options available</span>
+        </div>
+      </ng-template>
+    </app-popover>
+  </div>
+
+  <label *ngIf="label" [for]="name">
+    <span *ngIf="required">*&nbsp;</span>
+    <span>{{label}}</span>
+  </label>
+</div>
+
+<ul class="error-list" [ngClass]="{'visible': showErrors && hasErrors}">
+  <li *ngFor="let error of errors" class="error-message">{{error}}</li>
+</ul>
