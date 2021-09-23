@@ -119,12 +119,9 @@ export class InputSelect extends FormInput implements AfterViewInit {
 
     if(!this.multiple) {
       this._popover.hide();
-
-      // this._selected = option;
       this.value = optionValue;
     }
     else {
-      // this._selected = this.updateMultiValues(this._selected, option);
       this.value = this.updateMultiValues(this._value, optionValue);
     }
   }
