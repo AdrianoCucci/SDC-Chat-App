@@ -13,7 +13,8 @@
       </app-input-textarea>
 
       <app-input-select *ngIf="pingSoundOptions" class="col-12" name="ping-sound" label="Ping Sound"
-        [options]="pingSoundOptions" displayKey="key" valueKey="value" [(value)]="model.pingSound"></app-input-select>
+        [options]="pingSoundOptions" displayKey="key" valueKey="value" [clearable]="true" [(value)]="model.pingSound">
+      </app-input-select>
     </div>
 
     <div slot="footer" class="form-footer">
