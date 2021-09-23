@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 import { FormModule } from 'src/app/shared/modules/forms/form/form.module';
+import { DirectivesModule } from 'src/app/shared/modules/directives/directives-module';
 import { InputSelectModule } from 'src/app/shared/modules/forms/inputs/input-select/input-select.module';
 import { InputTextModule } from 'src/app/shared/modules/forms/inputs/input-text/input-text.module';
 import { InputTextareaModule } from 'src/app/shared/modules/forms/inputs/input-textarea/input-textarea.module';
@@ -17,6 +18,7 @@ const component = [RoomForm];
   imports: [
     CommonModule,
     FormModule,
+    DirectivesModule,
     DialogModule,
     InputTextModule,
     InputTextareaModule,

@@ -14,6 +14,14 @@
 
       <app-input-select *ngIf="pingSoundOptions" class="col-12" name="ping-sound" label="Ping Sound"
         [options]="pingSoundOptions" displayKey="key" valueKey="value" [clearable]="true" [(value)]="model.pingSound">
+
+        <ng-template app-template="option" let-option let-isSelected="isSelected" let-selectCallback="selectCallback">
+          <li class="ping-sound-select-option" [ngClass]="{'selected': isSelected}">
+            <app-button icon="volume-up" title="Preview sound" (click)="onPreviewSound(option.value)"></app-button>
+            <span (click)="selectCallback()">{{option.key}}</span>
+          </li>
+        </ng-template>
+
       </app-input-select>
     </div>
 

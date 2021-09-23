@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Room } from 'src/app/core/models/rooms/room';
 import { RoomRequest } from 'src/app/core/models/rooms/room-request';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
+import { AudioService } from 'src/app/core/services/audio.service';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
 import { Pair } from 'src/app/shared/models/pair';
 import { AppForm } from '../app-form';
@@ -16,7 +17,7 @@ export class RoomForm extends AppForm<RoomRequest, Room> {
   @Input() public organizationId: number;
   @Input() public pingSoundOptions: Pair<string, AudioSound>[];
 
-  constructor(private _roomsService: RoomsService) {
+  constructor(private _roomsService: RoomsService, private _audioService: AudioService) {
     super();
   }
 
@@ -32,5 +33,9 @@ export class RoomForm extends AppForm<RoomRequest, Room> {
     const response: HttpResponse<Room> = await this._roomsService.updateRoom(model.id, model).toPromise();
 
     return response.body;
+  }
+
+  onPreviewSound(audioSound: AudioSound): void {
+    this._audioService.play(audioSound);
   }
 }
