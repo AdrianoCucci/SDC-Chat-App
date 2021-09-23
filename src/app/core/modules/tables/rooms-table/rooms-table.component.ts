@@ -1,7 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, ViewChild } from '@angular/core';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faVolumeUp } from '@fortawesome/free-solid-svg-icons';
 import { Room } from 'src/app/core/models/rooms/room';
 import { RoomRequest } from 'src/app/core/models/rooms/room-request';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
@@ -25,7 +23,6 @@ export class RoomsTable {
   @Input() public organizationId: number;
 
   public readonly pingSoundPairs: Pair<string, AudioSound>[] = enumToPairs(AudioSound, true);
-  public readonly pingSoundIcon: IconDefinition = faVolumeUp;
   public readonly cells: TableCell[] = [
     { name: "Name", prop: "name", sortable: true, filterable: true },
     { name: "Number", prop: "number", type: "number", sortable: true, filterable: true },

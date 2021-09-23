@@ -6,8 +6,8 @@
   <ng-template app-template="pingSound" let-value="value">
 
     <app-button *ngIf="getPingSoundName(value) as name; else defaultTemplate"
-      class="ping-sound-preview-button block text" [text]="name" [icon]="pingSoundIcon"
-      (click)="onPlayPingSound(value)"></app-button>
+      class="ping-sound-preview-button block text" [text]="name" icon="volume-up" (click)="onPlayPingSound(value)">
+    </app-button>
 
     <ng-template #defaultTemplate>-</ng-template>
 
