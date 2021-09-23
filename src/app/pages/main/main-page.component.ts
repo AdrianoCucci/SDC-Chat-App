@@ -33,6 +33,8 @@ export class MainPage implements OnInit, OnDestroy {
       this.mainMenuItems = new MainMenuItemsMapper().getMenuItemsByRole(user.role);
       this.userDisplayName = user.displayName || user.username;
     }
+
+    this._clientUser = user;
   }
 
   async ngOnInit(): Promise<void> {
