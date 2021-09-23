@@ -33,14 +33,16 @@ export class InputText extends FormInput {
   }
 
   protected onValueSetting(newValue: any): any {
-    if(this.type === "number") {
-      if(newValue) {
-        newValue = Number(newValue);
-      }
-      else {
+    if(this.type === "number" && newValue != null) {
+      if(newValue === "" || Number.isNaN(newValue)) {
         newValue = null;
       }
+      else {
+        newValue = Number(newValue);
+      }
     }
+
+    console.log(newValue);
 
     return newValue;
   }
