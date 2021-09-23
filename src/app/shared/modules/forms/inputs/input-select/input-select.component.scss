@@ -1,35 +1,108 @@
 @import "../base/form-input.scss";
 
 :host {
+  --background: var(--surface-0);
   --border-color: var(--surface-400);
   --border: solid var(--border-color) 1px;
   --border-radius: 0.25rem;
 
+  --popover-background: var(--background);
+  --popover-border-radius: var(--border-radius);
+  --popover-box-shadow: var(--surface-500) 0 0 6px;
+
   div.input-wrapper div.select-wrapper {
     position: relative;
+    height: 2.125rem;
+    background-color: var(--background);
+    border: var(--border);
+    border-radius: var(--border-radius);
 
-    select {
-      flex: 1;
-      width: 100%;
+    div.select-box {
+      display: flex;
+      align-items: center;
+      height: 100%;
       padding: 0.5rem;
-      background-color: var(--surface-0);
-      border: var(--border);
-      border-radius: var(--border-radius);
-      transition: 0.1s;
+      font-size: 0.8rem;
       cursor: pointer;
 
-      option {
-        padding: 0.5rem;
+      div.value-wrapper {
+        position: absolute;
+        max-width: 88%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .value {
+          display: inline-block;
+          margin-right: 0.5rem;
+        }
+      }
+
+      span.placeholder {
+        position: absolute;
+        opacity: 0.5;
       }
     }
 
-    app-button.clear-button {
+    div.select-widgets {
       position: absolute;
+      display: flex;
+      align-items: center;
+      top: 0;
+      right: 0;
       height: 100%;
-      right: 1rem;
-      --padding: 0 0.5rem;
-      --background: var(--surface-900);
-      animation: clearButtonAnimation 0.16s forwards;
+      margin: 0 0.75rem;
+      pointer-events: none;
+      cursor: pointer;
+
+      app-button.clear-button {
+        height: 100%;
+        --background: var(--surface-900);
+        animation: clearButtonAnimation 0.16s;
+        pointer-events: initial;
+
+        &:hover {
+          transform: scale(1.25);
+        }
+      }
+    }
+
+    app-popover.select-options-popover {
+      width: 100%;
+      max-height: 200px;
+      --background: var(--popover-background);
+      --border-radius: var(--popover-border-radius);
+      --box-shadow: var(--popover-box-shadow);
+      --padding: 0.5rem;
+      --overflow: auto;
+
+      ul.select-options {
+        margin: 0;
+        padding: 0;
+
+        li.select-option {
+          display: block;
+          cursor: pointer;
+          padding: 0.5rem;
+          border-bottom: solid var(--surface-100) 1px;
+          border-radius: var(--border-radius);
+          transition: 0.16s;
+
+          &:hover {
+            background-color: var(--surface-100);
+          }
+
+          &.selected {
+            background-color: var(--green-50);
+            font-weight: 600;
+          }
+        }
+      }
+
+      div.no-options-wrapper {
+        padding: 0.25rem;
+        text-align: center;
+      }
     }
   }
 

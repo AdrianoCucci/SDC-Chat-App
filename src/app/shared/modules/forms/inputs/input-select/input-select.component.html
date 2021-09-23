@@ -1,14 +1,58 @@
 <div class="input-wrapper">
   <div class="select-wrapper">
-    <select [name]="name" [attr.id]="name" [title]="label" [required]="required" [disabled]="disabled"
-      (blur)="validateIfDirty()" [(ngModel)]="value">
+    <div class="select-box" (click)="optionsPopover.toggleVisible($event, popoverParent)">
+      <span *ngIf="placeholder && !hasValue" class="placeholder">{{placeholder}}</span>
 
-      <option *ngFor="let option of options" [value]="valueKey ? option[valueKey] : option">
-        <span class="option">{{displayKey ? option[displayKey] : option}}</span>
-      </option>
-    </select>
+      <div *ngIf="hasValue" class="value-wrapper">
+        <ng-container *ngIf="valueTemplate == null; else valueTemplateWrapper">
+          <span *ngIf="displayValue != null && !multiple" class="value">{{displayValue}}</span>
 
-    <app-button *ngIf="clearable && value" class="clear-button text" icon="times" (click)="value = null"></app-button>
+          <ng-container *ngIf="multiple">
+            <span *ngFor="let item of displayValue" class="value">{{item}}</span>
+          </ng-container>
+        </ng-container>
+
+        <ng-template #valueTemplateWrapper>
+          <div class="value">
+            <ng-container *ngTemplateOutlet="valueTemplate; context: { $implicit: value, selected: selected }">
+            </ng-container>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="select-widgets">
+      <app-button *ngIf="clearable && hasValue" class="clear-button text" icon="times" title="Clear value"
+        (click)="value = null">
+      </app-button>
+      <fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon>
+    </div>
+
+    <app-popover #optionsPopover class="select-options-popover" [autoAnchorX]="false" [offsetY]="2">
+      <ng-container *ngIf="hasOptions; else noOptionsTemplate">
+        <ul class="select-options">
+          <ng-container *ngFor="let option of options">
+
+            <li *ngIf="optionTemplate == null; else optionsTemplateWrapper" class="select-option"
+              [ngClass]="{'selected': isOptionSelected(option)}" (click)="onOptionSelect(option)">
+              <span class="option-name">{{getItemDisplay(option)}}</span>
+            </li>
+
+            <ng-template #optionsTemplateWrapper>
+              <ng-container *ngTemplateOutlet="optionTemplate; context: getOptionTemplateContext(option)">
+              </ng-container>
+            </ng-template>
+
+          </ng-container>
+        </ul>
+      </ng-container>
+
+      <ng-template #noOptionsTemplate>
+        <div class="no-options-wrapper">
+          <span>No options available</span>
+        </div>
+      </ng-template>
+    </app-popover>
   </div>
 
   <label *ngIf="label" [for]="name">
