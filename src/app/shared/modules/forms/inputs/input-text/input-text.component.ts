@@ -42,8 +42,6 @@ export class InputText extends FormInput {
       }
     }
 
-    console.log(newValue);
-
     return newValue;
   }
 
