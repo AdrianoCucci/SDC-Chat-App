@@ -1,5 +1,6 @@
 import { EventEmitter, Injectable } from "@angular/core";
 import { Socket } from "ngx-socket-io";
+import { User } from "../../models/users/user";
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ export class WebSocketService {
   public readonly onConnect = new EventEmitter<void>();
   public readonly onDisconnect = new EventEmitter<void>();
   public readonly onConnectError = new EventEmitter<any>();
+  public readonly onUserJoin = new EventEmitter<User>();
+  public readonly onUserLeave = new EventEmitter<User>();
 
   protected readonly _socket: Socket;
 
@@ -27,6 +30,8 @@ export class WebSocketService {
     socket.on(events.connect, () => this.onConnect.emit());
     socket.on(events.disconnect, () =>  this.onDisconnect.emit());
     socket.on(events.connectError, (event: any) => this.onConnectError.emit(event));
+    socket.on(events.userJoin, (user: User) => this.onUserJoin.emit(user));
+    socket.on(events.userLeave, (user: User) => this.onUserLeave.emit(user));
   }
 
   public connect(): void {
@@ -37,11 +42,25 @@ export class WebSocketService {
     this._socket.disconnect();
   }
 
+  public joinUser(user: User): void {
+    if(user != null) {
+      this._socket.emit(this.socketEvents.userJoin, user);
+    }
+  }
+
+  public leaveUser(user: User): void {
+    if(user != null) {
+      this._socket.emit(this.socketEvents.userLeave, user);
+    }
+  }
+
   public get socketEvents() {
     return {
       connect: "connect",
       disconnect: "disconnect",
-      connectError: "connect_error"
+      connectError: "connect_error",
+      userJoin: "user-join",
+      userLeave: "user-leave",
     }
   }
 

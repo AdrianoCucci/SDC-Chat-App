@@ -21,8 +21,6 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
   constructor(private _chatService: ChatService, private _audioService: AudioService) { }
 
   ngOnInit(): void {
-    this._chatService.connect();
-
     this._chatSubscription = new Subscription();
 
     this._chatSubscription.add(this._chatService.onUserJoin.subscribe((user: User) => this.onUserJoin(user)));
@@ -31,15 +29,10 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
 
     if(this.clientUser != null) {
       this.onUserJoin(this.clientUser);
-      this._chatService.joinUser(this.clientUser);
     }
   }
 
   ngOnDestroy(): void {
-    if(this.clientUser != null) {
-      this._chatService.leaveUser(this.clientUser);
-    }
-
     this._chatSubscription?.unsubscribe();
     this._chatSubscription = null;
   }
@@ -68,7 +61,7 @@ export class ChatWindowComponent implements OnInit, OnDestroy {
     }
   }
 
-  onAddMessage(message: ChatMessage) {
+  onAddMessage(message: ChatMessage): void {
     message.senderUserId = this.clientUser.id;
     message.organizationId = this.clientUser.organizationId;
     message.senderUser = this.clientUser;

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Event, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Role } from 'src/app/core/models/auth/role';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
@@ -22,6 +23,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   public logoutDialogVisible: boolean = false;
 
+  private readonly _clientUser: User;
   private _navSubscription: Subscription;
 
   constructor(private _loginService: LoginService, private _router: Router, private _socketService: WebSocketService) {
@@ -45,6 +47,11 @@ export class MainPage implements OnInit, OnDestroy {
         await this.navigateToFirstMenuItem();
       }
     });
+
+    if(this._clientUser.role !== Role.Administrator) {
+      this._socketService.connect();
+      this._socketService.joinUser(this._clientUser);
+    }
   }
 
   ngOnDestroy(): void {
