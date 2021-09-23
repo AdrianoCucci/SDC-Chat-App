@@ -42,7 +42,8 @@ const routes: Routes = [
       {
         path: PATHS.children.pings,
         canActivate: [RoleGuard],
-        data: { roles: [Role.OrganizationAdmin, Role.User] }
+        data: { roles: [Role.OrganizationAdmin, Role.User] },
+        loadChildren: () => import("./room-pings-page/room-pings-page.module").then(m => m.RoomPingsPageModule)
       }
     ]
   },
