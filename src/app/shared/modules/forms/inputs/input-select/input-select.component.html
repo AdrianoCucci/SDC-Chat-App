@@ -35,7 +35,7 @@
 
             <li *ngIf="optionTemplate == null; else optionsTemplateWrapper" class="select-option"
               [ngClass]="{'selected': isOptionSelected(option)}" (click)="onOptionSelect(option)">
-              <span class="option-name">{{getItemDisplay(option)}}</span>
+              <span class="option-name">{{getOptionDisplay(option)}}</span>
             </li>
 
             <ng-template #optionsTemplateWrapper>

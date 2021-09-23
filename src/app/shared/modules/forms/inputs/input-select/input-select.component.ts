@@ -54,7 +54,7 @@ export class InputSelect extends FormInput implements AfterViewInit {
     }
   }
 
-  public getItemDisplay(item: any): any {
+  public getOptionDisplay(item: any): any {
     let display: any = null;
 
     if(this.displayKey) {
@@ -67,7 +67,7 @@ export class InputSelect extends FormInput implements AfterViewInit {
     return display;
   }
 
-  public getItemValue(item: any): any {
+  public getOptionValue(item: any): any {
     let value: any = null;
 
     if(this.valueKey) {
@@ -80,9 +80,29 @@ export class InputSelect extends FormInput implements AfterViewInit {
     return value;
   }
 
+  public getOptionByValue(value: any): any {
+    let option: any = null;
+
+    if(this.hasOptions) {
+      option = this.options.find((o: any) => this.getOptionValue(o) === value);
+    }
+
+    return option;
+  }
+
+  public getOptionByDisplay(display: any): any {
+    let option: any = null;
+
+    if(this.hasOptions) {
+      option = this.options.find((o: any) => this.getOptionDisplay(o) === display);
+    }
+
+    return option;
+  }
+
   public isOptionSelected(option: any): boolean {
     let selected: boolean = false;
-    const optionValue: any = this.getItemValue(option);
+    const optionValue: any = this.getOptionValue(option);
 
     if(!this.multiple) {
       selected = this._value === optionValue;
@@ -95,16 +115,16 @@ export class InputSelect extends FormInput implements AfterViewInit {
   }
 
   onOptionSelect(option: any): void {
-    const optionValue: any = this.getItemValue(option);
+    const optionValue: any = this.getOptionValue(option);
 
     if(!this.multiple) {
       this._popover.hide();
 
-      this._selected = option;
+      // this._selected = option;
       this.value = optionValue;
     }
     else {
-      this._selected = this.updateMultiValues(this._selected, option);
+      // this._selected = this.updateMultiValues(this._selected, option);
       this.value = this.updateMultiValues(this._value, optionValue);
     }
   }
@@ -138,7 +158,9 @@ export class InputSelect extends FormInput implements AfterViewInit {
       this._displayValue = null;
     }
 
-    this.updateDisplayValue();
+    this._selected = this.updateSelected(newValue);
+    this._displayValue = this.updateDisplayValue(this._selected);
+
     return newValue;
   }
 
@@ -156,24 +178,44 @@ export class InputSelect extends FormInput implements AfterViewInit {
     return value;
   }
 
-  private updateDisplayValue(): void {
+  private updateSelected(value: any): any {
+    let selected: any;
+
     if(!this.multiple) {
-      this._displayValue = this._selected != null ? this.getItemDisplay(this._selected) : null;
+      selected = this.getOptionByValue(value);
     }
-    else if(Array.isArray(this._selected)) {
-      let displays: any[];
+    else if(Array.isArray(value)) {
+      const totalSelections: any[] = [];
 
-      if(this._selected?.length > 0) {
-        displays = [];
-
-        for(let i = 0; i < this._selected.length; i++) {
-          const display: any = this.getItemDisplay(this._selected[i]);
-          displays.push(display);
-        }
+      for(let i = 0; i < value.length; i++) {
+        const option: any = this.getOptionByValue(value[i]);
+        totalSelections.push(option);
       }
 
-      this._displayValue = displays;
+      selected = totalSelections.length > 0 ? totalSelections : null;
     }
+
+    return selected;
+  }
+
+  private updateDisplayValue(selected: any): void {
+    let displayValue: any;
+
+    if(!this.multiple) {
+      displayValue = selected != null ? this.getOptionDisplay(selected) : null;
+    }
+    else if(Array.isArray(selected)) {
+      const displays: any[] = [];
+
+      for(let i = 0; i < selected.length; i++) {
+        const display: any = this.getOptionDisplay(selected[i]);
+        displays.push(display);
+      }
+
+      displayValue = displays.length > 0 ? displays : null;
+    }
+
+    return displayValue;
   }
 
   public get hasOptions(): boolean {
