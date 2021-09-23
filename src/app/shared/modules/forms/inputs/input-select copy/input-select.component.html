@@ -4,11 +4,20 @@
       <span *ngIf="placeholder && !hasValue" class="placeholder">{{placeholder}}</span>
 
       <div *ngIf="hasValue" class="value-wrapper">
-        <span *ngIf="displayValue != null && !multiple" class="value">{{displayValue}}</span>
+        <ng-container *ngIf="valueTemplate == null; else valueTemplateWrapper">
+          <span *ngIf="displayValue != null && !multiple" class="value">{{displayValue}}</span>
 
-        <ng-container *ngIf="multiple">
-          <span *ngFor="let item of displayValue" class="value">{{item}}</span>
+          <ng-container *ngIf="multiple">
+            <span *ngFor="let item of displayValue" class="value">{{item}}</span>
+          </ng-container>
         </ng-container>
+
+        <ng-template #valueTemplateWrapper>
+          <div class="value">
+            <ng-container *ngTemplateOutlet="valueTemplate; context: { $implicit: value, selected: selected }">
+            </ng-container>
+          </div>
+        </ng-template>
       </div>
     </div>
 
@@ -20,12 +29,23 @@
     </div>
 
     <app-popover #optionsPopover class="select-options-popover" [autoAnchorX]="false">
-      <ul *ngIf="hasOptions; else noOptionsTemplate" class="select-options">
-        <li *ngFor="let option of options" class="select-option" [ngClass]="{'selected': isOptionSelected(option)}"
-          (click)="onOptionClick(option, optionsPopover)">
-          <span>{{getItemDisplay(option)}}</span>
-        </li>
-      </ul>
+      <ng-container *ngIf="hasOptions; else noOptionsTemplate">
+        <ul class="select-options">
+          <ng-container *ngFor="let option of options">
+
+            <li *ngIf="optionTemplate == null; else optionsTemplateWrapper" class="select-option"
+              [ngClass]="{'selected': isOptionSelected(option)}" (click)="onOptionSelect(option)">
+              <span>{{getItemDisplay(option)}}</span>
+            </li>
+
+            <ng-template #optionsTemplateWrapper>
+              <ng-container *ngTemplateOutlet="optionTemplate; context: getOptionTemplateContext(option)">
+              </ng-container>
+            </ng-template>
+
+          </ng-container>
+        </ul>
+      </ng-container>
 
       <ng-template #noOptionsTemplate>
         <div class="no-options-wrapper">

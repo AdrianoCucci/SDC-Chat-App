@@ -1,6 +1,7 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { AfterViewInit, Component, ContentChildren, HostBinding, Input, QueryList, TemplateRef, ViewChild } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { TemplateDirective } from '../../../directives/template.directive';
 import { Popover } from '../../../overlays/popover/popover.component';
 import { FormInput } from '../base/form-input';
 
@@ -10,7 +11,7 @@ import { FormInput } from '../base/form-input';
   styleUrls: ['./input-select.component.scss'],
   providers: [{ provide: FormInput, useExisting: InputSelect }]
 })
-export class InputSelect extends FormInput {
+export class InputSelect extends FormInput implements AfterViewInit {
   @Input() public options: any[];
   @Input() public displayKey: string;
   @Input() public valueKey: string;
@@ -20,7 +21,37 @@ export class InputSelect extends FormInput {
 
   public readonly dropDownIcon: IconDefinition = faAngleDown;
 
+  @ViewChild(Popover) private readonly _popover: Popover;
+  @ContentChildren(TemplateDirective) private readonly _templates: QueryList<TemplateDirective>;
+
+  private _selected: any;
   private _displayValue: any;
+  private _valueTemplate: TemplateRef<any>;
+  private _optionTemplate: TemplateRef<any>;
+
+  ngAfterViewInit(): void {
+    super.ngAfterViewInit();
+
+    setTimeout(() => {
+      this._templates.forEach((directive: TemplateDirective) => {
+        if(directive.name === "value") {
+          this._valueTemplate = directive.template;
+        }
+        else if(directive.name === "option") {
+          this._optionTemplate = directive.template;
+        }
+      });
+    });
+  }
+
+  public getOptionTemplateContext(option: any): any {
+    return {
+      $implicit: option,
+      options: this.options,
+      isSelected: this.isOptionSelected(option),
+      selectCallback: () => this.onOptionSelect(option)
+    }
+  }
 
   public getItemDisplay(item: any): any {
     let display: any = null;
@@ -62,14 +93,17 @@ export class InputSelect extends FormInput {
     return selected;
   }
 
-  onOptionClick(option: any, popover: Popover): void {
+  onOptionSelect(option: any): void {
     const optionValue: any = this.getItemValue(option);
 
     if(!this.multiple) {
-      popover.hide();
+      this._popover.hide();
+
+      this._selected = option;
       this.value = optionValue;
     }
     else {
+      this._selected = this.updateMultiValues(this._selected, option);
       this.value = this.updateMultiValues(this._value, optionValue);
     }
   }
@@ -103,7 +137,7 @@ export class InputSelect extends FormInput {
       this._displayValue = null;
     }
 
-    setTimeout(() => this.updateDisplayValue(newValue));
+    this.updateDisplayValue();
     return newValue;
   }
 
@@ -121,20 +155,23 @@ export class InputSelect extends FormInput {
     return value;
   }
 
-  private updateDisplayValue(value: any): void {
+  private updateDisplayValue(): void {
     if(!this.multiple) {
-      const selectedValue: any = this.options.find((o: any) => this.getItemValue(o) === value);
-      this._displayValue = this.getItemDisplay(selectedValue);
+      this._displayValue = this._selected != null ? this.getItemDisplay(this._selected) : null;
     }
-    else if(Array.isArray(this._value)) {
-      const selectedOptions: any[] = this.options
-        .filter((o: any) => {
-          const optionValue: any = this.getItemValue(o);
-          return (<any[]>this._value).includes(optionValue);
-        })
-        .map((o: any) => this.getItemDisplay(o));
+    else if(Array.isArray(this._selected)) {
+      let displays: any[];
 
-      this._displayValue = selectedOptions?.length > 0 ? selectedOptions : null;
+      if(this._selected?.length > 0) {
+        displays = [];
+
+        for(let i = 0; i < this._selected.length; i++) {
+          const display: any = this.getItemDisplay(this._selected[i]);
+          displays.push(display);
+        }
+      }
+
+      this._displayValue = displays;
     }
   }
 
@@ -142,7 +179,23 @@ export class InputSelect extends FormInput {
     return this.options?.length > 0 ?? false;
   }
 
+  public get selected(): any {
+    return this._selected;
+  }
+
+  public get hasSelected(): boolean {
+    return this._selected != null && Array.isArray(this._selected) ? this._selected.length > 0 : true;
+  }
+
   public get displayValue(): any {
     return this._displayValue;
+  }
+
+  public get valueTemplate(): TemplateRef<any> {
+    return this._valueTemplate;
+  }
+
+  public get optionTemplate(): TemplateRef<any> {
+    return this._optionTemplate;
   }
 }
