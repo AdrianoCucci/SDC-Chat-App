@@ -1,7 +1,10 @@
+import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { RoomPing } from '../../models/room-pings/room-ping';
+import { Room } from '../../models/rooms/room';
+import { RoomsService } from '../api/rooms-service';
 import { WebSocketService } from './web-socket.service';
 
 @Injectable({
@@ -13,8 +16,9 @@ export class RoomPingsService extends WebSocketService {
   public readonly onPingCancel = new EventEmitter<RoomPing>();
 
   private _requestingPings: RoomPing[];
+  private _rooms: Room[];
 
-  constructor(socket: Socket) {
+  constructor(socket: Socket, private _roomsService: RoomsService) {
     super(socket);
   }
 
@@ -36,6 +40,20 @@ export class RoomPingsService extends WebSocketService {
     socket.on(events.roomPingCancel, (roomPing: RoomPing) => {
       this.removeRequestingPing(roomPing);
       this.onPingCancel.emit(roomPing);
+    });
+  }
+
+  public loadRooms(organizationId: number): Promise<Room[]> {
+    return new Promise<Room[]>(async (resolve, reject) => {
+      try {
+        const response: HttpResponse<Room[]> = await this._roomsService.getAllRooms({ organizationId }).toPromise();
+        this._rooms = response.body;
+
+        resolve(this._rooms);
+      }
+      catch(error) {
+        reject(error);
+      }
     });
   }
 
@@ -101,5 +119,9 @@ export class RoomPingsService extends WebSocketService {
 
   public get requestingPings(): RoomPing[] {
     return this._requestingPings;
+  }
+
+  public get rooms(): Room[] {
+    return this._rooms;
   }
 }
