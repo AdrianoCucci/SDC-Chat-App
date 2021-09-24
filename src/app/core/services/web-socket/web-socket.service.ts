@@ -47,7 +47,7 @@ export class WebSocketService {
     socket.on(events.connectError, (event: any) => this.onConnectError.emit(event));
 
     socket.on(events.userJoin, (user: User) => {
-      this.addUser(user);
+      this.updateUser(user);
       this.onUserJoin.emit(user);
     });
 
@@ -81,15 +81,6 @@ export class WebSocketService {
   public disconnect(): void {
     this._socket.disconnect();
     this._users = null;
-  }
-
-  private addUser(user: User): void {
-    if(this._users == null) {
-      this._users = [user];
-    }
-    else {
-      this._users.push(user);
-    }
   }
 
   private updateUser(user: User): void {
