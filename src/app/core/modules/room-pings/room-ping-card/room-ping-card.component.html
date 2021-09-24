@@ -1,0 +1,28 @@
+<ng-container *ngIf="room != null">
+  <div class="room-info">
+    <span class="name">{{room.name}}</span>
+    <span *ngIf="room.number != null" class="number">
+      Room number: <b>{{room.number}}</b>
+    </span>
+  </div>
+
+  <div *ngIf="!isPingRequesting; else requestingActionsTemplate" class="room-ping-actions request-actions">
+    <app-button text="Need assistance!" (click)="onRequestActionClick()"></app-button>
+  </div>
+
+  <ng-template #requestingActionsTemplate>
+    <div *ngIf="!isClientPingRequesting; else clientRequestingTemplate;" class="room-ping-actions response-actions">
+      <app-button text="On my way!" (click)="onResponseActionClick()"></app-button>
+    </div>
+
+    <ng-template #clientRequestingTemplate>
+      <div class="client-request-overlay">
+        <div class="backdrop"></div>
+        <div class="content">
+          <span>Pinging...</span>
+          <app-button text="Cancel" (click)="onCancelActionClick()"></app-button>
+        </div>
+      </div>
+    </ng-template>
+  </ng-template>
+</ng-container>
