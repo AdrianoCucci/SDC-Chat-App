@@ -1,90 +1,35 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, Input } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
-import { AudioService } from 'src/app/core/services/audio.service';
 import { ChatService } from 'src/app/core/services/web-socket/chat.service';
-import { AudioSound } from 'src/app/shared/models/audio-sound';
 
 @Component({
   selector: 'app-chat-window',
   templateUrl: './chat-window.component.html',
   styleUrls: ['./chat-window.component.scss']
 })
-export class ChatWindowComponent implements OnInit, OnDestroy {
-  @Input() public allUsers: User[];
+export class ChatWindowComponent {
   @Input() public clientUser: User;
-  @Input() public messages: ChatMessage[];
 
-  private _chatSubscription: Subscription;
-
-  constructor(private _chatService: ChatService, private _audioService: AudioService) { }
-
-  ngOnInit(): void {
-    this._chatSubscription = new Subscription();
-
-    this._chatSubscription.add(this._chatService.onUserJoin.subscribe((user: User) => this.onUserJoin(user)));
-    this._chatSubscription.add(this._chatService.onUserLeave.subscribe((user: User) => this.onUserLeave(user)));
-    this._chatSubscription.add(this._chatService.onMessage.subscribe((message: ChatMessage) => this.onMessageReceived(message)));
-
-    if(this.clientUser != null) {
-      this.onUserJoin(this.clientUser);
-    }
-  }
-
-  ngOnDestroy(): void {
-    this._chatSubscription?.unsubscribe();
-    this._chatSubscription = null;
-  }
-
-  private onUserJoin(user: User): void {
-    if(this.allUsers != null) {
-      const index: number = this.allUsers.findIndex(u => u.id === user.id);
-
-      if(index === -1) {
-        user.isOnline = true;
-        this.allUsers.push(user);
-      }
-      else {
-        this.allUsers[index].isOnline = true;
-      }
-    }
-  }
-
-  private onUserLeave(user: User): void {
-    if(this.allUsers != null) {
-      const index: number = this.allUsers.findIndex(u => u.id === user.id);
-
-      if(index !== -1) {
-        this.allUsers[index].isOnline = false;
-      }
-    }
-  }
+  constructor(private _chatService: ChatService) { }
 
   onAddMessage(message: ChatMessage): void {
     message.senderUserId = this.clientUser.id;
     message.organizationId = this.clientUser.organizationId;
     message.senderUser = this.clientUser;
 
-    this.appendMessage(message);
     this._chatService.sendMessage(message);
   }
 
-  private onMessageReceived(message: ChatMessage): void {
-    this.appendMessage(message);
-    this._audioService.play(AudioSound.ChatNotification);
-  }
-
-  private appendMessage(message: ChatMessage): void {
-    if(this.messages == null) {
-      this.messages = [message];
-    }
-    else {
-      this.messages.push(message);
-    }
+  public get messages(): ChatMessage[] {
+    return this._chatService.messages;
   }
 
   public get hasMessages(): boolean {
     return this.messages?.length > 0 ?? false;
+  }
+
+  public get users(): User[] {
+    return this._chatService.users;
   }
 }
