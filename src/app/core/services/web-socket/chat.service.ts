@@ -2,8 +2,11 @@ import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { AudioSound } from 'src/app/shared/models/audio-sound';
 import { ChatMessage } from '../../models/messages/chat-message';
 import { ChatMessagesService } from '../api/chat-messages.service';
+import { UsersService } from '../api/users-service';
+import { AudioService } from '../audio.service';
 import { WebSocketService } from './web-socket.service';
 
 @Injectable({
@@ -14,8 +17,8 @@ export class ChatService extends WebSocketService {
 
   private _messages: ChatMessage[];
 
-  constructor(socket: Socket, private _messagesService: ChatMessagesService) {
-    super(socket);
+  constructor(socket: Socket, private _messagesService: ChatMessagesService, private _audioService: AudioService, usersService: UsersService) {
+    super(socket, usersService);
   }
 
   protected initializeEvents(socket: Socket): void {
@@ -26,6 +29,8 @@ export class ChatService extends WebSocketService {
     socket.on(events.message, (message: ChatMessage) => {
       this.addMessage(message);
       this.onMessage.emit(message);
+
+      this._audioService.play(AudioSound.ChatNotification);
     });
   }
 

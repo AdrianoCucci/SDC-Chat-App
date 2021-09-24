@@ -4,7 +4,6 @@ import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
-import { AudioService } from 'src/app/core/services/audio.service';
 import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
 
 @Component({
@@ -19,7 +18,7 @@ export class RoomPingCard implements OnInit, OnDestroy {
 
   private _subscriptions: Subscription;
 
-  constructor(private _pingsService: RoomPingsService, private _audioService: AudioService) { }
+  constructor(private _pingsService: RoomPingsService) { }
 
   ngOnInit(): void {
     this._subscriptions = new Subscription();
@@ -27,10 +26,6 @@ export class RoomPingCard implements OnInit, OnDestroy {
     this._subscriptions.add(this._pingsService.onPingRequest.subscribe((roomPing: RoomPing) => {
       if(roomPing.roomId === this.room?.id) {
         this.roomPing = roomPing;
-
-        if(this.room.pingSound != null) {
-          this._audioService.play(this.room.pingSound);
-        }
       }
     }));
 

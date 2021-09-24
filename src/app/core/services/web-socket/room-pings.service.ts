@@ -5,6 +5,8 @@ import { Socket } from 'ngx-socket-io';
 import { RoomPing } from '../../models/room-pings/room-ping';
 import { Room } from '../../models/rooms/room';
 import { RoomsService } from '../api/rooms-service';
+import { UsersService } from '../api/users-service';
+import { AudioService } from '../audio.service';
 import { WebSocketService } from './web-socket.service';
 
 @Injectable({
@@ -18,8 +20,8 @@ export class RoomPingsService extends WebSocketService {
   private _requestingPings: RoomPing[];
   private _rooms: Room[];
 
-  constructor(socket: Socket, private _roomsService: RoomsService) {
-    super(socket);
+  constructor(socket: Socket, private _roomsService: RoomsService, private _audioService: AudioService, usersService: UsersService) {
+    super(socket, usersService);
   }
 
   protected initializeEvents(socket: Socket): void {
@@ -30,6 +32,10 @@ export class RoomPingsService extends WebSocketService {
     socket.on(events.roomPingRequest, (roomPing: RoomPing) => {
       this.addRequestingPing(roomPing);
       this.onPingRequest.emit(roomPing);
+
+      if(roomPing.room?.pingSound != null) {
+        this._audioService.play(roomPing.room.pingSound);
+      }
     });
 
     socket.on(events.roomPingResponse, (roomPing: RoomPing) => {
