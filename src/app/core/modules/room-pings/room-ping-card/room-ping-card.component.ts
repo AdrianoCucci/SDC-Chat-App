@@ -56,6 +56,7 @@ export class RoomPingCard implements OnInit, OnDestroy {
     this.roomPing = await this._pingsService.sendPingRequest({
       state: RoomPingState.Requesting,
       roomId: this.room?.id,
+      room: this.room,
       organizationId: this.clientUser?.organizationId,
       requestDate: new Date().toISOString(),
       requestMessage: "Need assistance!",
