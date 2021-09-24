@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { InputTextareaModule } from 'src/app/shared/modules/forms/inputs/input-textarea/input-textarea.module';
 
-import { ChatWindowComponent } from './chat-window/chat-window.component';
 import { ChatMessageListComponent } from './chat-message-list/chat-message-list.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { UsersListComponent } from './users-list/users-list.component';
 
 const components = [
-  ChatWindowComponent,
   ChatMessageListComponent,
   ChatMessageComponent,
   UsersListComponent
