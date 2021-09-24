@@ -26,16 +26,16 @@ export class RoomPingsService extends WebSocketService {
     socket.on(events.roomPingCancel, (roomPing: RoomPing) => this.onPingCancel.emit(roomPing));
   }
 
-  public sendPingRequest(roomPing: RoomPing): void {
-    if(roomPing != null) {
-      this._socket.emit(this.roomPingEvents.roomPingRequest, roomPing);
-    }
+  public sendPingRequest(roomPing: RoomPing): Promise<RoomPing> {
+    return new Promise<RoomPing>((resolve) => {
+      this._socket.emit(this.roomPingEvents.roomPingRequest, roomPing, (response: RoomPing) => resolve(response));
+    });
   }
 
-  public sendPingResponse(roomPing: RoomPing): void {
-    if(roomPing != null) {
-      this._socket.emit(this.roomPingEvents.roomPingResponse, roomPing);
-    }
+  public sendPingResponse(roomPing: RoomPing): Promise<RoomPing> {
+    return new Promise<RoomPing>((resolve) => {
+      this._socket.emit(this.roomPingEvents.roomPingResponse, roomPing, (response: RoomPing) => resolve(response));
+    });
   }
 
   public cancelPingRequest(roomPing: RoomPing): void {
