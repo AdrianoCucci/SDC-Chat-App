@@ -21,6 +21,16 @@ export class RoomPingCard implements OnInit, OnDestroy {
   constructor(private _socketService: WebSocketService) { }
 
   ngOnInit(): void {
+    this.initRoomPingEvents();
+    this.initCurrentRoomPingState();
+  }
+
+  ngOnDestroy(): void {
+    this._subscriptions?.unsubscribe();
+    this._subscriptions = null;
+  }
+
+  private initRoomPingEvents(): void {
     this._subscriptions = new Subscription();
 
     this._subscriptions.add(this._socketService.roomPings.onPingRequest.subscribe((roomPing: RoomPing) => {
@@ -42,9 +52,18 @@ export class RoomPingCard implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy(): void {
-    this._subscriptions?.unsubscribe();
-    this._subscriptions = null;
+  private initCurrentRoomPingState(): void {
+    if(this.room != null) {
+      const requestingPings: RoomPing[] = this._socketService.roomPings.requestingPings;
+
+      if(requestingPings != null) {
+        const thisRoomPing: RoomPing = requestingPings.find((r: RoomPing) => r.roomId === this.room.id);
+
+        if(thisRoomPing != null) {
+          this.roomPing = thisRoomPing;
+        }
+      }
+    }
   }
 
   async onRequestActionClick(): Promise<void> {

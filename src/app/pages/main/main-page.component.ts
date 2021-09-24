@@ -84,7 +84,8 @@ export class MainPage implements OnInit, OnDestroy {
     await Promise.all([
       this._socketService.loadUsers(organizationId),
       this._socketService.chat.loadMessages(organizationId),
-      this._socketService.roomPings.loadRooms(organizationId)
+      this._socketService.roomPings.loadRooms(organizationId),
+      this._socketService.roomPings.getRequestingPings()
     ]);
   }
 
