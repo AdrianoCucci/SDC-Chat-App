@@ -3,6 +3,7 @@ import { User } from "../users/user";
 import { RoomPingState } from "./room-ping-state";
 
 export interface RoomPing {
+  guid?: string;
   state: RoomPingState;
   roomId: number;
   requestDate: Date | string;
