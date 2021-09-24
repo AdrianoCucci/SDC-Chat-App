@@ -2,7 +2,12 @@ import { HttpResponse } from "@angular/common/http";
 import { EventEmitter, Injectable } from "@angular/core";
 import { Socket } from "ngx-socket-io";
 import { User } from "../../models/users/user";
+import { ChatMessagesService } from "../api/chat-messages.service";
+import { RoomsService } from "../api/rooms-service";
 import { UsersService } from "../api/users-service";
+import { AudioService } from "../audio.service";
+import { ChatController } from "./chat-controller";
+import { RoomPingsController } from "./room-pings-controller";
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +19,14 @@ export class WebSocketService {
   public readonly onUserJoin = new EventEmitter<User>();
   public readonly onUserLeave = new EventEmitter<User>();
 
+  public readonly chat: ChatController;
+  public readonly roomPings: RoomPingsController;
+
   protected readonly _socket: Socket;
 
   private _users: User[];
 
-  constructor(socket: Socket, private _usersService: UsersService) {
+  constructor(socket: Socket, private _usersService: UsersService, messagesService: ChatMessagesService, roomsService: RoomsService, audioService: AudioService) {
     this._socket = socket;
 
     if(this._socket == null) {
@@ -26,6 +34,9 @@ export class WebSocketService {
     }
 
     this.initializeEvents(socket);
+
+    this.chat = new ChatController(socket, messagesService, audioService);
+    this.roomPings = new RoomPingsController(socket, roomsService, audioService);
   }
 
   protected initializeEvents(socket: Socket): void {

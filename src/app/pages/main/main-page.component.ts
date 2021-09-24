@@ -4,8 +4,6 @@ import { Subscription } from 'rxjs';
 import { Role } from 'src/app/core/models/auth/role';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
-import { ChatService } from 'src/app/core/services/web-socket/chat.service';
-import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
 import { MenuItem } from 'src/app/shared/models/menu-item';
@@ -29,13 +27,7 @@ export class MainPage implements OnInit, OnDestroy {
   private _subscription: Subscription;
   private _initialized: boolean = false;
 
-  constructor(
-    private _loginService: LoginService,
-    private _router: Router,
-    private _socketService: WebSocketService,
-    private _chatService: ChatService,
-    private _roomPingsService: RoomPingsService
-  ) {
+  constructor(private _loginService: LoginService, private _router: Router, private _socketService: WebSocketService) {
     const user: User = _loginService.user;
 
     if(user != null) {
@@ -91,8 +83,8 @@ export class MainPage implements OnInit, OnDestroy {
 
     await Promise.all([
       this._socketService.loadUsers(organizationId),
-      this._chatService.loadMessages(organizationId),
-      this._roomPingsService.loadRooms(organizationId)
+      this._socketService.chat.loadMessages(organizationId),
+      this._socketService.roomPings.loadRooms(organizationId)
     ]);
   }
 

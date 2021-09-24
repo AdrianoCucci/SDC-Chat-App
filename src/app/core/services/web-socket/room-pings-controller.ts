@@ -1,33 +1,33 @@
 import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
-import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { RoomPing } from '../../models/room-pings/room-ping';
 import { Room } from '../../models/rooms/room';
 import { RoomsService } from '../api/rooms-service';
-import { UsersService } from '../api/users-service';
 import { AudioService } from '../audio.service';
-import { WebSocketService } from './web-socket.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RoomPingsService extends WebSocketService {
+export class RoomPingsController {
   public readonly onPingRequest = new EventEmitter<RoomPing>();
   public readonly onPingResponse = new EventEmitter<RoomPing>();
   public readonly onPingCancel = new EventEmitter<RoomPing>();
 
+  private readonly _socket: Socket;
+  private readonly _roomsService: RoomsService;
+  private readonly _audioService: AudioService;
+
   private _requestingPings: RoomPing[];
   private _rooms: Room[];
 
-  constructor(socket: Socket, private _roomsService: RoomsService, private _audioService: AudioService, usersService: UsersService) {
-    super(socket, usersService);
+  constructor(socket: Socket, roomsService: RoomsService, audioService: AudioService) {
+    this._socket = socket;
+    this._roomsService = roomsService;
+    this._audioService = audioService;
+
+    this.initializeEvents(this._socket);
   }
 
-  protected initializeEvents(socket: Socket): void {
-    super.initializeEvents(socket);
-
-    const events = this.roomPingEvents;
+  private initializeEvents(socket: Socket): void {
+    const events = this.events;
 
     socket.on(events.roomPingRequest, (roomPing: RoomPing) => {
       this.addRequestingPing(roomPing);
@@ -65,7 +65,7 @@ export class RoomPingsService extends WebSocketService {
 
   public sendPingRequest(roomPing: RoomPing): Promise<RoomPing> {
     return new Promise<RoomPing>((resolve) => {
-      this._socket.emit(this.roomPingEvents.roomPingRequest, roomPing, (response: RoomPing) => {
+      this._socket.emit(this.events.roomPingRequest, roomPing, (response: RoomPing) => {
         this.addRequestingPing(response);
         resolve(response);
       });
@@ -74,7 +74,7 @@ export class RoomPingsService extends WebSocketService {
 
   public sendPingResponse(roomPing: RoomPing): Promise<RoomPing> {
     return new Promise<RoomPing>((resolve) => {
-      this._socket.emit(this.roomPingEvents.roomPingResponse, roomPing, (response: RoomPing) => {
+      this._socket.emit(this.events.roomPingResponse, roomPing, (response: RoomPing) => {
         this.removeRequestingPing(response);
         resolve(response);
       });
@@ -83,14 +83,14 @@ export class RoomPingsService extends WebSocketService {
 
   public cancelPingRequest(roomPing: RoomPing): void {
     if(roomPing != null) {
-      this._socket.emit(this.roomPingEvents.roomPingCancel, roomPing);
+      this._socket.emit(this.events.roomPingCancel, roomPing);
       this.removeRequestingPing(roomPing);
     }
   }
 
   public getRequestingPings(): Promise<RoomPing[]> {
     return new Promise<RoomPing[]>((resolve) => {
-      this._socket.emit(this.roomPingEvents.getRoomPings, (response: RoomPing[]) => {
+      this._socket.emit(this.events.getRoomPings, (response: RoomPing[]) => {
         this._requestingPings = response;
         resolve(response);
       });
@@ -114,7 +114,7 @@ export class RoomPingsService extends WebSocketService {
     }
   }
 
-  public get roomPingEvents() {
+  public get events() {
     return {
       roomPingRequest: "room-ping-request",
       roomPingResponse: "room-ping-response",

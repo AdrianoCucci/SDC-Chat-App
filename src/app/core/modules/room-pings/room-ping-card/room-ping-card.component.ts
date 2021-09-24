@@ -4,7 +4,7 @@ import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
-import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
+import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 
 @Component({
   selector: 'app-room-ping-card',
@@ -18,24 +18,24 @@ export class RoomPingCard implements OnInit, OnDestroy {
 
   private _subscriptions: Subscription;
 
-  constructor(private _pingsService: RoomPingsService) { }
+  constructor(private _socketService: WebSocketService) { }
 
   ngOnInit(): void {
     this._subscriptions = new Subscription();
 
-    this._subscriptions.add(this._pingsService.onPingRequest.subscribe((roomPing: RoomPing) => {
+    this._subscriptions.add(this._socketService.roomPings.onPingRequest.subscribe((roomPing: RoomPing) => {
       if(roomPing.roomId === this.room?.id) {
         this.roomPing = roomPing;
       }
     }));
 
-    this._subscriptions.add(this._pingsService.onPingResponse.subscribe((roomPing: RoomPing) => {
+    this._subscriptions.add(this._socketService.roomPings.onPingResponse.subscribe((roomPing: RoomPing) => {
       if(roomPing.roomId === this.room?.id) {
         this.roomPing = roomPing;
       }
     }));
 
-    this._subscriptions.add(this._pingsService.onPingCancel.subscribe((roomPing: RoomPing) => {
+    this._subscriptions.add(this._socketService.roomPings.onPingCancel.subscribe((roomPing: RoomPing) => {
       if(roomPing.roomId === this.room?.id) {
         this.roomPing = null;
       }
@@ -48,7 +48,7 @@ export class RoomPingCard implements OnInit, OnDestroy {
   }
 
   async onRequestActionClick(): Promise<void> {
-    this.roomPing = await this._pingsService.sendPingRequest({
+    this.roomPing = await this._socketService.roomPings.sendPingRequest({
       state: RoomPingState.Requesting,
       roomId: this.room?.id,
       room: this.room,
@@ -65,11 +65,11 @@ export class RoomPingCard implements OnInit, OnDestroy {
     roomPing.responseMessage = "On my way!";
     roomPing.responseUserId = this.clientUser?.id;
 
-    this.roomPing = await this._pingsService.sendPingResponse(roomPing);
+    this.roomPing = await this._socketService.roomPings.sendPingResponse(roomPing);
   }
 
   onCancelActionClick(): void {
-    this._pingsService.cancelPingRequest(this.roomPing);
+    this._socketService.roomPings.cancelPingRequest(this.roomPing);
     this.roomPing = null;
   }
 

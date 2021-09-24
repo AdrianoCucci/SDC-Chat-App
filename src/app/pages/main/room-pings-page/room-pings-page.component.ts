@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
-import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
+import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 
 @Component({
   selector: 'app-room-pings-page',
@@ -12,12 +12,12 @@ import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.se
 export class RoomPingsPage {
   public readonly clientUser: User;
 
-  constructor(private _pingsService: RoomPingsService, loginService: LoginService) {
+  constructor(private _socketService: WebSocketService, loginService: LoginService) {
     this.clientUser = loginService.user;
   }
 
   public get rooms(): Room[] {
-    return this._pingsService.rooms;
+    return this._socketService.roomPings.rooms;
   }
 
   public get hasRooms(): boolean {

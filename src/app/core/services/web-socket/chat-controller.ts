@@ -1,30 +1,30 @@
 import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
-import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
 import { ChatMessage } from '../../models/messages/chat-message';
 import { ChatMessagesService } from '../api/chat-messages.service';
-import { UsersService } from '../api/users-service';
 import { AudioService } from '../audio.service';
-import { WebSocketService } from './web-socket.service';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class ChatService extends WebSocketService {
+export class ChatController {
   public readonly onMessage = new EventEmitter<ChatMessage>();
+
+  private readonly _socket: Socket;
+  private readonly _messagesService: ChatMessagesService;
+  private readonly _audioService: AudioService;
 
   private _messages: ChatMessage[];
 
-  constructor(socket: Socket, private _messagesService: ChatMessagesService, private _audioService: AudioService, usersService: UsersService) {
-    super(socket, usersService);
+  constructor(socket: Socket, messagesService: ChatMessagesService, audioService: AudioService) {
+    this._socket = socket;
+    this._messagesService = messagesService;
+    this._audioService = audioService;
+
+    this.initializeEvents(this._socket);
   }
 
-  protected initializeEvents(socket: Socket): void {
-    super.initializeEvents(socket);
-
-    const events = this.chatEvents;
+  private initializeEvents(socket: Socket): void {
+    const events = this.events;
 
     socket.on(events.message, (message: ChatMessage) => {
       this.addMessage(message);
@@ -50,7 +50,7 @@ export class ChatService extends WebSocketService {
 
   public sendMessage(message: ChatMessage): void {
     if(message != null) {
-      this._socket.emit(this.chatEvents.message, message);
+      this._socket.emit(this.events.message, message);
       this.addMessage(message);
     }
   }
@@ -64,7 +64,7 @@ export class ChatService extends WebSocketService {
     }
   }
 
-  public get chatEvents() {
+  public get events() {
     return { message: "message" };
   }
 
