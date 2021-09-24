@@ -33,11 +33,13 @@ export class MainMenuItemsMapper {
 
     return [
       {
+        id: "organizations",
         routerLink: root + children.organizations,
         label: "Organizations",
         icon: faBuilding
       },
       {
+        id: "users",
         routerLink: root + children.users,
         label: "Users",
         icon: faUsers
@@ -51,21 +53,25 @@ export class MainMenuItemsMapper {
 
     return [
       {
+        id: "chat",
         routerLink: root + children.chat,
         label: "Chat",
         icon: faComments
       },
       {
+        id: "room-pings",
         routerLink: root + children.pings,
         label: "Room Pings",
         icon: faExclamation
       },
       {
+        id: "rooms",
         routerLink: root + children.rooms,
         label: "Rooms",
         icon: faDoorOpen
       },
       {
+        id: "users",
         routerLink: root + children.users,
         label: "Users",
         icon: faUsers
@@ -79,11 +85,13 @@ export class MainMenuItemsMapper {
 
     return [
       {
+        id: "chat",
         routerLink: root + children.chat,
         label: "Chat",
         icon: faComments
       },
       {
+        id: "roomPings",
         routerLink: root + children.pings,
         label: "Room Pings",
         icon: faExclamation
