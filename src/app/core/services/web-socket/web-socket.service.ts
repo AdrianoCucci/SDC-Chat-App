@@ -25,6 +25,7 @@ export class WebSocketService {
   protected readonly _socket: Socket;
 
   private _users: User[];
+  private _clientUser: User;
 
   constructor(socket: Socket, private _usersService: UsersService, messagesService: ChatMessagesService, roomsService: RoomsService, audioService: AudioService) {
     this._socket = socket;
@@ -71,16 +72,40 @@ export class WebSocketService {
     });
   }
 
-  public connect(user: User): void {
-    if(user != null) {
+  public connect(clientUser: User): void {
+    if(clientUser != null) {
       this._socket.connect();
-      this._socket.emit(this.socketEvents.userJoin, user);
+
+      this._socket.emit(this.socketEvents.userJoin, clientUser, (response: User) => {
+        this._clientUser = response;
+        const index: number = this.findUserIndex(this._clientUser.id);
+
+        if(index === -1) {
+          this.addUser(this._clientUser);
+        }
+        else {
+          this.updateUser(this._clientUser);
+        }
+      });
     }
   }
 
   public disconnect(): void {
     this._socket.disconnect();
     this._users = null;
+  }
+
+  public findUserIndex(userId: number): number {
+    return this._users?.findIndex((u: User) => u.id === userId) ?? -1;
+  }
+
+  private addUser(user: User): void {
+    if(this._users == null) {
+      this._users = [user];
+    }
+    else {
+      this._users.push(user);
+    }
   }
 
   private updateUser(user: User): void {
