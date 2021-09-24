@@ -8,6 +8,7 @@ import { DialogModule } from 'src/app/shared/modules/overlays/dialog/dialog.modu
 import { PopoverModule } from 'src/app/shared/modules/overlays/popover/popover.module';
 
 import { MainPage } from './main-page.component';
+import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.module';
 
 @NgModule({
   declarations: [MainPage],
@@ -17,7 +18,8 @@ import { MainPage } from './main-page.component';
     TabMenuModule,
     ButtonModule,
     PopoverModule,
-    DialogModule
+    DialogModule,
+    LoaderModule
   ]
 })
 export class MainPageModule { }

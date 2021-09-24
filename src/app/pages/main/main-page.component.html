@@ -1,41 +1,47 @@
-<header>
-  <h1 class="app-name">{{appName}}</h1>
+<ng-container *ngIf="initialized">
 
-  <app-tab-menu class="main-menu" [menuItems]="mainMenuItems"></app-tab-menu>
+  <header>
+    <h1 class="app-name">{{appName}}</h1>
 
-  <div class="user-options">
-    <app-button class="user-options-button outline" [text]="userDisplayName"
-      (click)="poUserOptions.toggleVisible($event)">
-    </app-button>
+    <app-tab-menu class="main-menu" [menuItems]="mainMenuItems"></app-tab-menu>
 
-    <app-popover #poUserOptions [offsetX]="20">
-      <ul class="user-options-list">
-        <li>
-          <app-button class="block text" text="My Account" (click)="poUserOptions.hide()"></app-button>
-        </li>
-        <li>
-          <app-button class="block text" text="Logout" (click)="logoutDialogVisible = true; poUserOptions.hide()">
-          </app-button>
-        </li>
-      </ul>
-    </app-popover>
-  </div>
-</header>
+    <div class="user-options">
+      <app-button class="user-options-button outline" [text]="userDisplayName"
+        (click)="poUserOptions.toggleVisible($event)">
+      </app-button>
 
-<main>
-  <router-outlet></router-outlet>
-</main>
+      <app-popover #poUserOptions [offsetX]="20">
+        <ul class="user-options-list">
+          <li>
+            <app-button class="block text" text="My Account" (click)="poUserOptions.hide()"></app-button>
+          </li>
+          <li>
+            <app-button class="block text" text="Logout" (click)="logoutDialogVisible = true; poUserOptions.hide()">
+            </app-button>
+          </li>
+        </ul>
+      </app-popover>
+    </div>
+  </header>
 
-<app-dialog #logoutDialog class="logout-dialog" [backdropDismiss]="true" [(visible)]="logoutDialogVisible">
-  <div slot="header">
-    <span>Logout</span>
-  </div>
-  <p slot="body" class="flex flex-align-center flex-justify-center h-percent-100 m-0">
-    Are you sure you want to logout?
-  </p>
-  <div slot="footer">
-    <app-button class="text option-no" text="No" (click)="logoutDialog.hide()"></app-button>
-    <div class="divider"></div>
-    <app-button class="text option-yes" text="Yes" (click)="logout()"></app-button>
-  </div>
-</app-dialog>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+
+  <app-dialog #logoutDialog class="logout-dialog" [backdropDismiss]="true" [(visible)]="logoutDialogVisible">
+    <div slot="header">
+      <span>Logout</span>
+    </div>
+    <p slot="body" class="flex flex-align-center flex-justify-center h-percent-100 m-0">
+      Are you sure you want to logout?
+    </p>
+    <div slot="footer">
+      <app-button class="text option-no" text="No" (click)="logoutDialog.hide()"></app-button>
+      <div class="divider"></div>
+      <app-button class="text option-yes" text="Yes" (click)="logout()"></app-button>
+    </div>
+  </app-dialog>
+
+</ng-container>
+
+<app-loader [fullscreen]="true" text="Please wait..." [visible]="!initialized"></app-loader>

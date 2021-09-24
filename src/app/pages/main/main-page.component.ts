@@ -4,6 +4,8 @@ import { Subscription } from 'rxjs';
 import { Role } from 'src/app/core/models/auth/role';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
+import { ChatService } from 'src/app/core/services/web-socket/chat.service';
+import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
 import { MenuItem } from 'src/app/shared/models/menu-item';
@@ -24,9 +26,16 @@ export class MainPage implements OnInit, OnDestroy {
   public logoutDialogVisible: boolean = false;
 
   private readonly _clientUser: User;
-  private _navSubscription: Subscription;
+  private _subscription: Subscription;
+  private _initialized: boolean = false;
 
-  constructor(private _loginService: LoginService, private _router: Router, private _socketService: WebSocketService) {
+  constructor(
+    private _loginService: LoginService,
+    private _router: Router,
+    private _socketService: WebSocketService,
+    private _chatService: ChatService,
+    private _roomPingsService: RoomPingsService
+  ) {
     const user: User = _loginService.user;
 
     if(user != null) {
@@ -38,29 +47,53 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    this._subscription = new Subscription();
+
+    await this.initRouterEvents(this._subscription);
+
+    if(this._clientUser.role !== Role.Administrator && this._clientUser.organizationId != null) {
+      try {
+        await this.initSocketClientData(this._clientUser);
+      }
+      catch(error) {
+        console.error(error);
+      }
+    }
+
+    this._initialized = true;
+  }
+
+  ngOnDestroy(): void {
+    this._socketService.disconnect();
+
+    this._subscription.unsubscribe();
+    this._subscription = null;
+  }
+
+  private async initRouterEvents(subscription: Subscription): Promise<void> {
     const rootPath: string = `/${MAIN_PATHS.root}`;
 
     if(this._router.url === rootPath) {
       await this.navigateToFirstMenuItem();
     }
 
-    this._navSubscription = this._router.events.subscribe(async (event: Event) => {
+    subscription.add(this._router.events.subscribe(async (event: Event) => {
       if(event instanceof NavigationStart && event.url === rootPath) {
         await this.navigateToFirstMenuItem();
       }
-    });
-
-    if(this._clientUser.role !== Role.Administrator) {
-      this._socketService.connect();
-      this._socketService.joinUser(this._clientUser);
-    }
+    }));
   }
 
-  ngOnDestroy(): void {
-    this._socketService.disconnect();
+  private async initSocketClientData(clientUser: User): Promise<void> {
+    this._socketService.connect(clientUser);
 
-    this._navSubscription.unsubscribe();
-    this._navSubscription = null;
+    const organizationId: number = clientUser.organizationId;
+
+    await Promise.all([
+      this._socketService.loadUsers(organizationId),
+      this._chatService.loadMessages(organizationId),
+      this._roomPingsService.loadRooms(organizationId)
+    ]);
   }
 
   public logout(): void {
@@ -72,5 +105,9 @@ export class MainPage implements OnInit, OnDestroy {
     if(this.mainMenuItems?.length > 0) {
       await this._router.navigateByUrl(this.mainMenuItems[0].routerLink, { replaceUrl: true });
     }
+  }
+
+  public get initialized(): boolean {
+    return this._initialized;
   }
 }
