@@ -1,1 +1,12 @@
-<p>room-pings-page works!</p>
+<section class="rooms">
+  <h2>Rooms</h2>
+
+  <div class="rooms-wrapper">
+    <app-room-ping-card *ngFor="let room of rooms" class="room" [room]="room" [clientUser]="clientUser">
+    </app-room-ping-card>
+  </div>
+</section>
+
+<section class="pings">
+  <h2>Pings</h2>
+</section>
