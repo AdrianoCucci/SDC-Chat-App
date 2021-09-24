@@ -1,4 +1,4 @@
-<app-chat-window *ngIf="initialized" [allUsers]="users" [clientUser]="loggedInUser" [messages]="messages">
+<app-chat-window *ngIf="initialized" [allUsers]="users" [clientUser]="clientUser" [messages]="messages">
 </app-chat-window>
 
 <app-loader [fullscreen]="true" [visible]="!initialized" text="Please wait..."></app-loader>

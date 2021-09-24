@@ -12,7 +12,7 @@ import { LoginService } from 'src/app/core/services/login.service';
   styleUrls: ['./chat-page.component.scss']
 })
 export class ChatPage {
-  public readonly loggedInUser: User;
+  public readonly clientUser: User;
 
   public users: User[];
   public messages: ChatMessage[];
@@ -20,12 +20,12 @@ export class ChatPage {
   private _initialized: boolean = false;
 
   constructor(private _usersService: UsersService, private _messagesService: ChatMessagesService, loginService: LoginService) {
-    this.loggedInUser = loginService.user;
+    this.clientUser = loginService.user;
   }
 
   async ngOnInit() {
     try {
-      const organizationId: number = this.loggedInUser.organizationId;
+      const organizationId: number = this.clientUser.organizationId;
 
       const data: [User[], ChatMessage[]] = await Promise.all([
         this.loadUsers(organizationId),
