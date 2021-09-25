@@ -1,8 +1,9 @@
 <nav>
   <ul>
     <li *ngFor="let item of menuItems; index as i">
-      <a [routerLink]="item.routerLink" routerLinkActive="active" [attr.id]="item.id" [class]="item.cssClass"
-        [ngClass]="{'menu-item': true, 'disabled': item.disabled }" (click)="onItemClickInternal(item)">
+      <a #rla="routerLinkActive" routerLinkActive [routerLink]="item.routerLink" [attr.id]="item.id"
+        [class]="item.cssClass" [ngClass]="{'menu-item': true, 'active': rla.isActive, 'disabled': item.disabled }"
+        (click)="onItemClickInternal(item)">
 
         <ng-container *ngIf="item.template == null || !templateOverwrite; else itemTemplate">
           <fa-icon *ngIf="item.icon" class="icon" [icon]="item.icon"></fa-icon>
@@ -14,7 +15,8 @@
         </ng-container>
 
         <ng-template #itemTemplate>
-          <ng-container *ngTemplateOutlet="item.template; context: { $implicit: item, index: i, allItems: menuItems }">
+          <ng-container
+            *ngTemplateOutlet="item.template; context: { $implicit: item, isActive: rla.isActive, index: i, allItems: menuItems }">
           </ng-container>
         </ng-template>
       </a>
