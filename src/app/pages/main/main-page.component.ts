@@ -102,6 +102,6 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   public get accountPageRouterLink(): string {
-    return `${MAIN_PATHS.root}/${MAIN_PATHS.children.account}`;
+    return MAIN_PATHS.children.account;
   }
 }
