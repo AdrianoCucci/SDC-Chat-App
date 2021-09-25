@@ -14,6 +14,7 @@ const routes: Routes = [
     children: [
       {
         path: PATHS.children.account,
+        loadChildren: () => import("./account-page/account-page.module").then(m => m.AccountPageModule)
       },
       {
         path: PATHS.children.organizations,
