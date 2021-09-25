@@ -3,7 +3,7 @@
   <header>
     <h1 class="app-name">{{appName}}</h1>
 
-    <app-tab-menu class="main-menu" [menuItems]="mainMenuItems"></app-tab-menu>
+    <app-main-menu class="main-menu" [menuItems]="mainMenuItems" [clientUser]="clientUser"></app-main-menu>
 
     <div class="user-options">
       <app-button class="user-options-button outline" [text]="userDisplayName"
@@ -16,7 +16,7 @@
             <app-button class="block text" text="My Account" (click)="poUserOptions.hide()"></app-button>
           </li>
           <li>
-            <app-button class="block text" text="Logout" (click)="logoutDialogVisible = true; poUserOptions.hide()">
+            <app-button class="block text" text="Logout" (click)="logoutDialog.show(); poUserOptions.hide()">
             </app-button>
           </li>
         </ul>
@@ -28,7 +28,7 @@
     <router-outlet></router-outlet>
   </main>
 
-  <app-dialog #logoutDialog class="logout-dialog" [backdropDismiss]="true" [(visible)]="logoutDialogVisible">
+  <app-dialog #logoutDialog class="logout-dialog" [backdropDismiss]="true">
     <div slot="header">
       <span>Logout</span>
     </div>

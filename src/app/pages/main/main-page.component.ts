@@ -18,12 +18,9 @@ import { environment } from 'src/environments/environment';
 export class MainPage implements OnInit, OnDestroy {
   public readonly mainMenuItems: MenuItem[];
   public readonly appName: string = environment.app.name;
-  public readonly appVersion: string = environment.app.version;
+  public readonly clientUser: User;
   public readonly userDisplayName: string;
 
-  public logoutDialogVisible: boolean = false;
-
-  private readonly _clientUser: User;
   private _subscription: Subscription;
   private _initialized: boolean = false;
 
@@ -35,7 +32,7 @@ export class MainPage implements OnInit, OnDestroy {
       this.userDisplayName = user.displayName || user.username;
     }
 
-    this._clientUser = user;
+    this.clientUser = user;
   }
 
   async ngOnInit(): Promise<void> {
@@ -43,9 +40,9 @@ export class MainPage implements OnInit, OnDestroy {
 
     await this.initRouterEvents(this._subscription);
 
-    if(this._clientUser.role !== Role.Administrator && this._clientUser.organizationId != null) {
+    if(this.clientUser.role !== Role.Administrator && this.clientUser.organizationId != null) {
       try {
-        await this.initSocketClientData(this._clientUser);
+        await this.initSocketClientData(this.clientUser);
       }
       catch(error) {
         console.error(error);
