@@ -127,7 +127,15 @@ export class RoomPingsController {
     return this._requestingPings;
   }
 
+  public get hasRequestingPings(): boolean {
+    return this._requestingPings?.length > 0 ?? false;
+  }
+
   public get rooms(): Room[] {
     return this._rooms;
+  }
+
+  public get hasRooms(): boolean {
+    return this._rooms?.length > 0 ?? false;
   }
 }

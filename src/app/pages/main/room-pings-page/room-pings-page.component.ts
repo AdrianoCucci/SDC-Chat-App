@@ -21,6 +21,6 @@ export class RoomPingsPage {
   }
 
   public get hasRooms(): boolean {
-    return this.rooms?.length > 0 ?? false;
+    return this._socketService.roomPings.hasRooms;
   }
 }
