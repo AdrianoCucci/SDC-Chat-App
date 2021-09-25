@@ -25,21 +25,43 @@
       }
     }
 
-    &.pings {
+    &.active-pings {
+      display: flex;
+      flex-direction: column;
       flex: 1;
       min-width: 300px;
+
+      ul.active-pings-list {
+        flex: 1;
+        margin: 0;
+        padding: 1rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        li.active-ping {
+          display: block;
+          animation: activePingIntro 0.25s;
+
+          &:not(:last-of-type) {
+            margin-bottom: 1rem;
+          }
+
+          &.dismissing {
+            animation: activePingOutro 0.25s;
+          }
+        }
+      }
     }
   }
 }
 
-@keyframes roomPingingAnimation {
-  0% {
-    border-top-color: var(--pink-500);
+@keyframes activePingIntro {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
   }
-  50% {
-    border-top-color: var(--green-500);
-  }
-  100% {
-    border-top-color: var(--blue-500);
+  to {
+    transform: translateX(0%);
+    opacity: 1;
   }
 }

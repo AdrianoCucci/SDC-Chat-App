@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
+import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
@@ -22,5 +24,11 @@ export class RoomPingsPage {
 
   public get hasRooms(): boolean {
     return this._socketService.roomPings.hasRooms;
+  }
+
+  public get activePings(): RoomPing[] {
+    return this._socketService.roomPings
+      .findPings((r: RoomPing) => r.state !== RoomPingState.Idle)
+      .sort((a: RoomPing, b: RoomPing) => a.state - b.state);
   }
 }

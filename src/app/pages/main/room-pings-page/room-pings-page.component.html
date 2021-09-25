@@ -7,6 +7,12 @@
   </div>
 </section>
 
-<section class="pings">
-  <h2>Pings</h2>
+<section class="active-pings">
+  <h2>Active Pings</h2>
+
+  <ul class="active-pings-list">
+    <li *ngFor="let ping of activePings" class="active-ping">
+      <app-active-ping-card [roomPing]="ping" [clientUser]="clientUser"></app-active-ping-card>
+    </li>
+  </ul>
 </section>
