@@ -1,3 +1,4 @@
+import { TemplateRef } from "@angular/core";
 import { IconDefinition } from "@fortawesome/fontawesome-common-types";
 
 export interface MenuItem {
@@ -12,4 +13,5 @@ export interface MenuItem {
   data?: any;
   onClick?: (context?: any) => void;
   children?: MenuItem[];
+  template?: TemplateRef<any>;
 }

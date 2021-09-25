@@ -44,6 +44,9 @@
         display: contents;
 
         a.menu-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
           padding: var(--item-padding);
           margin-bottom: calc(-1 * var(--list-border-width));
           background-color: var(--item-background);
@@ -55,12 +58,6 @@
 
           .icon {
             margin: 0.5rem;
-          }
-
-          &.default-template {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
           }
 
           &:hover {

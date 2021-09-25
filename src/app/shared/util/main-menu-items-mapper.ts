@@ -91,7 +91,7 @@ export class MainMenuItemsMapper {
         icon: faComments
       },
       {
-        id: "roomPings",
+        id: "room-pings",
         routerLink: root + children.pings,
         label: "Room Pings",
         icon: faExclamation
