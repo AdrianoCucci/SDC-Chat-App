@@ -1,1 +1,56 @@
-<p>account-page works!</p>
+<section *ngIf="clientUser != null" class="account-details">
+  <h2 class="account-details">
+    <span>Account Details</span>
+
+    <div class="account-actions">
+      <app-button class="m-r-2" text="Edit" icon="pen"></app-button>
+      <app-button text="Change Password" icon="key"></app-button>
+    </div>
+  </h2>
+
+  <ul class="details-list account">
+    <li class="info">
+      <span class="meta">Username</span>
+      <span class="data">{{clientUser.username}}</span>
+    </li>
+
+    <li class="info">
+      <span class="meta">Display Name</span>
+      <span *ngIf="clientUser.displayName" class="data">{{clientUser.displayName}}</span>
+      <span *ngIf="!clientUser.displayName" class="data"><i>(Not set)</i></span>
+    </li>
+
+    <li class="info">
+      <span class="meta">Role</span>
+      <span class="data">{{getRoleName(clientUser.role)}}</span>
+    </li>
+  </ul>
+</section>
+
+<section *ngIf="organization != null" class="organization-details">
+  <h2>Organization Details</h2>
+
+  <ul class="details-list organization">
+    <li class="info">
+      <span class="meta">Name</span>
+      <span class="data">{{organization.name}}</span>
+    </li>
+
+    <li class="info">
+      <span class="meta">Address</span>
+      <span class="data">{{organization.fullAddress}}</span>
+    </li>
+
+    <li class="info">
+      <span class="meta">Email</span>
+      <span class="data">{{organization.email}}</span>
+    </li>
+
+    <li class="info">
+      <span class="meta">Phone Number</span>
+      <span class="data">{{organization.phoneNumber}}</span>
+    </li>
+  </ul>
+</section>
+
+<app-loader [fullscreen]="true" text="Please wait..." [visible]="loadingVisible"></app-loader>
