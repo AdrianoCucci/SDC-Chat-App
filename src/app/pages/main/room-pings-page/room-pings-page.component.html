@@ -7,7 +7,7 @@
   </div>
 </section>
 
-<section class="active-pings">
+<section class="active-pings" [ngClass]="{'visible': activePings?.length > 0}">
   <h2>Active Pings</h2>
 
   <ul class="active-pings-list">

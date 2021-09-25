@@ -4,15 +4,19 @@
   height: 100%;
 
   section {
-    border: solid;
-
     h2 {
-      margin: 0 0 1rem 0;
+      padding: 0.5rem;
+      margin: 1rem;
+      background-color: var(--green-100);
+      border-bottom: solid var(--green-200) 4px;
+      border-radius: 0.25rem;
+      font-size: 1.3rem;
       font-weight: 600;
     }
 
     &.rooms {
       flex: 3;
+      background-color: var(--surface-50);
 
       div.rooms-wrapper {
         display: flex;
@@ -28,8 +32,11 @@
     &.active-pings {
       display: flex;
       flex-direction: column;
-      flex: 1;
-      min-width: 300px;
+      flex: 0;
+      min-width: 0;
+      background-color: var(--green-50);
+      border-left: solid var(--green-100) 2px;
+      transition: 0.16s;
 
       ul.active-pings-list {
         flex: 1;
@@ -50,6 +57,11 @@
             animation: activePingOutro 0.25s;
           }
         }
+      }
+
+      &.visible {
+        flex: 1;
+        min-width: 300px;
       }
     }
   }
