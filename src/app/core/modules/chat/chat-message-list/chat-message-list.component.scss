@@ -1,8 +1,8 @@
 :host {
-  --message-list-background: #8b9c8b;
-  --message-background: #9cab9c;
-  --input-wrapper-background: #738573;
-  --input-background: #dfebdf;
+  --message-list-background: var(--green-50);
+  --message-background: var(--green-100);
+  --input-wrapper-background: var(--green-400);
+  --input-background: var(--surface-0);
 
   display: flex;
   flex-direction: column;
@@ -20,6 +20,7 @@
       display: block;
       padding: 1rem;
       margin-bottom: 1rem;
+      border-radius: 0.25rem;
       border-bottom: solid var(--message-background) 1px;
       transition: 0.16s;
       animation: messageIntro 0.25s;

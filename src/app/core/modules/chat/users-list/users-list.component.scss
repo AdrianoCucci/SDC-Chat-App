@@ -1,8 +1,6 @@
 :host {
-  --header-background: #677767;
-  --header-color: white;
-  --initials-background: #779c77;
-  --initials-color: unset;
+  --header-background: var(--green-700);
+  --header-color: var(--surface-0);
 
   display: flex;
   flex-direction: column;
