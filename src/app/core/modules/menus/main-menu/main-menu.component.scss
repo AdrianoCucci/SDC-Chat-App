@@ -1,0 +1,32 @@
+:host {
+  display: block;
+
+  app-tab-menu {
+    --list-justify: center;
+
+    div.count-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 0;
+      height: 0;
+      margin-left: 0;
+      background-color: var(--green-500);
+      color: var(--surface-0);
+      border-radius: 100%;
+      font-size: 0;
+      font-weight: bold;
+      transform-origin: bottom left;
+      transition: 0.25s;
+
+      &.visible {
+        width: 26px;
+        height: 26px;
+        margin-left: 0.5rem;
+        font-size: 0.8rem;
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+}

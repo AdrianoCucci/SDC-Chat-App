@@ -1,0 +1,9 @@
+<app-tab-menu class="main-menu" [menuItems]="menuItems">
+  <ng-template app-template="chat">
+    <div class="count-chip" [ngClass]="{'visible': newMessagesCount > 0}">{{newMessagesCount}}</div>
+  </ng-template>
+
+  <ng-template app-template="room-pings">
+    <div class="count-chip" [ngClass]="{'visible': roomPingRequestsCount > 0}">{{roomPingRequestsCount}}</div>
+  </ng-template>
+</app-tab-menu>
