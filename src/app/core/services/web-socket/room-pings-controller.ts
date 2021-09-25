@@ -68,6 +68,8 @@ export class RoomPingsController {
     return new Promise<RoomPing>((resolve) => {
       this._socket.emit(this.events.roomPingRequest, roomPing, (response: RoomPing) => {
         this.addPing(response);
+        this.onPingRequest.emit(response);
+        
         resolve(response);
       });
     });
@@ -77,6 +79,8 @@ export class RoomPingsController {
     return new Promise<RoomPing>((resolve) => {
       this._socket.emit(this.events.roomPingResponse, roomPing, (response: RoomPing) => {
         this.addOrUpdatePing(response);
+        this.onPingResponse.emit(response);
+
         resolve(response);
       });
     });
@@ -84,6 +88,7 @@ export class RoomPingsController {
 
   public cancelPingRequest(roomPing: RoomPing): void {
     if(roomPing != null) {
+      this.onPingCancel.emit(roomPing);
       this._socket.emit(this.events.roomPingCancel, roomPing);
       this.removePing(roomPing.guid);
     }
