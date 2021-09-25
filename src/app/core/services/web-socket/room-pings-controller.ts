@@ -17,6 +17,7 @@ export class RoomPingsController {
 
   private _requestingPings: RoomPing[];
   private _rooms: Room[];
+  private _clientResponsePings: RoomPing[];
 
   constructor(socket: Socket, roomsService: RoomsService, audioService: AudioService) {
     this._socket = socket;
@@ -40,6 +41,8 @@ export class RoomPingsController {
 
     socket.on(events.roomPingResponse, (roomPing: RoomPing) => {
       this.removeRequestingPing(roomPing);
+      this.addClientResponsePing(roomPing);
+
       this.onPingResponse.emit(roomPing);
     });
 
@@ -76,6 +79,8 @@ export class RoomPingsController {
     return new Promise<RoomPing>((resolve) => {
       this._socket.emit(this.events.roomPingResponse, roomPing, (response: RoomPing) => {
         this.removeRequestingPing(response);
+        this.addClientResponsePing(response);
+
         resolve(response);
       });
     });
@@ -97,7 +102,7 @@ export class RoomPingsController {
     });
   }
 
-  private addRequestingPing(roomPing: RoomPing): void {
+  public addRequestingPing(roomPing: RoomPing): void {
     if(this._requestingPings == null) {
       this._requestingPings = [roomPing];
     }
@@ -106,11 +111,28 @@ export class RoomPingsController {
     }
   }
 
-  private removeRequestingPing(roomPing: RoomPing): void {
+  public removeRequestingPing(roomPing: RoomPing): void {
     const index: number = this._requestingPings?.findIndex((r: RoomPing) => r.guid === roomPing.guid);
 
     if(index !== -1) {
       this._requestingPings.splice(index, 1);
+    }
+  }
+
+  public addClientResponsePing(roomPing: RoomPing): void {
+    if(this._clientResponsePings == null) {
+      this._clientResponsePings = [roomPing];
+    }
+    else {
+      this._clientResponsePings.push(roomPing);
+    }
+  }
+
+  public removeClientResponsePing(roomPing: RoomPing): void {
+    const index: number = this._clientResponsePings?.findIndex((r: RoomPing) => r.guid === roomPing.guid);
+
+    if(index !== -1) {
+      this._clientResponsePings.splice(index, 1);
     }
   }
 
@@ -137,5 +159,13 @@ export class RoomPingsController {
 
   public get hasRooms(): boolean {
     return this._rooms?.length > 0 ?? false;
+  }
+
+  public get clientResponsePings(): RoomPing[] {
+    return this._clientResponsePings;
+  }
+
+  public get hasClientResponsePings(): boolean {
+    return this._clientResponsePings?.length > 0 ?? false;
   }
 }
