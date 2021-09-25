@@ -1,0 +1,26 @@
+<div *ngIf="room != null" class="room-info">
+  <span class="room-name">{{room.name}}</span>
+  <span *ngIf="room.number != null" class="room-number">
+    Room number: <b>{{room.number}}</b>
+  </span>
+</div>
+
+<div class="state-info request">
+  <span *ngIf="requestUser != null" class="state-user request">
+    {{requestUser.displayName || requestUser.username}}
+  </span>
+  <p class="state-message request">{{roomPing.requestMessage}}</p>
+</div>
+
+<div *ngIf="isResponded" class="state-info response">
+  <span *ngIf="responseUser != null" class="state-user response">
+    {{responseUser.displayName || responseUser.username}}
+  </span>
+  <p class="state-message response">{{roomPing.responseMessage}}</p>
+</div>
+
+<div class="actions">
+  <app-button *ngIf="!isResponded && !isClientRequest" text="On my way!" (click)="onRespond()"></app-button>
+  <app-button *ngIf="isClientRequest" text="Cancel" (click)="onCancel()"></app-button>
+  <app-button *ngIf="isResponded" text="Dismiss" (click)="onDismiss()"></app-button>
+</div>

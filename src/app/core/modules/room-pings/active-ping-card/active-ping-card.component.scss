@@ -1,0 +1,88 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  background-color: var(--green-100);
+  border-radius: 0.25rem;
+  border: solid var(--green-200) 2px;
+  overflow: hidden;
+
+  div.room-info {
+    margin-bottom: 0.75rem;
+
+    span.room-name {
+      display: block;
+      font-size: 1.14rem;
+      font-weight: 600;
+    }
+  }
+
+  div.state-info {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background-color: var(--green-200);
+    border-radius: 0.25rem;
+    animation: stateBlockIntro 0.25s;
+
+    span.state-user {
+      display: block;
+      font-weight: 600;
+      text-align: end;
+    }
+
+    p.state-message {
+      max-height: 100px;
+      margin: 0.5rem 0 0 0;
+      overflow: auto;
+    }
+
+    &:empty {
+      display: none;
+    }
+  }
+
+  div.actions {
+    text-align: end;
+  }
+
+  &.requesting {
+    border-top-width: 20px;
+    animation: requestingAnimation 1s infinite;
+  }
+
+  &.dismissing {
+    animation: dismissing 0.16s forwards;
+  }
+}
+
+@keyframes requestingAnimation {
+  0% {
+    border-top-color: var(--pink-500);
+  }
+  50% {
+    border-top-color: var(--green-500);
+  }
+  100% {
+    border-top-color: var(--blue-500);
+  }
+}
+
+@keyframes stateBlockIntro {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes dismissing {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
