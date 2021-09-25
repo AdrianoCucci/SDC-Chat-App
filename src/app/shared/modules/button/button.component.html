@@ -7,7 +7,7 @@
 </ng-template>
 
 <ng-container [ngSwitch]="renderType">
-  <a *ngSwitchCase="'router-link'" [routerLink]="routerLink" [routerLinkActive]="routerLinkActive">
+  <a *ngSwitchCase="'router-link'" [routerLink]="routerLink" [routerLinkActive]="routerLinkActive || ''">
     <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
   </a>
 
