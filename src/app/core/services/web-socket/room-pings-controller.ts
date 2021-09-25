@@ -106,6 +106,10 @@ export class RoomPingsController {
     return this._pings?.findIndex((r: RoomPing) => r.guid === guid) ?? -1;
   }
 
+  public findPings(predicate: (roomPing: RoomPing) => boolean): RoomPing[] {
+    return this._pings?.filter(predicate) ?? [];
+  }
+
   public addPing(roomPing: RoomPing): void {
     if(this._pings == null) {
       this._pings = [roomPing];
