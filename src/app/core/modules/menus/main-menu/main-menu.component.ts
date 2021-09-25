@@ -51,6 +51,10 @@ export class MainMenu implements OnInit, OnDestroy {
     }));
   }
 
+  public getDisplayCount(count: number) {
+    return count > 99 ? "99+" : count.toString();
+  }
+
   public get isChatItemActive(): boolean {
     return this._chatItem?.routerLink === this._router.url;
   }
