@@ -13,10 +13,12 @@
       <app-popover #poUserOptions [offsetX]="20">
         <ul class="user-options-list">
           <li>
-            <app-button class="block text" text="My Account" (click)="poUserOptions.hide()"></app-button>
+            <app-button class="block text" text="My Account" [routerLink]="accountPageRouterLink"
+              (click)="poUserOptions.hide()">
+            </app-button>
           </li>
           <li>
-            <app-button class="block text" text="Logout" (click)="logoutDialog.show(); poUserOptions.hide()">
+            <app-button class="block text" text="Logout" (click)="poUserOptions.hide(); logoutDialog.show()">
             </app-button>
           </li>
         </ul>
