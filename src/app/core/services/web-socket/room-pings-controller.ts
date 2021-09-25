@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { RoomPing } from '../../models/room-pings/room-ping';
+import { RoomPingState } from '../../models/room-pings/room-ping-state';
 import { Room } from '../../models/rooms/room';
 import { RoomsService } from '../api/rooms-service';
 import { AudioService } from '../audio.service';
@@ -15,9 +16,8 @@ export class RoomPingsController {
   private readonly _roomsService: RoomsService;
   private readonly _audioService: AudioService;
 
-  private _requestingPings: RoomPing[];
+  private _pings: RoomPing[];
   private _rooms: Room[];
-  private _clientResponsePings: RoomPing[];
 
   constructor(socket: Socket, roomsService: RoomsService, audioService: AudioService) {
     this._socket = socket;
@@ -31,24 +31,26 @@ export class RoomPingsController {
     const events = this.events;
 
     socket.on(events.roomPingRequest, (roomPing: RoomPing) => {
-      this.addRequestingPing(roomPing);
+      this.addPing(roomPing);
       this.onPingRequest.emit(roomPing);
 
       if(roomPing.room?.pingSound != null) {
         this._audioService.play(roomPing.room.pingSound);
       }
+
+      console.log(this._pings);
     });
 
     socket.on(events.roomPingResponse, (roomPing: RoomPing) => {
-      this.removeRequestingPing(roomPing);
-      this.addClientResponsePing(roomPing);
-
+      this.updatePing(roomPing.guid, roomPing);
       this.onPingResponse.emit(roomPing);
+      console.log(this._pings);
     });
 
     socket.on(events.roomPingCancel, (roomPing: RoomPing) => {
-      this.removeRequestingPing(roomPing);
+      this.removePing(roomPing.guid);
       this.onPingCancel.emit(roomPing);
+      console.log(this._pings);
     });
   }
 
@@ -69,7 +71,8 @@ export class RoomPingsController {
   public sendPingRequest(roomPing: RoomPing): Promise<RoomPing> {
     return new Promise<RoomPing>((resolve) => {
       this._socket.emit(this.events.roomPingRequest, roomPing, (response: RoomPing) => {
-        this.addRequestingPing(response);
+        this.addPing(response);
+        console.log(this._pings);
         resolve(response);
       });
     });
@@ -78,9 +81,8 @@ export class RoomPingsController {
   public sendPingResponse(roomPing: RoomPing): Promise<RoomPing> {
     return new Promise<RoomPing>((resolve) => {
       this._socket.emit(this.events.roomPingResponse, roomPing, (response: RoomPing) => {
-        this.removeRequestingPing(response);
-        this.addClientResponsePing(response);
-
+        this.addOrUpdatePing(response);
+        console.log(this._pings);
         resolve(response);
       });
     });
@@ -89,50 +91,68 @@ export class RoomPingsController {
   public cancelPingRequest(roomPing: RoomPing): void {
     if(roomPing != null) {
       this._socket.emit(this.events.roomPingCancel, roomPing);
-      this.removeRequestingPing(roomPing);
+      this.removePing(roomPing.guid);
+      console.log(this._pings);
     }
   }
 
   public getRequestingPings(): Promise<RoomPing[]> {
     return new Promise<RoomPing[]>((resolve) => {
       this._socket.emit(this.events.getRoomPings, (response: RoomPing[]) => {
-        this._requestingPings = response;
+        this._pings = response;
         resolve(response);
       });
     });
   }
 
-  public addRequestingPing(roomPing: RoomPing): void {
-    if(this._requestingPings == null) {
-      this._requestingPings = [roomPing];
+  public findPing(guid: string): RoomPing {
+    return this._pings?.find((r: RoomPing) => r.guid === guid) ?? null;
+  }
+
+  public findPingIndex(guid: string): number {
+    return this._pings?.findIndex((r: RoomPing) => r.guid === guid) ?? -1;
+  }
+
+  public addPing(roomPing: RoomPing): void {
+    if(this._pings == null) {
+      this._pings = [roomPing];
     }
     else {
-      this._requestingPings.push(roomPing);
+      this._pings.push(roomPing);
     }
   }
 
-  public removeRequestingPing(roomPing: RoomPing): void {
-    const index: number = this._requestingPings?.findIndex((r: RoomPing) => r.guid === roomPing.guid);
+  public updatePing(guid: string, roomPing: RoomPing): boolean {
+    const index: number = this.findPingIndex(guid);
+    const canUpdate: boolean = index !== -1;
 
-    if(index !== -1) {
-      this._requestingPings.splice(index, 1);
+    if(canUpdate) {
+      this._pings[index] = roomPing;
+    }
+
+    return canUpdate;
+  }
+
+  public addOrUpdatePing(roomPing: RoomPing): void {
+    if(!this.updatePing(roomPing.guid, roomPing)) {
+      this.addPing(roomPing);
     }
   }
 
-  public addClientResponsePing(roomPing: RoomPing): void {
-    if(this._clientResponsePings == null) {
-      this._clientResponsePings = [roomPing];
+  public removePing(guid: string): boolean {
+    const index: number = this.findPingIndex(guid);
+    const canRemove: boolean = index !== -1;
+
+    if(canRemove) {
+      this._pings.splice(index, 1);
     }
-    else {
-      this._clientResponsePings.push(roomPing);
-    }
+
+    return canRemove;
   }
 
-  public removeClientResponsePing(roomPing: RoomPing): void {
-    const index: number = this._clientResponsePings?.findIndex((r: RoomPing) => r.guid === roomPing.guid);
-
-    if(index !== -1) {
-      this._clientResponsePings.splice(index, 1);
+  public removeAllRespondedPings(): void {
+    if(this.hasPings) {
+      this._pings = this._pings.filter((r: RoomPing) => r.state !== RoomPingState.Responded);
     }
   }
 
@@ -145,12 +165,12 @@ export class RoomPingsController {
     };
   }
 
-  public get requestingPings(): RoomPing[] {
-    return this._requestingPings;
+  public get pings(): RoomPing[] {
+    return this._pings;
   }
 
-  public get hasRequestingPings(): boolean {
-    return this._requestingPings?.length > 0 ?? false;
+  public get hasPings(): boolean {
+    return this._pings?.length > 0 ?? false;
   }
 
   public get rooms(): Room[] {
@@ -159,13 +179,5 @@ export class RoomPingsController {
 
   public get hasRooms(): boolean {
     return this._rooms?.length > 0 ?? false;
-  }
-
-  public get clientResponsePings(): RoomPing[] {
-    return this._clientResponsePings;
-  }
-
-  public get hasClientResponsePings(): boolean {
-    return this._clientResponsePings?.length > 0 ?? false;
   }
 }

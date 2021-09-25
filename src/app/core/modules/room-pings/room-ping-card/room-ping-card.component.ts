@@ -54,10 +54,10 @@ export class RoomPingCard implements OnInit, OnDestroy {
 
   private initCurrentRoomPingState(): void {
     if(this.room != null) {
-      const requestingPings: RoomPing[] = this._socketService.roomPings.requestingPings;
+      const pings: RoomPing[] = this._socketService.roomPings.pings;
 
-      if(requestingPings != null) {
-        const thisRoomPing: RoomPing = requestingPings.find((r: RoomPing) => r.roomId === this.room.id);
+      if(pings != null) {
+        const thisRoomPing: RoomPing = pings.find((r: RoomPing) => r.roomId === this.room.id);
 
         if(thisRoomPing != null) {
           this.roomPing = thisRoomPing;

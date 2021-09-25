@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
+import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { User } from 'src/app/core/models/users/user';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 import { MenuItem } from 'src/app/shared/models/menu-item';
@@ -67,7 +68,8 @@ export class MainMenu implements OnInit, OnDestroy {
     let count: number = 0;
 
     if(this.clientUser != null) {
-      count = this._socketService.roomPings.requestingPings?.filter((r: RoomPing) => r.requestUserId !== this.clientUser.id).length ?? 0;
+      const predicate = (r: RoomPing) => r.requestUserId !== this.clientUser.id && r.state === RoomPingState.Requesting;
+      count = this._socketService.roomPings.pings?.filter(predicate).length ?? 0;
     }
 
     return count;
