@@ -3,7 +3,7 @@
     <span>Account Details</span>
 
     <div class="account-actions">
-      <app-button class="m-r-2" text="Edit" icon="pen"></app-button>
+      <app-button class="m-r-2" text="Edit" icon="pen" (click)="onEditAccount()"></app-button>
       <app-button text="Change Password" icon="key" (click)="onChangePassword()"></app-button>
     </div>
   </h2>
@@ -25,6 +25,8 @@
       <span class="data">{{getRoleName(clientUser.role)}}</span>
     </li>
   </ul>
+
+  <app-account-form [dialog]="true" (onSubmitSuccess)="onAccountFormSuccess($event)"></app-account-form>
 
   <app-pass-change-form #passChangeForm [dialog]="true" [userId]="clientUser.id"
     (onSubmitSuccess)="passChangeForm.dialogVisible = false">

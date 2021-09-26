@@ -3,6 +3,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
+import { AccountForm } from 'src/app/core/modules/forms/account-form/account-form.component';
 import { PassChangeForm } from 'src/app/core/modules/forms/pass-change-form/pass-change-form.component';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
 import { LoginService } from 'src/app/core/services/login.service';
@@ -15,17 +16,15 @@ import { Pair } from 'src/app/shared/models/pair';
   styleUrls: ['./account-page.component.scss']
 })
 export class AccountPage implements OnInit {
-  public readonly clientUser: User;
   public readonly rolePairs: Pair<string, Role>[] = enumToPairs(Role, true);
 
+  @ViewChild(AccountForm) private readonly _accountForm: AccountForm;
   @ViewChild(PassChangeForm) private readonly _passChangeForm: PassChangeForm;
 
   private _organization: Organization;
   private _loadingVisible: boolean = false;
 
-  constructor(private _orgsService: OrganizationsService, loginService: LoginService) {
-    this.clientUser = loginService.user;
-  }
+  constructor(private _loginService: LoginService, private _orgsService: OrganizationsService) { }
 
   public getRoleName(role: Role): string {
     return this.rolePairs.find((p: Pair) => p.value === role)?.key ?? null;
@@ -58,6 +57,20 @@ export class AccountPage implements OnInit {
     });
   }
 
+  onEditAccount(): void {
+    this._accountForm.clear();
+
+    setTimeout(() => {
+      this._accountForm.model = { ...this.clientUser } as any;
+      this._accountForm.dialogVisible = true;
+    });
+  }
+
+  onAccountFormSuccess(result: User): void {
+    this._accountForm.dialogVisible = false;
+    this._loginService.updateCurrentUser(result);
+  }
+
   onChangePassword(): void {
     this._passChangeForm.clear();
     this._passChangeForm.model = null;
@@ -66,6 +79,10 @@ export class AccountPage implements OnInit {
       this._passChangeForm.model = { currentPassword: "", newPassword: "" };
       this._passChangeForm.dialogVisible = true;
     });
+  }
+
+  public get clientUser(): User {
+    return this._loginService.user;
   }
 
   public get organization(): Organization {
