@@ -12,10 +12,10 @@ import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.se
   styleUrls: ['./room-pings-page.component.scss']
 })
 export class RoomPingsPage {
-  public readonly clientUser: User;
+  constructor(private _socketService: WebSocketService, private _loginService: LoginService) { }
 
-  constructor(private _socketService: WebSocketService, loginService: LoginService) {
-    this.clientUser = loginService.user;
+  public get clientUser(): User {
+    return this._loginService.user;
   }
 
   public get rooms(): Room[] {

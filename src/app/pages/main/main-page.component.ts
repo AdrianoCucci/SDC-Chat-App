@@ -18,21 +18,14 @@ import { environment } from 'src/environments/environment';
 export class MainPage implements OnInit, OnDestroy {
   public readonly mainMenuItems: MenuItem[];
   public readonly appName: string = environment.app.name;
-  public readonly clientUser: User;
-  public readonly userDisplayName: string;
 
   private _subscription: Subscription;
   private _initialized: boolean = false;
 
   constructor(private _loginService: LoginService, private _router: Router, private _socketService: WebSocketService) {
-    const user: User = _loginService.user;
-
-    if(user != null) {
-      this.mainMenuItems = new MainMenuItemsMapper().getMenuItemsByRole(user.role);
-      this.userDisplayName = user.displayName || user.username;
+    if(this.clientUser != null) {
+      this.mainMenuItems = new MainMenuItemsMapper().getMenuItemsByRole(this.clientUser.role);
     }
-
-    this.clientUser = user;
   }
 
   async ngOnInit(): Promise<void> {
@@ -99,6 +92,14 @@ export class MainPage implements OnInit, OnDestroy {
 
   public get initialized(): boolean {
     return this._initialized;
+  }
+
+  public get clientUser(): User {
+    return this._loginService.user;
+  }
+
+  public get userDisplayName(): string {
+    return this._loginService.user.displayName || this._loginService.user.username;
   }
 
   public get accountPageRouterLink(): string {

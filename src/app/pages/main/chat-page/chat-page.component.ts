@@ -10,16 +10,14 @@ import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.se
   styleUrls: ['./chat-page.component.scss']
 })
 export class ChatPage {
-  private readonly _clientUser: User;
-
-  constructor(private _socketService: WebSocketService, loginService: LoginService) {
-    this._clientUser = loginService.user;
-  }
+  constructor(private _socketService: WebSocketService, private _loginService: LoginService) { }
 
   onAddMessage(message: ChatMessage): void {
-    message.senderUserId = this._clientUser.id;
-    message.organizationId = this._clientUser.organizationId;
-    message.senderUser = this._clientUser;
+    const clientUser: User = this.clientUser;
+
+    message.senderUserId = clientUser.id;
+    message.organizationId = clientUser.organizationId;
+    message.senderUser = clientUser;
 
     this._socketService.chat.sendMessage(message);
   }
@@ -30,5 +28,9 @@ export class ChatPage {
 
   public get users(): User[] {
     return this._socketService.users;
+  }
+
+  public get clientUser(): User {
+    return this._loginService.user;
   }
 }
