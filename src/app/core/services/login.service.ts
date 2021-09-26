@@ -10,6 +10,7 @@ import { StorageService } from "./storage-service";
 export class LoginService {
   public readonly onLogin = new EventEmitter<User>();
   public readonly onLogout = new EventEmitter<void>();
+  public readonly onUserUpdate = new EventEmitter<User>();
 
   private readonly _storageKey: string = "auth";
 
@@ -26,6 +27,22 @@ export class LoginService {
     }
 
     return this._currentUser;
+  }
+
+  public updateCurrentUser(newUser: User): boolean {
+    const canUpdate: boolean = this.isLoggedIn;
+
+    if(canUpdate) {
+      const sessionLogin: AuthResponse = this.getSessionLogin();
+      sessionLogin.user = newUser;
+
+      this._storageService.setSessionEncrypted(this._storageKey, sessionLogin);
+      this._currentUser = newUser;
+
+      this.onUserUpdate.emit(this._currentUser);
+    }
+
+    return canUpdate;
   }
 
   public userHasRole(...roles: Role[]): boolean {
