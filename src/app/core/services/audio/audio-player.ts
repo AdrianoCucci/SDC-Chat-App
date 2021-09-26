@@ -1,10 +1,18 @@
+import { AudioSound } from "src/app/shared/models/audio-sound";
+
 export class AudioPlayer {
-  public maxInstances: number = 10;
+  public maxDistinctInstances: number;
+  public maxSameInstances: number;
 
-  private readonly _audioInstances: HTMLAudioElement[] = [];
+  private readonly _audioInstanceMap = new Map<AudioSound, HTMLAudioElement[]>();
 
-  public play(source: string, loop: boolean = false): void {
-    const audio: HTMLAudioElement = this.createAudioInstance();
+  public constructor(maxDistinctInstances?: number, maxSameInstances?: number) {
+    this.maxDistinctInstances = maxDistinctInstances != null ? maxDistinctInstances : 20;
+    this.maxSameInstances = maxSameInstances != null ? maxSameInstances : 5;
+  }
+
+  public play(sound: AudioSound, source: string, loop: boolean = false): void {
+    const audio: HTMLAudioElement = this.createAudioInstance(sound);
 
     if(audio != null) {
       audio.src = source;
@@ -12,49 +20,80 @@ export class AudioPlayer {
       audio.loop = loop;
 
       audio.play();
-      audio.onended = () => this.onAudioEnd(audio);
+      audio.onended = () => this.onAudioEnd(audio, sound);
     }
   }
 
-  public stop(source: string): void {
-    const audio: HTMLAudioElement = this._audioInstances.find((a: HTMLAudioElement) => a.src.endsWith(source));
+  public stop(sound: AudioSound): void {
+    this.removeAudio(sound);
+  }
 
-    if(audio !== null) {
-      this.removeAudioInstance(audio);
+  public stopAllOfType(sound: AudioSound): void {
+    this.removeAllAudioOfType(sound);
+  }
+
+  public stopAllAudio(): void {
+    this.clearAllAudio();
+  }
+
+  private createAudioInstance(sound: AudioSound): HTMLAudioElement {
+    let newInstance: HTMLAudioElement = null;
+    let instances: HTMLAudioElement[] = this._audioInstanceMap.get(sound);
+
+    if(instances == null && this._audioInstanceMap.size < this.maxDistinctInstances) {
+      newInstance = new Audio();
+      instances = [newInstance];
+
+      this._audioInstanceMap.set(sound, instances);
+    }
+    else if(instances.length < this.maxSameInstances) {
+      newInstance = new Audio();
+      instances.push(newInstance);
+    }
+
+    return newInstance;
+  }
+
+  private removeAudio(sound: AudioSound): void {
+    const instances: HTMLAudioElement[] = this._audioInstanceMap.get(sound);
+
+    if(instances?.length > 0) {
+      const oldestInstance: HTMLAudioElement = instances[0];
+      oldestInstance.pause();
+
+      instances.splice(0, 1);
+
+      if(instances.length === 0) {
+        this._audioInstanceMap.delete(sound);
+      }
     }
   }
 
-  public stopAll(): void {
-    for(let i = 0; i < this._audioInstances.length; i++) {
-      this._audioInstances[i].pause();
-    }
+  private removeAllAudioOfType(sound: AudioSound): void {
+    const instances: HTMLAudioElement[] = this._audioInstanceMap.get(sound);
 
-    this._audioInstances.splice(0, this._audioInstances.length);
-  }
+    if(instances != null) {
+      for(let i = 0; i < instances.length; i++) {
+        instances[i].pause();
+      }
 
-  private createAudioInstance(): HTMLAudioElement {
-    let audio: HTMLAudioElement = null;
-
-    if(this._audioInstances.length < this.maxInstances) {
-      audio = new Audio();
-      this._audioInstances.push(audio);
-    }
-
-    return audio;
-  }
-
-  private removeAudioInstance(audio: HTMLAudioElement): void {
-    const index: number = this._audioInstances.indexOf(audio);
-
-    if(index !== -1) {
-      audio.pause();
-      this._audioInstances.splice(index, 1);
+      this._audioInstanceMap.delete(sound);
     }
   }
 
-  private onAudioEnd(audio: HTMLAudioElement): void {
+  private clearAllAudio(): void {
+    this._audioInstanceMap.forEach((instances: HTMLAudioElement[]) => {
+      for(let i = 0; i < instances.length; i++) {
+        instances[i].pause();
+      }
+    });
+
+    this._audioInstanceMap.clear();
+  }
+
+  private onAudioEnd(audio: HTMLAudioElement, sound: AudioSound): void {
     if(!audio.loop) {
-      this.removeAudioInstance(audio);
+      this.removeAudio(sound);
     }
   }
 }

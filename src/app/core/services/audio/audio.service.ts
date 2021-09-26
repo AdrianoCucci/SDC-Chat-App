@@ -1,52 +1,36 @@
 import { Injectable } from "@angular/core";
 import { AudioSound } from "src/app/shared/models/audio-sound";
-import { Pair } from "src/app/shared/models/pair";
 import { AudioPlayer } from "./audio-player";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AudioService {
+  private readonly _player = new AudioPlayer();
   private readonly _assetsPrefix: string = "assets/audio";
-
-  private readonly _audioPlayerMap = new Map<AudioSound, Pair<string, AudioPlayer>>([
-    [AudioSound.ChatNotification, { key: "chat_notification.wav", value: null }],
-    [AudioSound.RoomPing, { key: "room_ping.wav", value: null }],
+  private readonly _soundSourceMap = new Map<AudioSound, string>([
+    [AudioSound.ChatNotification, "chat_notification.wav"],
+    [AudioSound.RoomPing, "room_ping.wav"]
   ]);
 
   public play(sound: AudioSound, loop: boolean = false): void {
-    const sourcePlayerPair: Pair<string, AudioPlayer> = this.getSourcePlayerPair(sound);
+    if(this._soundSourceMap.has(sound)) {
+      const sourceFile: string = this._soundSourceMap.get(sound);
+      const sourcePath: string = `${this._assetsPrefix}/${sourceFile}`;
 
-    if(sourcePlayerPair != null) {
-      const audioSource: string = `${this._assetsPrefix}/${sourcePlayerPair.key}`;
-      const player: AudioPlayer = sourcePlayerPair.value;
-
-      player.play(audioSource, loop);
+      this._player.play(sound, sourcePath, loop);
     }
   }
 
   public stop(sound: AudioSound): void {
-    const sourcePlayerPair: Pair<string, AudioPlayer> = this.getSourcePlayerPair(sound);
-
-    if(sourcePlayerPair != null) {
-      const audioSource: string = `${this._assetsPrefix}/${sourcePlayerPair.key}`;
-      const player: AudioPlayer = sourcePlayerPair.value;
-
-      player.stop(audioSource);
-    }
+    this._player.stop(sound);
   }
 
-  private getSourcePlayerPair(sound: AudioSound): Pair<string, AudioPlayer> {
-    let pair: Pair<string, AudioPlayer> = null;
+  public stopAllOfType(sound: AudioSound): void {
+    this._player.stopAllOfType(sound);
+  }
 
-    if(this._audioPlayerMap.has(sound)) {
-      pair = this._audioPlayerMap.get(sound);
-
-      if(pair.value == null) {
-        pair.value = new AudioPlayer();
-      }
-    }
-
-    return pair;
+  public stopAllAudio(): void {
+    this._player.stopAllAudio();
   }
 }
