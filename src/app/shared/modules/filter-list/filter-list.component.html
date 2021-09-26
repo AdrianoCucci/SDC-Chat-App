@@ -1,1 +1,12 @@
-<p>filter-list works!</p>
+<ul *ngIf="itemTemplate != null" class="filter-list">
+  <li *ngFor="let item of items; index as i" class="filter-list-item">
+
+    <ng-template #itemTemplateWrapper>
+      <ng-container *ngTemplateOutlet="itemTemplate; context: { $implicit: item, index: i, allItems: items }">
+      </ng-container>
+    </ng-template>
+
+    <ng-container *ngTemplateOutlet="itemTemplateWrapper"></ng-container>
+
+  </li>
+</ul>

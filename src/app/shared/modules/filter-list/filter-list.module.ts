@@ -1,19 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FilterListItemModule } from './filter-list-item/filter-list-item.module';
-
 import { FilterList } from './filter-list.component';
+const component = [FilterList];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FilterListItemModule
-  ],
-  exports: [
-    FilterList,
-    FilterListItemModule
-  ],
-  declarations: [FilterList]
+  imports: [CommonModule],
+  exports: component,
+  declarations: component
 })
 export class FilterListModule { }
