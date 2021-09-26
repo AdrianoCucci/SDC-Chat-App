@@ -1,0 +1,31 @@
+<ng-template #formTemplate>
+  <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
+    <div class="grid">
+
+      <app-input-text class="col-12" name="display-name" label="Display Name" [(value)]="model.displayName">
+      </app-input-text>
+
+    </div>
+
+    <div slot="footer" class="form-footer">
+      <app-inline-alert class="block" type="error" [summary]="errors" [visible]="errors != null"></app-inline-alert>
+
+      <div class="txt-right">
+        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+      </div>
+    </div>
+  </app-form>
+
+  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+</ng-template>
+
+<app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
+  <div slot="header" class="dialog-header" [ngSwitch]="mode">
+    <span>Change Password</span>
+    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
+  </div>
+
+  <div slot="body" class="dialog-body">
+    <ng-container *ngTemplateOutlet="formTemplate"></ng-container>
+  </div>
+</app-dialog>
