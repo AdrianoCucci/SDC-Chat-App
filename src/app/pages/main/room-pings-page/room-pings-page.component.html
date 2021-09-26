@@ -1,10 +1,16 @@
 <section class="rooms">
   <h2>Rooms</h2>
 
-  <div class="rooms-wrapper">
-    <app-room-ping-card *ngFor="let room of rooms" class="room" [room]="room" [clientUser]="clientUser">
-    </app-room-ping-card>
-  </div>
+  <!-- <app-room-ping-card *ngFor="let room of rooms" class="room" [room]="room" [clientUser]="clientUser">
+    </app-room-ping-card> -->
+
+  <app-filter-list class="rooms-list" [items]="rooms">
+    <ng-template app-template let-room>
+
+      <app-room-ping-card class="room" [room]="room" [clientUser]="clientUser"></app-room-ping-card>
+
+    </ng-template>
+  </app-filter-list>
 </section>
 
 <section class="active-pings" [ngClass]="{'visible': activePings?.length > 0}">

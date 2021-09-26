@@ -24,14 +24,13 @@
       flex: 3;
       background-color: var(--surface-50);
 
-      div.rooms-wrapper {
-        display: flex;
-        flex-wrap: wrap;
-        overflow: auto;
+      app-filter-list.rooms-list {
+        --list-direction: row;
+        --item-flex: 1 1 30%;
+        --item-padding: 1rem;
 
         app-room-ping-card.room {
-          flex: 1 1 30%;
-          margin: 1rem;
+          height: 100%;
         }
       }
     }
