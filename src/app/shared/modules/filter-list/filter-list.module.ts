@@ -10,7 +10,10 @@ import { FilterList } from './filter-list.component';
     CommonModule,
     FilterListItemModule
   ],
-  exports: [FilterList],
+  exports: [
+    FilterList,
+    FilterListItemModule
+  ],
   declarations: [FilterList]
 })
 export class FilterListModule { }
