@@ -35,18 +35,26 @@ export class RoomPingsController {
       this.onPingRequest.emit(roomPing);
 
       if(roomPing.room?.pingSound != null) {
-        this._audioService.play(roomPing.room.pingSound);
+        this._audioService.play(roomPing.room.pingSound, true);
       }
     });
 
     socket.on(events.roomPingResponse, (roomPing: RoomPing) => {
       this.updatePing(roomPing.guid, roomPing);
       this.onPingResponse.emit(roomPing);
+
+      if(roomPing.room?.pingSound != null) {
+        this._audioService.stop(roomPing.room.pingSound);
+      }
     });
 
     socket.on(events.roomPingCancel, (roomPing: RoomPing) => {
       this.removePing(roomPing.guid);
       this.onPingCancel.emit(roomPing);
+
+      if(roomPing.room?.pingSound != null) {
+        this._audioService.stop(roomPing.room.pingSound);
+      }
     });
   }
 
@@ -69,7 +77,7 @@ export class RoomPingsController {
       this._socket.emit(this.events.roomPingRequest, roomPing, (response: RoomPing) => {
         this.addPing(response);
         this.onPingRequest.emit(response);
-        
+
         resolve(response);
       });
     });
@@ -80,6 +88,10 @@ export class RoomPingsController {
       this._socket.emit(this.events.roomPingResponse, roomPing, (response: RoomPing) => {
         this.addOrUpdatePing(response);
         this.onPingResponse.emit(response);
+
+        if(response.room?.pingSound != null) {
+          this._audioService.stop(response.room.pingSound);
+        }
 
         resolve(response);
       });

@@ -17,7 +17,7 @@ export class AudioPlayer {
   }
 
   public stop(source: string): void {
-    const audio: HTMLAudioElement = this._audioInstances.find((a: HTMLAudioElement) => a.src === source);
+    const audio: HTMLAudioElement = this._audioInstances.find((a: HTMLAudioElement) => a.src.endsWith(source));
 
     if(audio !== null) {
       this.removeAudioInstance(audio);
