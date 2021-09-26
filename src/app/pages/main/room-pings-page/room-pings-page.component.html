@@ -1,7 +1,11 @@
 <section class="rooms">
-  <h2>Rooms</h2>
+  <div class="section-header">
+    <h2>Rooms</h2>
+    <app-input-text class="block" placeholder="Filter room names or numbers..." (valueChange)="list.filter($event)">
+    </app-input-text>
+  </div>
 
-  <app-filter-list class="rooms-list" [items]="rooms" [keywordFields]="['name', 'number']">
+  <app-filter-list #list class="rooms-list" [items]="rooms" [keywordFields]="['name', 'number']">
     <ng-template app-template let-room>
 
       <app-room-ping-card class="room" [room]="room" [clientUser]="clientUser"></app-room-ping-card>
@@ -11,7 +15,9 @@
 </section>
 
 <section class="active-pings" [ngClass]="{'visible': activePings?.length > 0}">
-  <h2>Active Pings</h2>
+  <div class="section-header">
+    <h2>Active Pings</h2>
+  </div>
 
   <ul class="active-pings-list">
     <li *ngFor="let ping of activePings" class="active-ping">

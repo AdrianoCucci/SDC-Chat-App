@@ -5,8 +5,12 @@
   --list-padding: 0;
 
   --item-flex: 1;
+  --item-max-width: unset;
+  --item-max-height: unset;
   --item-margin: unset;
   --item-padding: unset;
+  --item-overflow: hidden;
+  --item-transition: 0.25s;
 
   display: block;
   width: 100%;
@@ -25,16 +29,18 @@
       display: flex;
       flex-direction: column;
       flex: var(--item-flex);
+      max-width: var(--item-max-width);
+      max-height: var(--item-max-height);
       margin: var(--item-margin);
       padding: var(--item-padding);
-      transition: 0.16s;
+      overflow: var(--item-overflow);
+      transition: var(--item-transition);
 
       &.filtered-out {
         flex: 0;
         margin: 0;
         padding: 0;
         opacity: 0;
-        overflow: hidden;
       }
     }
   }

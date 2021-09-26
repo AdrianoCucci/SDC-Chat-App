@@ -26,7 +26,7 @@ export class FilterList implements AfterViewInit {
   public filter(value: string): any[] {
     const filteredItems: any[] = [];
 
-    if(this.hasItems && this.keywordFields) {
+    if(value && this.hasItems && this.keywordFields) {
       const keywordFields: string[] = Array.isArray(this.keywordFields) ? this.keywordFields : [this.keywordFields];
 
       for(let i = 0; i < this.items.length; i++) {

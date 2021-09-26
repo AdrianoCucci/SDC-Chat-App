@@ -10,14 +10,18 @@
     flex-direction: column;
     overflow: hidden;
 
-    h2 {
+    div.section-header {
       padding: 0.5rem;
       margin: 1rem;
       background-color: var(--green-200);
       border-bottom: solid var(--green-300) 4px;
       border-radius: 0.25rem;
-      font-size: 1.3rem;
-      font-weight: 600;
+
+      h2 {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+      }
     }
 
     &.rooms {
@@ -26,7 +30,7 @@
 
       app-filter-list.rooms-list {
         --list-direction: row;
-        --item-flex: 1 1 30%;
+        --item-max-height: 200px;
         --item-padding: 1rem;
 
         app-room-ping-card.room {
