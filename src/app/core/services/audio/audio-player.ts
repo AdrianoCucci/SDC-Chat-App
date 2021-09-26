@@ -13,14 +13,14 @@ export class AudioPlayer {
     this.maxSameInstances = maxSameInstances != null ? maxSameInstances : 5;
   }
 
-  public play(sound: AudioSound, source: string, loop: boolean = false): void {
+  public async play(sound: AudioSound, source: string, loop: boolean = false): Promise<void> {
     const audio: HTMLAudioElement = this.createAudioInstance(sound);
 
     if(audio != null) {
       audio.src = source;
       audio.loop = loop;
 
-      audio.play();
+      await audio.play();
       audio.onended = () => this.onAudioEnd(audio, sound);
     }
   }

@@ -13,12 +13,12 @@ export class AudioService {
     [AudioSound.RoomPing, "room_ping.wav"]
   ]);
 
-  public play(sound: AudioSound, loop: boolean = false): void {
+  public async play(sound: AudioSound, loop: boolean = false): Promise<void> {
     const sourceFile: string = this._soundSourceMap.get(sound);
 
     if(sourceFile != null) {
       const sourcePath: string = `${this._assetsPrefix}/${sourceFile}`;
-      this._player.play(sound, sourcePath, loop);
+      await this._player.play(sound, sourcePath, loop);
     }
   }
 
