@@ -7,12 +7,18 @@
   </div>
 
   <div *ngIf="!isPingRequesting; else requestingActionsTemplate" class="room-ping-actions request-actions">
-    <app-button text="Need assistance!" (click)="onRequestActionClick()"></app-button>
+    <app-input-text #message placeholder="Request message..."></app-input-text>
+    <app-button [text]="message.value?.trim() ? 'Send request' : 'Need assistance!'"
+      (click)="onRequestActionClick(message.value)">
+    </app-button>
   </div>
 
   <ng-template #requestingActionsTemplate>
     <div *ngIf="!isClientPingRequesting; else clientRequestingTemplate;" class="room-ping-actions response-actions">
-      <app-button text="On my way!" (click)="onResponseActionClick()"></app-button>
+      <app-input-text #message placeholder="Response message..."></app-input-text>
+      <app-button [text]="message.value?.trim() ? 'Send response' : 'On my way!'"
+        (click)="onResponseActionClick(message.value)">
+      </app-button>
     </div>
 
     <ng-template #clientRequestingTemplate>

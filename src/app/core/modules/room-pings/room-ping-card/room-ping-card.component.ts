@@ -66,22 +66,22 @@ export class RoomPingCard implements OnInit, OnDestroy {
     }
   }
 
-  async onRequestActionClick(): Promise<void> {
+  async onRequestActionClick(message?: string): Promise<void> {
     this.roomPing = await this._socketService.roomPings.sendPingRequest({
       state: RoomPingState.Requesting,
       roomId: this.room?.id,
       room: this.room,
       organizationId: this.clientUser?.organizationId,
       requestDate: new Date().toISOString(),
-      requestMessage: "Need assistance!",
+      requestMessage: message?.trim() || "Need assistance!",
       requestUserId: this.clientUser?.id
     });
   }
 
-  async onResponseActionClick(): Promise<void> {
+  async onResponseActionClick(message?: string): Promise<void> {
     const roomPing: RoomPing = this.roomPing;
     roomPing.state = RoomPingState.Responded;
-    roomPing.responseMessage = "On my way!";
+    roomPing.responseMessage = message?.trim() || "On my way!";
     roomPing.responseUserId = this.clientUser?.id;
 
     this.roomPing = await this._socketService.roomPings.sendPingResponse(roomPing);
