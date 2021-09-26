@@ -55,8 +55,8 @@ export class RoomsTable {
     return this.pingSoundPairs.find((p: Pair<string, AudioSound>) => p.value === audioSound)?.key ?? null;
   }
 
-  onPlayPingSound(audioSound: AudioSound): void {
-    this._audioService.play(audioSound);
+  async onPlayPingSound(audioSound: AudioSound): Promise<void> {
+    await this._audioService.playOneShot(audioSound);
   }
 
   onAddRoom(): void {
@@ -105,10 +105,10 @@ export class RoomsTable {
     setTimeout(() => {
       this._roomForm.model = model;
       this._roomForm.mode = mode;
-      
+
       this._roomForm.organizationId = this.organizationId;
       this._roomForm.pingSoundOptions = this.pingSoundPairs;
-     
+
       this._roomForm.dialogVisible = true;
     });
   }

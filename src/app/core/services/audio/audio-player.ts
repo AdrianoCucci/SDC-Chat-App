@@ -5,6 +5,8 @@ export class AudioPlayer {
   public maxSameInstances: number;
 
   private readonly _audioInstanceMap = new Map<AudioSound, HTMLAudioElement[]>();
+  private _oneShotAudio: HTMLAudioElement;
+  private _oneShotReady: boolean = true;
 
   public constructor(maxDistinctInstances?: number, maxSameInstances?: number) {
     this.maxDistinctInstances = maxDistinctInstances != null ? maxDistinctInstances : 20;
@@ -16,11 +18,27 @@ export class AudioPlayer {
 
     if(audio != null) {
       audio.src = source;
-      audio.volume = 1;
       audio.loop = loop;
 
       audio.play();
       audio.onended = () => this.onAudioEnd(audio, sound);
+    }
+  }
+
+  public async playOneShot(source: string): Promise<void> {
+    if(this._oneShotReady) {
+      if(this._oneShotAudio == null) {
+        this._oneShotAudio = new Audio(source);
+      }
+      else {
+        this._oneShotAudio.pause();
+        this._oneShotAudio.src = source;
+      }
+
+      this._oneShotReady = false;
+      await this._oneShotAudio.play().finally(() => this._oneShotReady = true);
+
+      this._oneShotAudio.onended = () => this._oneShotAudio = null;
     }
   }
 

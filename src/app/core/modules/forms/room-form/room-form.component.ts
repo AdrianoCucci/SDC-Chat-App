@@ -35,7 +35,7 @@ export class RoomForm extends AppForm<RoomRequest, Room> {
     return response.body;
   }
 
-  onPreviewSound(audioSound: AudioSound): void {
-    this._audioService.play(audioSound);
+  async onPreviewSound(audioSound: AudioSound): Promise<void> {
+    await this._audioService.playOneShot(audioSound);
   }
 }

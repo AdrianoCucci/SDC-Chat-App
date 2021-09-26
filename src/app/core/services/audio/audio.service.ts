@@ -14,11 +14,20 @@ export class AudioService {
   ]);
 
   public play(sound: AudioSound, loop: boolean = false): void {
-    if(this._soundSourceMap.has(sound)) {
-      const sourceFile: string = this._soundSourceMap.get(sound);
-      const sourcePath: string = `${this._assetsPrefix}/${sourceFile}`;
+    const sourceFile: string = this._soundSourceMap.get(sound);
 
+    if(sourceFile != null) {
+      const sourcePath: string = `${this._assetsPrefix}/${sourceFile}`;
       this._player.play(sound, sourcePath, loop);
+    }
+  }
+
+  public async playOneShot(sound: AudioSound): Promise<void> {
+    const sourceFile: string = this._soundSourceMap.get(sound);
+
+    if(sourceFile != null) {
+      const sourcePath: string = `${this._assetsPrefix}/${sourceFile}`;
+      await this._player.playOneShot(sourcePath);
     }
   }
 
