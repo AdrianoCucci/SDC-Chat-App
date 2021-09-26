@@ -8,7 +8,7 @@ export class AudioService {
   private readonly _assetsPrefix: string = "assets/audio";
 
   private readonly _audioSourceMap = new Map<AudioSound, () => HTMLAudioElement>([
-    [AudioSound.ChatNotification, () => new Audio(`${this._assetsPrefix}/sdc_chat_notification.wav`)]
+    [AudioSound.ChatNotification, () => new Audio(`${this._assetsPrefix}/chat_notification.wav`)]
   ]);
 
   public play(sound: AudioSound, volume: number = 1): void {
