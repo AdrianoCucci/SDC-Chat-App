@@ -1,8 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
+import { PassChangeForm } from 'src/app/core/modules/forms/pass-change-form/pass-change-form.component';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
@@ -16,6 +17,8 @@ import { Pair } from 'src/app/shared/models/pair';
 export class AccountPage implements OnInit {
   public readonly clientUser: User;
   public readonly rolePairs: Pair<string, Role>[] = enumToPairs(Role, true);
+
+  @ViewChild(PassChangeForm) private readonly _passChangeForm: PassChangeForm;
 
   private _organization: Organization;
   private _loadingVisible: boolean = false;
@@ -52,6 +55,16 @@ export class AccountPage implements OnInit {
       catch(error) {
         reject(error);
       }
+    });
+  }
+
+  onChangePassword(): void {
+    this._passChangeForm.clear();
+    this._passChangeForm.model = null;
+
+    setTimeout(() => {
+      this._passChangeForm.model = { currentPassword: "", newPassword: "" };
+      this._passChangeForm.dialogVisible = true;
     });
   }
 

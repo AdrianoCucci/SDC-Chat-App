@@ -4,7 +4,7 @@
 
     <div class="account-actions">
       <app-button class="m-r-2" text="Edit" icon="pen"></app-button>
-      <app-button text="Change Password" icon="key"></app-button>
+      <app-button text="Change Password" icon="key" (click)="onChangePassword()"></app-button>
     </div>
   </h2>
 
@@ -25,6 +25,10 @@
       <span class="data">{{getRoleName(clientUser.role)}}</span>
     </li>
   </ul>
+
+  <app-pass-change-form #passChangeForm [dialog]="true" [userId]="clientUser.id"
+    (onSubmitSuccess)="passChangeForm.dialogVisible = false">
+  </app-pass-change-form>
 </section>
 
 <section *ngIf="organization != null" class="organization-details">
