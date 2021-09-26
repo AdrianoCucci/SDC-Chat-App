@@ -1,5 +1,7 @@
 import { Injectable } from "@angular/core";
 import { AudioSound } from "src/app/shared/models/audio-sound";
+import { Pair } from "src/app/shared/models/pair";
+import { AudioPlayer } from "./audio-player";
 
 @Injectable({
   providedIn: 'root'
@@ -7,21 +9,44 @@ import { AudioSound } from "src/app/shared/models/audio-sound";
 export class AudioService {
   private readonly _assetsPrefix: string = "assets/audio";
 
-  private readonly _audioSourceMap = new Map<AudioSound, () => HTMLAudioElement>([
-    [AudioSound.ChatNotification, () => new Audio(`${this._assetsPrefix}/chat_notification.wav`)],
-    [AudioSound.RoomPing, () => new Audio(`${this._assetsPrefix}/room_ping.wav`)]
+  private readonly _audioPlayerMap = new Map<AudioSound, Pair<string, AudioPlayer>>([
+    [AudioSound.ChatNotification, { key: "chat_notification.wav", value: null }],
+    [AudioSound.RoomPing, { key: "room_ping.wav", value: null }],
   ]);
 
-  public play(sound: AudioSound, volume: number = 1): void {
-    if(this._audioSourceMap.has(sound)) {
-      const audio: HTMLAudioElement = this._audioSourceMap.get(sound)();
+  public play(sound: AudioSound, loop: boolean = false): void {
+    const sourcePlayerPair: Pair<string, AudioPlayer> = this.getSourcePlayerPair(sound);
 
-      audio.volume = this.clampVolume(volume);
-      audio.play();
+    if(sourcePlayerPair != null) {
+      const audioSource: string = `${this._assetsPrefix}/${sourcePlayerPair.key}`;
+      const player: AudioPlayer = sourcePlayerPair.value;
+
+      player.play(audioSource, loop);
     }
   }
 
-  private clampVolume(volume: number): number {
-    return Math.min(Math.max(volume, 0), 1);
+  public stop(sound: AudioSound): void {
+    const sourcePlayerPair: Pair<string, AudioPlayer> = this.getSourcePlayerPair(sound);
+
+    if(sourcePlayerPair != null) {
+      const audioSource: string = `${this._assetsPrefix}/${sourcePlayerPair.key}`;
+      const player: AudioPlayer = sourcePlayerPair.value;
+
+      player.stop(audioSource);
+    }
+  }
+
+  private getSourcePlayerPair(sound: AudioSound): Pair<string, AudioPlayer> {
+    let pair: Pair<string, AudioPlayer> = null;
+
+    if(this._audioPlayerMap.has(sound)) {
+      pair = this._audioPlayerMap.get(sound);
+
+      if(pair.value == null) {
+        pair.value = new AudioPlayer();
+      }
+    }
+
+    return pair;
   }
 }

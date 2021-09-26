@@ -1,29 +1,30 @@
 export class AudioPlayer {
-  public readonly source: string;
-
-  public maxInstances: number = 1;
-  public loop: boolean = false;
+  public maxInstances: number = 10;
 
   private readonly _audioInstances: HTMLAudioElement[] = [];
-  private _volume: number;
 
-  public constructor(source: string) {
-    this.source = source;
-  }
-
-  public play(): void {
+  public play(source: string, loop: boolean = false): void {
     const audio: HTMLAudioElement = this.createAudioInstance();
 
-    if(audio) {
-      audio.src = this.source;
-      audio.volume = this.volume;
+    if(audio != null) {
+      audio.src = source;
+      audio.volume = 1;
+      audio.loop = loop;
 
       audio.play();
       audio.onended = () => this.onAudioEnd(audio);
     }
   }
 
-  public stop(): void {
+  public stop(source: string): void {
+    const audio: HTMLAudioElement = this._audioInstances.find((a: HTMLAudioElement) => a.src === source);
+
+    if(audio !== null) {
+      this.removeAudioInstance(audio);
+    }
+  }
+
+  public stopAll(): void {
     for(let i = 0; i < this._audioInstances.length; i++) {
       this._audioInstances[i].pause();
     }
@@ -42,31 +43,18 @@ export class AudioPlayer {
     return audio;
   }
 
+  private removeAudioInstance(audio: HTMLAudioElement): void {
+    const index: number = this._audioInstances.indexOf(audio);
+
+    if(index !== -1) {
+      audio.pause();
+      this._audioInstances.splice(index, 1);
+    }
+  }
+
   private onAudioEnd(audio: HTMLAudioElement): void {
-    if(!this.loop) {
-      const index: number = this._audioInstances.indexOf(audio);
-
-      if(index !== -1) {
-        this._audioInstances.splice(index, 1);
-      }
+    if(!audio.loop) {
+      this.removeAudioInstance(audio);
     }
-  }
-
-  public get volume(): number {
-    return this._volume;
-  }
-
-  public set volume(value: number) {
-    if(typeof value !== "number") {
-      value = 1;
-    }
-    else if(value < 0) {
-      value = 0;
-    }
-    else if(value > 1) {
-      value = 1;
-    }
-
-    this._volume = value;
   }
 }
