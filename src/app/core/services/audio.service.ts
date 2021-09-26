@@ -8,7 +8,8 @@ export class AudioService {
   private readonly _assetsPrefix: string = "assets/audio";
 
   private readonly _audioSourceMap = new Map<AudioSound, () => HTMLAudioElement>([
-    [AudioSound.ChatNotification, () => new Audio(`${this._assetsPrefix}/chat_notification.wav`)]
+    [AudioSound.ChatNotification, () => new Audio(`${this._assetsPrefix}/chat_notification.wav`)],
+    [AudioSound.RoomPing, () => new Audio(`${this._assetsPrefix}/room_ping.wav`)]
   ]);
 
   public play(sound: AudioSound, volume: number = 1): void {
