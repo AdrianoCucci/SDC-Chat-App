@@ -11,7 +11,7 @@ export class ChatMessageListComponent implements AfterViewInit {
   @Output() public readonly onAddMessage = new EventEmitter<ChatMessage>();
   @Input() public messages: ChatMessage[];
 
-  @ViewChild("messagesList") private readonly _messagesListRef: ElementRef;
+  @ViewChild("messagesScrollWrapper") private readonly _messagesScrollWrapperRef: ElementRef;
 
   ngAfterViewInit(): void {
     this.scrollToBottom();
@@ -35,11 +35,11 @@ export class ChatMessageListComponent implements AfterViewInit {
   }
 
   public scrollToBottom() {
-    if(this._messagesListRef != null) {
-      const list: HTMLElement = this._messagesListRef.nativeElement;
+    if(this._messagesScrollWrapperRef != null) {
+      const scrollWrapper: HTMLElement = this._messagesScrollWrapperRef.nativeElement;
 
-      list.scrollTo({
-        top: list.scrollHeight,
+      scrollWrapper.scrollTo({
+        top: scrollWrapper.scrollHeight,
         behavior: "smooth"
       });
     }
