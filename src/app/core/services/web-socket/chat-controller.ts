@@ -4,7 +4,7 @@ import { Socket } from 'ngx-socket-io';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
 import { ChatMessage } from '../../models/messages/chat-message';
 import { ChatMessagesService } from '../api/chat-messages.service';
-import { AudioService } from '../audio.service';
+import { AudioService } from '../audio/audio.service';
 
 export class ChatController {
   public readonly onMessage = new EventEmitter<ChatMessage>();

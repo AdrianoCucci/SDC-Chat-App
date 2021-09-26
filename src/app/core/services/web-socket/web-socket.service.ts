@@ -5,7 +5,7 @@ import { User } from "../../models/users/user";
 import { ChatMessagesService } from "../api/chat-messages.service";
 import { RoomsService } from "../api/rooms-service";
 import { UsersService } from "../api/users-service";
-import { AudioService } from "../audio.service";
+import { AudioService } from "../audio/audio.service";
 import { ChatController } from "./chat-controller";
 import { RoomPingsController } from "./room-pings-controller";
 

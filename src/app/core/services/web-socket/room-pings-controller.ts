@@ -5,7 +5,7 @@ import { RoomPing } from '../../models/room-pings/room-ping';
 import { RoomPingState } from '../../models/room-pings/room-ping-state';
 import { Room } from '../../models/rooms/room';
 import { RoomsService } from '../api/rooms-service';
-import { AudioService } from '../audio.service';
+import { AudioService } from '../audio/audio.service';
 
 export class RoomPingsController {
   public readonly onPingRequest = new EventEmitter<RoomPing>();
