@@ -24,18 +24,18 @@
 
       li {
         display: block;
-        margin-bottom: 1rem;
-        border-radius: 0.25rem;
-        border-bottom: solid var(--message-background) 1px;
-        transition: 0.16s;
         animation: messageIntro 0.25s;
-
-        &:hover {
-          background-color: var(--message-background);
-        }
 
         app-chat-message {
           padding: 1rem;
+          margin-bottom: 1rem;
+          border-radius: 0.25rem;
+          border-bottom: solid var(--message-background) 1px;
+          transition: 0.16s;
+
+          &.client-message:hover {
+            background-color: var(--message-background);
+          }
         }
       }
     }
