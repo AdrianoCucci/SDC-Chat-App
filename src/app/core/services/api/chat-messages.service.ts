@@ -21,4 +21,20 @@ export class ChatMessagesService extends WebApiService {
 
     return this.get(url);
   }
+
+  public getMessage(messageId: number): Observable<HttpResponse<ChatMessage>> {
+    return this.get(`${this._apiPrefix}/${messageId}`);
+  }
+
+  public addMessage(request: ChatMessage): Observable<HttpResponse<ChatMessage>> {
+    return this.post(this._apiPrefix, request);
+  }
+
+  public updateMessage(messageId: number, request: ChatMessage): Observable<HttpResponse<ChatMessage>> {
+    return this.put(`${this._apiPrefix}/${messageId}`, request);
+  }
+
+  public deleteMessage(messageId: number): Observable<HttpResponse<void>> {
+    return this.delete(`${this._apiPrefix}/${messageId}`);
+  }
 }
