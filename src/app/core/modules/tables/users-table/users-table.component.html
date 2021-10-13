@@ -30,22 +30,11 @@
   [defaultOrganizationId]="clientUser?.organizationId" (onSubmitSuccess)="onUserFormSubmit($event)">
 </app-user-form>
 
-<app-dialog #deleteDialog class="delete-dialog" [backdropDismiss]="true">
-  <div slot="header">
-    <span>Delete User</span>
-  </div>
-  <p *ngIf="deleteDialog.data" slot="body"
-    class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
-    <span>Are you sure you want to delete user:</span>
-    <span>"<b>{{deleteDialog.data.username}}</b>"?</span>
-  </p>
-  <div slot="footer" class="txt-right">
-    <app-button class="text option-no" text="No" (click)="deleteDialog.hide()"></app-button>
-
-    <app-button class="text option-yes" text="Yes" (click)="deleteDialog.hide(); onDeleteUser(deleteDialog.data)">
-    </app-button>
-  </div>
-</app-dialog>
+<app-confirm-dialog #deleteDialog header="Delete User" cancelText="No" confirmText="Yes" [backdropDismiss]="true"
+  (onConfirm)="onDeleteUser($event)">
+  <span>Are you sure you want to delete user:</span>
+  <span>"<b>{{deleteDialog.data?.username}}</b>"?</span>
+</app-confirm-dialog>
 
 <app-loader [fullscreen]="true" text="Deleting user..." [visible]="isDeletingUser"></app-loader>
 
