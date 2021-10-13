@@ -23,7 +23,11 @@ export class ChatPage {
   }
 
   onEditMessage(message: ChatMessage): void {
-    console.log("EDIT: ", message);
+    this._socketService.chat.sendMessageEdit(message);
+  }
+
+  onDeleteMessage(message: ChatMessage): void {
+    this._socketService.chat.sendMessageDelete(message);
   }
 
   public get messages(): ChatMessage[] {

@@ -8,6 +8,8 @@ import { AudioService } from '../audio/audio.service';
 
 export class ChatController {
   public readonly onMessage = new EventEmitter<ChatMessage>();
+  public readonly onMessageEdit = new EventEmitter<ChatMessage>();
+  public readonly onMessageDelete = new EventEmitter<ChatMessage>();
 
   private readonly _socket: Socket;
   private readonly _messagesService: ChatMessagesService;
@@ -32,6 +34,16 @@ export class ChatController {
 
       this._audioService.play(AudioSound.ChatNotification);
     });
+
+    socket.on(events.messageEdit, (message: ChatMessage) => {
+      this.onMessageEdit.emit(message);
+      this.updateMessage(message);
+    });
+
+    socket.on(events.messageDelete, (message: ChatMessage) => {
+      this.onMessageDelete.emit(message);
+      this.deleteMessage(message);
+    });
   }
 
   public loadMessages(organizationId: number): Promise<ChatMessage[]> {
@@ -55,6 +67,20 @@ export class ChatController {
     }
   }
 
+  public sendMessageEdit(message: ChatMessage): void {
+    if(message != null) {
+      this._socket.emit(this.events.messageEdit, message);
+      this.updateMessage(message);
+    }
+  }
+
+  public sendMessageDelete(message: ChatMessage): void {
+    if(message != null) {
+      this._socket.emit(this.events.messageDelete, message);
+      this.deleteMessage(message);
+    }
+  }
+
   private addMessage(message: ChatMessage): void {
     if(this._messages == null) {
       this._messages = [message];
@@ -64,8 +90,32 @@ export class ChatController {
     }
   }
 
+  private updateMessage(message: ChatMessage): void {
+    const index: number = this.findMessageIndex(message);
+
+    if(index !== -1) {
+      this._messages[index] = message;
+    }
+  }
+
+  private deleteMessage(message: ChatMessage): void {
+    const index: number = this.findMessageIndex(message);
+
+    if(index !== -1) {
+      this._messages.splice(index, 1);
+    }
+  }
+
+  private findMessageIndex(message: ChatMessage): number {
+    return this._messages?.findIndex((c: ChatMessage) => c.id === message.id) ?? -1;
+  }
+
   public get events() {
-    return { message: "message" };
+    return {
+      message: "message",
+      messageEdit: "message-edit",
+      messageDelete: "message-delete"
+    };
   }
 
   public get messages(): ChatMessage[] {
