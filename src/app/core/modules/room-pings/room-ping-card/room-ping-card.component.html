@@ -6,27 +6,25 @@
     </span>
   </div>
 
-  <div *ngIf="!isPingRequesting; else requestingActionsTemplate" class="room-ping-actions request-actions">
+  <form *ngIf="!isPingRequesting; else requestingActionsTemplate" class="room-ping-actions request-actions"
+    (submit)="onRequest(message.value)">
     <app-input-text #message placeholder="Request message..."></app-input-text>
-    <app-button [text]="message.value?.trim() ? 'Send request' : 'Need assistance!'"
-      (click)="onRequestActionClick(message.value)">
-    </app-button>
-  </div>
+    <app-button type="submit" [text]="message.value?.trim() ? 'Send request' : 'Need assistance!'"></app-button>
+  </form>
 
   <ng-template #requestingActionsTemplate>
-    <div *ngIf="!isClientPingRequesting; else clientRequestingTemplate;" class="room-ping-actions response-actions">
+    <form *ngIf="!isClientPingRequesting; else clientRequestingTemplate;" class="room-ping-actions response-actions"
+      (submit)="onResponse(message.value)">
       <app-input-text #message placeholder="Response message..."></app-input-text>
-      <app-button [text]="message.value?.trim() ? 'Send response' : 'On my way!'"
-        (click)="onResponseActionClick(message.value)">
-      </app-button>
-    </div>
+      <app-button type="submit" [text]="message.value?.trim() ? 'Send response' : 'On my way!'"></app-button>
+    </form>
 
     <ng-template #clientRequestingTemplate>
       <div class="client-request-overlay">
         <div class="backdrop"></div>
         <div class="content">
           <span>Pinging...</span>
-          <app-button text="Cancel" (click)="onCancelActionClick()"></app-button>
+          <app-button text="Cancel" (click)="onCancel()"></app-button>
         </div>
       </div>
     </ng-template>

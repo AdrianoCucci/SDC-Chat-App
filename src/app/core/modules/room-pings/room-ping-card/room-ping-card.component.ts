@@ -66,7 +66,7 @@ export class RoomPingCard implements OnInit, OnDestroy {
     }
   }
 
-  async onRequestActionClick(message?: string): Promise<void> {
+  async onRequest(message?: string): Promise<void> {
     this.roomPing = await this._socketService.roomPings.sendPingRequest({
       state: RoomPingState.Requesting,
       roomId: this.room?.id,
@@ -78,7 +78,7 @@ export class RoomPingCard implements OnInit, OnDestroy {
     });
   }
 
-  async onResponseActionClick(message?: string): Promise<void> {
+  async onResponse(message?: string): Promise<void> {
     const roomPing: RoomPing = this.roomPing;
     roomPing.state = RoomPingState.Responded;
     roomPing.responseMessage = message?.trim() || "On my way!";
@@ -87,7 +87,7 @@ export class RoomPingCard implements OnInit, OnDestroy {
     this.roomPing = await this._socketService.roomPings.sendPingResponse(roomPing);
   }
 
-  onCancelActionClick(): void {
+  onCancel(): void {
     this._socketService.roomPings.cancelPingRequest(this.roomPing);
     this.roomPing = null;
   }

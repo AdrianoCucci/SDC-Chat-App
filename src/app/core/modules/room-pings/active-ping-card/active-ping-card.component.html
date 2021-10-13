@@ -20,11 +20,10 @@
 </div>
 
 <div class="actions">
-  <div *ngIf="!isResponded && !isClientRequest" class="response-wrapper">
+  <form *ngIf="!isResponded && !isClientRequest" class="response-form" (submit)="onRespond(message.value)">
     <app-input-text #message placeholder="Response message..."></app-input-text>
-    <app-button [text]="message.value?.trim() ? 'Send response' : 'On my way!'" (click)="onRespond(message.value)">
-    </app-button>
-  </div>
+    <app-button type="submit" [text]="message.value?.trim() ? 'Send response' : 'On my way!'"></app-button>
+  </form>
 
   <app-button *ngIf="isClientRequest" text="Cancel" (click)="onCancel()"></app-button>
   <app-button *ngIf="isResponded" text="Dismiss" (click)="onDismiss()"></app-button>
