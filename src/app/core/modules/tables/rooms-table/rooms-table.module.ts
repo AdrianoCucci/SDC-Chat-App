@@ -5,7 +5,7 @@ import { TableModule } from 'src/app/shared/modules/table/table.module';
 import { RoomFormModule } from '../../forms/room-form/room-form.module';
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 import { DirectivesModule } from 'src/app/shared/modules/directives/directives-module';
-import { DialogModule } from 'src/app/shared/modules/overlays/dialog/dialog.module';
+import { ConfirmDialogModule } from 'src/app/shared/modules/overlays/dialog/confirm-dialog/confirm-dialog.module';
 import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.module';
 
 import { RoomsTable } from './rooms-table.component';
@@ -18,7 +18,7 @@ const component = [RoomsTable];
     RoomFormModule,
     DirectivesModule,
     ButtonModule,
-    DialogModule,
+    ConfirmDialogModule,
     LoaderModule
   ],
   exports: component,
