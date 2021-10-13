@@ -41,6 +41,6 @@
   }
 
   &.auto-resize div.input-wrapper {
-    height: calc(var(--auto-resize-lines) * var(--line-height));
+    height: calc(var(--auto-resize-lines) * var(--line-height) * 1.25);
   }
 }
