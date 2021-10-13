@@ -30,8 +30,9 @@
     <router-outlet></router-outlet>
   </main>
 
-  <app-confirm-dialog #logoutDialog header="Logout" message="Are you sure you want to logout?" cancelText="No"
-    confirmText="Yes" [backdropDismiss]="true" (onConfirm)="logout()">
+  <app-confirm-dialog #logoutDialog header="Logout" cancelText="No" confirmText="Yes" [backdropDismiss]="true"
+    (onConfirm)="logout()">
+    <span>Are you sure you want to logout?</span>
   </app-confirm-dialog>
 </ng-container>
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Dialog } from '../dialog/dialog.component';
+import { Dialog } from '../dialog.component';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -12,7 +12,6 @@ export class ConfirmDialog extends Dialog {
 
   @Input() public dismissButton: boolean = true;
   @Input() public header: string;
-  @Input() public message: string;
   @Input() public cancelText: string = "Cancel";
   @Input() public confirmText: string = "Confirm";
 
