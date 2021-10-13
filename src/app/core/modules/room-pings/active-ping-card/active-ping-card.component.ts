@@ -18,10 +18,10 @@ export class ActivePingCard {
 
   constructor(private _socketService: WebSocketService) { }
 
-  async onRespond(): Promise<void> {
+  async onRespond(message?: string): Promise<void> {
     const roomPing: RoomPing = this.roomPing;
     roomPing.state = RoomPingState.Responded;
-    roomPing.responseMessage = "On my way!";
+    roomPing.responseMessage = message || "On my way!";
     roomPing.responseUserId = this.clientUser?.id;
 
     this.roomPing = await this._socketService.roomPings.sendPingResponse(roomPing);

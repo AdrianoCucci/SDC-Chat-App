@@ -43,6 +43,23 @@
 
   div.actions {
     text-align: end;
+
+    div.response-wrapper {
+      display: flex;
+      justify-content: flex-end;
+
+      app-input-text {
+        flex: 1;
+        margin-right: 0.5rem;
+        padding: 0;
+      }
+
+      app-button {
+        min-width: 128px;
+        --padding: 0.16rem;
+        font-size: 0.8rem;
+      }
+    }
   }
 
   &.requesting {
