@@ -6,6 +6,8 @@
 @import "./theme/spacing.scss";
 @import "./theme/font.scss";
 
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap");
+
 * {
   box-sizing: border-box;
 }
@@ -14,6 +16,6 @@ body {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Quicksand", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   overflow: hidden;
 }
