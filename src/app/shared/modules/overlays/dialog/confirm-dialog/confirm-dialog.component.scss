@@ -1,0 +1,43 @@
+@import "../dialog.component.scss";
+
+:host {
+  --footer-padding: 0;
+
+  div.dialog-content {
+    div.dialog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    div.dialog-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      p.message {
+        margin: 0;
+      }
+    }
+
+    div.dialog-footer {
+      display: flex;
+      justify-content: space-between;
+
+      app-button.option {
+        flex: 1;
+        min-height: 3.25rem;
+
+        &.option-confirm {
+          font-weight: bold;
+        }
+      }
+
+      div.divider {
+        width: 2px;
+        background-color: var(--surface-300);
+      }
+    }
+  }
+}

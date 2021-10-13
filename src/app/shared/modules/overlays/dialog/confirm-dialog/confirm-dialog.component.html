@@ -1,0 +1,18 @@
+<ng-container *ngIf="contentVisible">
+  <div class="dialog-backdrop" (click)="onBackdropClick()"></div>
+
+  <div class="dialog-content">
+    <div class="dialog-header">
+      <span *ngIf="header" class="header-text">{{header}}</span>
+      <app-button *ngIf="dismissButton" class="text dismiss" icon="times" (click)="hide()"></app-button>
+    </div>
+    <div class="dialog-body">
+      <p *ngIf="message" class="message">{{message}}</p>
+    </div>
+    <div class="dialog-footer">
+      <app-button class="text option option-cancel" [text]="cancelText" (click)="onCancelClick()"></app-button>
+      <div class="divider"></div>
+      <app-button class="text option option-confirm" [text]="confirmText" (click)="onConfirmClick()"></app-button>
+    </div>
+  </div>
+</ng-container>
