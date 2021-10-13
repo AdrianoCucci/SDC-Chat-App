@@ -1,6 +1,7 @@
 import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
+import { Popover } from 'src/app/shared/modules/overlays/popover/popover.component';
 
 @Component({
   selector: 'app-chat-message',
@@ -29,7 +30,7 @@ export class ChatMessageComponent implements OnInit {
     return contents;
   }
 
-  onSaveEdit(contents: string) {
+  onSaveEdit(contents: string): void {
     if(contents && (this._message?.contents !== contents ?? false)) {
       this._message.contents = contents;
       this._displayContents = this.parseMessageContents(this._message.contents);
@@ -38,6 +39,11 @@ export class ChatMessageComponent implements OnInit {
     }
 
     this.editingActive = false;
+  }
+
+  onDeleteConfirm(popover: Popover): void {
+    popover.hide();
+    setTimeout(() => this.onDelete.emit(this._message), 160);
   }
 
   public get message(): ChatMessage {

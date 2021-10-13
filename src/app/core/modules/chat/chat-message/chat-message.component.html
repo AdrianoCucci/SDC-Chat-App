@@ -5,7 +5,8 @@
     <div class="header-end">
       <div *ngIf="isClientMessage && !editingActive" class="actions">
         <app-button class="edit text" icon="pen" title="Edit message" (click)="editingActive = true"></app-button>
-        <app-button class="delete text" icon="trash" title="Delete message"></app-button>
+        <app-button class="delete text" icon="trash" title="Delete message"
+          (click)="deletePopover.show($event, 'body')"></app-button>
       </div>
 
       <span class="date">{{message.datePosted | date:'short'}}</span>
@@ -27,4 +28,13 @@
       </app-button>
     </div>
   </ng-template>
+
+  <app-popover #deletePopover [offsetY]="10">
+    <div>Delete this message?</div>
+
+    <div class="flex flex-justify-center m-t-1">
+      <app-button class="text" text="No" (click)="deletePopover.hide()"></app-button>
+      <app-button class="text" text="Yes" (click)="onDeleteConfirm(deletePopover)"></app-button>
+    </div>
+  </app-popover>
 </ng-container>
