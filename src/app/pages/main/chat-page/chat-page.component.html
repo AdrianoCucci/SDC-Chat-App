@@ -1,2 +1,3 @@
 <app-users-list [users]="users"></app-users-list>
-<app-chat-message-list [messages]="messages" (onAddMessage)="onAddMessage($event)"></app-chat-message-list>
+<app-chat-message-list [messages]="messages" [clientUser]="clientUser" (onAddMessage)="onAddMessage($event)">
+</app-chat-message-list>

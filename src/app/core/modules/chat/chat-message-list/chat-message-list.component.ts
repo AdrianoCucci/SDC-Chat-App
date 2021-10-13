@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
+import { User } from 'src/app/core/models/users/user';
 import { InputTextarea } from 'src/app/shared/modules/forms/inputs/input-textarea/input-textarea.component';
 
 @Component({
@@ -10,6 +11,7 @@ import { InputTextarea } from 'src/app/shared/modules/forms/inputs/input-textare
 export class ChatMessageListComponent implements AfterViewInit {
   @Output() public readonly onAddMessage = new EventEmitter<ChatMessage>();
   @Input() public messages: ChatMessage[];
+  @Input() public clientUser: User;
 
   @ViewChild("messagesScrollWrapper") private readonly _messagesScrollWrapperRef: ElementRef;
 

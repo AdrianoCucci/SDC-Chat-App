@@ -1,7 +1,15 @@
 <ng-container *ngIf="message">
   <div class="header">
     <span class="sender">{{senderName}}</span>
-    <span class="date">{{message.datePosted | date:'short'}}</span>
+
+    <div class="header-end">
+      <div *ngIf="isClientMessage" class="actions">
+        <app-button class="edit text" icon="pen" title="Edit message"></app-button>
+        <app-button class="delete text" icon="trash" title="Delete message"></app-button>
+      </div>
+
+      <span class="date">{{message.datePosted | date:'short'}}</span>
+    </div>
   </div>
 
   <div class="body">

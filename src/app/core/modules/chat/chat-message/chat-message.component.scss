@@ -11,8 +11,32 @@
       font-weight: 600;
     }
 
-    span.date {
-      font-size: 0.8rem;
+    div.header-end {
+      position: relative;
+      display: flex;
+
+      div.actions {
+        position: absolute;
+        top: -0.6rem;
+        right: 150%;
+        margin-right: 0.5rem;
+        width: max-content;
+        opacity: 0;
+        pointer-events: none;
+        transition: 0.16s;
+
+        app-button {
+          --padding: 0.4rem;
+
+          &.delete {
+            --background: var(--pink-400);
+          }
+        }
+      }
+
+      span.date {
+        font-size: 0.8rem;
+      }
     }
   }
 
@@ -20,5 +44,11 @@
     p.message-contents {
       margin: 0;
     }
+  }
+
+  &:hover div.header div.header-end div.actions {
+    right: 100%;
+    opacity: 1;
+    pointer-events: initial;
   }
 }

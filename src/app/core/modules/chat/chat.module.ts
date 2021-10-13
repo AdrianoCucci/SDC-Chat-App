@@ -6,6 +6,7 @@ import { InputTextareaModule } from 'src/app/shared/modules/forms/inputs/input-t
 import { ChatMessageListComponent } from './chat-message-list/chat-message-list.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { UsersListComponent } from './users-list/users-list.component';
+import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 
 const components = [
   ChatMessageListComponent,
@@ -16,7 +17,8 @@ const components = [
 @NgModule({
   imports: [
     CommonModule,
-    InputTextareaModule
+    InputTextareaModule,
+    ButtonModule
   ],
   exports: components,
   declarations: components

@@ -1,7 +1,7 @@
 <div #messagesScrollWrapper class="messages-wrapper">
   <ul class="messages-list">
     <li *ngFor="let message of messages">
-      <app-chat-message [message]="message" class="message"></app-chat-message>
+      <app-chat-message [message]="message" [clientUser]="clientUser" class="message"></app-chat-message>
     </li>
   </ul>
 </div>

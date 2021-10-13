@@ -24,7 +24,6 @@
 
       li {
         display: block;
-        padding: 1rem;
         margin-bottom: 1rem;
         border-radius: 0.25rem;
         border-bottom: solid var(--message-background) 1px;
@@ -33,6 +32,10 @@
 
         &:hover {
           background-color: var(--message-background);
+        }
+
+        app-chat-message {
+          padding: 1rem;
         }
       }
     }

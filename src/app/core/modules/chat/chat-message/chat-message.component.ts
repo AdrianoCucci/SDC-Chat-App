@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 
@@ -8,6 +8,8 @@ import { User } from 'src/app/core/models/users/user';
   styleUrls: ['./chat-message.component.scss']
 })
 export class ChatMessageComponent implements OnInit {
+  @Input() public clientUser: User;
+
   private _message: ChatMessage;
   private _messageContents: string;
 
@@ -51,5 +53,9 @@ export class ChatMessageComponent implements OnInit {
 
   public get messageContents(): string {
     return this._messageContents;
+  }
+
+  @HostBinding("class.client-message") public get isClientMessage(): boolean {
+    return this.sender?.id === this.clientUser?.id ?? false;
   }
 }
