@@ -30,20 +30,9 @@
     <router-outlet></router-outlet>
   </main>
 
-  <app-dialog #logoutDialog class="logout-dialog" [backdropDismiss]="true">
-    <div slot="header">
-      <span>Logout</span>
-    </div>
-    <p slot="body" class="flex flex-align-center flex-justify-center h-percent-100 m-0">
-      Are you sure you want to logout?
-    </p>
-    <div slot="footer">
-      <app-button class="text option-no" text="No" (click)="logoutDialog.hide()"></app-button>
-      <div class="divider"></div>
-      <app-button class="text option-yes" text="Yes" (click)="logout()"></app-button>
-    </div>
-  </app-dialog>
-
+  <app-confirm-dialog #logoutDialog header="Logout" message="Are you sure you want to logout?" cancelText="No"
+    confirmText="Yes" [backdropDismiss]="true" (onConfirm)="logout()">
+  </app-confirm-dialog>
 </ng-container>
 
 <app-loader [fullscreen]="true" text="Please wait..." [visible]="!initialized"></app-loader>

@@ -66,27 +66,4 @@
     flex-grow: 1;
     overflow: hidden;
   }
-
-  app-dialog.logout-dialog {
-    --footer-padding: 0;
-
-    div[slot="footer"] {
-      display: flex;
-      justify-content: space-between;
-
-      app-button {
-        flex: 1;
-        min-height: 3.25rem;
-
-        &.option-yes {
-          font-weight: bold;
-        }
-      }
-
-      div.divider {
-        width: 2px;
-        background-color: var(--surface-300);
-      }
-    }
-  }
 }
