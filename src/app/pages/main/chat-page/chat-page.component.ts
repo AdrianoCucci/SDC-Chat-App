@@ -22,6 +22,10 @@ export class ChatPage {
     this._socketService.chat.sendMessage(message);
   }
 
+  onEditMessage(message: ChatMessage): void {
+    console.log("EDIT: ", message);
+  }
+
   public get messages(): ChatMessage[] {
     return this._socketService.chat.messages;
   }

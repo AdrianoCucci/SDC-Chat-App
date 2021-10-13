@@ -10,6 +10,8 @@ import { InputTextarea } from 'src/app/shared/modules/forms/inputs/input-textare
 })
 export class ChatMessageListComponent implements AfterViewInit {
   @Output() public readonly onAddMessage = new EventEmitter<ChatMessage>();
+  @Output() public readonly onEditMessage = new EventEmitter<ChatMessage>();
+  
   @Input() public messages: ChatMessage[];
   @Input() public clientUser: User;
 

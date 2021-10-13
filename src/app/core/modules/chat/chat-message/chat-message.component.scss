@@ -46,6 +46,11 @@
     }
   }
 
+  div.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   &:hover div.header div.header-end div.actions {
     right: 100%;
     opacity: 1;

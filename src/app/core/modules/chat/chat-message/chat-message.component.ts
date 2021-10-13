@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 
@@ -8,13 +8,17 @@ import { User } from 'src/app/core/models/users/user';
   styleUrls: ['./chat-message.component.scss']
 })
 export class ChatMessageComponent implements OnInit {
+  @Output() public readonly onEdit = new EventEmitter<ChatMessage>();
+  @Output() public readonly onDelete = new EventEmitter<ChatMessage>();
+
   @Input() public clientUser: User;
+  @HostBinding("class.editing") public editingActive: boolean = false;
 
   private _message: ChatMessage;
-  private _messageContents: string;
+  private _displayContents: string;
 
   ngOnInit(): void {
-    this._messageContents = this.parseMessageContents(this._message?.contents);
+    this._displayContents = this.parseMessageContents(this._message?.contents);
   }
 
   private parseMessageContents(contents: string): string {
@@ -25,12 +29,23 @@ export class ChatMessageComponent implements OnInit {
     return contents;
   }
 
+  onSaveEdit(contents: string) {
+    if(contents && (this._message?.contents !== contents ?? false)) {
+      this._message.contents = contents;
+      this._displayContents = this.parseMessageContents(this._message.contents);
+
+      this.onEdit.emit(this._message);
+    }
+
+    this.editingActive = false;
+  }
+
   public get message(): ChatMessage {
     return this._message;
   }
   @Input() public set message(value: ChatMessage) {
     this._message = value;
-    this._messageContents = this.parseMessageContents(this._message?.contents);
+    this._displayContents = this.parseMessageContents(this._message?.contents);
   }
 
   public get sender(): User {
@@ -51,8 +66,8 @@ export class ChatMessageComponent implements OnInit {
     return name;
   }
 
-  public get messageContents(): string {
-    return this._messageContents;
+  public get displayContents(): string {
+    return this._displayContents;
   }
 
   @HostBinding("class.client-message") public get isClientMessage(): boolean {

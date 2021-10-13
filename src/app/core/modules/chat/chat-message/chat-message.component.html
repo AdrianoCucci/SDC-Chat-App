@@ -3,8 +3,8 @@
     <span class="sender">{{senderName}}</span>
 
     <div class="header-end">
-      <div *ngIf="isClientMessage" class="actions">
-        <app-button class="edit text" icon="pen" title="Edit message"></app-button>
+      <div *ngIf="isClientMessage && !editingActive" class="actions">
+        <app-button class="edit text" icon="pen" title="Edit message" (click)="editingActive = true"></app-button>
         <app-button class="delete text" icon="trash" title="Delete message"></app-button>
       </div>
 
@@ -13,6 +13,18 @@
   </div>
 
   <div class="body">
-    <p class="message-contents" [innerHTML]="messageContents"></p>
+    <p *ngIf="!editingActive; else editTemplate" class="message-contents" [innerHTML]="displayContents"></p>
   </div>
+
+  <ng-template #editTemplate>
+    <app-input-textarea #editInput class="edit-input block" [value]="message.contents" [autoResize]="true">
+    </app-input-textarea>
+
+    <div class="edit-actions">
+      <app-button class="edit-action text cancel" icon="times" title="Cancel" (click)="editingActive = false">
+      </app-button>
+      <app-button class="edit-action text save" icon="check" title="Save changes" (click)="onSaveEdit(editInput.value)">
+      </app-button>
+    </div>
+  </ng-template>
 </ng-container>
