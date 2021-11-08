@@ -12,6 +12,7 @@ export class Popover implements OnInit, IVisibilityChangeable {
   @Output() public readonly onHide = new EventEmitter<void>();
 
   @Input() public parent?: PopoverParent;
+  @Input() public inheritTargetWidth: boolean = true;
   @Input() public offsetX: number = 0;
   @Input() public offsetY: number = 0;
   @Input() public anchorX: "left" | "right";
@@ -72,7 +73,11 @@ export class Popover implements OnInit, IVisibilityChangeable {
 
       this._currentTimeout = window.setTimeout(() => {
         this.setParent(this._nativeElement, this.parent);
-        this.alignToTarget(this._nativeElement, this._currentTarget, this.parent);
+
+        for(let i = 0; i < 2; i++) {
+          this.alignToTarget(this._nativeElement, this._currentTarget, this.parent);
+        }
+
         this.setEventHandlersEnabled(true);
       });
     }
@@ -113,6 +118,10 @@ export class Popover implements OnInit, IVisibilityChangeable {
     if(parent === "body" || parent === document.body) {
       styleTop = anchorTop ? `${targetRect.bottom + offsetY}px` : `${targetRect.top - host.offsetHeight - offsetY}px`;
       styleLeft = anchorLeft ? `${targetRect.x + offsetX}px` : `${(targetRect.x + targetRect.width) - host.offsetWidth - offsetX}px`;
+
+      if(this.inheritTargetWidth) {
+        host.style.width = `${target.clientWidth}px`;
+      }
     }
     else {
       styleTop = anchorTop ? `calc(100% + ${offsetY}px)` : `-${host.offsetHeight + offsetY}px`;
