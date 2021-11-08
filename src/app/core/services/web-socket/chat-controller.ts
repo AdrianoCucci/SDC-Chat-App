@@ -1,12 +1,13 @@
 import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
 import { ChatMessage } from '../../models/messages/chat-message';
 import { ChatMessagesService } from '../api/chat-messages.service';
 import { AudioService } from '../audio/audio.service';
 
-export class ChatController {
+export class ChatController implements IDisposable {
   public readonly onMessage = new EventEmitter<ChatMessage>();
   public readonly onMessageEdit = new EventEmitter<ChatMessage>();
   public readonly onMessageDelete = new EventEmitter<ChatMessage>();
@@ -23,6 +24,10 @@ export class ChatController {
     this._audioService = audioService;
 
     this.initializeEvents(this._socket);
+  }
+
+  public dispose(): void {
+    this._messages = null;
   }
 
   private initializeEvents(socket: Socket): void {

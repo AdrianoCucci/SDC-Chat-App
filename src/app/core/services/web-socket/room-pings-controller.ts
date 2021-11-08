@@ -1,13 +1,14 @@
 import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
+import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
 import { RoomPing } from '../../models/room-pings/room-ping';
 import { RoomPingState } from '../../models/room-pings/room-ping-state';
 import { Room } from '../../models/rooms/room';
 import { RoomsService } from '../api/rooms-service';
 import { AudioService } from '../audio/audio.service';
 
-export class RoomPingsController {
+export class RoomPingsController implements IDisposable {
   public readonly onPingRequest = new EventEmitter<RoomPing>();
   public readonly onPingResponse = new EventEmitter<RoomPing>();
   public readonly onPingCancel = new EventEmitter<RoomPing>();
@@ -25,6 +26,11 @@ export class RoomPingsController {
     this._audioService = audioService;
 
     this.initializeEvents(this._socket);
+  }
+
+  public dispose(): void {
+    this._pings = null;
+    this._rooms = null;
   }
 
   private initializeEvents(socket: Socket): void {

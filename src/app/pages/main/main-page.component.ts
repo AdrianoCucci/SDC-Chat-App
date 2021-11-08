@@ -47,6 +47,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._socketService.disconnect();
+    this._socketService.dispose();
 
     this._subscription.unsubscribe();
     this._subscription = null;
@@ -99,7 +100,7 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   public get userDisplayName(): string {
-    return this._loginService.user?.displayName || this._loginService.user.username;
+    return this._loginService.user?.displayName || this._loginService.user?.username;
   }
 
   public get accountPageRouterLink(): string {

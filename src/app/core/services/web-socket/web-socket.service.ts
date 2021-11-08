@@ -1,6 +1,7 @@
 import { HttpResponse } from "@angular/common/http";
 import { EventEmitter, Injectable } from "@angular/core";
 import { Socket } from "ngx-socket-io";
+import { IDisposable } from "src/app/shared/interfaces/i-disposable";
 import { User } from "../../models/users/user";
 import { ChatMessagesService } from "../api/chat-messages.service";
 import { RoomsService } from "../api/rooms-service";
@@ -12,7 +13,7 @@ import { RoomPingsController } from "./room-pings-controller";
 @Injectable({
   providedIn: 'root'
 })
-export class WebSocketService {
+export class WebSocketService implements IDisposable {
   public readonly onConnect = new EventEmitter<void>();
   public readonly onDisconnect = new EventEmitter<void>();
   public readonly onConnectError = new EventEmitter<any>();
@@ -92,11 +93,17 @@ export class WebSocketService {
 
   public disconnect(): void {
     this._socket.disconnect();
-    this._users = null;
   }
 
   public findUserIndex(userId: number): number {
     return this._users?.findIndex((u: User) => u.id === userId) ?? -1;
+  }
+
+  public dispose(): void {
+    this._users = null;
+    this._clientUser = null;
+    this.chat.dispose();
+    this.roomPings.dispose();
   }
 
   private addUser(user: User): void {
