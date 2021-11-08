@@ -30,11 +30,11 @@
 
     <app-popover #optionsPopover class="select-options-popover" [autoAnchorX]="false" [offsetY]="2">
       <ng-container *ngIf="hasOptions; else noOptionsTemplate">
-        <ul class="select-options">
+        <ul class="popover-list select-options">
           <ng-container *ngFor="let option of options">
 
             <li *ngIf="optionTemplate == null; else optionsTemplateWrapper" class="select-option"
-              [ngClass]="{'selected': isOptionSelected(option)}" (click)="onOptionSelect(option)">
+              [ngClass]="{'emphasized': isOptionSelected(option)}" (click)="onOptionSelect(option)">
               <span class="option-name">{{getOptionDisplay(option)}}</span>
             </li>
 
