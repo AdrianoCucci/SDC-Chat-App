@@ -1,8 +1,6 @@
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { AdminPassResetRequest } from "../../models/auth/admin-pass-reset-request";
-import { PassResetRequest } from "../../models/auth/pass-reset-request";
 import { User } from "../../models/users/user";
 import { UserParams } from "../../models/users/user-params";
 import { UserRequest } from "../../models/users/user-request";
@@ -39,13 +37,5 @@ export class UsersService extends WebApiService {
 
   public deleteUser(id: number): Observable<HttpResponse<void>> {
     return this.delete(`${this._apiPrefix}/${id}`);
-  }
-
-  public resetPassword(id: number, request: PassResetRequest): Observable<HttpResponse<void>> {
-    return this.post(`${this._apiPrefix}/${id}/reset-password`, request);
-  }
-
-  public adminResetPassword(id: number, request: AdminPassResetRequest): Observable<HttpResponse<void>> {
-    return this.post(`${this._apiPrefix}/${id}/admin-reset-password`, request);
   }
 }
