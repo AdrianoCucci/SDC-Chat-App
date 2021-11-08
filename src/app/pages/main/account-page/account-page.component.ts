@@ -76,7 +76,12 @@ export class AccountPage implements OnInit {
     this._passChangeForm.model = null;
 
     setTimeout(() => {
-      this._passChangeForm.model = { currentPassword: "", newPassword: "" };
+      this._passChangeForm.model = {
+        userId: this.clientUser.id,
+        currentPassword: "",
+        newPassword: ""
+      };
+
       this._passChangeForm.dialogVisible = true;
     });
   }

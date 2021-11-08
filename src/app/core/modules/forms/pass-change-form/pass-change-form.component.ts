@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { PassResetRequest } from 'src/app/core/models/auth/pass-reset-request';
-import { UsersService } from 'src/app/core/services/api/users-service';
+import { AuthService } from 'src/app/core/services/api/auth-service';
 import { AppForm } from '../app-form';
 
 @Component({
@@ -9,9 +9,7 @@ import { AppForm } from '../app-form';
   styleUrls: ['./pass-change-form.component.scss']
 })
 export class PassChangeForm extends AppForm<PassResetRequest, void> {
-  @Input() public userId: number;
-
-  constructor(private _usersService: UsersService) {
+  constructor(private _authService: AuthService) {
     super();
   }
 
@@ -20,6 +18,6 @@ export class PassChangeForm extends AppForm<PassResetRequest, void> {
   }
 
   protected async onRequestUpdate(model: PassResetRequest): Promise<void> {
-    await this._usersService.resetPassword(this.userId, model).toPromise();
+    await this._authService.resetPassword(model).toPromise();
   }
 }

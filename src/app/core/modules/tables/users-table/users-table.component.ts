@@ -102,7 +102,7 @@ export class UsersTable implements OnInit {
 
     setTimeout(() => {
       this._passResetForm.user = user;
-      this._passResetForm.model = { newPassword: "" };
+      this._passResetForm.model = { userId: user.id, newPassword: "" };
       this._passResetForm.dialogVisible = true;
     });
   }
