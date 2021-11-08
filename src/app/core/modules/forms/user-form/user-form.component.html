@@ -19,11 +19,12 @@
         </app-input-text>
       </ng-container>
 
-      <app-input-select *ngIf="showRoles" class="col-6" name="role" label="Role" [options]="roleOptions"
-        displayKey="key" valueKey="value" [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
+      <app-input-select *ngIf="showRoles" class="col-6" name="role" label="Role" popoverParent="body"
+        [options]="roleOptions" displayKey="key" valueKey="value" [validations]="{ required: true }"
+        [(value)]="model.role"></app-input-select>
 
       <app-input-select *ngIf="organizationOptions != null" class="col-6" name="organization" label="Organization"
-        [options]="organizationOptions" displayKey="name" valueKey="id" [clearable]="true"
+        popoverParent="body" [options]="organizationOptions" displayKey="name" valueKey="id" [clearable]="true"
         [(value)]="model.organizationId">
       </app-input-select>
 
