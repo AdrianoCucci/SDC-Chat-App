@@ -1,6 +1,16 @@
 @use "sass:math";
 
 @for $i from 0 to 101 {
+  .w-rem-#{$i} {
+    width: #{$i}rem;
+  }
+  .w-min-rem-#{$i} {
+    min-width: #{$i}rem;
+  }
+  .w-max-rem-#{$i} {
+    max-width: #{$i}rem;
+  }
+
   .w-percent-#{$i} {
     width: math.percentage(math.div($i, 100));
   }
@@ -19,6 +29,16 @@
   }
   .w-max-vw-#{$i} {
     max-width: #{$i}vw;
+  }
+
+  .h-rem-#{$i} {
+    height: #{$i}rem;
+  }
+  .h-min-rem-#{$i} {
+    min-height: #{$i}rem;
+  }
+  .h-max-rem-#{$i} {
+    max-height: #{$i}rem;
   }
 
   .h-percent-#{$i} {
