@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ChatMessage } from "../../models/messages/chat-message";
-import { ChatMessageQuery } from "../../models/messages/chat-message-params";
+import { ChatMessageQuery } from "../../models/messages/chat-message-query";
 import { WebApiService } from "./web-api.service";
 
 @Injectable({
