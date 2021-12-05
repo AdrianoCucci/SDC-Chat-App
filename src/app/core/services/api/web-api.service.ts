@@ -28,7 +28,7 @@ export abstract class WebApiService {
   protected delete<T = any>(url: string, responseType?: string): Observable<HttpResponse<T>> {
     return this._httpClient.delete<T>(this.getFullUrl(url), this.getHttpOptions(responseType)) as Observable<HttpResponse<T>>;
   }
-  
+
   private getHttpOptions(responseType?: string): any {
     let httpOptions: any = this._httpOptions;
 
@@ -44,29 +44,24 @@ export abstract class WebApiService {
     return this._apiRoot + (endpoint ? endpoint : "");
   }
 
-  protected appendQueryParam(query: string, paramName: string, paramValue: any): string {
-    return query + `${(query.startsWith('?') ? '&' : '?')}${paramName}=${paramValue}`;
+  protected getQueryParam(paramName: string, paramValue: any, url?: string): string {
+    return url?.includes('?') ? `&${paramName}=${paramValue}` : `?${paramName}=${paramValue}`;
   }
 
-  protected buildOptionsQuery(...options: object[]): string {
-    let query: string = "";
+  protected getObjectQueryParams(obj: object, url?: string): string {
+    let params: string = "";
 
-    if(options != null) {
-      for(let i = 0; i < options.length; i++) {
-        const option: object = options[i];
+    if(obj) {
+      for(const key in obj) {
+        const argSymbol: string = params.includes('?') || url?.includes('?') ? '&' : '?';
+        const value: any = obj[key];
 
-        if(option != null) {
-          const entries: [string, any][] = Object.entries(option);
-
-          for(const [key, value] of entries) {
-            if(value != null) {
-              query = this.appendQueryParam(query, key, value);
-            }
-          }
+        if(value != null) {
+          params += `${argSymbol}${key}=${obj[key]}`;
         }
       }
     }
 
-    return query;
+    return params;
   }
 }

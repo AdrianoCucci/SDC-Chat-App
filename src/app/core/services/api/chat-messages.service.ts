@@ -2,7 +2,7 @@ import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { ChatMessage } from "../../models/messages/chat-message";
-import { ChatMessageParams } from "../../models/messages/chat-message-params";
+import { ChatMessageQuery } from "../../models/messages/chat-message-params";
 import { WebApiService } from "./web-api.service";
 
 @Injectable({
@@ -15,10 +15,8 @@ export class ChatMessagesService extends WebApiService {
     super(httpClient);
   }
 
-  public getAllMessages(params?: ChatMessageParams): Observable<HttpResponse<ChatMessage[]>> {
-    const query: string = this.buildOptionsQuery(params);
-    const url: string = `${this._apiPrefix}${query}`;
-
+  public getAllMessages(model?: ChatMessageQuery): Observable<HttpResponse<ChatMessage[]>> {
+    const url: string = `${this._apiPrefix}${this.getObjectQueryParams(model)}`;
     return this.get(url);
   }
 

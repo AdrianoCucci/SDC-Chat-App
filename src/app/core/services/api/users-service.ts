@@ -2,7 +2,6 @@ import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { User } from "../../models/users/user";
-import { UserParams } from "../../models/users/user-params";
 import { UserRequest } from "../../models/users/user-request";
 import { WebApiService } from "./web-api.service";
 
@@ -16,10 +15,8 @@ export class UsersService extends WebApiService {
     super(httpClient);
   }
 
-  public getAllUsers(params?: UserParams): Observable<HttpResponse<User[]>> {
-    const query: string = this.buildOptionsQuery(params);
-    const url: string = `${this._apiPrefix}${query}`;
-
+  public getAllUsers(model?: Partial<User>): Observable<HttpResponse<User[]>> {
+    const url: string = `${this._apiPrefix}${this.getObjectQueryParams(model)}`;
     return this.get(url);
   }
 

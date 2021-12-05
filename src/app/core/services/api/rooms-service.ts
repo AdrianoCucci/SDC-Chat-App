@@ -2,7 +2,6 @@ import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { Room } from "../../models/rooms/room";
-import { RoomParams } from "../../models/rooms/room-params";
 import { RoomRequest } from "../../models/rooms/room-request";
 import { WebApiService } from "./web-api.service";
 
@@ -16,10 +15,8 @@ export class RoomsService extends WebApiService {
     super(httpClient);
   }
 
-  public getAllRooms(params?: RoomParams): Observable<HttpResponse<Room[]>> {
-    const query: string = this.buildOptionsQuery(params);
-    const url: string = `${this._apiPrefix}${query}`;
-
+  public getAllRooms(model?: Partial<Room>): Observable<HttpResponse<Room[]>> {
+    const url: string = `${this._apiPrefix}${this.getObjectQueryParams(model)}`;
     return this.get(url);
   }
 
