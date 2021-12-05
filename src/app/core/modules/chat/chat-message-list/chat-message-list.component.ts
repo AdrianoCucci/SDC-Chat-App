@@ -53,7 +53,7 @@ export class ChatMessageListComponent implements AfterViewInit {
   private sendMessage(text: string): void {
     const message: ChatMessage = {
       contents: text,
-      datePosted: new Date(),
+      datePosted: new Date().toISOString(),
       senderUserId: null
     };
 
