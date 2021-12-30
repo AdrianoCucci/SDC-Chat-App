@@ -1,7 +1,6 @@
 import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
-import { Popover } from 'src/app/shared/modules/overlays/popover/popover.component';
 
 @Component({
   selector: 'app-chat-message',
@@ -10,7 +9,7 @@ import { Popover } from 'src/app/shared/modules/overlays/popover/popover.compone
 })
 export class ChatMessageComponent implements OnInit {
   @Output() public readonly onEdit = new EventEmitter<ChatMessage>();
-  @Output() public readonly onDelete = new EventEmitter<ChatMessage>();
+  @Output() public readonly onDelete = new EventEmitter<DeleteEventArgs>();
 
   @Input() public clientUser: User;
   @HostBinding("class.editing") public editingActive: boolean = false;
@@ -41,9 +40,8 @@ export class ChatMessageComponent implements OnInit {
     this.editingActive = false;
   }
 
-  onDeleteConfirm(popover: Popover): void {
-    popover.hide();
-    setTimeout(() => this.onDelete.emit(this._message), 160);
+  onDeleteClick(event: MouseEvent): void {
+    this.onDelete.emit({ clickEvent: event, message: this._message });
   }
 
   public get message(): ChatMessage {
@@ -79,4 +77,9 @@ export class ChatMessageComponent implements OnInit {
   @HostBinding("class.client-message") public get isClientMessage(): boolean {
     return this.sender?.id === this.clientUser?.id ?? false;
   }
+}
+
+export interface DeleteEventArgs {
+  message: ChatMessage;
+  clickEvent: MouseEvent;
 }

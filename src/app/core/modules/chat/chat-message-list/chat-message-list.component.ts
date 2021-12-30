@@ -2,6 +2,8 @@ import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, View
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 import { InputTextarea } from 'src/app/shared/modules/forms/inputs/input-textarea/input-textarea.component';
+import { Popover } from 'src/app/shared/modules/overlays/popover/popover.component';
+import { ChatMessageComponent, DeleteEventArgs } from '../chat-message/chat-message.component';
 
 @Component({
   selector: 'app-chat-message-list',
@@ -12,11 +14,14 @@ export class ChatMessageListComponent implements AfterViewInit {
   @Output() public readonly onAddMessage = new EventEmitter<ChatMessage>();
   @Output() public readonly onEditMessage = new EventEmitter<ChatMessage>();
   @Output() public readonly onDeleteMessage = new EventEmitter<ChatMessage>();
-  
+
   @Input() public messages: ChatMessage[];
   @Input() public clientUser: User;
 
   @ViewChild("messagesScrollWrapper") private readonly _messagesScrollWrapperRef: ElementRef;
+  @ViewChild(Popover) private readonly _deletePopover: Popover;
+
+  private _deletingMessage: ChatMessage;
 
   ngAfterViewInit(): void {
     this.scrollToBottom();
@@ -58,5 +63,30 @@ export class ChatMessageListComponent implements AfterViewInit {
     };
 
     this.onAddMessage.emit(message);
+  }
+
+  onPromptDeleteMessage(event: DeleteEventArgs): void {
+    this._deletePopover.hide();
+
+    this._deletingMessage = event.message;
+    this._deletePopover.show(event.clickEvent, "body");
+  }
+
+  onDeletePromptCancel(): void {
+    this._deletePopover.hide();
+    this._deletingMessage = null;
+  }
+
+  onDeletePromptConfirm(): void {
+    this._deletePopover.hide();
+
+    setTimeout(() => {
+      this.onDeleteMessage.emit({ ...this._deletingMessage });
+      this._deletingMessage = null;
+    }, 160);
+  }
+
+  public get deletingMessage(): any {
+    return this._deletingMessage;
   }
 }
