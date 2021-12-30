@@ -55,7 +55,7 @@ export class ChatController implements IDisposable {
     return new Promise<ChatMessage[]>(async (resolve, reject) => {
       try {
         const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessages({ organizationId }).toPromise();
-        this._messages = response.body;
+        this._messages = response.body.sort((a: ChatMessage, b: ChatMessage) => new Date(a.datePosted).getTime() - new Date(b.datePosted).getTime());
 
         resolve(this._messages);
       }
