@@ -37,7 +37,7 @@ export class Popover implements OnInit, IVisibilityChangeable {
     this._contentVisible = this._visible;
   }
 
-  public show(event: any, parent?: PopoverParent): void {
+  public show(event: MouseEvent | HTMLElement, parent?: PopoverParent): void {
     if(event instanceof HTMLElement) {
       this._currentTarget = event;
     }
