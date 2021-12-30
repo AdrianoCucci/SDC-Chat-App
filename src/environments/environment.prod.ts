@@ -7,8 +7,7 @@ export const environment = {
     tokenEncryptKey: "z[mr%KHw2g'A]~ET!djLgPG_B@rba4"
   },
 
-  server: {
-    url: "",
-    apiPrefix: "api"
+  api: {
+    url: "http://localhost:3000"
   }
 };
