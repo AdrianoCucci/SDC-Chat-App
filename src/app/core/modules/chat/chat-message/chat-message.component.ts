@@ -53,7 +53,7 @@ export class ChatMessageComponent implements OnInit {
   }
 
   public get sender(): User {
-    return this._message.senderUser;
+    return this._message?.senderUser;
   }
 
   public get senderName(): string {
