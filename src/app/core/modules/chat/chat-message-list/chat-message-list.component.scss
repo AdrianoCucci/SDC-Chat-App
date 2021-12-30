@@ -1,6 +1,8 @@
 :host {
   --message-list-background: var(--green-50);
   --message-background: var(--green-100);
+  --message-background-client: var(--green-100);
+  --message-background-client-hover: var(--green-200);
   --input-wrapper-background: var(--green-400);
   --input-background: var(--surface-0);
 
@@ -33,8 +35,12 @@
           border-bottom: solid var(--message-background) 1px;
           transition: 0.16s;
 
-          &.client-message:hover {
-            background-color: var(--message-background);
+          &.client-message {
+            background-color: var(--message-background-client);
+
+            &:hover {
+            background-color: var(--message-background-client-hover);
+            }
           }
         }
       }

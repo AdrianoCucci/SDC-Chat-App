@@ -17,16 +17,20 @@
 
       div.actions {
         position: absolute;
+        display: flex;
         top: -0.6rem;
         right: 150%;
         margin-right: 0.5rem;
         width: max-content;
+        border-radius: 0.25rem;
         opacity: 0;
+        overflow: hidden;
         pointer-events: none;
         transition: 0.16s;
 
         app-button {
           --padding: 0.4rem;
+          background-color: var(--green-100);
 
           &.delete {
             --background: var(--pink-400);
@@ -51,8 +55,15 @@
   }
 
   div.edit-actions {
-    display: flex;
+    display: inline-flex;
     justify-content: flex-end;
+    float: right;
+    border-radius: 0.25rem;
+    overflow: hidden;
+
+    app-button {
+      background-color: var(--green-100);
+    }
   }
 
   &:hover div.header div.header-end div.actions {
