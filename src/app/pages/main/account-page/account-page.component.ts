@@ -1,4 +1,4 @@
-import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
@@ -23,6 +23,7 @@ export class AccountPage implements OnInit {
 
   private _organization: Organization;
   private _loadingVisible: boolean = false;
+  private _initError: string;
 
   constructor(private _loginService: LoginService, private _orgsService: OrganizationsService) { }
 
@@ -37,7 +38,7 @@ export class AccountPage implements OnInit {
         this._organization = await this.loadOrganization(this.clientUser.organizationId);
       }
       catch(error) {
-        console.error(error);
+        this._initError = (<HttpErrorResponse>error).message;
       }
       finally {
         this._loadingVisible = false;
@@ -96,5 +97,9 @@ export class AccountPage implements OnInit {
 
   public get loadingVisible(): boolean {
     return this._loadingVisible;
+  }
+
+  public get initError(): string {
+    return this._initError;
   }
 }
