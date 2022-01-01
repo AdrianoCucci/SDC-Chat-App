@@ -1,6 +1,7 @@
 import { HttpResponse } from "@angular/common/http";
 import { EventEmitter, Injectable } from "@angular/core";
 import { Socket } from "ngx-socket-io";
+import { Subscription } from "rxjs";
 import { IDisposable } from "src/app/shared/interfaces/i-disposable";
 import { User } from "../../models/users/user";
 import { ChatMessagesService } from "../api/chat-messages.service";
@@ -46,10 +47,7 @@ export class WebSocketService implements IDisposable {
 
     socket.on(events.connect, () => this.onConnect.emit());
     socket.on(events.disconnect, () => this.onDisconnect.emit());
-    socket.on(events.connectError, (event: any) => {
-      console.log("CONNECT ERROR: ", event);
-      this.onConnectError.emit(event);
-    });
+    socket.on(events.connectError, (event: any) => this.onConnectError.emit(event));
 
     socket.on(events.userJoin, (user: User) => {
       this.updateUser(user);
@@ -92,6 +90,28 @@ export class WebSocketService implements IDisposable {
         }
       });
     }
+  }
+
+  public tryConnect(clientUser: User): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      if(!clientUser) {
+        reject("[clientUser] cannot be null");
+      }
+
+      const subscription = new Subscription();
+
+      subscription.add(this.onConnect.subscribe(() => {
+        subscription.unsubscribe();
+        resolve();
+      }));
+
+      subscription.add(this.onConnectError.subscribe((error: any) => {
+        subscription.unsubscribe();
+        reject(error);
+      }));
+
+      this.connect(clientUser);
+    });
   }
 
   public disconnect(): void {

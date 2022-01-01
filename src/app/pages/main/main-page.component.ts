@@ -68,7 +68,7 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   private async initSocketClientData(clientUser: User): Promise<void> {
-    this._socketService.connect(clientUser);
+    await this._socketService.tryConnect(clientUser);
 
     const organizationId: number = clientUser.organizationId;
 
