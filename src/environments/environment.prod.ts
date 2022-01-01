@@ -8,7 +8,7 @@ export const environment = {
   },
 
   api: {
-    url: "/api",
+    url: "/sdc-chat/api",
     socketPath: "/socket"
   }
 };
