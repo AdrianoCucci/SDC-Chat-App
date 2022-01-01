@@ -2,18 +2,16 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import { environment as shared } from "./environment.shared";
+
 export const environment = {
   production: false,
 
-  app: {
-    name: "SDC-Chat",
-    version: "1.0.0",
-    tokenEncryptKey: "z[mr%KHw2g'A]~ET!djLgPG_B@rba4"
-  },
+  app: shared.app,
 
-  api: {
-    url: "http://localhost:3000",
-    socketPath: "/socket"
+  server: {
+    host: "http://localhost:3000",
+    ...shared.server
   }
 };
 

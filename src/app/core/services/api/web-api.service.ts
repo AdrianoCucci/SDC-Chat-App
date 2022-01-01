@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export abstract class WebApiService {
-  protected readonly _apiRoot: string = `${environment.api.url}/`;
+  protected readonly _apiRoot: string = `${environment.server.host}/${environment.server.apiPath}/`;
   protected readonly _httpOptions: any = {
     headers: new HttpHeaders({
       "Content-Type": "application/json"

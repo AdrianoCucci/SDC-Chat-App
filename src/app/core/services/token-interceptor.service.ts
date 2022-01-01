@@ -30,6 +30,7 @@ export class TokenInterceptorService implements HttpInterceptor {
   }
 
   private requestIsToAPI(request: HttpRequest<any>): boolean {
-    return request.url.search(environment.api.url) !== -1;
+    const apiPath: string = `${environment.server.host}/${environment.server.apiPath}`;
+    return request.url.search(apiPath) !== -1;
   }
 }

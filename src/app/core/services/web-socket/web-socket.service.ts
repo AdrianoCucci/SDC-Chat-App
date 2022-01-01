@@ -46,7 +46,10 @@ export class WebSocketService implements IDisposable {
 
     socket.on(events.connect, () => this.onConnect.emit());
     socket.on(events.disconnect, () => this.onDisconnect.emit());
-    socket.on(events.connectError, (event: any) => this.onConnectError.emit(event));
+    socket.on(events.connectError, (event: any) => {
+      console.log("CONNECT ERROR: ", event);
+      this.onConnectError.emit(event);
+    });
 
     socket.on(events.userJoin, (user: User) => {
       this.updateUser(user);

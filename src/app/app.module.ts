@@ -17,10 +17,10 @@ import { AppComponent } from './app.component';
     AppRoutingModule,
     HttpClientModule,
     SocketIoModule.forRoot({
-      url: environment.api.url,
+      url: environment.server.host,
       options: {
-        autoConnect: false,
-        path: environment.api.socketPath
+        path: environment.server.socketPath,
+        autoConnect: false
       }
     })
   ],
