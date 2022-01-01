@@ -19,7 +19,7 @@ import { AppComponent } from './app.component';
     SocketIoModule.forRoot({
       url: environment.server.host,
       options: {
-        path: environment.server.socketPath,
+        path: `/${environment.server.socketPath}`,
         autoConnect: false
       }
     })
