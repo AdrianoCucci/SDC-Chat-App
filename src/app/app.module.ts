@@ -16,7 +16,13 @@ import { AppComponent } from './app.component';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    SocketIoModule.forRoot({ url: environment.api.url, options: { autoConnect: false } })
+    SocketIoModule.forRoot({
+      url: environment.api.url,
+      options: {
+        autoConnect: false,
+        path: environment.api.socketPath
+      }
+    })
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }
