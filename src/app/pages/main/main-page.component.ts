@@ -3,6 +3,7 @@ import { Event, NavigationStart, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Role } from 'src/app/core/models/auth/role';
 import { User } from 'src/app/core/models/users/user';
+import { AudioService } from 'src/app/core/services/audio/audio.service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
@@ -23,7 +24,12 @@ export class MainPage implements OnInit, OnDestroy {
   private _initialized: boolean = false;
   private _initError: string;
 
-  constructor(private _loginService: LoginService, private _router: Router, private _socketService: WebSocketService) {
+  constructor(
+    private _loginService: LoginService,
+    private _router: Router,
+    private _socketService: WebSocketService,
+    private _audioService: AudioService
+  ) {
     if(this.clientUser != null) {
       this.mainMenuItems = new MainMenuItemsMapper().getMenuItemsByRole(this.clientUser.role);
     }
@@ -59,6 +65,8 @@ export class MainPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._socketService.disconnect();
     this._socketService.dispose();
+
+    this._audioService.stopAllAudio();
 
     this._subscription.unsubscribe();
     this._subscription = null;

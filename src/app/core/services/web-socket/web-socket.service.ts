@@ -29,7 +29,13 @@ export class WebSocketService implements IDisposable {
   private _users: User[];
   private _clientUser: User;
 
-  constructor(socket: Socket, private _usersService: UsersService, messagesService: ChatMessagesService, roomsService: RoomsService, audioService: AudioService) {
+  constructor(
+    private _usersService: UsersService,
+    socket: Socket,
+    messagesService: ChatMessagesService,
+    roomsService: RoomsService,
+    audioService: AudioService
+  ) {
     this._socket = socket;
 
     if(this._socket == null) {
