@@ -6,7 +6,7 @@ export const environment = {
   },
 
   server: {
-    apiPath: "sdc-chat/api",
-    socketPath: "sdc-chat/api/socket",
+    apiPath: "/sdc-chat/api",
+    socketPath: "/sdc-chat/api/socket",
   }
 };
