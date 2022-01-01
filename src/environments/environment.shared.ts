@@ -7,6 +7,11 @@ export const environment = {
 
   server: {
     apiPath: "/sdc-chat/api",
-    socketPath: "/sdc-chat/api/socket",
+
+    socketConfig: {
+      path: "/sdc-chat/api/socket",
+      autoConnect: false,
+      reconnectionAttempts: 4
+    }
   }
 };

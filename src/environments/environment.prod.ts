@@ -6,7 +6,7 @@ export const environment = {
   app: shared.app,
 
   server: {
-    host: "",
-    ...shared.server
+    ...shared.server,
+    host: ""
   }
 };

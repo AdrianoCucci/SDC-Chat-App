@@ -10,8 +10,8 @@ export const environment = {
   app: shared.app,
 
   server: {
+    ...shared.server,
     host: "http://localhost:3000",
-    ...shared.server
   }
 };
 

@@ -18,10 +18,7 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     SocketIoModule.forRoot({
       url: environment.server.host,
-      options: {
-        path: environment.server.socketPath,
-        autoConnect: false
-      }
+      options: environment.server.socketConfig
     })
   ],
   providers: [
