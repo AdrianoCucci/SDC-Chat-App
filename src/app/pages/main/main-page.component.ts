@@ -21,6 +21,7 @@ export class MainPage implements OnInit, OnDestroy {
 
   private _subscription: Subscription;
   private _initialized: boolean = false;
+  private _initError: string;
 
   constructor(private _loginService: LoginService, private _router: Router, private _socketService: WebSocketService) {
     if(this.clientUser != null) {
@@ -38,7 +39,17 @@ export class MainPage implements OnInit, OnDestroy {
         await this.initSocketClientData(this.clientUser);
       }
       catch(error) {
-        console.error(error);
+        switch(typeof error) {
+          case "string":
+            this._initError = error;
+            break;
+          case "object":
+            this._initError = error.toString();
+            break;
+          default:
+            this._initError = "An unknown error occurred";
+            break;
+        }
       }
     }
 
@@ -93,6 +104,10 @@ export class MainPage implements OnInit, OnDestroy {
 
   public get initialized(): boolean {
     return this._initialized;
+  }
+
+  public get initError(): string {
+    return this._initError;
   }
 
   public get clientUser(): User {

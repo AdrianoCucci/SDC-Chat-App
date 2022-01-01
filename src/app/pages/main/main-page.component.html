@@ -37,3 +37,17 @@
 </ng-container>
 
 <app-loader [fullscreen]="true" text="Please wait..." [visible]="!initialized"></app-loader>
+
+<app-dialog *ngIf="initError" #errorDialog class="error-dialog" [backdropDismiss]="true" [visible]="true">
+  <div slot="header">
+    <span>Error Occurred</span>
+  </div>
+  <p slot="body" class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
+    <span>Failed to initialize server data.</span>
+    <br />
+    <b>{{initError}}</b>
+  </p>
+  <div slot="footer" class="txt-right">
+    <app-button class="text" text="OK" (click)="errorDialog.hide()"></app-button>
+  </div>
+</app-dialog>
