@@ -6,6 +6,11 @@
       </app-chat-message>
     </li>
   </ul>
+
+  <div *ngIf="!hasMessages" class="no-messages-wrapper">
+    <fa-icon class="icon" [icon]="noMessagesIcon"></fa-icon>
+    <span class="message">No messages</span>
+  </div>
 </div>
 
 <div class="input-wrapper">
