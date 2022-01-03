@@ -12,6 +12,12 @@ export const environment = {
   server: {
     ...shared.server,
     host: "http://localhost:3000",
+    apiPath: "",
+
+    socketConfig: {
+      ...shared.server.socketConfig,
+      path: "/socket"
+    }
   }
 };
 
