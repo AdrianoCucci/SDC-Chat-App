@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/core/services/api/auth-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
 import { FormSubmitResult } from 'src/app/shared/modules/forms/form/form-submit-result';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-page',
@@ -42,7 +43,7 @@ export class LoginPage {
       await this.onLoginSuccess(response.body);
     }
     catch(error) {
-      this.onLoginFail(error as HttpErrorResponse);
+      this.onLoginFail(error);
     }
     finally {
       this._isLoggingIn = false;
@@ -54,8 +55,24 @@ export class LoginPage {
     await this._router.navigateByUrl(MAIN_PATHS.root);
   }
 
-  private onLoginFail(httpError: HttpErrorResponse): void {
-    this._loginError = httpError.error.message ?? httpError.message;
+  private onLoginFail(error: any): void {
+    if(error instanceof HttpErrorResponse) {
+      this._loginError = error.error.message ?? error.message;
+    }
+    else if(error instanceof DOMException) {
+      this._loginError = error.message;
+    }
+    else if(typeof error === "string") {
+      this._loginError = error;
+    }
+    else {
+      this._loginError = "An unknown error occurred";
+    }
+
+    if(!environment.production) {
+      console.error(error);
+    }
+
     this.errorVisible = true;
   }
 
