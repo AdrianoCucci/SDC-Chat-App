@@ -83,7 +83,7 @@ export class ChatMessageComponent implements OnInit {
   }
 
   @HostBinding("class.client-message") public get isClientMessage(): boolean {
-    return this.sender?.id === this.clientUser?.id ?? false;
+    return this.message?.senderUserId === this.clientUser?.id ?? false;
   }
 }
 

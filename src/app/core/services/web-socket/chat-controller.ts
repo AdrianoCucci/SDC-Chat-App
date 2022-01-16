@@ -57,7 +57,8 @@ export class ChatController implements IDisposable {
         const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessagesBeforeDate({
           organizationId,
           datePosted: beforeDate.toISOString(),
-          take
+          take,
+          include: "senderUser"
         }).toPromise();
 
         if(concat) {
