@@ -121,7 +121,7 @@ export class ChatController implements IDisposable {
       this._messages = [message];
     }
     else {
-      this._messages.push(message);
+      this._messages.unshift(message);
     }
   }
 
