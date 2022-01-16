@@ -51,11 +51,21 @@ export class ChatController implements IDisposable {
     });
   }
 
-  public loadMessages(organizationId: number): Promise<ChatMessage[]> {
+  public loadMessages(organizationId: number, beforeDate: Date, take?: number, concat?: boolean): Promise<ChatMessage[]> {
     return new Promise<ChatMessage[]>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessages({ organizationId }).toPromise();
-        this._messages = response.body.sort((a: ChatMessage, b: ChatMessage) => new Date(a.datePosted).getTime() - new Date(b.datePosted).getTime());
+        const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessagesBeforeDate({
+          organizationId,
+          datePosted: beforeDate.toISOString(),
+          take
+        }).toPromise();
+
+        if(concat && this._messages != null) {
+          this._messages = this._messages.concat(response.body);
+        }
+        else {
+          this._messages = response.body;
+        }
 
         resolve(this._messages);
       }

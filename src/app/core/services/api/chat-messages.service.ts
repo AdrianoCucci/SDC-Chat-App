@@ -1,8 +1,10 @@
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { Includable } from "src/app/shared/models/includable.type";
+import { PagedList } from "src/app/shared/models/pagination/paged-list";
+import { Paged } from "src/app/shared/models/pagination/paged.type";
 import { ChatMessage } from "../../models/messages/chat-message";
-import { ChatMessageQuery } from "../../models/messages/chat-message-query";
 import { WebApiService } from "./web-api.service";
 
 @Injectable({
@@ -15,8 +17,13 @@ export class ChatMessagesService extends WebApiService {
     super(httpClient);
   }
 
-  public getAllMessages(model?: ChatMessageQuery): Observable<HttpResponse<ChatMessage[]>> {
+  public getAllMessages(model?: Paged<Includable<Partial<ChatMessage>>>): Observable<HttpResponse<PagedList<ChatMessage>>> {
     const url: string = `${this._apiPrefix}${this.getObjectQueryParams(model)}`;
+    return this.get(url);
+  }
+
+  public getAllMessagesBeforeDate(model?: Paged<Includable<Partial<ChatMessage>>>): Observable<HttpResponse<ChatMessage[]>> {
+    const url: string = `${this._apiPrefix}/before${this.getObjectQueryParams(model)}`;
     return this.get(url);
   }
 
