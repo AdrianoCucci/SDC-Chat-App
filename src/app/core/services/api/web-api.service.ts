@@ -57,7 +57,7 @@ export abstract class WebApiService {
         const value: any = obj[key];
 
         if(value != null) {
-          params += `${argSymbol}${key}=${obj[key]}`;
+          params += `${argSymbol}${key}=${value}`;
         }
       }
     }

@@ -1,4 +1,6 @@
 <app-users-list [users]="users?.data"></app-users-list>
-<app-chat-message-list [messages]="messages" [clientUser]="clientUser" (onAddMessage)="onAddMessage($event)"
-  (onEditMessage)="onEditMessage($event)" (onDeleteMessage)="onDeleteMessage($event)">
+
+<app-chat-message-list #list [messages]="messages" [clientUser]="clientUser" [listLoaderVisible]="isLoadingMessages"
+  (onAddMessage)="onAddMessage($event)" (onEditMessage)="onEditMessage($event)"
+  (onDeleteMessage)="onDeleteMessage($event)" (onScrollTopReached)="onLoadMoreMessages(list)">
 </app-chat-message-list>

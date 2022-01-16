@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { faComments, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
@@ -11,23 +11,36 @@ import { DeleteEventArgs } from '../chat-message/chat-message.component';
   templateUrl: './chat-message-list.component.html',
   styleUrls: ['./chat-message-list.component.scss']
 })
-export class ChatMessageListComponent implements AfterViewInit {
+export class ChatMessageListComponent implements AfterViewInit, OnDestroy {
   @Output() public readonly onAddMessage = new EventEmitter<ChatMessage>();
   @Output() public readonly onEditMessage = new EventEmitter<ChatMessage>();
   @Output() public readonly onDeleteMessage = new EventEmitter<ChatMessage>();
+  @Output() public readonly onScrollTopReached = new EventEmitter<void>();
 
   public readonly noMessagesIcon: IconDefinition = faComments;
 
   @Input() public messages: ChatMessage[];
   @Input() public clientUser: User;
+  @Input() public listLoaderVisible: boolean = false;
 
   @ViewChild("messagesScrollWrapper") private readonly _messagesScrollWrapperRef: ElementRef;
   @ViewChild(Popover) private readonly _deletePopover: Popover;
 
+  private readonly _scrollTopLoadThreshold: number = 100;
+
+  private _allowScrollTopReachedEvent: boolean = true;
   private _deletingMessage: ChatMessage;
 
   ngAfterViewInit(): void {
-    this.scrollToBottom();
+    this.scrollToBottom("auto");
+
+    const scrollWrapper = this._messagesScrollWrapperRef.nativeElement as HTMLElement;
+    scrollWrapper.onscroll = () => this.onScrollWrapperScroll(scrollWrapper);
+  }
+
+  ngOnDestroy(): void {
+    const scrollWrapper = this._messagesScrollWrapperRef.nativeElement as HTMLElement;
+    scrollWrapper.onscroll = null;
   }
 
   onTextareaEnter(textArea: InputTextarea): void {
@@ -47,14 +60,28 @@ export class ChatMessageListComponent implements AfterViewInit {
     });
   }
 
-  public scrollToBottom() {
+  public scrollToBottom(behavior: ScrollBehavior = "smooth") {
     if(this._messagesScrollWrapperRef != null) {
       const scrollWrapper: HTMLElement = this._messagesScrollWrapperRef.nativeElement;
 
       scrollWrapper.scrollTo({
         top: scrollWrapper.scrollHeight,
-        behavior: "smooth"
+        behavior
       });
+    }
+  }
+
+  private onScrollWrapperScroll(scrollWrapper: HTMLElement): void {
+    const scrollThreshold: number = scrollWrapper.scrollHeight - Math.abs(scrollWrapper.scrollTop) - scrollWrapper.clientHeight;
+
+    if(scrollThreshold < this._scrollTopLoadThreshold) {
+      if(this._allowScrollTopReachedEvent) {
+        this.onScrollTopReached.emit();
+        this._allowScrollTopReachedEvent = false;
+      }
+    }
+    else {
+      this._allowScrollTopReachedEvent = true;
     }
   }
 

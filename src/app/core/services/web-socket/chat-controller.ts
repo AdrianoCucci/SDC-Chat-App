@@ -60,8 +60,8 @@ export class ChatController implements IDisposable {
           take
         }).toPromise();
 
-        if(concat && this._messages != null) {
-          this._messages = this._messages.concat(response.body);
+        if(concat) {
+          this.concatMessages(response.body);
         }
         else {
           this._messages = response.body;
@@ -93,6 +93,25 @@ export class ChatController implements IDisposable {
     if(message != null) {
       this._socket.emit(this.events.messageDelete, message);
       this.deleteMessage(message);
+    }
+  }
+
+  private concatMessages(messages: ChatMessage[]): void {
+    if(this._messages == null) {
+      this._messages = messages;
+    }
+    else {
+      const appended: ChatMessage[] = [];
+
+      for(let i = 0; i < messages.length; i++) {
+        const message: ChatMessage = messages[i];
+
+        if(this._messages.findIndex((m: ChatMessage) => m.id === message.id) === -1) {
+          appended.push(message);
+        }
+      }
+
+      this._messages = this._messages.concat(appended);
     }
   }
 
