@@ -5,6 +5,7 @@ import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 
 @Component({
   selector: 'app-room-pings-page',
@@ -18,7 +19,7 @@ export class RoomPingsPage {
     return this._loginService.user;
   }
 
-  public get rooms(): Room[] {
+  public get rooms(): PagedList<Room> {
     return this._socketService.roomPings.rooms;
   }
 

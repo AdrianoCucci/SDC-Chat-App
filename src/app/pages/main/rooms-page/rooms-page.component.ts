@@ -4,6 +4,7 @@ import { Room } from 'src/app/core/models/rooms/room';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 
 @Component({
   selector: 'app-rooms-page',
@@ -17,7 +18,7 @@ export class RoomsPage implements OnInit {
   public loadError: string;
   public errorVisible: boolean = false;
 
-  private _rooms: Room[];
+  private _rooms: PagedList<Room>;
 
   constructor(private _roomsService: RoomsService, loginService: LoginService) {
     this.organizationId = loginService.user.organizationId;
@@ -27,7 +28,7 @@ export class RoomsPage implements OnInit {
     try {
       this.loadingVisible = true;
 
-      const response: HttpResponse<Room[]> = await this._roomsService.getAllRooms({ organizationId: this.organizationId }).toPromise();
+      const response: HttpResponse<PagedList<Room>> = await this._roomsService.getAllRooms({ organizationId: this.organizationId }).toPromise();
       this._rooms = response.body;
     }
     catch(error) {
@@ -39,7 +40,7 @@ export class RoomsPage implements OnInit {
     }
   }
 
-  public get rooms(): Room[] {
+  public get rooms(): PagedList<Room> {
     return this._rooms;
   }
 }

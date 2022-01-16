@@ -2,6 +2,7 @@ import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 import { RoomPing } from '../../models/room-pings/room-ping';
 import { RoomPingState } from '../../models/room-pings/room-ping-state';
 import { Room } from '../../models/rooms/room';
@@ -18,7 +19,7 @@ export class RoomPingsController implements IDisposable {
   private readonly _audioService: AudioService;
 
   private _pings: RoomPing[];
-  private _rooms: Room[];
+  private _rooms: PagedList<Room>;
 
   constructor(socket: Socket, roomsService: RoomsService, audioService: AudioService) {
     this._socket = socket;
@@ -64,10 +65,10 @@ export class RoomPingsController implements IDisposable {
     });
   }
 
-  public loadRooms(organizationId: number): Promise<Room[]> {
-    return new Promise<Room[]>(async (resolve, reject) => {
+  public loadRooms(organizationId: number): Promise<PagedList<Room>> {
+    return new Promise<PagedList<Room>>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<Room[]> = await this._roomsService.getAllRooms({ organizationId }).toPromise();
+        const response: HttpResponse<PagedList<Room>> = await this._roomsService.getAllRooms({ organizationId }).toPromise();
         this._rooms = response.body;
 
         resolve(this._rooms);
@@ -193,11 +194,11 @@ export class RoomPingsController implements IDisposable {
     return this._pings?.length > 0 ?? false;
   }
 
-  public get rooms(): Room[] {
+  public get rooms(): PagedList<Room> {
     return this._rooms;
   }
 
   public get hasRooms(): boolean {
-    return this._rooms?.length > 0 ?? false;
+    return this._rooms?.data?.length > 0 ?? false;
   }
 }
