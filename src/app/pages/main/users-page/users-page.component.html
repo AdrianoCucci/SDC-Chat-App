@@ -1,4 +1,4 @@
-<app-users-table *ngIf="initialized" [users]="users?.data" [clientUser]="clientUser" [organizations]="organizations"
+<app-users-table *ngIf="initialized" [users]="users?.data" [clientUser]="clientUser" [organizations]="organizations?.data"
   [adminFeatures]="adminFeatures"></app-users-table>
 
 <app-loader [fullscreen]="true" [(visible)]="loadingVisible" text="Please wait..."></app-loader>

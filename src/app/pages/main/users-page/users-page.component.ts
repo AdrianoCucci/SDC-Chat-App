@@ -22,7 +22,7 @@ export class UsersPage implements OnInit {
   public errorVisible: boolean = false;
 
   private _users: PagedList<User>;
-  private _organizations: Organization[];
+  private _organizations: PagedList<Organization>;
   private _initialized: boolean = false;
 
   constructor(private _usersService: UsersService, private _orgsService: OrganizationsService, loginService: LoginService) {
@@ -54,7 +54,7 @@ export class UsersPage implements OnInit {
   }
 
   private async loadOrganizations(): Promise<void> {
-    const response: HttpResponse<Organization[]> = await this._orgsService.getAllOrganizations().toPromise();
+    const response: HttpResponse<PagedList<Organization>> = await this._orgsService.getAllOrganizations().toPromise();
     this._organizations = response.body;
   }
 
@@ -70,7 +70,7 @@ export class UsersPage implements OnInit {
     return this._users;
   }
 
-  public get organizations(): Organization[] {
+  public get organizations(): PagedList<Organization> {
     return this._organizations;
   }
 }
