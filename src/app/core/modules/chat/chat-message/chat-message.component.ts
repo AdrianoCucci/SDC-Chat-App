@@ -29,6 +29,14 @@ export class ChatMessageComponent implements OnInit {
     return contents;
   }
 
+  public getMessageDateFormat(message: ChatMessage): string {
+    const today = new Date();
+    const datePosted = new Date(message.datePosted);
+    const millisecondsInDay: number = 86400000;
+
+    return today.getTime() - datePosted.getTime() < millisecondsInDay ? "h:mm a" : "dd/MM/yyyy";
+  }
+
   onSaveEdit(contents: string): void {
     if(contents && (this._message?.contents !== contents ?? false)) {
       this._message.contents = contents;
