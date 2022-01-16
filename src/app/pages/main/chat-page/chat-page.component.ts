@@ -3,6 +3,7 @@ import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 
 @Component({
   selector: 'app-chat-page',
@@ -34,7 +35,7 @@ export class ChatPage {
     return this._socketService.chat.messages;
   }
 
-  public get users(): User[] {
+  public get users(): PagedList<User> {
     return this._socketService.users;
   }
 

@@ -7,6 +7,7 @@ import { OrganizationsService } from 'src/app/core/services/api/organizations-se
 import { UsersService } from 'src/app/core/services/api/users-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 
 @Component({
   selector: 'app-users-page',
@@ -20,7 +21,7 @@ export class UsersPage implements OnInit {
   public loadError: string;
   public errorVisible: boolean = false;
 
-  private _users: User[];
+  private _users: PagedList<User>;
   private _organizations: Organization[];
   private _initialized: boolean = false;
 
@@ -48,7 +49,7 @@ export class UsersPage implements OnInit {
   }
 
   private async loadUsers(organizationId?: number): Promise<void> {
-    const response: HttpResponse<User[]> = await this._usersService.getAllUsers({ organizationId }).toPromise();
+    const response: HttpResponse<PagedList<User>> = await this._usersService.getAllUsers({ organizationId }).toPromise();
     this._users = response.body;
   }
 
@@ -65,7 +66,7 @@ export class UsersPage implements OnInit {
     return this.clientUser?.role === Role.Administrator ?? false;
   }
 
-  public get users(): User[] {
+  public get users(): PagedList<User> {
     return this._users;
   }
 
