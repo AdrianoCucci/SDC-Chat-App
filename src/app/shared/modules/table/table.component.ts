@@ -2,7 +2,9 @@ import { AfterViewInit, Component, ContentChildren, Input, QueryList, TemplateRe
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faSort, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
 import { ColumnMode } from '@swimlane/ngx-datatable';
+import { PagedList } from '../../models/pagination/paged-list';
 import { TemplateDirective } from '../directives/template.directive';
+import { PageEvent } from './page-event';
 import { TableCell } from './table-cell';
 
 @Component({
@@ -14,6 +16,10 @@ export class Table implements AfterViewInit {
   @Input() public cells: TableCell[];
   @Input() public data: any[];
   @Input() public columnMode = ColumnMode.force;
+  @Input() public serverPaging: boolean = false;
+  @Input() public offset: number = 0;
+  @Input() public limit: number = 20;
+  @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<any>>
 
   public readonly sortNoneIcon: IconDefinition = faSort;
   public readonly sortAscIcon: IconDefinition = faSortAmountUp;
@@ -23,6 +29,7 @@ export class Table implements AfterViewInit {
   private readonly _rowActionsTemplateName: string = "table-row-actions";
   private readonly _activeFiltersMap = new Map<TableCell, any>();
 
+  private _count: number;
   private _initialized: boolean;
   private _filteredData: any[];
   private _rowActionsTemplate: TemplateRef<any>;
@@ -257,6 +264,19 @@ export class Table implements AfterViewInit {
     this._filteredData = this.applyActiveFilters(this.data);
   }
 
+  async onPage(event: PageEvent): Promise<void> {
+    if(this.pageHandler != null) {
+      const response: PagedList<any> = await this.pageHandler(event);
+
+      if(response && response.data && response.pagination) {
+        this._count = response.pagination.totalItemsCount;
+        this.data = response.data;
+        this.offset = response.pagination.skip;
+        this.limit = response.pagination.take;
+      }
+    }
+  }
+
   private applyActiveFilters(data: any[]): any[] {
     let filteredData: any[] = data;
 
@@ -295,6 +315,10 @@ export class Table implements AfterViewInit {
 
   public get rows(): any[] {
     return this._filteredData ?? this.data;
+  }
+
+  public get count(): number {
+    return this._count ?? this.rows?.length;
   }
 
   public get rowActionsTemplate(): TemplateRef<any> {

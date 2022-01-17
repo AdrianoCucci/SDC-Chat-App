@@ -8,7 +8,9 @@ import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
 import { FormMode } from 'src/app/shared/models/form-mode';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 import { Pair } from 'src/app/shared/models/pair';
+import { PageEvent } from 'src/app/shared/modules/table/page-event';
 import { TableCell } from 'src/app/shared/modules/table/table-cell';
 import { Table } from 'src/app/shared/modules/table/table.component';
 import { RoomForm } from '../../forms/room-form/room-form.component';
@@ -21,6 +23,7 @@ import { RoomForm } from '../../forms/room-form/room-form.component';
 export class RoomsTable {
   @Input() public rooms: Room[];
   @Input() public organizationId: number;
+  @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<Room>>;
 
   public readonly pingSoundPairs: Pair<string, AudioSound>[] = enumToPairs(AudioSound, true);
   public readonly cells: TableCell[] = [

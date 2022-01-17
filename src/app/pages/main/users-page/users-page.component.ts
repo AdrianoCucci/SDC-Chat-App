@@ -8,6 +8,8 @@ import { UsersService } from 'src/app/core/services/api/users-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
+import { Paginatable } from 'src/app/shared/models/pagination/paginatable';
+import { PageEvent } from 'src/app/shared/modules/table/page-event';
 
 @Component({
   selector: 'app-users-page',
@@ -16,6 +18,15 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 })
 export class UsersPage implements OnInit {
   public readonly clientUser: User;
+
+  public readonly pageHandler = async (event: PageEvent): Promise<PagedList<User>> => {
+    await this.loadUsers({
+      take: event.limit,
+      skip: event.offset * event.limit
+    });
+
+    return this._users;
+  }
 
   public loadingVisible: boolean = false;
   public loadError: string;
@@ -34,7 +45,7 @@ export class UsersPage implements OnInit {
       this.loadingVisible = true;
 
       await Promise.all([
-        this.loadUsers(this.adminFeatures ? null : this.clientUser.organizationId),
+        this.loadUsers(),
         this.adminFeatures ? this.loadOrganizations() : null
       ]);
     }
@@ -48,8 +59,13 @@ export class UsersPage implements OnInit {
     }
   }
 
-  private async loadUsers(organizationId?: number): Promise<void> {
-    const response: HttpResponse<PagedList<User>> = await this._usersService.getAllUsers({ organizationId }).toPromise();
+  private async loadUsers(pagination?: Paginatable): Promise<void> {
+    const response: HttpResponse<PagedList<User>> = await this._usersService.getAllUsers({
+      organizationId: this.adminFeatures ? null : this.clientUser.organizationId,
+      skip: pagination?.skip,
+      take: pagination?.take
+    }).toPromise();
+
     this._users = response.body;
   }
 

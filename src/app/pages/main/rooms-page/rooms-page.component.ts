@@ -5,6 +5,8 @@ import { RoomsService } from 'src/app/core/services/api/rooms-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
+import { Paginatable } from 'src/app/shared/models/pagination/paginatable';
+import { PageEvent } from 'src/app/shared/modules/table/page-event';
 
 @Component({
   selector: 'app-rooms-page',
@@ -13,6 +15,11 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 })
 export class RoomsPage implements OnInit {
   public readonly organizationId: number;
+
+  public readonly pageHandler = (event: PageEvent): Promise<PagedList<Room>> => this.loadRooms({
+    take: event.limit,
+    skip: event.offset * event.limit
+  });
 
   public loadingVisible: boolean = false;
   public loadError: string;
@@ -25,10 +32,19 @@ export class RoomsPage implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    await this.loadRooms();
+  }
+
+  private async loadRooms(pagination?: Paginatable): Promise<PagedList<Room>> {
     try {
       this.loadingVisible = true;
 
-      const response: HttpResponse<PagedList<Room>> = await this._roomsService.getAllRooms({ organizationId: this.organizationId }).toPromise();
+      const response: HttpResponse<PagedList<Room>> = await this._roomsService.getAllRooms({
+        organizationId: this.organizationId,
+        skip: pagination?.skip,
+        take: pagination?.take
+      }).toPromise();
+
       this._rooms = response.body;
     }
     catch(error) {
@@ -38,6 +54,8 @@ export class RoomsPage implements OnInit {
     finally {
       this.loadingVisible = false;
     }
+
+    return this._rooms;
   }
 
   public get rooms(): PagedList<Room> {

@@ -2,7 +2,7 @@
   <app-button text="Add Organization" icon="building" (click)="onAddOrganization()"></app-button>
 </div>
 
-<app-table [cells]="cells" [data]="organizations">
+<app-table [cells]="cells" [data]="organizations" [pageHandler]="pageHandler">
   <ng-template app-template="table-row-actions" let-organization>
     <div class="organization-actions">
       <app-button class="text edit-organization" icon="pen" title="Edit Organization"
