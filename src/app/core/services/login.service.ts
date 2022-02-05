@@ -2,6 +2,7 @@ import { EventEmitter, Injectable } from "@angular/core";
 import { AuthResponse } from "../models/auth/auth-response";
 import { Role } from "../models/auth/role";
 import { User } from "../models/users/user";
+import { UsersService } from "./api/users-service";
 import { StorageService } from "./storage-service";
 
 @Injectable({
@@ -16,7 +17,7 @@ export class LoginService {
 
   private _currentUser: User;
 
-  constructor(private _storageService: StorageService) { }
+  constructor(private _storageService: StorageService, private _usersService: UsersService) { }
 
   public setCurrentUser(authResponse: AuthResponse): User {
     if(authResponse.isSuccess && authResponse.user != null) {
@@ -55,12 +56,17 @@ export class LoginService {
     return hasRole;
   }
 
-  public logout(): void {
+  public async logout(): Promise<void> {
     if(this.isLoggedIn) {
-      this._storageService.clearSession();
-      this._currentUser = null;
+      try {
+        await this._usersService.updateUser(this._currentUser.id, { isOnline: false }).toPromise();
+      }
+      finally {
+        this._storageService.clearSession();
+        this._currentUser = null;
 
-      this.onLogout.emit();
+        this.onLogout.emit();
+      }
     }
   }
 
