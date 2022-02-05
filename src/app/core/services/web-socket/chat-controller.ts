@@ -84,18 +84,34 @@ export class ChatController implements IDisposable {
     });
   }
 
-  public sendMessage(message: ChatMessage): void {
-    if(message != null) {
-      this._socket.emit(this.events.message, message);
+  public sendMessage(message: ChatMessage): Promise<ChatMessage> {
+    return new Promise((resolve) => {
+      if(message == null) {
+        resolve(null);
+      }
+
       this.addMessage(message);
-    }
+
+      this._socket.emit(this.events.message, message, (response: ChatMessage) => {
+        Object.assign(message, response);
+        resolve(response);
+      });
+    });
   }
 
-  public sendMessageEdit(message: ChatMessage): void {
-    if(message != null) {
-      this._socket.emit(this.events.messageEdit, message);
+  public sendMessageEdit(message: ChatMessage): Promise<ChatMessage> {
+    return new Promise((resolve) => {
+      if(message == null) {
+        resolve(null);
+      }
+
       this.updateMessage(message);
-    }
+
+      this._socket.emit(this.events.messageEdit, message, (response: ChatMessage) => {
+        Object.assign(message, response);
+        resolve(response);
+      });
+    });
   }
 
   public sendMessageDelete(message: ChatMessage): void {
