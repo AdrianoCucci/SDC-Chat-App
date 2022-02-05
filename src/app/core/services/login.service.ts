@@ -56,17 +56,13 @@ export class LoginService {
     return hasRole;
   }
 
-  public async logout(): Promise<void> {
+  public logout(): void {
     if(this.isLoggedIn) {
-      try {
-        await this._usersService.updateUser(this._currentUser.id, { isOnline: false }).toPromise();
-      }
-      finally {
-        this._storageService.clearSession();
-        this._currentUser = null;
+      this._usersService.updateUser(this._currentUser.id, { isOnline: false }).toPromise();
+      this._storageService.clearSession();
+      this._currentUser = null;
 
-        this.onLogout.emit();
-      }
+      this.onLogout.emit();
     }
   }
 
