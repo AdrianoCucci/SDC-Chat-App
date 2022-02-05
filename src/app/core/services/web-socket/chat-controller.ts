@@ -1,8 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+import { Socketio } from "ngx-socketio2";
+import { Subscription, TeardownLogic } from 'rxjs';
 import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
+import { subscribeMany } from 'src/app/shared/util/rxjs-utils';
 import { ChatMessage } from '../../models/messages/chat-message';
 import { ChatMessagesService } from '../api/chat-messages.service';
 import { AudioService } from '../audio/audio.service';
@@ -12,43 +14,49 @@ export class ChatController implements IDisposable {
   public readonly onMessageEdit = new EventEmitter<ChatMessage>();
   public readonly onMessageDelete = new EventEmitter<ChatMessage>();
 
-  private readonly _socket: Socket;
+  private readonly _socket: Socketio;
   private readonly _messagesService: ChatMessagesService;
   private readonly _audioService: AudioService;
 
+  private _subscription: Subscription;
   private _messages: ChatMessage[];
 
-  constructor(socket: Socket, messagesService: ChatMessagesService, audioService: AudioService) {
+  constructor(socket: Socketio, messagesService: ChatMessagesService, audioService: AudioService) {
     this._socket = socket;
     this._messagesService = messagesService;
     this._audioService = audioService;
 
-    this.initializeEvents(this._socket);
+    this._subscription = subscribeMany(this.getEventSubscriptions(this._socket));
   }
 
   public dispose(): void {
+    this._subscription?.unsubscribe();
+    this._subscription = null;
     this._messages = null;
   }
 
-  private initializeEvents(socket: Socket): void {
+  private getEventSubscriptions(socket: Socketio): TeardownLogic[] {
     const events = this.events;
 
-    socket.on(events.message, (message: ChatMessage) => {
-      this.addMessage(message);
-      this.onMessage.emit(message);
+    const subscriptions: TeardownLogic[] = [
+      socket.on<ChatMessage>(events.message).subscribe((message: ChatMessage) => {
+        this.addMessage(message);
+        this.onMessage.emit(message);
+        this._audioService.play(AudioSound.ChatNotification);
+      }),
 
-      this._audioService.play(AudioSound.ChatNotification);
-    });
+      socket.on<ChatMessage>(events.messageEdit).subscribe((message: ChatMessage) => {
+        this.onMessageEdit.emit(message);
+        this.updateMessage(message);
+      }),
 
-    socket.on(events.messageEdit, (message: ChatMessage) => {
-      this.onMessageEdit.emit(message);
-      this.updateMessage(message);
-    });
+      socket.on<ChatMessage>(events.messageDelete).subscribe((message: ChatMessage) => {
+        this.onMessageDelete.emit(message);
+        this.deleteMessage(message);
+      })
+    ];
 
-    socket.on(events.messageDelete, (message: ChatMessage) => {
-      this.onMessageDelete.emit(message);
-      this.deleteMessage(message);
-    });
+    return subscriptions;
   }
 
   public loadMessages(organizationId: number, beforeDate: Date, take?: number, concat?: boolean): Promise<ChatMessage[]> {

@@ -1,9 +1,10 @@
 import { HttpResponse } from "@angular/common/http";
 import { EventEmitter, Injectable } from "@angular/core";
-import { Socket } from "ngx-socket-io";
-import { Subscription } from "rxjs";
+import { Socketio } from "ngx-socketio2";
+import { Subscription, TeardownLogic } from "rxjs";
 import { IDisposable } from "src/app/shared/interfaces/i-disposable";
 import { PagedList } from "src/app/shared/models/pagination/paged-list";
+import { subscribeMany } from "src/app/shared/util/rxjs-utils";
 import { User } from "../../models/users/user";
 import { ChatMessagesService } from "../api/chat-messages.service";
 import { RoomsService } from "../api/rooms-service";
@@ -25,14 +26,15 @@ export class WebSocketService implements IDisposable {
   public readonly chat: ChatController;
   public readonly roomPings: RoomPingsController;
 
-  protected readonly _socket: Socket;
+  protected readonly _socket: Socketio;
 
+  private _subscription: Subscription;
   private _users: PagedList<User>;
   private _clientUser: User;
 
   constructor(
     private _usersService: UsersService,
-    socket: Socket,
+    socket: Socketio,
     messagesService: ChatMessagesService,
     roomsService: RoomsService,
     audioService: AudioService
@@ -43,28 +45,32 @@ export class WebSocketService implements IDisposable {
       throw new Error("[WebSocketService] > [Socket] dependency is null");
     }
 
-    this.initializeEvents(socket);
+    this._subscription = subscribeMany(this.getEventSubscriptions(socket));
 
     this.chat = new ChatController(socket, messagesService, audioService);
     this.roomPings = new RoomPingsController(socket, roomsService, audioService);
   }
 
-  protected initializeEvents(socket: Socket): void {
+  private getEventSubscriptions(socket: Socketio): TeardownLogic[] {
     const events = this.socketEvents;
 
-    socket.on(events.connect, () => this.onConnect.emit());
-    socket.on(events.disconnect, () => this.onDisconnect.emit());
-    socket.on(events.connectError, (event: any) => this.onConnectError.emit(event));
+    const subscriptions: TeardownLogic[] = [
+      socket.on(events.connect).subscribe(() => this.onConnect.emit()),
+      socket.on(events.disconnect).subscribe(() => this.onDisconnect.emit()),
+      socket.on(events.connectError).subscribe((event: any) => this.onConnectError.emit(event)),
 
-    socket.on(events.userJoin, (user: User) => {
-      this.updateUser(user);
-      this.onUserJoin.emit(user);
-    });
+      socket.on<User>(events.userJoin).subscribe((user: User) => {
+        this.updateUser(user);
+        this.onUserJoin.emit(user);
+      }),
 
-    socket.on(events.userLeave, (user: User) => {
-      this.updateUser(user);
-      this.onUserLeave.emit(user);
-    });
+      socket.on<User>(events.userLeave).subscribe((user: User) => {
+        this.updateUser(user);
+        this.onUserLeave.emit(user);
+      })
+    ];
+
+    return subscriptions;
   }
 
   public loadUsers(organizationId: number): Promise<PagedList<User>> {
@@ -132,6 +138,10 @@ export class WebSocketService implements IDisposable {
   public dispose(): void {
     this._users = null;
     this._clientUser = null;
+
+    this._subscription?.unsubscribe();
+    this._subscription = null;
+
     this.chat.dispose();
     this.roomPings.dispose();
   }
@@ -149,7 +159,7 @@ export class WebSocketService implements IDisposable {
     const index: number = this._users?.data.findIndex((u: User) => u.id === user.id);
 
     if(index !== -1) {
-      this._users[index] = user;
+      this._users.data[index] = user;
     }
   }
 
@@ -164,7 +174,7 @@ export class WebSocketService implements IDisposable {
   }
 
   public get isConnected(): boolean {
-    return this._socket.ioSocket.connected;
+    return this._socket.connected;
   }
 
   public get users(): PagedList<User> {

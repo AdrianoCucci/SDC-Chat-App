@@ -25,7 +25,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@swimlane/ngx-datatable": "^20.0.0",
     "crypto-js": "^4.1.1",
-    "ngx-socket-io": "^4.1.0",
+    "ngx-socketio2": "^1.0.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.3.1",
     "zone.js": "~0.11.4"

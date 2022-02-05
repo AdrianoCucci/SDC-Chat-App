@@ -1,8 +1,10 @@
 import { HttpResponse } from '@angular/common/http';
 import { EventEmitter } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+import { Socketio } from 'ngx-socketio2';
+import { Subscription, TeardownLogic } from 'rxjs';
 import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
+import { subscribeMany } from 'src/app/shared/util/rxjs-utils';
 import { RoomPing } from '../../models/room-pings/room-ping';
 import { RoomPingState } from '../../models/room-pings/room-ping-state';
 import { Room } from '../../models/rooms/room';
@@ -14,55 +16,63 @@ export class RoomPingsController implements IDisposable {
   public readonly onPingResponse = new EventEmitter<RoomPing>();
   public readonly onPingCancel = new EventEmitter<RoomPing>();
 
-  private readonly _socket: Socket;
+  private readonly _socket: Socketio;
   private readonly _roomsService: RoomsService;
   private readonly _audioService: AudioService;
 
+  private _subscription: Subscription;
   private _pings: RoomPing[];
   private _rooms: PagedList<Room>;
 
-  constructor(socket: Socket, roomsService: RoomsService, audioService: AudioService) {
+  constructor(socket: Socketio, roomsService: RoomsService, audioService: AudioService) {
     this._socket = socket;
     this._roomsService = roomsService;
     this._audioService = audioService;
 
-    this.initializeEvents(this._socket);
+    this._subscription = subscribeMany(this.getEventSubscriptions(this._socket));
   }
 
   public dispose(): void {
     this._pings = null;
     this._rooms = null;
+
+    this._subscription?.unsubscribe();
+    this._subscription = null;
   }
 
-  private initializeEvents(socket: Socket): void {
+  private getEventSubscriptions(socket: Socketio): TeardownLogic[] {
     const events = this.events;
 
-    socket.on(events.roomPingRequest, (roomPing: RoomPing) => {
-      this.addPing(roomPing);
-      this.onPingRequest.emit(roomPing);
+    const subscriptions: TeardownLogic[] = [
+      socket.on<RoomPing>(events.roomPingRequest).subscribe((roomPing: RoomPing) => {
+        this.addPing(roomPing);
+        this.onPingRequest.emit(roomPing);
 
-      if(roomPing.room?.pingSound != null) {
-        this._audioService.play(roomPing.room.pingSound, true);
-      }
-    });
+        if(roomPing.room?.pingSound != null) {
+          this._audioService.play(roomPing.room.pingSound, true);
+        }
+      }),
 
-    socket.on(events.roomPingResponse, (roomPing: RoomPing) => {
-      this.updatePing(roomPing.guid, roomPing);
-      this.onPingResponse.emit(roomPing);
+      socket.on<RoomPing>(events.roomPingResponse).subscribe((roomPing: RoomPing) => {
+        this.updatePing(roomPing.guid, roomPing);
+        this.onPingResponse.emit(roomPing);
 
-      if(roomPing.room?.pingSound != null) {
-        this._audioService.stop(roomPing.room.pingSound);
-      }
-    });
+        if(roomPing.room?.pingSound != null) {
+          this._audioService.stop(roomPing.room.pingSound);
+        }
+      }),
 
-    socket.on(events.roomPingCancel, (roomPing: RoomPing) => {
-      this.removePing(roomPing.guid);
-      this.onPingCancel.emit(roomPing);
+      socket.on<RoomPing>(events.roomPingCancel).subscribe((roomPing: RoomPing) => {
+        this.removePing(roomPing.guid);
+        this.onPingCancel.emit(roomPing);
 
-      if(roomPing.room?.pingSound != null) {
-        this._audioService.stop(roomPing.room.pingSound);
-      }
-    });
+        if(roomPing.room?.pingSound != null) {
+          this._audioService.stop(roomPing.room.pingSound);
+        }
+      }),
+    ];
+    
+    return subscriptions;
   }
 
   public loadRooms(organizationId: number): Promise<PagedList<Room>> {
