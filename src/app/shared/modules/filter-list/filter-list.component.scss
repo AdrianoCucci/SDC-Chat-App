@@ -1,5 +1,7 @@
 :host {
   --list-direction: column;
+  --list-align: unset;
+  --list-justify: unset;
   --list-wrap: wrap;
   --list-margin: 0;
   --list-padding: 0;
@@ -18,6 +20,8 @@
 
   ul.filter-list {
     display: flex;
+    align-items: var(--list-align);
+    justify-content: var(--list-justify);
     flex-wrap: var(--list-wrap);
     flex-direction: var(--list-direction);
     width: 100%;

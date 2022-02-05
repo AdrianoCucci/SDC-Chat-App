@@ -30,6 +30,9 @@
 
       app-filter-list.rooms-list {
         --list-direction: row;
+        --list-justify: center;
+        --item-flex: 1 1 400px;
+        --item-max-width: 800px;
         --item-max-height: 200px;
         --item-padding: 1rem;
 
