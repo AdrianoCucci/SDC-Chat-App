@@ -91,9 +91,12 @@ export class MainPage implements OnInit, OnDestroy {
 
     const organizationId: number = clientUser.organizationId;
 
+    const messagesBeforeDate = new Date();
+    messagesBeforeDate.setHours(messagesBeforeDate.getHours() + 24);
+
     await Promise.all([
       this._socketService.loadUsers(organizationId),
-      this._socketService.chat.loadMessages(organizationId),
+      this._socketService.chat.loadMessages(organizationId, messagesBeforeDate, 50),
       this._socketService.roomPings.loadRooms(organizationId),
       this._socketService.roomPings.getRequestingPings()
     ]);

@@ -1,6 +1,9 @@
 import { HttpClient, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
+import { Includable } from "src/app/shared/models/includable.type";
+import { PagedList } from "src/app/shared/models/pagination/paged-list";
+import { Paged } from "src/app/shared/models/pagination/paged.type";
 import { Organization } from "../../models/organizations/organization";
 import { OrganizationRequest } from "../../models/organizations/organization-request";
 import { WebApiService } from "./web-api.service";
@@ -15,8 +18,9 @@ export class OrganizationsService extends WebApiService {
     super(httpClient);
   }
 
-  public getAllOrganizations(): Observable<HttpResponse<Organization[]>> {
-    return this.get(this._apiPrefix);
+  public getAllOrganizations(model?: Paged<Includable<Partial<Organization>>>): Observable<HttpResponse<PagedList<Organization>>> {
+    const url: string = `${this._apiPrefix}${this.getObjectQueryParams(model)}`;
+    return this.get(url);
   }
 
   public getOrganization(id: number): Observable<HttpResponse<Organization>> {

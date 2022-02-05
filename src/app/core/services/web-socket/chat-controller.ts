@@ -51,11 +51,22 @@ export class ChatController implements IDisposable {
     });
   }
 
-  public loadMessages(organizationId: number): Promise<ChatMessage[]> {
+  public loadMessages(organizationId: number, beforeDate: Date, take?: number, concat?: boolean): Promise<ChatMessage[]> {
     return new Promise<ChatMessage[]>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessages({ organizationId }).toPromise();
-        this._messages = response.body.sort((a: ChatMessage, b: ChatMessage) => new Date(a.datePosted).getTime() - new Date(b.datePosted).getTime());
+        const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessagesBeforeDate({
+          organizationId,
+          datePosted: beforeDate.toISOString(),
+          take,
+          include: "senderUser"
+        }).toPromise();
+
+        if(concat) {
+          this.concatMessages(response.body);
+        }
+        else {
+          this._messages = response.body;
+        }
 
         resolve(this._messages);
       }
@@ -86,12 +97,31 @@ export class ChatController implements IDisposable {
     }
   }
 
+  private concatMessages(messages: ChatMessage[]): void {
+    if(this._messages == null) {
+      this._messages = messages;
+    }
+    else {
+      const appended: ChatMessage[] = [];
+
+      for(let i = 0; i < messages.length; i++) {
+        const message: ChatMessage = messages[i];
+
+        if(this._messages.findIndex((m: ChatMessage) => m.id === message.id) === -1) {
+          appended.push(message);
+        }
+      }
+
+      this._messages = this._messages.concat(appended);
+    }
+  }
+
   private addMessage(message: ChatMessage): void {
     if(this._messages == null) {
       this._messages = [message];
     }
     else {
-      this._messages.push(message);
+      this._messages.unshift(message);
     }
   }
 

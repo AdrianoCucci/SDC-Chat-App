@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
@@ -13,6 +13,8 @@ import { Pair } from 'src/app/shared/models/pair';
 import { AdminPassResetForm } from '../../forms/admin-pass-reset-form/admin-pass-reset-form.component';
 import { TableCell } from 'src/app/shared/modules/table/table-cell';
 import { Table } from 'src/app/shared/modules/table/table.component';
+import { PageEvent } from 'src/app/shared/modules/table/page-event';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 
 @Component({
   selector: 'app-users-table',
@@ -22,6 +24,7 @@ import { Table } from 'src/app/shared/modules/table/table.component';
 export class UsersTable implements OnInit {
   @Input() public users: User[];
   @Input() public clientUser: User;
+  @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<User>>;
 
   public readonly rolePairs: Pair<string, Role>[] = enumToPairs(Role, true);
 

@@ -5,6 +5,7 @@ import { InputTextareaModule } from 'src/app/shared/modules/forms/inputs/input-t
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 import { PopoverModule } from 'src/app/shared/modules/overlays/popover/popover.module';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.module';
 
 import { ChatMessageListComponent } from './chat-message-list/chat-message-list.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
@@ -22,7 +23,8 @@ const components = [
     InputTextareaModule,
     ButtonModule,
     PopoverModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    LoaderModule
   ],
   exports: components,
   declarations: components

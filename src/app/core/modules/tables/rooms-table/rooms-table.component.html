@@ -2,7 +2,7 @@
   <app-button text="Add Room" icon="door-open" (click)="onAddRoom()"></app-button>
 </div>
 
-<app-table [cells]="cells" [data]="rooms">
+<app-table [cells]="cells" [data]="rooms" [pageHandler]="pageHandler">
   <ng-template app-template="pingSound" let-value="value">
 
     <app-button *ngIf="getPingSoundName(value) as name; else defaultTemplate"

@@ -5,6 +5,8 @@ import { OrganizationRequest } from 'src/app/core/models/organizations/organizat
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
 import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
+import { PageEvent } from 'src/app/shared/modules/table/page-event';
 import { TableCell } from 'src/app/shared/modules/table/table-cell';
 import { Table } from 'src/app/shared/modules/table/table.component';
 import { OrganizationForm } from '../../forms/organization-form/organization-form.component';
@@ -16,6 +18,7 @@ import { OrganizationForm } from '../../forms/organization-form/organization-for
 })
 export class OrganizationsTable {
   @Input() public organizations: Organization[];
+  @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<Organization>>;
 
   public readonly cells: TableCell[] = [
     { name: "Name", prop: "name", sortable: true, filterable: true },

@@ -3,6 +3,7 @@ import { EventEmitter, Injectable } from "@angular/core";
 import { Socket } from "ngx-socket-io";
 import { Subscription } from "rxjs";
 import { IDisposable } from "src/app/shared/interfaces/i-disposable";
+import { PagedList } from "src/app/shared/models/pagination/paged-list";
 import { User } from "../../models/users/user";
 import { ChatMessagesService } from "../api/chat-messages.service";
 import { RoomsService } from "../api/rooms-service";
@@ -26,7 +27,7 @@ export class WebSocketService implements IDisposable {
 
   protected readonly _socket: Socket;
 
-  private _users: User[];
+  private _users: PagedList<User>;
   private _clientUser: User;
 
   constructor(
@@ -66,10 +67,10 @@ export class WebSocketService implements IDisposable {
     });
   }
 
-  public loadUsers(organizationId: number): Promise<User[]> {
-    return new Promise<User[]>(async (resolve, reject) => {
+  public loadUsers(organizationId: number): Promise<PagedList<User>> {
+    return new Promise<PagedList<User>>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<User[]> = await this._usersService.getAllUsers({ organizationId }).toPromise();
+        const response: HttpResponse<PagedList<User>> = await this._usersService.getAllUsers({ organizationId }).toPromise();
         this._users = response.body;
 
         resolve(this._users);
@@ -125,7 +126,7 @@ export class WebSocketService implements IDisposable {
   }
 
   public findUserIndex(userId: number): number {
-    return this._users?.findIndex((u: User) => u.id === userId) ?? -1;
+    return this._users?.data.findIndex((u: User) => u.id === userId) ?? -1;
   }
 
   public dispose(): void {
@@ -137,15 +138,15 @@ export class WebSocketService implements IDisposable {
 
   private addUser(user: User): void {
     if(this._users == null) {
-      this._users = [user];
+      this._users = { data: [user], pagination: null };
     }
     else {
-      this._users.push(user);
+      this._users.data.push(user);
     }
   }
 
   private updateUser(user: User): void {
-    const index: number = this._users?.findIndex((u: User) => u.id === user.id);
+    const index: number = this._users?.data.findIndex((u: User) => u.id === user.id);
 
     if(index !== -1) {
       this._users[index] = user;
@@ -166,7 +167,7 @@ export class WebSocketService implements IDisposable {
     return this._socket.ioSocket.connected;
   }
 
-  public get users(): User[] {
+  public get users(): PagedList<User> {
     return this._users;
   }
 }

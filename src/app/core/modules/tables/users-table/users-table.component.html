@@ -2,7 +2,7 @@
   <app-button text="Add User" icon="user-plus" (click)="onAddUser()"></app-button>
 </div>
 
-<app-table [cells]="cells" [data]="users">
+<app-table [cells]="cells" [data]="users" [pageHandler]="pageHandler">
   <ng-template app-template="role" let-value="value">{{getRoleName(value)}}</ng-template>
   <ng-template app-template="organizationId" let-value="value">{{getOrganizationName(value)}}</ng-template>
 
