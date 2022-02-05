@@ -87,43 +87,58 @@ export class WebSocketService implements IDisposable {
     });
   }
 
-  public connect(clientUser: User): void {
-    if(clientUser != null) {
-      this._socket.connect();
-
-      this._socket.emit(this.socketEvents.userJoin, clientUser, (response: User) => {
-        this._clientUser = response;
-        const index: number = this.findUserIndex(this._clientUser.id);
-
-        if(index === -1) {
-          this.addUser(this._clientUser);
-        }
-        else {
-          this.updateUser(this._clientUser);
-        }
-      });
-    }
-  }
-
-  public tryConnect(clientUser: User): Promise<void> {
-    return new Promise<void>((resolve, reject) => {
+  public connect(clientUser: User): Promise<void> {
+    return new Promise((resolve, reject) => {
       if(!clientUser) {
         reject("[clientUser] cannot be null");
       }
 
       const subscription = new Subscription();
+      let interval: number;
 
-      subscription.add(this.onConnect.subscribe(() => {
+      const onConnectSuccess = () => {
         subscription.unsubscribe();
+        window.clearInterval(interval);
+        this.joinClientUser(clientUser);
+
         resolve();
-      }));
+      };
 
-      subscription.add(this.onConnectError.subscribe((error: any) => {
+      const onConnectFail = (error?: any) => {
         subscription.unsubscribe();
+        window.clearInterval(interval);
+        
         reject(error);
-      }));
+      };
 
-      this.connect(clientUser);
+      const connect = () => {
+        if(this.isConnected) {
+          onConnectSuccess();
+        }
+        else {
+          this._socket.connect();
+        }
+      };
+
+      subscription.add(this.onConnect.subscribe(() => onConnectSuccess()));
+      subscription.add(this.onConnectError.subscribe((error: any) => onConnectFail(error)));
+
+      interval = window.setInterval(() => connect(), 1000);
+      connect();
+    });
+  }
+
+  private joinClientUser(clientUser: User): void {
+    this._socket.emit(this.socketEvents.userJoin, clientUser, (response: User) => {
+      this._clientUser = response;
+      const index: number = this.findUserIndex(this._clientUser.id);
+
+      if(index === -1) {
+        this.addUser(this._clientUser);
+      }
+      else {
+        this.updateUser(this._clientUser);
+      }
     });
   }
 
