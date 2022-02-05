@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { Observable } from 'rxjs';
+import { ActivatedRouteSnapshot, CanActivate, Router, UrlTree } from '@angular/router';
 import { Role } from 'src/app/core/models/auth/role';
 import { LoginService } from 'src/app/core/services/login.service';
 
@@ -10,7 +9,7 @@ import { LoginService } from 'src/app/core/services/login.service';
 export class RoleGuard implements CanActivate {
   constructor(private _loginService: LoginService, private _router: Router) { }
 
-  public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+  public canActivate(route: ActivatedRouteSnapshot): boolean | UrlTree {
     let result: boolean | UrlTree = true;
 
     const requiredRoles: Role[] = route.data.roles;
