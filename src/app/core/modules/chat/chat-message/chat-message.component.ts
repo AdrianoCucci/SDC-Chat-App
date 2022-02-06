@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
+import { isToday } from 'src/app/shared/util/date-utils';
 
 @Component({
   selector: 'app-chat-message',
@@ -33,13 +34,9 @@ export class ChatMessageComponent implements OnInit {
   }
 
   public getMessageDateFormat(message: ChatMessage): string {
-    const today = new Date();
     const datePosted = new Date(message.datePosted);
-    const millisecondsInDay: number = 86400000;
 
-    const isPostedToday: boolean = today.getTime() - datePosted.getTime() < millisecondsInDay;
-
-    return isPostedToday
+    return isToday(datePosted)
       ? `Today at: ${this._datePipe.transform(datePosted, "h:mm a")}`
       : this._datePipe.transform(datePosted, "dd/MM/yyyy");
   }
