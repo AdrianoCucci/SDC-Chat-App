@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { InputTextareaModule } from 'src/app/shared/modules/forms/inputs/input-textarea/input-textarea.module';
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
@@ -26,6 +26,7 @@ const components = [
     FontAwesomeModule,
     LoaderModule
   ],
+  providers: [DatePipe],
   exports: components,
   declarations: components
 })

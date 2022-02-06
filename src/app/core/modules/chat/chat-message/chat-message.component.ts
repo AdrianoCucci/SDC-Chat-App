@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
@@ -17,6 +18,8 @@ export class ChatMessageComponent implements OnInit {
   private _message: ChatMessage;
   private _displayContents: string;
 
+  constructor(private _datePipe: DatePipe) { }
+
   ngOnInit(): void {
     this._displayContents = this.parseMessageContents(this._message?.contents);
   }
@@ -34,7 +37,11 @@ export class ChatMessageComponent implements OnInit {
     const datePosted = new Date(message.datePosted);
     const millisecondsInDay: number = 86400000;
 
-    return today.getTime() - datePosted.getTime() < millisecondsInDay ? "h:mm a" : "dd/MM/yyyy";
+    const isPostedToday: boolean = today.getTime() - datePosted.getTime() < millisecondsInDay;
+
+    return isPostedToday
+      ? `Today at: ${this._datePipe.transform(datePosted, "h:mm a")}`
+      : this._datePipe.transform(datePosted, "dd/MM/yyyy");
   }
 
   onSaveEdit(contents: string): void {
