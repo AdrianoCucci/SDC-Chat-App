@@ -5,13 +5,12 @@
 import { environment as shared } from "./environment.shared";
 
 export const environment = {
-  production: false,
+  ...shared,
 
-  app: shared.app,
+  production: false,
 
   server: {
     ...shared.server,
-    host: "http://localhost:3000",
     apiPath: "",
 
     socketConfig: {

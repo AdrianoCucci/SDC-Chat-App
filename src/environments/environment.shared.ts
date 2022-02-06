@@ -6,10 +6,11 @@ export const environment = {
   },
 
   server: {
-    apiPath: "/sdc-chat/api",
+    host: "http://localhost:3000",
+    apiPath: "/sdc-chat-api",
 
     socketConfig: {
-      path: "/sdc-chat/api/socket",
+      path: "/sdc-chat-api/socket",
       autoConnect: false,
       reconnectionAttempts: 4
     }

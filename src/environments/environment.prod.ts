@@ -1,12 +1,6 @@
 import { environment as shared } from "./environment.shared";
 
 export const environment = {
-  production: true,
-
-  app: shared.app,
-
-  server: {
-    ...shared.server,
-    host: ""
-  }
+  ...shared,
+  production: true
 };
