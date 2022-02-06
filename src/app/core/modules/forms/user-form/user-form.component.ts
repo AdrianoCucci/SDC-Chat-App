@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
@@ -14,15 +14,19 @@ import { AppForm } from '../app-form';
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.scss']
 })
-export class UserForm extends AppForm<UserRequest, User> {
+export class UserForm extends AppForm<UserRequest, User> implements OnInit {
   @Input() public organizationOptions: Organization[];
   @Input() public defaultOrganizationId?: number;
-  @Input() public showRoles?: boolean = true;
-
-  public readonly roleOptions: Pair<string, Role>[] = enumToPairs(Role, true);
+  @Input() public roleOptions: Pair<string, Role>[];
 
   constructor(private _usersService: UsersService) {
     super();
+  }
+
+  ngOnInit(): void {
+    if(!this.roleOptions) {
+      this.roleOptions = enumToPairs(Role, true);
+    }
   }
 
   protected async onRequestAdd(model: UserRequest): Promise<User> {

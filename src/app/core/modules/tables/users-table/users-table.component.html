@@ -26,7 +26,7 @@
 <app-admin-pass-reset-form #passResetForm [dialog]="true" (onSubmitSuccess)="passResetForm.dialogVisible = false">
 </app-admin-pass-reset-form>
 
-<app-user-form [dialog]="true" [organizationOptions]="organizations" [showRoles]="adminFeatures"
+<app-user-form [dialog]="true" [organizationOptions]="organizations" [roleOptions]="rolePairs"
   [defaultOrganizationId]="clientUser?.organizationId" (onSubmitSuccess)="onUserFormSubmit($event)">
 </app-user-form>
 

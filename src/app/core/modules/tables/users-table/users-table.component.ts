@@ -1,4 +1,4 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
@@ -26,7 +26,18 @@ export class UsersTable implements OnInit {
   @Input() public clientUser: User;
   @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<User>>;
 
-  public readonly rolePairs: Pair<string, Role>[] = enumToPairs(Role, true);
+  private readonly _roleCell: TableCell = {
+    name: "Role",
+    prop: "role",
+    sortable: true,
+    filterable: true,
+    type: "select",
+    selectOptions: {
+      options: [],
+      displayKey: "key",
+      valueKey: "value"
+    }
+  };
 
   private readonly _organizationCell: TableCell = {
     name: "Organization",
@@ -44,19 +55,7 @@ export class UsersTable implements OnInit {
   public readonly cells: TableCell[] = [
     { name: "Username", prop: "username", sortable: true, filterable: true },
     { name: "Display Name", prop: "displayName", sortable: true, filterable: true },
-    {
-      name: "Role",
-      prop: "role",
-      sortable: true,
-      filterable: true,
-      cellClass: "admin-cell",
-      type: "select",
-      selectOptions: {
-        options: this.rolePairs,
-        displayKey: "key",
-        valueKey: "value"
-      }
-    },
+    this._roleCell,
     this._organizationCell,
     { name: "Account Locked", prop: "isLocked", sortable: true, type: "boolean", filterable: true }
   ];
@@ -75,7 +74,7 @@ export class UsersTable implements OnInit {
   constructor(private _usersService: UsersService) { }
 
   ngOnInit(): void {
-    this.setAdminCellsHidden(!this._adminFeatures);
+    this.updateAdminState(this._adminFeatures);
   }
 
   public isClientUser(user: User): boolean {
@@ -90,6 +89,11 @@ export class UsersTable implements OnInit {
     return this._organizations?.find((o: Organization) => o.id === organizationId)?.name ?? '-';
   }
 
+  private updateAdminState(allowAdminFeatures: boolean): void {
+    this.setAdminCellsHidden(!allowAdminFeatures);
+    this._roleCell.selectOptions.options = this.getRolePairs(allowAdminFeatures);
+  }
+
   private setAdminCellsHidden(hidden: boolean) {
     for(let i = 0; i < this.cells.length; i++) {
       const cell: TableCell = this.cells[i];
@@ -98,6 +102,20 @@ export class UsersTable implements OnInit {
         cell.hidden = hidden;
       }
     }
+  }
+
+  private getRolePairs(allowAdminFeatures: boolean): Pair<string, Role>[] {
+    const pairs: Pair<string, Role>[] = enumToPairs(Role, true);
+
+    if(!allowAdminFeatures) {
+      const adminIndex: number = pairs.findIndex((p: Pair) => p.value === Role.Administrator);
+
+      if(adminIndex !== -1) {
+        pairs.splice(adminIndex, 1);
+      }
+    }
+
+    return pairs;
   }
 
   onResetUserPassword(user: User): void {
@@ -170,7 +188,11 @@ export class UsersTable implements OnInit {
   }
   @Input() public set adminFeatures(value: boolean) {
     this._adminFeatures = value;
-    this.setAdminCellsHidden(!this._adminFeatures);
+    this.updateAdminState(this._adminFeatures);
+  }
+
+  public get rolePairs(): Pair<string, Role>[] {
+    return this._roleCell.selectOptions.options;
   }
 
   public get organizations(): Organization[] {
