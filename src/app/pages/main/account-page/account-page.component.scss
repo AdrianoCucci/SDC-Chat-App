@@ -14,6 +14,9 @@
     }
 
     h2 {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 0.75rem;
       margin: 1rem 0 2rem 0;
       background-color: var(--green-200);
@@ -22,22 +25,16 @@
       font-size: 1.3rem;
       font-weight: 600;
 
-      &.account-details {
+      div.section-actions {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
+        font-size: initial;
+      }
 
-        div.account-actions {
-          display: flex;
-          font-size: initial;
-        }
+      @include mobileWidth() {
+        flex-direction: column;
 
-        @include mobileWidth() {
-          flex-direction: column;
-
-          div.account-actions {
-            margin-top: 0.5rem;
-          }
+        div.section-actions {
+          margin-top: 0.5rem;
         }
       }
     }

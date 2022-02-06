@@ -1,8 +1,8 @@
 <section *ngIf="clientUser != null" class="account-details">
-  <h2 class="account-details">
+  <h2>
     <span>Account Details</span>
 
-    <div class="account-actions">
+    <div class="section-actions account-actions">
       <app-button class="m-r-2" text="Edit" icon="pen" (click)="onEditAccount()"></app-button>
       <app-button text="Change Password" icon="key" (click)="onChangePassword()"></app-button>
     </div>
@@ -33,7 +33,13 @@
 </section>
 
 <section *ngIf="organization != null" class="organization-details">
-  <h2>Organization Details</h2>
+  <h2>
+    <span>Organization Details</span>
+
+    <div *ngIf="allowEditOrganization" class="section-actions organization-actions">
+      <app-button class="m-r-2" text="Edit" icon="pen" (click)="onEditOrganization()"></app-button>
+    </div>
+  </h2>
 
   <ul class="details-list organization">
     <li class="info">
@@ -56,20 +62,8 @@
       <span class="data">{{organization.phoneNumber}}</span>
     </li>
   </ul>
+
+  <app-organization-form *ngIf="allowEditOrganization" mode="edit" [dialog]="true"
+    (onSubmitSuccess)="onOrganizationFormSuccess($event)">
+  </app-organization-form>
 </section>
-
-<app-loader [fullscreen]="true" text="Please wait..." [visible]="loadingVisible"></app-loader>
-
-<app-dialog *ngIf="initError" #errorDialog class="error-dialog" [backdropDismiss]="true" [visible]="true">
-  <div slot="header">
-    <span>Error Occurred</span>
-  </div>
-  <p slot="body" class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
-    <span>Failed to load data.</span>
-    <br />
-    <b>{{initError}}</b>
-  </p>
-  <div slot="footer" class="txt-right">
-    <app-button class="text" text="OK" (click)="errorDialog.hide()"></app-button>
-  </div>
-</app-dialog>

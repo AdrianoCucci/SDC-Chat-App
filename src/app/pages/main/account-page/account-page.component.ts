@@ -1,11 +1,10 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
 import { AccountForm } from 'src/app/core/modules/forms/account-form/account-form.component';
+import { OrganizationForm } from 'src/app/core/modules/forms/organization-form/organization-form.component';
 import { PassChangeForm } from 'src/app/core/modules/forms/pass-change-form/pass-change-form.component';
-import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
 import { Pair } from 'src/app/shared/models/pair';
@@ -15,54 +14,24 @@ import { Pair } from 'src/app/shared/models/pair';
   templateUrl: './account-page.component.html',
   styleUrls: ['./account-page.component.scss']
 })
-export class AccountPage implements OnInit {
+export class AccountPage {
   public readonly rolePairs: Pair<string, Role>[] = enumToPairs(Role, true);
 
   @ViewChild(AccountForm) private readonly _accountForm: AccountForm;
   @ViewChild(PassChangeForm) private readonly _passChangeForm: PassChangeForm;
+  @ViewChild(OrganizationForm) private readonly _organizationForm: OrganizationForm;
 
-  private _organization: Organization;
-  private _loadingVisible: boolean = false;
-  private _initError: string;
-
-  constructor(private _loginService: LoginService, private _orgsService: OrganizationsService) { }
+  constructor(private _loginService: LoginService) { }
 
   public getRoleName(role: Role): string {
     return this.rolePairs.find((p: Pair) => p.value === role)?.key ?? null;
-  }
-
-  async ngOnInit(): Promise<void> {
-    if(this.clientUser.organizationId != null) {
-      try {
-        this._loadingVisible = true;
-        this._organization = await this.loadOrganization(this.clientUser.organizationId);
-      }
-      catch(error) {
-        this._initError = (<HttpErrorResponse>error).message;
-      }
-      finally {
-        this._loadingVisible = false;
-      }
-    }
-  }
-
-  private loadOrganization(id: number): Promise<Organization> {
-    return new Promise<Organization>(async (resolve, reject) => {
-      try {
-        const response: HttpResponse<Organization> = await this._orgsService.getOrganization(id).toPromise();
-        resolve(response.body);
-      }
-      catch(error) {
-        reject(error);
-      }
-    });
   }
 
   onEditAccount(): void {
     this._accountForm.clear();
 
     setTimeout(() => {
-      this._accountForm.model = { ...this.clientUser } as any;
+      this._accountForm.model = { ...this.clientUser };
       this._accountForm.dialogVisible = true;
     });
   }
@@ -70,6 +39,22 @@ export class AccountPage implements OnInit {
   onAccountFormSuccess(result: User): void {
     this._accountForm.dialogVisible = false;
     this._loginService.updateCurrentUser(result);
+  }
+
+  onEditOrganization(): void {
+    this._organizationForm.clear();
+
+    setTimeout(() => {
+      this._organizationForm.model = { ...this.organization };
+      this._organizationForm.dialogVisible = true;
+    });
+  }
+
+  onOrganizationFormSuccess(result: Organization): void {
+    this._organizationForm.dialogVisible = false;
+
+    this.clientUser.organization = result;
+    this._loginService.updateCurrentUser(this.clientUser);
   }
 
   onChangePassword(): void {
@@ -92,14 +77,10 @@ export class AccountPage implements OnInit {
   }
 
   public get organization(): Organization {
-    return this._organization;
+    return this.clientUser?.organization;
   }
 
-  public get loadingVisible(): boolean {
-    return this._loadingVisible;
-  }
-
-  public get initError(): string {
-    return this._initError;
+  public get allowEditOrganization(): boolean {
+    return this.clientUser?.role === Role.OrganizationAdmin;
   }
 }
