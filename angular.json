@@ -23,7 +23,6 @@
             "outputPath": "dist/SDC-Chat-App",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "baseHref": ".",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",

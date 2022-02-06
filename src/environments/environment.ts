@@ -6,18 +6,7 @@ import { environment as shared } from "./environment.shared";
 
 export const environment = {
   ...shared,
-
-  production: false,
-
-  server: {
-    ...shared.server,
-    apiPath: "",
-
-    socketConfig: {
-      ...shared.server.socketConfig,
-      path: "/socket"
-    }
-  }
+  production: false
 };
 
 /*
