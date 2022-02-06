@@ -107,7 +107,7 @@ export class WebSocketService implements IDisposable {
       const onConnectFail = (error?: any) => {
         subscription.unsubscribe();
         window.clearInterval(interval);
-        
+
         reject(error);
       };
 
@@ -123,7 +123,7 @@ export class WebSocketService implements IDisposable {
       subscription.add(this.onConnect.subscribe(() => onConnectSuccess()));
       subscription.add(this.onConnectError.subscribe((error: any) => onConnectFail(error)));
 
-      interval = window.setInterval(() => connect(), 1000);
+      interval = window.setInterval(() => connect(), 500);
       connect();
     });
   }
