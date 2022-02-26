@@ -3,7 +3,7 @@
   --message-background: var(--color-1);
   --message-background-client: var(--color-1-tint-4);
   --message-background-client-hover: var(--color-1-tint-3);
-  --input-wrapper-background: var(--color-3);
+  --input-wrapper-background: var(--color-2);
 
   display: flex;
   flex-direction: column;
@@ -56,7 +56,7 @@
       padding: 16px;
       margin-bottom: 16px;
       background-color: var(--color-light-shade-1);
-      color: var(--color-3-shade-5);
+      color: var(--color-2-shade-5);
       border-radius: 0.25rem;
       animation: noMessagesIntro 0.25s;
 

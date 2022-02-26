@@ -7,7 +7,7 @@
   padding: 0.75rem;
   background-color: var(--color-1-shade-2);
   border-radius: 0.25rem;
-  border: solid var(--color-3) 2px;
+  border: solid var(--color-2) 2px;
   border-top-width: 30px;
   overflow: hidden;
 
@@ -87,7 +87,7 @@
       border-top-color: var(--color-warn);
     }
     100% {
-      border-top-color: var(--color-3);
+      border-top-color: var(--color-2);
     }
   }
 }
