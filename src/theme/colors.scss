@@ -36,6 +36,7 @@
 
   @include generateColorVariable("1", #cae6fc, $colorDark);
   @include generateColorVariable("2", #d4ecd5, $colorDark);
+  @include generateColorVariable("3", #4baaf5, $colorDark);
   @include generateColorVariable("success", #2dd36f, $colorDark);
   @include generateColorVariable("warn", #ffc409, $colorDark);
   @include generateColorVariable("danger", #eb445a, $colorLight);
