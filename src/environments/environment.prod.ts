@@ -1,3 +1,4 @@
+import { config } from "../config";
 import { environment as shared } from "./environment.shared";
 
 export const environment = {
@@ -7,6 +8,6 @@ export const environment = {
 
   server: {
     ...shared.server,
-    host: "http://192.168.0.125:3000"
+    host: config.apiAddress
   }
 };
