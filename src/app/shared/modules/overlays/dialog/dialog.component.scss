@@ -3,17 +3,17 @@
 :host {
   --visible-transition: 0.16s;
 
-  --backdrop-background: var(--surface-800);
+  --backdrop-background: var(--color-dark);
   --backdrop-opacity: 0.5;
 
   --content-padding: 0;
-  --content-background: var(--green-50);
+  --content-background: var(--color-light);
   --content-border-radius: 0.25rem;
-  --content-box-shadow: var(--surface-800) 0 8px 25px;
+  --content-box-shadow: var(--color-dark-tint-1) 0 8px 25px;
 
   --header-padding: 1rem;
-  --header-background: unset;
-  --header-shadow: var(--surface-400) 0 0 4px;
+  --header-background: var(--color-1-tint-5);
+  --header-shadow: var(--color-medium) 0 0 4px;
 
   --body-padding: 1rem;
   --body-background: unset;

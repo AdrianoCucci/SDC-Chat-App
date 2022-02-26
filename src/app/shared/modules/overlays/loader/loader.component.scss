@@ -3,18 +3,18 @@
 
   --spinner-size: 50px;
   --spinner-thickness: 6px;
-  --spinner-color: var(--green-800);
-  --spinner-color-accent: var(--green-400);
+  --spinner-color: var(--color-3);
+  --spinner-color-accent: transparent;
   --spinner-speed: 0.65s;
   --spinner-easing: linear;
 
-  --backdrop-background: var(--surface-800);
+  --backdrop-background: var(--color-dark);
   --backdrop-opacity: 0.5;
 
   --content-padding: 1rem;
-  --content-background: var(--green-100);
+  --content-background: var(--color-light);
   --content-border-radius: 0.25rem;
-  --content-box-shadow: var(--surface-600) 0 0 10px;
+  --content-box-shadow: var(--color-dark-tint-2) 0 0 10px;
 
   display: inline-block;
   opacity: 0;

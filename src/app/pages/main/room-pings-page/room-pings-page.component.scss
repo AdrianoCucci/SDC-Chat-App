@@ -13,12 +13,13 @@
     div.section-header {
       padding: 0.5rem;
       margin: 1rem;
-      background-color: var(--green-200);
-      border-bottom: solid var(--green-300) 4px;
+      background-color: var(--color-1-tint-3);
+      border-bottom: solid var(--color-1) 4px;
       border-radius: 0.25rem;
 
       h2 {
         margin: 0;
+        padding: 0.5rem 0.75rem;
         font-size: 1.3rem;
         font-weight: 600;
       }
@@ -26,7 +27,6 @@
 
     &.rooms {
       flex: 3;
-      background-color: var(--surface-50);
 
       app-filter-list.rooms-list {
         --list-direction: row;
@@ -45,8 +45,8 @@
     &.active-pings {
       flex: 0;
       min-width: 0;
-      background-color: var(--green-50);
-      border-left: solid var(--green-300) 2px;
+      background-color: var(--color-light);
+      border-left: solid var(--color-1) 2px;
       overflow: hidden;
       transition: 0.16s;
 
@@ -87,7 +87,7 @@
 
       &.visible {
         min-height: 50vh;
-        border-top: solid var(--green-300) 4px;
+        border-top: solid var(--color-1) 4px;
       }
     }
   }

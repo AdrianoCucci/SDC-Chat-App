@@ -1,14 +1,14 @@
 @import "../base/form-input.scss";
 
 :host {
-  --background: var(--surface-0);
-  --border-color: var(--surface-400);
+  --background: var(--color-white);
+  --border-color: var(--color-medium-shade-4);
   --border: solid var(--border-color) 1px;
   --border-radius: 0.25rem;
 
   --popover-background: var(--background);
   --popover-border-radius: var(--border-radius);
-  --popover-box-shadow: var(--surface-500) 0 0 6px;
+  --popover-box-shadow: var(--color-medium-shade-1) 0 0 6px;
 
   div.input-wrapper div.select-wrapper {
     position: relative;
@@ -58,7 +58,7 @@
 
       app-button.clear-button {
         height: 100%;
-        --background: var(--surface-900);
+        --background: var(--color-dark);
         animation: clearButtonAnimation 0.16s;
         pointer-events: initial;
 
@@ -85,7 +85,7 @@
   }
 
   &.has-errors {
-    --border-color: var(--pink-500);
+    --border-color: var(--color-danger);
   }
 }
 

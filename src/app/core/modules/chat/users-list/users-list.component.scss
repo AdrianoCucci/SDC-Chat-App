@@ -1,10 +1,11 @@
 :host {
-  --header-background: var(--green-700);
-  --header-color: var(--surface-0);
+  --header-background: var(--color-1-shade-5);
+  --header-color: var(--color-1-contrast);
 
   display: flex;
   flex-direction: column;
-  background-color: #aec6ae;
+  background-color: var(--color-1-tint-5);
+  border-right: solid var(--header-background) 1px;
 
   span.header {
     display: block;

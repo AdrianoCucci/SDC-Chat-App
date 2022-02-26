@@ -18,7 +18,7 @@
       div.actions {
         position: absolute;
         display: flex;
-        top: -0.6rem;
+        top: -0.5rem;
         right: 150%;
         margin-right: 0.5rem;
         width: max-content;
@@ -29,11 +29,13 @@
         transition: 0.16s;
 
         app-button {
+          flex: 1;
+          min-width: 40px;
           --padding: 0.4rem;
-          background-color: var(--green-100);
+          --border-radius: 0;
 
           &.delete {
-            --background: var(--pink-400);
+            --color: var(--color-danger);
           }
         }
       }
@@ -62,7 +64,8 @@
     overflow: hidden;
 
     app-button {
-      background-color: var(--green-100);
+      flex: 1;
+      --border-radius: 0;
     }
   }
 

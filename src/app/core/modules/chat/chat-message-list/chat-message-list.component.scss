@@ -1,10 +1,9 @@
 :host {
-  --message-list-background: var(--green-50);
-  --message-background: var(--green-100);
-  --message-background-client: var(--green-100);
-  --message-background-client-hover: var(--green-200);
-  --input-wrapper-background: var(--green-400);
-  --input-background: var(--surface-0);
+  --message-list-background: var(--color-light);
+  --message-background: var(--color-1);
+  --message-background-client: var(--color-1-tint-4);
+  --message-background-client-hover: var(--color-1-tint-3);
+  --input-wrapper-background: var(--color-3);
 
   display: flex;
   flex-direction: column;
@@ -56,8 +55,8 @@
       height: 100%;
       padding: 16px;
       margin-bottom: 16px;
-      background-color: var(--gray-200);
-      color: var(--green-900);
+      background-color: var(--color-light-shade-1);
+      color: var(--color-3-shade-5);
       border-radius: 0.25rem;
       animation: noMessagesIntro 0.25s;
 
@@ -80,7 +79,6 @@
     app-input-textarea.user-input {
       flex-grow: 1;
       margin: 0;
-      --background: var(--input-background);
       --border: none;
       --border-radius: 0.5rem;
     }
