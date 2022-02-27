@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthRequest } from 'src/app/core/models/auth/auth-request';
 import { AuthResponse } from 'src/app/core/models/auth/auth-response';
@@ -14,9 +14,10 @@ import { environment } from 'src/environments/environment';
   templateUrl: './login-page.component.html',
   styleUrls: ['./login-page.component.scss']
 })
-export class LoginPage {
+export class LoginPage implements OnInit {
   public username: string;
   public password: string;
+  public rememberLogin: boolean;
 
   public errorVisible: boolean = false;;
 
@@ -24,6 +25,12 @@ export class LoginPage {
   private _loginError: string;
 
   constructor(private _authService: AuthService, private _loginService: LoginService, private _router: Router) { }
+
+  ngOnInit(): void {
+    if(this._loginService.loadSavedLogin()) {
+      this.navigateToMain();
+    }
+  }
 
   async onFormSubmit(result: FormSubmitResult): Promise<void> {
     if(result.isValid) {
@@ -40,7 +47,7 @@ export class LoginPage {
     try {
       this._isLoggingIn = true;
       const response: HttpResponse<AuthResponse> = await this._authService.login(request).toPromise();
-      await this.onLoginSuccess(response.body);
+      this.onLoginSuccess(response.body);
     }
     catch(error) {
       this.onLoginFail(error);
@@ -50,9 +57,13 @@ export class LoginPage {
     }
   }
 
-  private async onLoginSuccess(response: AuthResponse): Promise<void> {
-    this._loginService.setCurrentUser(response);
-    await this._router.navigateByUrl(MAIN_PATHS.root);
+  private onLoginSuccess(response: AuthResponse): void {
+    this._loginService.setCurrentUser(response, this.rememberLogin);
+    this.navigateToMain();
+  }
+
+  private navigateToMain(): void {
+    this._router.navigateByUrl(MAIN_PATHS.root);
   }
 
   private onLoginFail(error: any): void {

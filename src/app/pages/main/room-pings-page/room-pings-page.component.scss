@@ -2,6 +2,8 @@
 @import "/src/theme/colors.scss";
 
 :host {
+  --active-section-border-color: var(--color-1);
+
   display: flex;
   width: 100%;
   height: 100%;
@@ -47,7 +49,7 @@
       flex: 0;
       min-width: 0;
       background-color: var(--color-light);
-      border-left: solid var(--color-1) 2px;
+      border-left: solid var(--active-section-border-color) 2px;
       overflow: hidden;
       transition: 0.16s;
 
@@ -88,7 +90,7 @@
 
       &.visible {
         min-height: 50vh;
-        border-top: solid var(--color-1) 4px;
+        border-top: solid var(--active-section-border-color) 4px;
       }
     }
   }
@@ -106,8 +108,12 @@
 }
 
 @include themeHighContrast() {
-  :host div.section-header {
-    background-color: var(--color-black);
-    color: var(--color-white);
+  :host {
+    --active-section-border-color: var(--color-black);
+
+    div.section-header {
+      background-color: var(--color-black);
+      color: var(--color-white);
+    }
   }
 }

@@ -80,9 +80,13 @@
         color: var(--color-white);
       }
 
-      ul.details-list li span.meta {
-        background-color: var(--color-medium);
-        color: var(--color-white);
+      ul.details-list li {
+        border-bottom: solid var(--color-medium) 2px;
+
+        span.meta {
+          background-color: var(--color-medium);
+          color: var(--color-white);
+        }
       }
     }
   }
