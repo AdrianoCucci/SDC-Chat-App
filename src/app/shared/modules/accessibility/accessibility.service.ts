@@ -11,6 +11,7 @@ import { AccessibilityOptionsModel } from "./accessibility-options.model";
 })
 export class AccessibilityService {
   private _model: AccessibilityOptionsModel;
+  private _debounceTimeout: number;
 
   constructor(private _usersService: UsersService, private _loginService: LoginService) {
     this.loadDefaultPreferences();
@@ -55,6 +56,13 @@ export class AccessibilityService {
     }
   }
 
+  private debounceSavePreferences(): void {
+    this.updateDOM();
+
+    window.clearTimeout(this._debounceTimeout);
+    this._debounceTimeout = window.setTimeout(() => this.savePreferences(), 500);
+  }
+
   public loadDefaultPreferences(): void {
     this._model = { theme: "default" };
     this.updateDOM();
@@ -72,7 +80,7 @@ export class AccessibilityService {
   }
   public set fontSize(value: number) {
     this._model.fontSize = value;
-    this.updateDOM();
+    this.debounceSavePreferences();
   }
 
   public get theme(): string {
@@ -80,6 +88,6 @@ export class AccessibilityService {
   }
   public set theme(value: string) {
     this._model.theme = value;
-    this.updateDOM();
+    this.debounceSavePreferences();
   }
 }
