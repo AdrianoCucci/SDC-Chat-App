@@ -98,6 +98,10 @@ export class LoginService {
   public get isLoggedIn(): boolean {
     if(this._currentUser == null) {
       this._currentUser = this.getSessionLogin()?.user;
+
+      if(this._currentUser != null) {
+        this.onLogin.emit(this._currentUser);
+      }
     }
 
     return this._currentUser != null;
