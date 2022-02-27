@@ -1,4 +1,4 @@
-<div class="card fade-in-up anim-speed-2">
+<div class="card fade-in anim-speed-2">
   <div class="card-header fade-in-up anim-speed-3">
     <h2>Please Login</h2>
   </div>
@@ -22,7 +22,11 @@
   </div>
 </div>
 
-<app-dialog #errorDialog [backdropDismiss]="true" [(visible)]="errorVisible">
+<div class="version-container fade-in-up anim-speed-3">
+  <app-version></app-version>
+</div>
+
+<app-dialog #errorDialog [backdropDismiss]=" true" [(visible)]="errorVisible">
   <div slot="header">
     <span>Failed to Login</span>
   </div>
