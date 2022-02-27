@@ -9,4 +9,5 @@ export interface UserRequest {
   isLocked?: boolean;
   isOnline?: boolean;
   organizationId?: number;
+  preferencesJson?: string;
 }

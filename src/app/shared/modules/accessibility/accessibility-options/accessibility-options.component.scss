@@ -1,0 +1,25 @@
+:host {
+  display: inline-block;
+
+  div.option {
+    span.option-name {
+      font-size: 1.14rem;
+      font-weight: 600;
+    }
+
+    div.option-content {
+      display: flex;
+      align-items: center;
+
+      .option-value {
+        flex: 1;
+        min-width: 10rem;
+      }
+    }
+
+    &:not(:last-of-type) {
+      margin-bottom: 0.75rem;
+      border-bottom: solid var(--color-medium) 1px;
+    }
+  }
+}

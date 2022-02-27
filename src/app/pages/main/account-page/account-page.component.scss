@@ -1,4 +1,5 @@
 @import "/src/theme/responsive.scss";
+@import "/src/theme/colors.scss";
 
 :host {
   position: relative;
@@ -66,6 +67,22 @@
           border-radius: 0 1000px 1000px 0;
           font-weight: 600;
         }
+      }
+    }
+  }
+}
+
+@include themeHighContrast() {
+  :host {
+    section {
+      h2 {
+        background-color: var(--color-black);
+        color: var(--color-white);
+      }
+
+      ul.details-list li span.meta {
+        background-color: var(--color-medium);
+        color: var(--color-white);
       }
     }
   }

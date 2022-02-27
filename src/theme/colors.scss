@@ -1,6 +1,11 @@
 @use "sass:color";
 @use "sass:math";
 
+$colorWhite: #ffffff;
+$colorBlack: #000000;
+$colorLight: #fafafa;
+$colorDark: #212121;
+
 @function getColorRGB($color) {
   @return "#{red($color)}, #{green($color)}, #{blue($color)}";
 }
@@ -31,11 +36,8 @@
 }
 
 :root {
-  --color-white: #ffffff;
-  --color-black: #000000;
-
-  $colorLight: #fafafa;
-  $colorDark: #212121;
+  --color-white: #{$colorWhite};
+  --color-black: #{$colorBlack};
 
   @include generateColorVariable("1", #cae6fc, $colorDark);
   @include generateColorVariable("2", #4baaf5, $colorDark);
@@ -45,4 +47,21 @@
   @include generateColorVariable("light", $colorLight, $colorDark);
   @include generateColorVariable("medium", #bdbdbd, $colorDark);
   @include generateColorVariable("dark", $colorDark, $colorLight);
+
+  &[theme="high-contrast"] {
+    @include generateColorVariable("1", $colorWhite, $colorBlack);
+    @include generateColorVariable("2", $colorBlack, $colorWhite);
+    @include generateColorVariable("success", #008000, $colorWhite);
+    @include generateColorVariable("warn", #ffff00, $colorBlack);
+    @include generateColorVariable("danger", #ff0000, $colorWhite);
+    @include generateColorVariable("light", $colorWhite, $colorBlack);
+    @include generateColorVariable("medium", #808080, $colorBlack);
+    @include generateColorVariable("dark", $colorBlack, $colorWhite);
+  }
+}
+
+@mixin themeHighContrast() {
+  :root[theme="high-contrast"] {
+    @content;
+  }
 }

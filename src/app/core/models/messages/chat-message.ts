@@ -1,3 +1,4 @@
+import { Organization } from "../organizations/organization";
 import { User } from "../users/user";
 
 export interface ChatMessage {
@@ -8,4 +9,5 @@ export interface ChatMessage {
   organizationId?: number;
 
   senderUser?: User;
+  organization?: Organization;
 }

@@ -1,14 +1,23 @@
+@import "/src/theme/colors.scss";
+
 :host {
   --row-background: unset;
+  --row-color: unset;
   --row-background-odd: unset;
+  --row-color-odd: unset;
   --row-background-even: var(--color-light);
+  --row-color-even: var(--color-light-contrast);
   --row-border-bottom: solid var(--color-1) 1px;
   --header-cell-background: var(--color-1-shade-1);
+  --header-cell-color: var(--color-1-contrast);
   --header-cell-border-color: var(--color-1-shade-3);
   --header-sort-background: var(--color-2);
+  --header-sort-color: var(--color-2-contrast);
   --pager-border-top: solid var(--color-1) 1px;
   --pager-item-background: var(--color-1-tint-5);
+  --pager-item-color: var(--color-1-contrast);
   --pager-item-background-active: var(--color-2);
+  --pager-item-color-active: var(--color-2-contrast);
 
   display: block;
   width: 100%;
@@ -54,13 +63,16 @@
 
           datatable-row-wrapper {
             background-color: var(--row-background);
+            color: var(--row-color);
 
             &:nth-of-type(odd) {
               background-color: var(--row-background-odd);
+              color: var(--row-color-odd);
             }
 
             &:nth-of-type(even) {
               background-color: var(--row-background-even);
+              color: var(--row-color-even);
             }
 
             datatable-body-cell {
@@ -100,12 +112,14 @@
               margin: 0 0.25rem;
               color: initial;
               background-color: var(--pager-item-background);
+              color: var(--pager-item-color);
               border-radius: 0.25rem;
               text-decoration: none;
             }
 
             &.active a {
               background-color: var(--pager-item-background-active);
+              color: var(--pager-item-color-active);
             }
           }
         }
@@ -120,6 +134,7 @@
       flex: 1;
       min-height: 3rem;
       background-color: var(--header-cell-background);
+      color: var(--header-cell-color);
       border-right: solid var(--header-cell-border-color) 2px;
       border-bottom: solid var(--header-cell-border-color) 1px;
 
@@ -156,6 +171,7 @@
         &:hover,
         &.sort-active {
           background-color: var(--header-sort-background);
+          color: var(--header-sort-color);
         }
       }
     }
@@ -170,5 +186,19 @@
         pointer-events: none;
       }
     }
+  }
+}
+
+@include themeHighContrast() {
+  :host {
+    --header-cell-background: var(--color-black);
+    --header-cell-color: var(--color-white);
+    --row-background-even: var(--color-medium);
+    --row-color-even: var(--color-white);
+    --header-sort-background: var(--color-white);
+    --header-sort-color: var(--color-black);
+    --pager-border-top: solid var(--color-black) 1px;
+
+    border-color: var(--color-black);
   }
 }

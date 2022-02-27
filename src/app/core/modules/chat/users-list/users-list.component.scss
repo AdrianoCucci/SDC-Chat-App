@@ -1,3 +1,5 @@
+@import "/src/theme/colors.scss";
+
 :host {
   --header-background: var(--color-1-shade-5);
   --header-color: var(--color-1-contrast);
@@ -52,5 +54,12 @@
         }
       }
     }
+  }
+}
+
+@include themeHighContrast() {
+  :host {
+    --header-background: var(--color-black);
+    --header-color: var(--color-white);
   }
 }

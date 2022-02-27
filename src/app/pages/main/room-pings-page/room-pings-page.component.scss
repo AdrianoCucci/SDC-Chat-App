@@ -1,4 +1,5 @@
 @import "/src/theme/responsive.scss";
+@import "/src/theme/colors.scss";
 
 :host {
   display: flex;
@@ -31,9 +32,9 @@
       app-filter-list.rooms-list {
         --list-direction: row;
         --list-justify: center;
-        --item-flex: 1 1 400px;
-        --item-max-width: 800px;
-        --item-max-height: 200px;
+        --item-flex: 1 1 26rem;
+        --item-max-width: 50rem;
+        --item-max-height: 12rem;
         --item-padding: 1rem;
 
         app-room-ping-card.room {
@@ -101,5 +102,12 @@
   to {
     transform: translateX(0%);
     opacity: 1;
+  }
+}
+
+@include themeHighContrast() {
+  :host div.section-header {
+    background-color: var(--color-black);
+    color: var(--color-white);
   }
 }
