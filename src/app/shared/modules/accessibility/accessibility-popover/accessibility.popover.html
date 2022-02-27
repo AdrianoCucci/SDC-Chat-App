@@ -1,0 +1,6 @@
+<app-button [class]="buttonClass" [text]="buttonText" [icon]="buttonIcon" (click)="popover.toggleVisible($event)">
+</app-button>
+
+<app-popover #popover parent="body" [inheritTargetWidth]="false">
+  <app-accessibility-options></app-accessibility-options>
+</app-popover>
