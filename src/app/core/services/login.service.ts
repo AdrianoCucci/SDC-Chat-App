@@ -3,7 +3,8 @@ import { AuthResponse } from "../models/auth/auth-response";
 import { Role } from "../models/auth/role";
 import { User } from "../models/users/user";
 import { UsersService } from "./api/users-service";
-import { StorageService } from "./storage-service";
+import { EncryptService } from "./encrypt-service";
+import { StorageService } from "./storage/storage-service";
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,14 @@ export class LoginService {
 
   private _currentUser: User;
 
-  constructor(private _storageService: StorageService, private _usersService: UsersService) { }
+  constructor(private _storageService: StorageService, private _encryptService: EncryptService, private _usersService: UsersService) { }
 
   public setCurrentUser(authResponse: AuthResponse): User {
     if(authResponse.isSuccess && authResponse.user != null) {
-      this._storageService.setSessionEncrypted(this._storageKey, authResponse);
-      this._currentUser = authResponse.user;
+      const savedData: string = this._encryptService.encrypt(JSON.stringify(authResponse));
+      this._storageService.session.set(this._storageKey, savedData);
 
+      this._currentUser = authResponse.user;
       this.onLogin.emit(this._currentUser);
     }
 
@@ -37,9 +39,10 @@ export class LoginService {
       const sessionLogin: AuthResponse = this.getSessionLogin();
       sessionLogin.user = newUser;
 
-      this._storageService.setSessionEncrypted(this._storageKey, sessionLogin);
-      this._currentUser = newUser;
+      const savedData: string = this._encryptService.encrypt(JSON.stringify(sessionLogin));
+      this._storageService.session.set(this._storageKey, savedData);
 
+      this._currentUser = newUser;
       this.onUserUpdate.emit(this._currentUser);
     }
 
@@ -59,7 +62,7 @@ export class LoginService {
   public logout(): void {
     if(this.isLoggedIn) {
       this._usersService.updateUser(this._currentUser.id, { isOnline: false }).toPromise();
-      this._storageService.clearSession();
+      this._storageService.session.clear();
       this._currentUser = null;
 
       this.onLogout.emit();
@@ -70,15 +73,22 @@ export class LoginService {
     let token: string = null;
 
     if(this.isLoggedIn) {
-      const authResponse: AuthResponse = this._storageService.getSessionDecrypted(this._storageKey);
-      token = authResponse.token;
+      token = this.getSessionLogin()?.token;
     }
 
     return token;
   }
 
   private getSessionLogin(): AuthResponse {
-    return this._storageService.getSessionDecrypted(this._storageKey);
+    let sessionLogin: AuthResponse = null;
+    const authData: string = this._storageService.session.get(this._storageKey);
+
+    if(authData) {
+      const decryptedData: string = this._encryptService.decrypt(authData);
+      sessionLogin = JSON.parse(decryptedData);
+    }
+
+    return sessionLogin;
   }
 
   public get user(): User {

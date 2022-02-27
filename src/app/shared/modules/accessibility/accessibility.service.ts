@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { StorageService } from "src/app/core/services/storage-service";
+import { StorageService } from "src/app/core/services/storage/storage-service";
 import { AccessibilityOptionsModel } from "./accessibility-options.model";
 
 @Injectable({
