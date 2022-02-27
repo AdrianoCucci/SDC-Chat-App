@@ -20,7 +20,6 @@
     background-color: var(--color-2);
     box-shadow: var(--color-medium-shade-1) 0 4px 10px 2px;
     overflow: hidden;
-    animation: fadeInUp 0.5s;
 
     @include belowPcWidth() {
       min-width: 500px;
@@ -38,7 +37,6 @@
     background-color: var(--color-1);
     transition: 0.25s;
     overflow: hidden;
-    animation: fadeInUp 0.75s;
 
     h2 {
       margin: 0;
@@ -52,7 +50,6 @@
     padding: 3vmax;
     background-color: var(--color-1-shade-2);
     overflow: auto;
-    animation: fadeInUp 0.75s;
 
     app-form {
       height: 100%;
@@ -62,16 +59,5 @@
         margin: 4rem 1rem 1rem 1rem;
       }
     }
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0%);
-    opacity: 1;
   }
 }
