@@ -34,7 +34,7 @@
       display: flex;
       justify-content: space-between;
       padding-bottom: 0.5rem;
-      border-bottom: solid var(--surface-100) 1px;
+      border-bottom: solid var(--color-light-shade-1) 1px;
 
       app-button {
         flex-shrink: 0;
@@ -51,7 +51,7 @@
         cursor: pointer;
 
         &:hover {
-          background-color: var(--surface-100);
+          background-color: var(--color-light);
         }
       }
 
@@ -60,7 +60,7 @@
       }
 
       &.selected span {
-        background-color: var(--green-50);
+        background-color: var(--color-1-tint-5);
         font-weight: 600;
       }
     }

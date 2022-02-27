@@ -69,7 +69,6 @@ export class Table implements AfterViewInit {
         this._filteredData = [...this._filteredData];
         this._filteredData = this.applyActiveFilters(this.data);
       }
-
     }
   }
 

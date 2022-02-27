@@ -1,24 +1,32 @@
-<div class="logo-wrapper"></div>
+<div class="card fade-in anim-speed-2">
+  <div class="card-header fade-in-up anim-speed-3">
+    <h2>Please Login</h2>
+  </div>
 
-<div class="form-wrapper">
-  <app-form (onSubmit)="onFormSubmit($event)">
-    <app-input-text class="block" name="username" label="Username" [validations]="{ required: true }"
-      [(value)]="username">
-    </app-input-text>
+  <div class="card-body fade-in-up anim-speed-3">
+    <app-form (onSubmit)="onFormSubmit($event)">
+      <app-input-text class="block" name="username" label="Username" [validations]="{ required: true }"
+        [(value)]="username">
+      </app-input-text>
 
-    <app-input-text class="block" name="password" type="password" label="Password" [validations]="{ required: true }"
-      [(value)]="password">
-    </app-input-text>
+      <app-input-text class="block" name="password" type="password" label="Password" [validations]="{ required: true }"
+        [(value)]="password">
+      </app-input-text>
 
-    <div slot="footer">
-      <app-button class="block" type="submit" text="Login" icon="login"></app-button>
-    </div>
-  </app-form>
+      <div slot="footer">
+        <app-button class="block" type="submit" text="Login" icon="login"></app-button>
+      </div>
+    </app-form>
 
-  <app-loader text="Logging in..." [visible]="isLoggingIn" [fullscreen]="true"></app-loader>
+    <app-loader text="Logging in..." [visible]="isLoggingIn" [fullscreen]="true"></app-loader>
+  </div>
 </div>
 
-<app-dialog #errorDialog [backdropDismiss]="true" [(visible)]="errorVisible">
+<div class="version-container fade-in-up anim-speed-3">
+  <app-version></app-version>
+</div>
+
+<app-dialog #errorDialog [backdropDismiss]=" true" [(visible)]="errorVisible">
   <div slot="header">
     <span>Failed to Login</span>
   </div>

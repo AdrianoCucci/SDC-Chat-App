@@ -1,7 +1,7 @@
 :host {
   --padding: 0.4rem 0.8rem;
-  --background: var(--green-400);
-  --color: var(--surface-900);
+  --background: var(--color-2);
+  --color: var(--color-2-contrast);
   --border-radius: 0.25rem;
   --icon-transform: unset;
   --justify-content: center;
@@ -12,6 +12,34 @@
   cursor: pointer;
   overflow: hidden;
   transition: 0.1s;
+
+  &.success {
+    --background: var(--color-success);
+    --color: var(--color-success-contrast);
+  }
+
+  &.warn {
+    --background: var(--color-warn);
+    --color: var(--color-warn-contrast);
+  }
+
+  &.danger {
+    --background: var(--color-danger);
+    --color: var(--color-danger-contrast);
+  }
+
+  &.plain {
+    --background: var(--color-medium);
+    --color: var(--color-medium-contrast);
+  }
+
+  &:hover {
+    filter: brightness(1.1);
+  }
+
+  &:active {
+    filter: brightness(0.9);
+  }
 
   a {
     text-decoration: none;
@@ -70,13 +98,5 @@
     background-color: transparent;
     border-color: transparent;
     --color: var(--background);
-  }
-
-  &:hover {
-    filter: brightness(1.1);
-  }
-
-  &:active {
-    filter: brightness(0.9);
   }
 }

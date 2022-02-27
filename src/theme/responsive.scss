@@ -4,19 +4,19 @@ $pcMinSize: 1024px;
 //MOBILE DEVICE SCREEN SIZES--------------------------------------------------------------------------------------------------------------
 
 @mixin mobileSize() {
-  @media (max-width: $tabletMinSize - 1), (max-height: $tabletMinSize - 1) {
+  @media (max-width: ($tabletMinSize - 1)), (max-height: ($tabletMinSize - 1)) {
     @content;
   }
 }
 
 @mixin mobileWidth() {
-  @media (max-width: $tabletMinSize - 1) {
+  @media (max-width: ($tabletMinSize - 1)) {
     @content;
   }
 }
 
 @mixin mobileHeight() {
-  @media (max-height: $tabletMinSize - 1) {
+  @media (max-height: ($tabletMinSize - 1)) {
     @content;
   }
 }
@@ -24,19 +24,19 @@ $pcMinSize: 1024px;
 //TABLET DEVICE SCREEN SIZES--------------------------------------------------------------------------------------------------------------
 
 @mixin tabletSize() {
-  @media (min-width: $tabletMinSize) and (max-width: $pcMinSize - 1) and (min-height: $tabletMinSize) and (max-height: $pcMinSize - 1) {
+  @media (min-width: $tabletMinSize) and (max-width: ($pcMinSize - 1)) and (min-height: $tabletMinSize) and (max-height: ($pcMinSize - 1)) {
     @content;
   }
 }
 
 @mixin tabletWidth() {
-  @media (min-width: $tabletMinSize) and (max-width: $pcMinSize - 1) {
+  @media (min-width: $tabletMinSize) and (max-width: ($pcMinSize - 1)) {
     @content;
   }
 }
 
 @mixin tabletHeight() {
-  @media (min-height: $tabletMinSize) and (max-height: $pcMinSize - 1) {
+  @media (min-height: $tabletMinSize) and (max-height: ($pcMinSize - 1)) {
     @content;
   }
 }
@@ -62,13 +62,13 @@ $pcMinSize: 1024px;
 }
 
 @mixin belowPcWidth() {
-  @media (max-width: $pcMinSize - 1) {
+  @media (max-width: ($pcMinSize - 1)) {
     @content;
   }
 }
 
 @mixin belowPcHeight() {
-  @media (max-height: $pcMinSize - 1) {
+  @media (max-height: ($pcMinSize - 1)) {
     @content;
   }
 }

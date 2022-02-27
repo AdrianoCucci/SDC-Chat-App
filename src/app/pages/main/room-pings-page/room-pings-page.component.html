@@ -1,11 +1,11 @@
 <section class="rooms">
-  <div class="section-header">
+  <div class="section-header fade-in-down">
     <h2>Rooms</h2>
     <app-input-text class="block" placeholder="Filter room names or numbers..." (valueChange)="list.filter($event)">
     </app-input-text>
   </div>
 
-  <app-filter-list #list class="rooms-list" [items]="rooms?.data" [keywordFields]="['name', 'number']">
+  <app-filter-list #list class="rooms-list fade-in-up" [items]="rooms?.data" [keywordFields]="['name', 'number']">
     <ng-template app-template let-room>
 
       <app-room-ping-card class="room" [room]="room" [clientUser]="clientUser"></app-room-ping-card>

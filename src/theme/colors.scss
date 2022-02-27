@@ -1,0 +1,48 @@
+@use "sass:color";
+@use "sass:math";
+
+@function getColorRGB($color) {
+  @return "#{red($color)}, #{green($color)}, #{blue($color)}";
+}
+
+@function getColorRGBA($color) {
+  $rgb: getColorRGB($color);
+  @return "#{$rgb}, #{alpha($color)}";
+}
+
+@mixin generateColorVariable($name, $baseColor, $contrastColor) {
+  --color-#{$name}: #{$baseColor};
+  --color-#{$name}-rgb: #{getColorRGB($baseColor)};
+  --color-#{$name}-contrast: #{$contrastColor};
+
+  @for $i from 1 through 5 {
+    $scalePercent: math.percentage($i * 0.15);
+
+    --color-#{$name}-tint-#{$i}: #{color.scale(
+        $baseColor,
+        $lightness: $scalePercent
+      )};
+
+    --color-#{$name}-shade-#{$i}: #{color.scale(
+        $baseColor,
+        $lightness: - ($scalePercent * 0.25)
+      )};
+  }
+}
+
+:root {
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  $colorLight: #fafafa;
+  $colorDark: #212121;
+
+  @include generateColorVariable("1", #cae6fc, $colorDark);
+  @include generateColorVariable("2", #4baaf5, $colorDark);
+  @include generateColorVariable("success", #2dd36f, $colorDark);
+  @include generateColorVariable("warn", #ffc409, $colorDark);
+  @include generateColorVariable("danger", #eb445a, $colorLight);
+  @include generateColorVariable("light", $colorLight, $colorDark);
+  @include generateColorVariable("medium", #bdbdbd, $colorDark);
+  @include generateColorVariable("dark", $colorDark, $colorLight);
+}

@@ -4,8 +4,8 @@
 
     <div class="header-end">
       <div *ngIf="isClientMessage && !editingActive" class="actions">
-        <app-button class="text edit" icon="pen" title="Edit message" (click)="editingActive = true"></app-button>
-        <app-button class="text delete" icon="trash" title="Delete message" (click)="onDeleteClick($event)">
+        <app-button class="edit" icon="pen" title="Edit message" (click)="editingActive = true"></app-button>
+        <app-button class="delete" icon="trash" title="Delete message" (click)="onDeleteClick($event)">
         </app-button>
       </div>
 
@@ -22,9 +22,9 @@
     </app-input-textarea>
 
     <div class="edit-actions">
-      <app-button class="edit-action text cancel" icon="times" title="Cancel" (click)="editingActive = false">
+      <app-button class="edit-action cancel" icon="times" title="Cancel" (click)="editingActive = false">
       </app-button>
-      <app-button class="edit-action text save" icon="check" title="Save changes" (click)="onSaveEdit(editInput.value)">
+      <app-button class="edit-action save" icon="check" title="Save changes" (click)="onSaveEdit(editInput.value)">
       </app-button>
     </div>
   </ng-template>

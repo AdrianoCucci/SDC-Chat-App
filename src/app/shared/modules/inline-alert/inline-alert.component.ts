@@ -21,7 +21,7 @@ export class InlineAlert {
   private readonly _typeIconMap = new Map<AlertType, IconDefinition>([
     ["question", faQuestion],
     ["info", faInfo],
-    ["warning", faExclamation],
+    ["warn", faExclamation],
     ["error", faExclamationCircle]
   ]);
 
@@ -91,4 +91,4 @@ export class InlineAlert {
   }
 }
 
-export type AlertType = "plain" | "question" | "info" | "warning" | "error";
+export type AlertType = "plain" | "question" | "info" | "warn" | "error";

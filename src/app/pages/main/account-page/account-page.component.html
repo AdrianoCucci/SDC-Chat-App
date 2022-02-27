@@ -1,5 +1,5 @@
 <section *ngIf="clientUser != null" class="account-details">
-  <h2>
+  <h2 class="fade-in-down anim-speed-2">
     <span>Account Details</span>
 
     <div class="section-actions account-actions">
@@ -8,7 +8,7 @@
     </div>
   </h2>
 
-  <ul class="details-list account">
+  <ul class="details-list account fade-in-down">
     <li class="info">
       <span class="meta">Username</span>
       <span class="data">{{clientUser.username}}</span>
@@ -33,7 +33,7 @@
 </section>
 
 <section *ngIf="organization != null" class="organization-details">
-  <h2>
+  <h2 class="fade-in-down anim-speed-2">
     <span>Organization Details</span>
 
     <div *ngIf="allowEditOrganization" class="section-actions organization-actions">
@@ -41,7 +41,7 @@
     </div>
   </h2>
 
-  <ul class="details-list organization">
+  <ul class="details-list organization fade-in-down">
     <li class="info">
       <span class="meta">Name</span>
       <span class="data">{{organization.name}}</span>

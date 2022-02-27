@@ -3,38 +3,70 @@
 :host {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
+  background: linear-gradient(
+    45deg,
+    var(--color-1-tint-5) 50%,
+    var(--color-1-tint-3) 50%
+  );
 
-  div.logo-wrapper {
-    flex: 1;
-    background-color: var(--green-100);
-    transition: 0.25s;
+  div.card {
+    display: inline-block;
+    width: 40vw;
+    min-width: 300px;
+    border-radius: 0.5rem;
+    background-color: var(--color-2);
+    box-shadow: var(--color-medium-shade-1) 0 4px 10px 2px;
+    overflow: hidden;
 
-    @media (max-height: 600px) {
-      flex: 0;
-      transition: none;
+    @include belowPcWidth() {
+      min-width: 500px;
+      max-height: 85vh;
+      overflow: auto;
+    }
+
+    @include mobileWidth() {
+      min-width: 0;
+      width: 90vw;
+    }
+
+    div.card-header {
+      background-color: var(--color-1);
+      transition: 0.25s;
+      overflow: hidden;
+
+      h2 {
+        margin: 0;
+        padding: 1.5rem 0.5rem;
+        text-align: center;
+      }
+    }
+
+    div.card-body {
+      position: relative;
+      padding: 3vmax;
+      background-color: var(--color-1-shade-2);
+      overflow: auto;
+
+      app-form {
+        height: 100%;
+        margin: auto;
+
+        div[slot="footer"] {
+          margin: 4rem 1rem 1rem 1rem;
+        }
+      }
     }
   }
 
-  div.form-wrapper {
-    position: relative;
-    flex: 1 0;
-    padding: 3vmax;
-    background-color: var(--green-50);
+  div.version-container {
+    padding: 1.5rem;
 
-    app-form {
-      height: 100%;
-      max-width: 50%;
-      margin: auto;
-
-      @include belowPcWidth() {
-        max-width: 100%;
-      }
-
-      div[slot="footer"] {
-        margin: 4rem 1rem 1rem 1rem;
-      }
+    @include belowPcWidth() {
+      padding: 2vh;
     }
   }
 }

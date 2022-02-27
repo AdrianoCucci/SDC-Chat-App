@@ -9,11 +9,5 @@
 
   app-table {
     flex-grow: 1;
-    
-    div.organization-actions {
-      app-button.delete-organization {
-        --background: var(--pink-600);
-      }
-    }
   }
 }

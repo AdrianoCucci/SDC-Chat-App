@@ -3,12 +3,12 @@
   --list-margin: 0;
   --list-padding: 0;
   --list-background: unset;
-  --list-border-color: var(--surface-400);
+  --list-border-color: var(--color-medium);
   --list-border-width: 2px;
 
   --item-padding: 0 1rem;
   --item-background: unset;
-  --item-color: var(--surface-800);
+  --item-color: var(--color-dark-tint-2);
   --item-border-color: var(--list-border-color);
   --item-font-weight: initial;
 
@@ -18,8 +18,8 @@
   --item-font-weight-hover: var(--item-font-weight);
 
   --item-background-active: var(--item-background);
-  --item-color-active: var(--green-600);
-  --item-border-color-active: var(--green-600);
+  --item-color-active: var(--color-2-shade-5);
+  --item-border-color-active: var(--color-2-shade-5);
   --item-font-weight-active: 600;
 
   display: inline-block;

@@ -7,6 +7,7 @@ import { FormModule } from 'src/app/shared/modules/forms/form/form.module';
 import { InputTextModule } from 'src/app/shared/modules/forms/inputs/input-text/input-text.module';
 import { DialogModule } from 'src/app/shared/modules/overlays/dialog/dialog.module';
 import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.module';
+import { VersionModule } from 'src/app/shared/modules/version/version.module';
 
 import { LoginPage } from './login-page.component';
 
@@ -19,7 +20,8 @@ import { LoginPage } from './login-page.component';
     InputTextModule,
     ButtonModule,
     LoaderModule,
-    DialogModule
+    DialogModule,
+    VersionModule
   ]
 })
 export class LoginPageModule { }

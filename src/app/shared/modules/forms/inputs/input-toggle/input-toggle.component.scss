@@ -2,10 +2,10 @@
 
 :host {
   --input-size: 1.5rem;
-  --background: var(--surface-50);
-  --border-color: var(--surface-400);
+  --background: var(--color-white);
+  --border-color: var(--color-medium-shade-4);
   --border-radius: 0.25rem;
-  --fill: var(--blue-500);
+  --fill: var(--color-2-shade-5);
   --icon-size: 0.9rem;
   --transition: 0.16s;
 
@@ -26,7 +26,7 @@
         justify-content: center;
         width: 100%;
         height: 100%;
-        color: var(--surface-0);
+        color: var(--color-white);
         transition: var(--transition);
 
         &.fill-background {
@@ -76,7 +76,7 @@
   }
 
   &.has-errors {
-    --border-color: var(--pink-500);
+    --border-color: var(--color-danger);
   }
 }
 

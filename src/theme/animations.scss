@@ -1,0 +1,149 @@
+$defaultAnimSpeed: 300ms;
+
+.fade-in {
+  animation-name: fadeIn;
+  animation-duration: $defaultAnimSpeed;
+}
+.fade-in-up {
+  animation-name: fadeInUp;
+  animation-duration: $defaultAnimSpeed;
+}
+.fade-in-down {
+  animation-name: fadeInDown;
+  animation-duration: $defaultAnimSpeed;
+}
+.fade-in-left {
+  animation-name: fadeInLeft;
+  animation-duration: $defaultAnimSpeed;
+}
+.fade-in-right {
+  animation-name: fadeInRight;
+  animation-duration: $defaultAnimSpeed;
+}
+.slide-in-up {
+  animation-name: slideInUp;
+  animation-duration: $defaultAnimSpeed;
+}
+.slide-in-down {
+  animation-name: slideInDown;
+  animation-duration: $defaultAnimSpeed;
+}
+.slide-in-left {
+  animation-name: slideInLeft;
+  animation-duration: $defaultAnimSpeed;
+}
+.slide-in-right {
+  animation-name: slideInRight;
+  animation-duration: $defaultAnimSpeed;
+}
+
+@for $i from 1 through 10 {
+  .anim-speed-#{$i} {
+    animation-duration: #{$i * 300}ms;
+  }
+}
+
+.anim-linear {
+  animation-timing-function: linear;
+}
+.anim-ease {
+  animation-timing-function: ease;
+}
+.anim-ease-in {
+  animation-timing-function: ease-in;
+}
+.anim-ease-out {
+  animation-timing-function: ease-out;
+}
+.anim-ease-in-out {
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0%);
+  }
+}

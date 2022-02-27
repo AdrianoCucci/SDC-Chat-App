@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   padding: 1rem;
-  background-color: var(--green-100);
+  background-color: var(--color-1-shade-2);
   border-radius: 0.25rem;
-  border: solid var(--green-200) 2px;
+  border: solid var(--color-2) 2px;
   overflow: hidden;
 
   div.room-info {
@@ -20,7 +20,7 @@
   div.state-info {
     margin-bottom: 0.5rem;
     padding: 0.5rem;
-    background-color: var(--green-200);
+    background-color: var(--color-light);
     border-radius: 0.25rem;
     animation: stateBlockIntro 0.25s;
 
@@ -42,6 +42,7 @@
   }
 
   div.actions {
+    margin-top: 0.25rem;
     text-align: end;
 
     form.response-form {
@@ -74,13 +75,13 @@
 
 @keyframes requestingAnimation {
   0% {
-    border-top-color: var(--pink-500);
+    border-top-color: var(--color-danger);
   }
   50% {
-    border-top-color: var(--green-500);
+    border-top-color: var(--color-warn);
   }
   100% {
-    border-top-color: var(--blue-500);
+    border-top-color: var(--color-2);
   }
 }
 
