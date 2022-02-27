@@ -9,8 +9,10 @@
   height: 100%;
   background: linear-gradient(
     45deg,
-    var(--color-1-tint-5) 50%,
-    var(--color-1-tint-3) 50%
+    var(--color-1-tint-3) 25%,
+    var(--color-1-tint-5) 25%,
+    var(--color-1-tint-5) 75%,
+    var(--color-1-tint-1) 75%
   );
 
   div.card {

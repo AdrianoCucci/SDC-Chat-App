@@ -1,10 +1,10 @@
 <div class="card fade-in anim-speed-2">
-  <div class="card-header fade-in-up anim-speed-3">
+  <div class="card-header fade-in-up anim-speed-2">
     <h2>Please Login</h2>
   </div>
 
-  <div class="card-body fade-in-up anim-speed-3">
-    <app-form (onSubmit)="onFormSubmit($event)">
+  <div class="card-body fade-in-up anim-speed-2">
+    <app-form class="fade-in-down anim-speed-3" (onSubmit)="onFormSubmit($event)">
       <app-input-text class="block" name="username" label="Username" [validations]="{ required: true }"
         [(value)]="username">
       </app-input-text>
