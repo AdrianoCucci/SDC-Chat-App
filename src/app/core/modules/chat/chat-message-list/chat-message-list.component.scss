@@ -1,8 +1,13 @@
+@import "/src/theme/colors.scss";
+
 :host {
   --message-list-background: var(--color-light);
   --message-background: var(--color-1);
+  --message-color: var(--color-1-contrast);
   --message-background-client: var(--color-1-tint-4);
+  --message-color-client: var(--color-1-contrast);
   --message-background-client-hover: var(--color-1-tint-3);
+  --message-color-client-hover: var(--color-1-contrast);
   --input-wrapper-background: var(--color-2);
 
   display: flex;
@@ -33,14 +38,17 @@
           padding: 1rem;
           margin-bottom: 1rem;
           border-radius: 0.25rem;
+          color: var(--message-color);
           border-bottom: solid var(--message-background) 1px;
           transition: 0.16s;
 
           &.client-message {
             background-color: var(--message-background-client);
+            color: var(--message-color-client);
 
             &:hover {
               background-color: var(--message-background-client-hover);
+              color: var(--message-color-client-hover);
             }
           }
         }
@@ -104,5 +112,14 @@
   to {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@include themeHighContrast() {
+  :host {
+    --message-background-client: var(--color-medium);
+    --message-color-client: var(--color-white);
+    --message-background-client-hover: var(--color-medium-shade-5);
+    --message-color-client-hover: var(--color-white);
   }
 }
