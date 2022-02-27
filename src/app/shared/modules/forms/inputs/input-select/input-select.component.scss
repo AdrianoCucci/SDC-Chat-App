@@ -2,6 +2,7 @@
 
 :host {
   --background: var(--color-white);
+  --color: var(--color-black);
   --border-color: var(--color-medium-shade-4);
   --border: solid var(--border-color) 1px;
   --border-radius: 0.25rem;
@@ -14,6 +15,7 @@
     position: relative;
     height: 2.125rem;
     background-color: var(--background);
+    color: var(--color);
     border: var(--border);
     border-radius: var(--border-radius);
 

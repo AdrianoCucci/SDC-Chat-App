@@ -29,6 +29,7 @@ app-popover ul.popover-list {
     display: block;
     cursor: pointer;
     padding: 0.5rem;
+    color: var(--color-dark);
     border-bottom: solid var(--color-light-shade-1) 1px;
     border-radius: var(--border-radius);
     transition: 0.16s;
@@ -40,6 +41,15 @@ app-popover ul.popover-list {
     &.emphasized {
       background-color: var(--color-1-tint-5);
       font-weight: 600;
+    }
+  }
+}
+
+@include themeHighContrast() {
+  app-popover ul.popover-list li {
+    &:hover,
+    &.emphasized {
+      background-color: var(--color-light-shade-2);
     }
   }
 }

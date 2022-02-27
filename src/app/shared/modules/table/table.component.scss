@@ -48,6 +48,12 @@
             display: flex;
             height: 100%;
           }
+
+          span.resize-handle {
+            padding: 0;
+            background-color: var(--header-cell-border-color);
+            visibility: visible;
+          }
         }
       }
 
@@ -135,7 +141,6 @@
       min-height: 3rem;
       background-color: var(--header-cell-background);
       color: var(--header-cell-color);
-      border-right: solid var(--header-cell-border-color) 2px;
       border-bottom: solid var(--header-cell-border-color) 1px;
 
       div.cell-header-name-wrapper {
