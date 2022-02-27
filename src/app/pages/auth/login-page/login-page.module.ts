@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { LoginPageRoutingModule } from './login-page-routing.module';
 
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
+import { InputToggleModule } from 'src/app/shared/modules/forms/inputs/input-toggle/input-toggle.module';
 import { FormModule } from 'src/app/shared/modules/forms/form/form.module';
 import { InputTextModule } from 'src/app/shared/modules/forms/inputs/input-text/input-text.module';
 import { DialogModule } from 'src/app/shared/modules/overlays/dialog/dialog.module';
@@ -18,6 +19,7 @@ import { LoginPage } from './login-page.component';
     LoginPageRoutingModule,
     FormModule,
     InputTextModule,
+    InputToggleModule,
     ButtonModule,
     LoaderModule,
     DialogModule,
