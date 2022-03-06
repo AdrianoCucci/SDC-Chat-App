@@ -13,13 +13,16 @@
 
   --header-padding: 1rem;
   --header-background: var(--color-1-tint-5);
+  --header-color: var(--color-1-contrast);
   --header-shadow: var(--color-medium) 0 0 4px;
 
   --body-padding: 1rem;
   --body-background: unset;
+  --body-color: unset;
 
   --footer-padding: 1rem;
   --footer-background: unset;
+  --footer-color: unset;
   --footer-shadow: var(--color-medium) 0 0 4px;
 
   position: fixed;
@@ -66,6 +69,7 @@
       flex-shrink: 0;
       padding: var(--header-padding);
       background-color: var(--header-background);
+      color: var(--header-color);
       font-size: 1.3rem;
       font-weight: 600;
       box-shadow: var(--header-shadow);
@@ -82,6 +86,7 @@
       flex-grow: 1;
       padding: var(--body-padding);
       background-color: var(--body-background);
+      color: var(--body-color);
       overflow: auto;
 
       &:empty {
@@ -93,6 +98,7 @@
       flex-shrink: 0;
       padding: var(--footer-padding);
       background-color: var(--footer-background);
+      color: var(--footer-color);
       box-shadow: var(--footer-shadow);
 
       &:empty {
