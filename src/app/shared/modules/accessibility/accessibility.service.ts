@@ -22,7 +22,7 @@ export class AccessibilityService {
 
     if(this._loginService.isLoggedIn) {
       try {
-        const userId: number = this._loginService.user.id;
+        const user: User = this._loginService.user;
 
         const request: UserRequest = {
           preferencesJson: JSON.stringify({
@@ -30,8 +30,8 @@ export class AccessibilityService {
           })
         };
 
-        const response: HttpResponse<User> = await this._usersService.updateUser(userId, request).toPromise();
-        this._loginService.updateCurrentUser(response.body);
+        const response: HttpResponse<User> = await this._usersService.updateUser(user.id, request).toPromise();
+        this._loginService.updateCurrentUser({ ...user, preferencesJson: response.body.preferencesJson });
 
         result = Promise.resolve();
       }
