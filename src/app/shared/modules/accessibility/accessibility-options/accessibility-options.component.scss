@@ -1,5 +1,6 @@
 :host {
   display: inline-block;
+  color: var(--color-dark);
 
   div.option {
     span.option-name {
@@ -11,6 +12,10 @@
       display: flex;
       align-items: center;
 
+      .option-icon {
+        font-size: 1rem;
+      }
+
       .option-value {
         flex: 1;
         min-width: 10rem;
@@ -19,7 +24,6 @@
 
     &:not(:last-of-type) {
       margin-bottom: 0.75rem;
-      border-bottom: solid var(--color-medium) 1px;
     }
   }
 }
