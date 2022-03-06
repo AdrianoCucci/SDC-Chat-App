@@ -17,7 +17,7 @@ export class InputText extends FormInput {
 
   public clearErrors(): void {
     super.clearErrors();
-    (this._inputRef.nativeElement as HTMLInputElement).classList.remove("ng-dirty", "ng-invalid");
+    this._nativeInput.classList.remove("ng-dirty", "ng-invalid");
   }
 
   protected onValidate(value: string, validations: InputTextValidations, errors: string[], inputName: string): void {
@@ -38,11 +38,30 @@ export class InputText extends FormInput {
         newValue = null;
       }
       else {
-        newValue = Number(newValue);
+        newValue = this.clampMinMaxValue(Number(newValue));
       }
     }
 
+    if(this._nativeInput) {
+      this._nativeInput.value = `${newValue}`;
+    }
+
     return newValue;
+  }
+
+  private clampMinMaxValue(value: number): number {
+    if(this.min != null) {
+      value = value < this.min ? this.min : value;
+    }
+    if(this.max != null) {
+      value = value > this.max ? this.max : value;
+    }
+
+    return value;
+  }
+
+  private get _nativeInput(): HTMLInputElement {
+    return this._inputRef?.nativeElement;
   }
 
   public get pattern(): RegExp | string {
