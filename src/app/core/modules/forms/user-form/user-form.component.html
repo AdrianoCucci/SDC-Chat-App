@@ -19,16 +19,16 @@
         </app-input-text>
       </ng-container>
 
-      <app-input-select [class]="organizationOptions == null ? 'col-12' : 'col-6'" name="role" label="Role"
-        popoverParent="body" [options]="roleOptions" displayKey="key" valueKey="value"
-        [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
+      <app-input-select class="col-6" name="role" label="Role" popoverParent="body" [options]="roleOptions"
+        displayKey="key" valueKey="value" [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
 
       <app-input-select *ngIf="organizationOptions != null" class="col-6" name="organization" label="Organization"
         popoverParent="body" [options]="organizationOptions" displayKey="name" valueKey="id" [clearable]="true"
         [(value)]="model.organizationId">
       </app-input-select>
 
-      <app-input-toggle class="col-12" name="account-locked" label="Account Locked" [(value)]="model.isLocked">
+      <app-input-toggle [class]="organizationOptions == null ? 'col-6' : 'col-12'" name="account-locked"
+        label="Account Locked" [(value)]="model.isLocked">
       </app-input-toggle>
     </div>
 

@@ -9,7 +9,11 @@
   --icon-size: 0.9rem;
   --transition: 0.16s;
 
+  justify-content: flex-end;
+
   div.input-wrapper {
+    padding: 0.35rem 0;
+
     div.box-outer {
       width: var(--input-size);
       height: var(--input-size);
