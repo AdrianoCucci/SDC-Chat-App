@@ -6,7 +6,7 @@ import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 import { AccountFormModule } from 'src/app/core/modules/forms/account-form/account-form.module';
 import { PassChangeFormModule } from 'src/app/core/modules/forms/pass-change-form/pass-change-form.module';
 import { OrganizationFormModule } from 'src/app/core/modules/forms/organization-form/organization-form.module';
-import { AccessibilityPopoverModule } from 'src/app/shared/modules/accessibility/accessibility-popover/accessibility.popover.module';
+import { AccessibilityDialogModule } from 'src/app/shared/modules/accessibility/accessibility-dialog/accessibility.dialog.module';
 
 import { AccountPage } from './account-page.component';
 
@@ -19,7 +19,7 @@ import { AccountPage } from './account-page.component';
     AccountFormModule,
     PassChangeFormModule,
     OrganizationFormModule,
-    AccessibilityPopoverModule
+    AccessibilityDialogModule
   ]
 })
 export class AccountPageModule { }
