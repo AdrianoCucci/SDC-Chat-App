@@ -1,4 +1,4 @@
-<app-users-list class="fade-in-left" [users]="users?.data"></app-users-list>
+<app-users-list class="fade-in-left" [users]="users?.data" [clientUser]="clientUser"></app-users-list>
 
 <app-chat-message-list class="fade-in-up" #list [messages]="messages" [clientUser]="clientUser"
   [listLoaderVisible]="isLoadingMessages" (onAddMessage)="onAddMessage($event)" (onEditMessage)="onEditMessage($event)"
