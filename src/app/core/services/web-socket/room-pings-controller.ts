@@ -49,7 +49,7 @@ export class RoomPingsController implements IDisposable {
         this.onPingRequest.emit(roomPing);
 
         if(roomPing.room?.pingSound != null) {
-          this._audioService.play(roomPing.room.pingSound, true);
+          this._audioService.play(roomPing.room.pingSound);
         }
       }),
 
@@ -71,7 +71,7 @@ export class RoomPingsController implements IDisposable {
         }
       }),
     ];
-    
+
     return subscriptions;
   }
 
