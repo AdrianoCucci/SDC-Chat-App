@@ -21,6 +21,10 @@ export class UserPrefsService {
     return prefsData ? prefsData[key] : null;
   }
 
+  public hasPreference(key: string): boolean {
+    return this.getPreference(key) != null;
+  }
+
   public async setPreference(key: string, value: any): Promise<object> {
     let prefsData: object = this.getAllPreferences();
 
@@ -31,17 +35,25 @@ export class UserPrefsService {
     return await this.savePreferences(prefsData);
   }
 
-  public hasPreference(key: string): boolean {
-    return this.getPreference(key) != null;
+  public async deletePreference(key: string): Promise<object> {
+    let prefsData: object = this.getAllPreferences();
+
+    if(prefsData != null && prefsData[key] != null) {
+      delete prefsData[key];
+      prefsData = await this.savePreferences(prefsData);
+    }
+
+    return prefsData;
+  }
+
+  public async clearPreferences(): Promise<void> {
+    await this.savePreferences(null);
   }
 
   public async savePreferences(preferences: object): Promise<object> {
     let result: Promise<object>;
 
     try {
-      if(preferences == null) {
-        throw new Error("[preferences] cannot be null");
-      }
       if(!this._loginService.isLoggedIn) {
         throw new Error("User is not logged in");
       }
