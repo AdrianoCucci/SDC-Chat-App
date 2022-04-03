@@ -1,5 +1,5 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { faPlus, faTimes, faCheck, faTrash, faSignInAlt, faSignOutAlt, faUpload, faDownload, faCloudUploadAlt, faCloudDownloadAlt, faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faUser, faUsers, faUserPlus, faUserEdit, faLock, faKey, faExternalLinkAlt, faEdit, faPen, faSync, faCog, faCogs, faBuilding, faDoorOpen, faVolumeUp } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTimes, faCheck, faTrash, faSignInAlt, faSignOutAlt, faUpload, faDownload, faCloudUploadAlt, faCloudDownloadAlt, faChevronUp, faChevronDown, faChevronLeft, faChevronRight, faUser, faUsers, faUserPlus, faUserEdit, faLock, faKey, faExternalLinkAlt, faEdit, faPen, faSync, faCog, faCogs, faBuilding, faDoorOpen, faVolumeUp, faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import { CommonIcon } from "../models/common-icon.type";
 
 const commonIconsMap = new Map<string, IconDefinition>([
@@ -31,7 +31,8 @@ const commonIconsMap = new Map<string, IconDefinition>([
   ["cogs", faCogs],
   ["building", faBuilding],
   ["door-open", faDoorOpen],
-  ["volume-up", faVolumeUp]
+  ["volume-up", faVolumeUp],
+  ["circle-exclamation", faCircleExclamation]
 ]);
 
 export const getCommonIconDefinition = (commonIcon: CommonIcon): IconDefinition => typeof commonIcon === "string"

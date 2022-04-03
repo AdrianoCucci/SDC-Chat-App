@@ -7,7 +7,7 @@ import { Event } from "./event.model";
 export class EventsService {
   private readonly _subscriptions: EventSubscription[] = [];
 
-  public subscribe(subscription: EventSubscription): void {
+  public subscribe(subscription: EventSubscription): EventSubscription {
     if(!subscription) {
       throw new Error("[subscription] must have a value");
     }
@@ -19,22 +19,21 @@ export class EventsService {
     if(!currentSubscriptions.includes(subscription)) {
       currentSubscriptions.push(subscription);
     }
+
+    return subscription;
   }
 
-  public subscribeAll(eventHandler: EventHandler): void {
-    this.subscribe({ eventHandler });
+  public subscribeAll(eventHandler: EventHandler): EventSubscription {
+    return this.subscribe({ eventHandler });
   }
 
-  public unsubscribe(eventHandler: EventHandler): boolean {
+  public unsubscribe(subscription: EventSubscription): boolean {
     const currentSubscriptions: EventSubscription[] = this._subscriptions;
-    const subscriptions: EventSubscription[] = currentSubscriptions.filter((e: EventSubscription) => e.eventHandler === eventHandler);
-    const canUnsubscribe: boolean = subscriptions?.length > 0;
+    const index: number = currentSubscriptions.indexOf(subscription);
+    const canUnsubscribe: boolean = index !== -1;
 
     if(canUnsubscribe) {
-      subscriptions.forEach((e: EventSubscription) => {
-        const index: number = currentSubscriptions.indexOf(e);
-        currentSubscriptions.splice(index, 1);
-      });
+      currentSubscriptions.splice(index, 1);
     }
 
     return canUnsubscribe;

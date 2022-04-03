@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Toast } from './toast';
-import { ToastAlign } from './toast-align.type';
 import { ToastOptions } from './toast-options.model';
 
 @Component({
@@ -14,7 +13,7 @@ export class ToastOverlay {
 
   constructor(private _changeDetector: ChangeDetectorRef) { }
 
-  public createToast(options?: ToastOptions): void {
+  public createToast(options?: ToastOptions): Toast {
     const toast = new Toast(options);
     this.toasts.push(toast);
 
@@ -29,9 +28,11 @@ export class ToastOverlay {
     });
 
     this._changeDetector.detectChanges();
+    
+    return toast;
   }
 
-  public dismissAllToasts() {
+  public dismissAllToasts(): void {
     this.toasts.forEach((t: Toast) => t.dismiss());
   }
 
