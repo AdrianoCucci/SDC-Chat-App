@@ -1,55 +1,51 @@
-import { Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
+import { RoomPingsController } from 'src/app/core/services/web-socket/room-pings-controller';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { Event } from 'src/app/shared/modules/events/event.model';
+import { EventsService } from 'src/app/shared/modules/events/events.service';
 
 @Component({
   selector: 'app-room-ping-card',
   templateUrl: './room-ping-card.component.html',
   styleUrls: ['./room-ping-card.component.scss']
 })
-export class RoomPingCard implements OnInit, OnDestroy {
+export class RoomPingCard implements OnInit {
   @Input() public room: Room;
   @Input() public roomPing: RoomPing;
   @Input() public clientUser: User;
 
-  private _subscriptions: Subscription;
-
-  constructor(private _socketService: WebSocketService) { }
+  constructor(private _socketService: WebSocketService, private _eventsService: EventsService) { }
 
   ngOnInit(): void {
     this.initRoomPingEvents();
     this.initCurrentRoomPingState();
   }
 
-  ngOnDestroy(): void {
-    this._subscriptions?.unsubscribe();
-    this._subscriptions = null;
+  private initRoomPingEvents(): void {
+    this._eventsService.subscribe({
+      eventSource: RoomPingsController.name,
+      eventHandler: this.onRoomPingEvent
+    });
   }
 
-  private initRoomPingEvents(): void {
-    this._subscriptions = new Subscription();
+  private onRoomPingEvent = (event: Event<RoomPing>): void => {
+    if(event.data.roomId !== this.room?.id) {
+      return;
+    }
 
-    this._subscriptions.add(this._socketService.roomPings.onPingRequest.subscribe((roomPing: RoomPing) => {
-      if(roomPing.roomId === this.room?.id) {
-        this.roomPing = roomPing;
-      }
-    }));
-
-    this._subscriptions.add(this._socketService.roomPings.onPingResponse.subscribe((roomPing: RoomPing) => {
-      if(roomPing.roomId === this.room?.id) {
-        this.roomPing = roomPing;
-      }
-    }));
-
-    this._subscriptions.add(this._socketService.roomPings.onPingCancel.subscribe((roomPing: RoomPing) => {
-      if(roomPing.roomId === this.room?.id) {
+    switch(event.type) {
+      case "room-ping-request":
+      case "room-ping-response":
+        this.roomPing = { ...event.data };
+        break;
+      case "room-ping-cancel":
         this.roomPing = null;
-      }
-    }));
+        break;
+    }
   }
 
   private initCurrentRoomPingState(): void {

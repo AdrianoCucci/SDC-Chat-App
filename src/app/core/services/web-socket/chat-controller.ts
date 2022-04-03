@@ -1,30 +1,33 @@
 import { HttpResponse } from '@angular/common/http';
-import { EventEmitter } from '@angular/core';
 import { Socketio } from "ngx-socketio2";
 import { Subscription, TeardownLogic } from 'rxjs';
 import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
+import { EventsService } from 'src/app/shared/modules/events/events.service';
 import { subscribeMany } from 'src/app/shared/util/rxjs-utils';
 import { ChatMessage } from '../../models/messages/chat-message';
 import { ChatMessagesService } from '../api/chat-messages.service';
 import { AudioService } from '../audio/audio.service';
 
 export class ChatController implements IDisposable {
-  public readonly onMessage = new EventEmitter<ChatMessage>();
-  public readonly onMessageEdit = new EventEmitter<ChatMessage>();
-  public readonly onMessageDelete = new EventEmitter<ChatMessage>();
-
   private readonly _socket: Socketio;
   private readonly _messagesService: ChatMessagesService;
   private readonly _audioService: AudioService;
+  private readonly _eventsService: EventsService;
 
   private _subscription: Subscription;
   private _messages: ChatMessage[];
 
-  constructor(socket: Socketio, messagesService: ChatMessagesService, audioService: AudioService) {
+  constructor(
+    socket: Socketio,
+    messagesService: ChatMessagesService,
+    audioService: AudioService,
+    eventsService: EventsService
+  ) {
     this._socket = socket;
     this._messagesService = messagesService;
     this._audioService = audioService;
+    this._eventsService = eventsService;
 
     this._subscription = subscribeMany(this.getEventSubscriptions(this._socket));
   }
@@ -41,17 +44,33 @@ export class ChatController implements IDisposable {
     const subscriptions: TeardownLogic[] = [
       socket.on<ChatMessage>(events.message).subscribe((message: ChatMessage) => {
         this.addMessage(message);
-        this.onMessage.emit(message);
+
+        this._eventsService.publish({
+          source: this.constructor.name,
+          type: events.message,
+          data: message
+        });
+
         this._audioService.play(AudioSound.ChatNotification);
       }),
 
       socket.on<ChatMessage>(events.messageEdit).subscribe((message: ChatMessage) => {
-        this.onMessageEdit.emit(message);
+        this._eventsService.publish({
+          source: this.constructor.name,
+          type: events.messageEdit,
+          data: message
+        });
+
         this.updateMessage(message);
       }),
 
       socket.on<ChatMessage>(events.messageDelete).subscribe((message: ChatMessage) => {
-        this.onMessageDelete.emit(message);
+        this._eventsService.publish({
+          source: this.constructor.name,
+          type: events.messageDelete,
+          data: message
+        });
+
         this.deleteMessage(message);
       })
     ];

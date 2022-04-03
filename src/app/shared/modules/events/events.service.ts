@@ -59,7 +59,7 @@ export class EventsService {
         (!e.eventType || e.eventType === event.type);
 
       if(canInvoke) {
-        e.eventHandler.call(this, event);
+        e.eventHandler(event);
       }
     });
   }
