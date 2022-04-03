@@ -39,8 +39,8 @@ export class MainMenu implements OnInit {
 
   private subscribeEvents() {
     this._eventsService.subscribe({
-      eventSource: ChatController.name,
-      eventType: "message",
+      eventSources: ChatController.name,
+      eventTypes: "message",
       eventHandler: () => {
         if(!this.isChatItemActive) {
           this._newMessagesCount++;

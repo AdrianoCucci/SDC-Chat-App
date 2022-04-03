@@ -48,19 +48,33 @@ export class EventsService {
     if(!event) {
       throw new Error("[event] must have a value");
     }
-    if(!event.timestamp) {
-      event.timestamp = new Date();
-    }
 
-    const currentSubscriptions: EventSubscription[] = this._subscriptions;
-    currentSubscriptions.forEach((e: EventSubscription) => {
-      const canInvoke: boolean =
-        (!e.eventSource || e.eventSource === event.source) &&
-        (!e.eventType || e.eventType === event.type);
+    event.severity = event.severity ?? "info";
+    event.timestamp = event.timestamp ?? new Date();
 
-      if(canInvoke) {
+    this._subscriptions.forEach((e: EventSubscription) => {
+      if(this.canInvokeEventSubscription(e, event)) {
         e.eventHandler(event);
       }
     });
+  }
+
+  private compareInvokeFilter(value: any | any[], comparedValue: any): boolean {
+    let result: boolean = true;
+
+    if(value != null) {
+      result = Array.isArray(value) ? value.includes(comparedValue) : value === comparedValue;
+    }
+
+    return result;
+  }
+
+  private canInvokeEventSubscription(subscription: EventSubscription, event: Event): boolean {
+    const result: boolean =
+      this.compareInvokeFilter(subscription.eventSources, event.source) &&
+      this.compareInvokeFilter(subscription.eventTypes, event.type) &&
+      this.compareInvokeFilter(subscription.eventSeverities, event.severity);
+
+    return result;
   }
 }

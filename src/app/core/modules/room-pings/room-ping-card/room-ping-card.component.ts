@@ -27,7 +27,7 @@ export class RoomPingCard implements OnInit {
 
   private initRoomPingEvents(): void {
     this._eventsService.subscribe({
-      eventSource: RoomPingsController.name,
+      eventSources: RoomPingsController.name,
       eventHandler: this.onRoomPingEvent
     });
   }

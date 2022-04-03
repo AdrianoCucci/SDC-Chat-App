@@ -68,7 +68,7 @@ export class WebSocketService implements IDisposable {
       socket.on(events.connectError).subscribe((event: any) => {
         this._eventsService.publish({
           source: this.constructor.name,
-          type: events.connectError,
+          type: events.connectError.replace(/_/g, '-'),
           data: event
         });
       }),

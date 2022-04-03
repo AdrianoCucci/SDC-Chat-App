@@ -14,8 +14,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._eventsService.subscribe({
-      eventSource: LoginService.name,
-      eventType: "login",
+      eventSources: LoginService.name,
+      eventTypes: "login",
       eventHandler: () => this._accessibilityService.loadPreferences()
     });
   }

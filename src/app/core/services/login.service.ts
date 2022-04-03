@@ -129,7 +129,7 @@ export class LoginService {
   private publishUserUpdate(): void {
     this._eventsService.publish({
       source: this.constructor.name,
-      type: "user_update",
+      type: "user-update",
       data: this._currentUser
     });
   }
