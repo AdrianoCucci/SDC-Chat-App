@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { LoginService } from './core/services/login.service';
 import { AccessibilityService } from './shared/modules/accessibility/accessibility.service';
+import { EventsService } from './shared/modules/events/events.service';
 
 @Component({
   selector: 'app-root',
@@ -9,16 +9,18 @@ import { AccessibilityService } from './shared/modules/accessibility/accessibili
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private _subscription: Subscription;
 
-  constructor(private _loginService: LoginService, private _accessibilityService: AccessibilityService) { }
+  constructor(private _eventsService: EventsService, private _accessibilityService: AccessibilityService) { }
 
   ngOnInit(): void {
-    this._subscription = this._loginService.onLogin.subscribe(() => this._accessibilityService.loadPreferences());
+    this._eventsService.subscribe({
+      eventSource: LoginService.name,
+      eventType: "login",
+      eventHandler: () => this._accessibilityService.loadPreferences()
+    });
   }
 
   ngOnDestroy(): void {
-    this._subscription?.unsubscribe();
-    this._subscription = null;
+    this._eventsService.unsubscribeAll();
   }
 }
