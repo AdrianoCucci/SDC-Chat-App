@@ -1,9 +1,11 @@
 import { HttpResponse } from "@angular/common/http";
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Socketio } from "ngx-socketio2";
 import { Subscription, TeardownLogic } from "rxjs";
 import { IDisposable } from "src/app/shared/interfaces/i-disposable";
 import { PagedList } from "src/app/shared/models/pagination/paged-list";
+import { Event } from "src/app/shared/modules/events/event.model";
+import { EventsService } from "src/app/shared/modules/events/events.service";
 import { subscribeMany } from "src/app/shared/util/rxjs-utils";
 import { User } from "../../models/users/user";
 import { ChatMessagesService } from "../api/chat-messages.service";
@@ -17,12 +19,6 @@ import { RoomPingsController } from "./room-pings-controller";
   providedIn: 'root'
 })
 export class WebSocketService implements IDisposable {
-  public readonly onConnect = new EventEmitter<void>();
-  public readonly onDisconnect = new EventEmitter<void>();
-  public readonly onConnectError = new EventEmitter<any>();
-  public readonly onUserJoin = new EventEmitter<User>();
-  public readonly onUserLeave = new EventEmitter<User>();
-
   public readonly chat: ChatController;
   public readonly roomPings: RoomPingsController;
 
@@ -33,6 +29,7 @@ export class WebSocketService implements IDisposable {
   private _clientUser: User;
 
   constructor(
+    private _eventsService: EventsService,
     private _usersService: UsersService,
     socket: Socketio,
     messagesService: ChatMessagesService,
@@ -42,31 +39,62 @@ export class WebSocketService implements IDisposable {
     this._socket = socket;
 
     if(this._socket == null) {
-      throw new Error("[WebSocketService] > [Socket] dependency is null");
+      throw new Error(`[${this.constructor.name}] > [Socket] dependency is null`);
     }
 
     this._subscription = subscribeMany(this.getEventSubscriptions(socket));
 
-    this.chat = new ChatController(socket, messagesService, audioService);
-    this.roomPings = new RoomPingsController(socket, roomsService, audioService);
+    this.chat = new ChatController(socket, messagesService, audioService, _eventsService);
+    this.roomPings = new RoomPingsController(socket, roomsService, audioService, _eventsService);
   }
 
   private getEventSubscriptions(socket: Socketio): TeardownLogic[] {
     const events = this.socketEvents;
 
     const subscriptions: TeardownLogic[] = [
-      socket.on(events.connect).subscribe(() => this.onConnect.emit()),
-      socket.on(events.disconnect).subscribe(() => this.onDisconnect.emit()),
-      socket.on(events.connectError).subscribe((event: any) => this.onConnectError.emit(event)),
+      socket.on(events.connect).subscribe(() => {
+        this._eventsService.publish({
+          source: this.constructor.name,
+          type: events.connect
+        });
+      }),
+
+      socket.on(events.disconnect).subscribe(() => {
+        this._eventsService.publish({
+          source: this.constructor.name,
+          type: events.disconnect
+        });
+      }),
+
+      socket.on(events.connectError.replace('-', '_')).subscribe((event: any) => {
+        this._eventsService.publish({
+          source: this.constructor.name,
+          type: events.connectError,
+          data: event,
+          severity: "error"
+        });
+
+        this.tryReconnect();
+      }),
 
       socket.on<User>(events.userJoin).subscribe((user: User) => {
         this.updateUser(user);
-        this.onUserJoin.emit(user);
+
+        this._eventsService.publish({
+          source: this.constructor.name,
+          type: events.userJoin,
+          data: user
+        });
       }),
 
       socket.on<User>(events.userLeave).subscribe((user: User) => {
         this.updateUser(user);
-        this.onUserLeave.emit(user);
+
+        this._eventsService.publish({
+          source: this.constructor.name,
+          type: events.userLeave,
+          data: user
+        });
       })
     ];
 
@@ -93,39 +121,46 @@ export class WebSocketService implements IDisposable {
         reject("[clientUser] cannot be null");
       }
 
-      const subscription = new Subscription();
       let interval: number;
+      let attempts: number = 1;
 
-      const onConnectSuccess = () => {
-        subscription.unsubscribe();
-        window.clearInterval(interval);
-        this.joinClientUser(clientUser);
+      const tryConnect = () => {
+        this._socket.connect();
 
-        resolve();
-      };
-
-      const onConnectFail = (error?: any) => {
-        subscription.unsubscribe();
-        window.clearInterval(interval);
-
-        reject(error);
-      };
-
-      const connect = () => {
         if(this.isConnected) {
-          onConnectSuccess();
+          window.clearInterval(interval);
+          this.joinClientUser(clientUser);
+
+          resolve();
         }
-        else {
-          this._socket.connect();
+        else if(attempts >= 10) {
+          window.clearInterval(interval);
+
+          const event: Event<Error> = {
+            source: this.constructor.name,
+            type: this.socketEvents.connectError,
+            data: new Error(`Max connection attempts reached: (${attempts})`),
+            severity: "error"
+          };
+
+          this._eventsService.publish(event);
+          reject(event.data);
         }
       };
 
-      subscription.add(this.onConnect.subscribe(() => onConnectSuccess()));
-      subscription.add(this.onConnectError.subscribe((error: any) => onConnectFail(error)));
+      interval = window.setInterval(() => {
+        attempts++;
+        tryConnect();
+      }, 500);
 
-      interval = window.setInterval(() => connect(), 500);
-      connect();
+      tryConnect();
     });
+  }
+
+  public async tryReconnect(): Promise<void> {
+    if(this._clientUser != null) {
+      await this.connect(this._clientUser);
+    }
   }
 
   private joinClientUser(clientUser: User): void {
@@ -182,7 +217,7 @@ export class WebSocketService implements IDisposable {
     return {
       connect: "connect",
       disconnect: "disconnect",
-      connectError: "connect_error",
+      connectError: "connect-error",
       userJoin: "user-join",
       userLeave: "user-leave",
     }

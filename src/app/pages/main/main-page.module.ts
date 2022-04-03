@@ -9,6 +9,7 @@ import { DialogModule } from 'src/app/shared/modules/overlays/dialog/dialog.modu
 import { ConfirmDialogModule } from 'src/app/shared/modules/overlays/dialog/confirm-dialog/confirm-dialog.module';
 import { PopoverModule } from 'src/app/shared/modules/overlays/popover/popover.module';
 import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.module';
+import { WebSocketAlertsOverlayModule } from 'src/app/core/modules/overlays/web-socket-alerts/web-socket-alerts-overlay.module';
 
 import { MainPage } from './main-page.component';
 
@@ -23,7 +24,8 @@ import { MainPage } from './main-page.component';
     PopoverModule,
     DialogModule,
     ConfirmDialogModule,
-    LoaderModule
+    LoaderModule,
+    WebSocketAlertsOverlayModule
   ]
 })
 export class MainPageModule { }

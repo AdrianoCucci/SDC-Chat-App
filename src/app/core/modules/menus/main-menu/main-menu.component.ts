@@ -1,11 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { User } from 'src/app/core/models/users/user';
+import { ChatController } from 'src/app/core/services/web-socket/chat-controller';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 import { MenuItem } from 'src/app/shared/models/menu-item';
+import { EventSubscription } from 'src/app/shared/modules/events/event-subscription.model';
+import { EventsService } from 'src/app/shared/modules/events/events.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -16,22 +18,20 @@ export class MainMenu implements OnInit, OnDestroy {
   @Input() public menuItems: MenuItem[];
   @Input() public clientUser: User;
 
-  private _subscription: Subscription;
   private _chatItem?: MenuItem;
   private _newMessagesCount: number = 0;
+  private _eventSubscription: EventSubscription;
 
-  constructor(private _router: Router, private _socketService: WebSocketService) { }
+  constructor(private _router: Router, private _socketService: WebSocketService, private _eventsService: EventsService) { }
 
   ngOnInit(): void {
     this.initMenuItems(this.menuItems);
-
-    this._subscription = new Subscription();
-    this.subscribeEvents(this._subscription);
+    this._eventSubscription = this.subscribeEvents();
   }
 
   ngOnDestroy(): void {
-    this._subscription?.unsubscribe();
-    this._subscription = null;
+    this._eventsService.unsubscribe(this._eventSubscription);
+    this._eventSubscription = undefined;
   }
 
   private initMenuItems(menuItems: MenuItem[]) {
@@ -44,12 +44,16 @@ export class MainMenu implements OnInit, OnDestroy {
     }
   }
 
-  private subscribeEvents(subscription: Subscription) {
-    subscription.add(this._socketService.chat.onMessage.subscribe(() => {
-      if(!this.isChatItemActive) {
-        this._newMessagesCount++;
+  private subscribeEvents(): EventSubscription {
+    return this._eventsService.subscribe({
+      eventSources: ChatController.name,
+      eventTypes: "message",
+      eventHandler: () => {
+        if(!this.isChatItemActive) {
+          this._newMessagesCount++;
+        }
       }
-    }));
+    });
   }
 
   public getDisplayCount(count: number) {
