@@ -4,6 +4,7 @@ import { Socketio } from "ngx-socketio2";
 import { Subscription, TeardownLogic } from "rxjs";
 import { IDisposable } from "src/app/shared/interfaces/i-disposable";
 import { PagedList } from "src/app/shared/models/pagination/paged-list";
+import { Event } from "src/app/shared/modules/events/event.model";
 import { EventsService } from "src/app/shared/modules/events/events.service";
 import { subscribeMany } from "src/app/shared/util/rxjs-utils";
 import { User } from "../../models/users/user";
@@ -65,12 +66,15 @@ export class WebSocketService implements IDisposable {
         });
       }),
 
-      socket.on(events.connectError).subscribe((event: any) => {
+      socket.on(events.connectError.replace('-', '_')).subscribe((event: any) => {
         this._eventsService.publish({
           source: this.constructor.name,
-          type: events.connectError.replace(/_/g, '-'),
-          data: event
+          type: events.connectError,
+          data: event,
+          severity: "error"
         });
+
+        this.tryReconnect();
       }),
 
       socket.on<User>(events.userJoin).subscribe((user: User) => {
@@ -129,19 +133,34 @@ export class WebSocketService implements IDisposable {
 
           resolve();
         }
-        else if(attempts > 10) {
+        else if(attempts >= 10) {
           window.clearInterval(interval);
-          reject(new Error(`Max connection attempts reached: (${attempts})`));
+
+          const event: Event<Error> = {
+            source: this.constructor.name,
+            type: this.socketEvents.connectError,
+            data: new Error(`Max connection attempts reached: (${attempts})`),
+            severity: "error"
+          };
+
+          this._eventsService.publish(event);
+          reject(event.data);
         }
       };
 
       interval = window.setInterval(() => {
         attempts++;
         tryConnect();
-      }, 400);
+      }, 500);
 
       tryConnect();
     });
+  }
+
+  public async tryReconnect(): Promise<void> {
+    if(this._clientUser != null) {
+      await this.connect(this._clientUser);
+    }
   }
 
   private joinClientUser(clientUser: User): void {
@@ -198,7 +217,7 @@ export class WebSocketService implements IDisposable {
     return {
       connect: "connect",
       disconnect: "disconnect",
-      connectError: "connect_error",
+      connectError: "connect-error",
       userJoin: "user-join",
       userLeave: "user-leave",
     }
