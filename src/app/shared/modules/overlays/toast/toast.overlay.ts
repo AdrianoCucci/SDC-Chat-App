@@ -28,7 +28,7 @@ export class ToastOverlay {
     });
 
     this._changeDetector.detectChanges();
-    
+
     return toast;
   }
 
