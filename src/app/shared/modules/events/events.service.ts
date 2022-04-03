@@ -40,6 +40,10 @@ export class EventsService {
     return canUnsubscribe;
   }
 
+  public unsubscribeAll(): void {
+    this._subscriptions.splice(0, this._subscriptions.length);
+  }
+
   public publish<T = any>(event: Event<T>): void {
     if(!event) {
       throw new Error("[event] must have a value");
