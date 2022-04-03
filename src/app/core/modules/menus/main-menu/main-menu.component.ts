@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
@@ -6,6 +6,7 @@ import { User } from 'src/app/core/models/users/user';
 import { ChatController } from 'src/app/core/services/web-socket/chat-controller';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 import { MenuItem } from 'src/app/shared/models/menu-item';
+import { EventSubscription } from 'src/app/shared/modules/events/event-subscription.model';
 import { EventsService } from 'src/app/shared/modules/events/events.service';
 
 @Component({
@@ -13,18 +14,24 @@ import { EventsService } from 'src/app/shared/modules/events/events.service';
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss']
 })
-export class MainMenu implements OnInit {
+export class MainMenu implements OnInit, OnDestroy {
   @Input() public menuItems: MenuItem[];
   @Input() public clientUser: User;
 
   private _chatItem?: MenuItem;
   private _newMessagesCount: number = 0;
+  private _eventSubscription: EventSubscription;
 
   constructor(private _router: Router, private _socketService: WebSocketService, private _eventsService: EventsService) { }
 
   ngOnInit(): void {
     this.initMenuItems(this.menuItems);
-    this.subscribeEvents();
+    this._eventSubscription = this.subscribeEvents();
+  }
+
+  ngOnDestroy(): void {
+    this._eventsService.unsubscribe(this._eventSubscription);
+    this._eventSubscription = undefined;
   }
 
   private initMenuItems(menuItems: MenuItem[]) {
@@ -37,8 +44,8 @@ export class MainMenu implements OnInit {
     }
   }
 
-  private subscribeEvents() {
-    this._eventsService.subscribe({
+  private subscribeEvents(): EventSubscription {
+    return this._eventsService.subscribe({
       eventSources: ChatController.name,
       eventTypes: "message",
       eventHandler: () => {
