@@ -1,10 +1,10 @@
-import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
 import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
-import { RoomPingsController } from 'src/app/core/services/web-socket/room-pings-controller';
-import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
+import { EventSubscription } from 'src/app/shared/modules/events/event-subscription.model';
 import { Event } from 'src/app/shared/modules/events/event.model';
 import { EventsService } from 'src/app/shared/modules/events/events.service';
 
@@ -13,21 +13,28 @@ import { EventsService } from 'src/app/shared/modules/events/events.service';
   templateUrl: './room-ping-card.component.html',
   styleUrls: ['./room-ping-card.component.scss']
 })
-export class RoomPingCard implements OnInit {
+export class RoomPingCard implements OnInit, OnDestroy {
   @Input() public room: Room;
   @Input() public roomPing: RoomPing;
   @Input() public clientUser: User;
 
-  constructor(private _socketService: WebSocketService, private _eventsService: EventsService) { }
+  private _subscription?: EventSubscription;
+
+  constructor(private _roomPingsService: RoomPingsService, private _eventsService: EventsService) { }
 
   ngOnInit(): void {
     this.initRoomPingEvents();
     this.initCurrentRoomPingState();
   }
 
+  ngOnDestroy(): void {
+    this._eventsService.unsubscribe(this._subscription);
+    this._subscription = undefined;
+  }
+
   private initRoomPingEvents(): void {
-    this._eventsService.subscribe({
-      eventSources: RoomPingsController.name,
+    this._subscription = this._eventsService.subscribe({
+      eventSources: RoomPingsService.name,
       eventHandler: this.onRoomPingEvent
     });
   }
@@ -50,7 +57,7 @@ export class RoomPingCard implements OnInit {
 
   private initCurrentRoomPingState(): void {
     if(this.room != null) {
-      const pings: RoomPing[] = this._socketService.roomPings.pings;
+      const pings: RoomPing[] = this._roomPingsService.pings;
 
       if(pings != null) {
         const thisRoomPing: RoomPing = pings.find((r: RoomPing) => r.roomId === this.room.id);
@@ -63,7 +70,7 @@ export class RoomPingCard implements OnInit {
   }
 
   async onRequest(message?: string): Promise<void> {
-    this.roomPing = await this._socketService.roomPings.sendPingRequest({
+    this.roomPing = await this._roomPingsService.sendPingRequest({
       state: RoomPingState.Requesting,
       roomId: this.room?.id,
       room: this.room,
@@ -80,11 +87,11 @@ export class RoomPingCard implements OnInit {
     roomPing.responseMessage = message?.trim() || "On my way!";
     roomPing.responseUserId = this.clientUser?.id;
 
-    this.roomPing = await this._socketService.roomPings.sendPingResponse(roomPing);
+    this.roomPing = await this._roomPingsService.sendPingResponse(roomPing);
   }
 
   onCancel(): void {
-    this._socketService.roomPings.cancelPingRequest(this.roomPing);
+    this._roomPingsService.cancelPingRequest(this.roomPing);
     this.roomPing = null;
   }
 
