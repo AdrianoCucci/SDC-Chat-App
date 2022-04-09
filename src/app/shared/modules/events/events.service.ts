@@ -39,6 +39,10 @@ export class EventsService {
     return canUnsubscribe;
   }
 
+  public unsubscribeMany(subscriptions: EventSubscription[]): void {
+    subscriptions.forEach((e: EventSubscription) => this.unsubscribe(e));
+  }
+
   public unsubscribeAll(): void {
     this._subscriptions.splice(0, this._subscriptions.length);
   }
