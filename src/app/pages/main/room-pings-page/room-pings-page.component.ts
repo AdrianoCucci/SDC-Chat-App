@@ -4,7 +4,7 @@ import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
 import { LoginService } from 'src/app/core/services/login.service';
-import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 
 @Component({
@@ -13,22 +13,22 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
   styleUrls: ['./room-pings-page.component.scss']
 })
 export class RoomPingsPage {
-  constructor(private _socketService: WebSocketService, private _loginService: LoginService) { }
+  constructor(private _roomPingsService: RoomPingsService, private _loginService: LoginService) { }
 
   public get clientUser(): User {
     return this._loginService.user;
   }
 
   public get rooms(): PagedList<Room> {
-    return this._socketService.roomPings.rooms;
+    return this._roomPingsService.rooms;
   }
 
   public get hasRooms(): boolean {
-    return this._socketService.roomPings.hasRooms;
+    return this._roomPingsService.hasRooms;
   }
 
   public get activePings(): RoomPing[] {
-    return this._socketService.roomPings
+    return this._roomPingsService
       .findPings((r: RoomPing) => r.state !== RoomPingState.Idle)
       .sort((a: RoomPing, b: RoomPing) => a.state - b.state);
   }

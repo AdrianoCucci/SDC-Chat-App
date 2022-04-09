@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { User } from 'src/app/core/models/users/user';
-import { ChatController } from 'src/app/core/services/web-socket/chat-controller';
-import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { ChatService } from 'src/app/core/services/web-socket/chat.service';
+import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
 import { MenuItem } from 'src/app/shared/models/menu-item';
 import { EventSubscription } from 'src/app/shared/modules/events/event-subscription.model';
 import { EventsService } from 'src/app/shared/modules/events/events.service';
@@ -22,7 +22,7 @@ export class MainMenu implements OnInit, OnDestroy {
   private _newMessagesCount: number = 0;
   private _eventSubscription: EventSubscription;
 
-  constructor(private _router: Router, private _socketService: WebSocketService, private _eventsService: EventsService) { }
+  constructor(private _router: Router, private _roomPingsService: RoomPingsService, private _eventsService: EventsService) { }
 
   ngOnInit(): void {
     this.initMenuItems(this.menuItems);
@@ -46,7 +46,7 @@ export class MainMenu implements OnInit, OnDestroy {
 
   private subscribeEvents(): EventSubscription {
     return this._eventsService.subscribe({
-      eventSources: ChatController.name,
+      eventSources: ChatService.name,
       eventTypes: "message",
       eventHandler: () => {
         if(!this.isChatItemActive) {
@@ -73,7 +73,7 @@ export class MainMenu implements OnInit, OnDestroy {
 
     if(this.clientUser != null) {
       const predicate = (r: RoomPing) => r.requestUserId !== this.clientUser.id && r.state === RoomPingState.Requesting;
-      count = this._socketService.roomPings.pings?.filter(predicate).length ?? 0;
+      count = this._roomPingsService.pings?.filter(predicate).length ?? 0;
     }
 
     return count;

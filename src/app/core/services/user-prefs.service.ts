@@ -5,7 +5,9 @@ import { UserRequest } from "../models/users/user-request";
 import { UsersService } from "./api/users-service";
 import { LoginService } from "./login.service";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class UserPrefsService {
   constructor(private _usersService: UsersService, private _loginService: LoginService) { }
 

@@ -5,6 +5,9 @@ import { Role } from 'src/app/core/models/auth/role';
 import { User } from 'src/app/core/models/users/user';
 import { AudioService } from 'src/app/core/services/audio/audio.service';
 import { LoginService } from 'src/app/core/services/login.service';
+import { ChatService } from 'src/app/core/services/web-socket/chat.service';
+import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
+import { SocketUsersService } from 'src/app/core/services/web-socket/socket-users.service';
 import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
 import { MenuItem } from 'src/app/shared/models/menu-item';
@@ -28,6 +31,9 @@ export class MainPage implements OnInit, OnDestroy {
     private _loginService: LoginService,
     private _router: Router,
     private _socketService: WebSocketService,
+    private _socketUsersService: SocketUsersService,
+    private _chatService: ChatService,
+    private _roomPingsService: RoomPingsService,
     private _audioService: AudioService
   ) {
     if(this.clientUser != null) {
@@ -63,9 +69,6 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._socketService.disconnect();
-    this._socketService.dispose();
-
     this._audioService.stopAllAudio();
 
     this._subscription.unsubscribe();
@@ -87,7 +90,8 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   private async initSocketClientData(clientUser: User): Promise<void> {
-    await this._socketService.connect(clientUser);
+    await this._socketService.connect();
+    this._socketUsersService.joinClientUser(clientUser);
 
     const organizationId: number = clientUser.organizationId;
 
@@ -95,10 +99,10 @@ export class MainPage implements OnInit, OnDestroy {
     messagesBeforeDate.setHours(messagesBeforeDate.getHours() + 24);
 
     await Promise.all([
-      this._socketService.loadUsers(organizationId),
-      this._socketService.chat.loadMessages(organizationId, messagesBeforeDate, 50),
-      this._socketService.roomPings.loadRooms(organizationId),
-      this._socketService.roomPings.getRequestingPings()
+      this._socketUsersService.loadUsers(organizationId),
+      this._chatService.loadMessages(organizationId, messagesBeforeDate, 50),
+      this._roomPingsService.loadRooms(organizationId),
+      this._roomPingsService.getRequestingPings()
     ]);
   }
 
