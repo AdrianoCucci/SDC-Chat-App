@@ -9,6 +9,7 @@ import { TokenInterceptorService } from './core/services/token-interceptor.servi
 import { environment } from 'src/environments/environment';
 
 import { AppComponent } from './app.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -19,6 +20,10 @@ import { AppComponent } from './app.component';
     SocketioModule.forRoot({
       url: environment.server.host,
       options: environment.server.socketConfig
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
     })
   ],
   providers: [
