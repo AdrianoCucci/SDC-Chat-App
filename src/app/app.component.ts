@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
       eventHandler: () => this._accessibilityService.loadPreferences()
     });
 
-    if(environment.app.logEvents) {
+    if(environment.app.logEvents && !environment.production) {
       this._eventsService.subscribeAll((event: Event) => console.log(event));
     }
   }

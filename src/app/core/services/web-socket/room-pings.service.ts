@@ -108,13 +108,6 @@ export class RoomPingsService implements IDisposable {
 
       this._socketService.emit(eventType, roomPing, (response: RoomPing) => {
         this.addPing(response);
-
-        this._eventsService.publish({
-          source: this.constructor.name,
-          type: eventType,
-          data: response
-        });
-
         resolve(response);
       });
     });
@@ -127,12 +120,6 @@ export class RoomPingsService implements IDisposable {
       this._socketService.emit(eventType, roomPing, (response: RoomPing) => {
         this.upsertPing(response);
 
-        this._eventsService.publish({
-          source: this.constructor.name,
-          type: eventType,
-          data: response
-        });
-
         if(response.room?.pingSound != null) {
           this._audioService.stop(response.room.pingSound);
         }
@@ -144,14 +131,6 @@ export class RoomPingsService implements IDisposable {
 
   public cancelPingRequest(roomPing: RoomPing): void {
     if(roomPing != null) {
-      const eventType: string = this.socketEvents.roomPingCancel;
-
-      this._eventsService.publish({
-        source: this.constructor.name,
-        type: eventType,
-        data: roomPing
-      });
-
       this._socketService.emit(this.socketEvents.roomPingCancel, roomPing);
       this.removePing(roomPing.guid);
     }
