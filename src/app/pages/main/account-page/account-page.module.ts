@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AccountPageRoutingModule } from './account-page-routing.module';
 
+import { TabMenuPanelModule } from 'src/app/shared/modules/menus/tab-menu-panel/tab-menu-panel.module';
 import { ButtonModule } from 'src/app/shared/modules/button/button.module';
 import { InputToggleModule } from 'src/app/shared/modules/forms/inputs/input-toggle/input-toggle.module';
 import { InlineAlertModule } from 'src/app/shared/modules/inline-alert/inline-alert.module';
@@ -17,6 +18,7 @@ import { AccountPage } from './account-page.component';
   imports: [
     CommonModule,
     AccountPageRoutingModule,
+    TabMenuPanelModule,
     ButtonModule,
     InputToggleModule,
     InlineAlertModule,
