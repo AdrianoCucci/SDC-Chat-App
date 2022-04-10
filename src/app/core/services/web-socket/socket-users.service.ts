@@ -46,7 +46,7 @@ export class SocketUsersService implements IDisposable {
 
       eventsService.publish({
         source: eventsSource,
-        type: events.userJoin,
+        type: events.userLeave,
         data: user
       });
     });
