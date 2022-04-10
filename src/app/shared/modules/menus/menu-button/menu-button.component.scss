@@ -5,7 +5,7 @@
   --description-padding: 0;
   --description-background: inherit;
   --description-color: inherit;
-  --description-font-size: 0.85rem;
+  --description-font-size: 0.85em;
   --description-font-weight: initial;
 
   display: inline-flex;
@@ -14,7 +14,6 @@
   padding: 0 1rem;
   background-color: unset;
   color: var(--color-dark-tint-2);
-  font-weight: initial;
   transition: 0.16s;
   cursor: pointer;
 
@@ -25,7 +24,6 @@
     div.menu-button-main {
       display: flex;
       align-items: center;
-      justify-content: space-between;
 
       .icon {
         margin: 0.5rem;

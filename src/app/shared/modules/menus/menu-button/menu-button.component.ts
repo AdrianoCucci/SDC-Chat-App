@@ -17,10 +17,6 @@ export class MenuButtonComponent {
 
   @ViewChild(RouterLinkActive) private readonly _routerLinkActive: RouterLinkActive;
 
-  ngAfterViewInit() {
-    console.log(this._routerLinkActive);
-  }
-
   public getItemIconDefinition(menuItem: MenuItem): IconDefinition {
     return getCommonIconDefinition(menuItem.icon);
   }
