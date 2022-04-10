@@ -1,1 +1,26 @@
-<p>account-details works!</p>
+<section class="info-section fade-in-left">
+  <div class="info-row">
+    <div class="meta">Username</div>
+    <div class="data">{{user.username}}</div>
+  </div>
+
+  <div class="info-row">
+    <div class="meta">Display Name</div>
+    <div class="data">{{user.displayName || '(Not set)'}}</div>
+  </div>
+
+  <div class="info-row">
+    <div class="meta">Role</div>
+    <div class="data">{{getUserRoleDisplay()}}</div>
+  </div>
+</section>
+
+<section class="footer txt-right fade-in-right">
+  <app-button class="m-r-2" text="Edit Account" icon="pen" (click)="onEditAccount()"></app-button>
+  <app-button text="Change Password" icon="key" (click)="onChangePassword()"></app-button>
+</section>
+
+<app-account-form [dialog]="true" (onSubmitSuccess)="onAccountFormSuccess($event)"></app-account-form>
+
+<app-pass-change-form #passChangeForm [dialog]="true" (onSubmitSuccess)="passChangeForm.dialogVisible = false">
+</app-pass-change-form>
