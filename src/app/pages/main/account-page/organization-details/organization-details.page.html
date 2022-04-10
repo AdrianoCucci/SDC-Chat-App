@@ -1,1 +1,30 @@
-<p>organization-details works!</p>
+<section class="info-section fade-in-left">
+  <div class="info-row">
+    <div class="meta">Name</div>
+    <div class="data">{{organization.name || '(Not set)'}}</div>
+  </div>
+
+  <div class="info-row">
+    <div class="meta">Address</div>
+    <div class="data">{{organization.fullAddress || '(Not set)'}}</div>
+  </div>
+
+  <div class="info-row">
+    <div class="meta">Email</div>
+    <div class="data">{{organization.email || '(Not set)'}}</div>
+  </div>
+
+  <div class="info-row">
+    <div class="meta">Phone Number</div>
+    <div class="data">{{organization.phoneNumber || '(Not set)'}}</div>
+  </div>
+</section>
+
+<ng-container *ngIf="allowEditOrganization">
+  <section class="footer txt-right fade-in-right">
+    <app-button class="m-r-2" text="Edit Organization" icon="pen" (click)="onEditOrganization()"></app-button>
+  </section>
+
+  <app-organization-form mode="edit" [dialog]="true" (onSubmitSuccess)="onOrganizationFormSuccess($event)">
+  </app-organization-form>
+</ng-container>
