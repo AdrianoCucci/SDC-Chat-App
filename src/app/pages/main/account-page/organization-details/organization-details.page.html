@@ -1,23 +1,23 @@
 <section class="info-section fade-in-left">
-  <div class="info-row">
-    <div class="meta">Name</div>
-    <div class="data">{{organization.name || '(Not set)'}}</div>
-  </div>
+  <app-info-row>
+    <span slot="meta">Name</span>
+    <span slot="data">{{organization.name || '(Not set)'}}</span>
+  </app-info-row>
 
-  <div class="info-row">
-    <div class="meta">Address</div>
-    <div class="data">{{organization.fullAddress || '(Not set)'}}</div>
-  </div>
+  <app-info-row>
+    <span slot="meta">Address</span>
+    <span slot="data">{{organization.fullAddress || '(Not set)'}}</span>
+  </app-info-row>
 
-  <div class="info-row">
-    <div class="meta">Email</div>
-    <div class="data">{{organization.email || '(Not set)'}}</div>
-  </div>
+  <app-info-row>
+    <span slot="meta">Email</span>
+    <span slot="data">{{organization.email || '(Not set)'}}</span>
+  </app-info-row>
 
-  <div class="info-row">
-    <div class="meta">Phone Number</div>
-    <div class="data">{{organization.phoneNumber || '(Not set)'}}</div>
-  </div>
+  <app-info-row>
+    <span slot="meta">Phone Number</span>
+    <span slot="data">{{organization.phoneNumber || '(Not set)'}}</span>
+  </app-info-row>
 </section>
 
 <ng-container *ngIf="allowEditOrganization">

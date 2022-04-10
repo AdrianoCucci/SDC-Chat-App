@@ -1,4 +1,6 @@
-.info-row {
+@import "/src/theme/colors.scss";
+
+:host {
   display: flex;
   background-color: var(--color-1-tint-5);
   border-bottom: solid var(--color-1) 2px;
@@ -27,6 +29,19 @@
       margin: 0.25rem 0 0 0;
       font-size: 0.85rem;
       font-weight: initial;
+    }
+  }
+}
+
+@include themeHighContrast() {
+  :host {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border-bottom: solid var(--color-medium) 2px;
+    
+    .meta {
+      background-color: var(--color-medium);
+      color: var(--color-white);
     }
   }
 }

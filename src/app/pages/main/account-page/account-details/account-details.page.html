@@ -1,18 +1,23 @@
 <section class="info-section fade-in-left">
-  <div class="info-row">
-    <div class="meta">Username</div>
-    <div class="data">{{user.username}}</div>
-  </div>
+  <app-info-row>
+    <span slot="meta">Username</span>
+    <span slot="data">{{user.username}}</span>
+  </app-info-row>
 
-  <div class="info-row">
-    <div class="meta">Display Name</div>
-    <div class="data">{{user.displayName || '(Not set)'}}</div>
-  </div>
+  <app-info-row>
+    <span slot="meta">Display Name</span>
+    <span slot="data">{{user.displayName || '(Not set)'}}</span>
+  </app-info-row>
 
-  <div class="info-row">
-    <div class="meta">Role</div>
-    <div class="data">{{getUserRoleDisplay()}}</div>
-  </div>
+  <app-info-row>
+    <span slot="meta">Display Name</span>
+    <span slot="data">{{user.displayName || '(Not set)'}}</span>
+  </app-info-row>
+
+  <app-info-row>
+    <span slot="meta">Role</span>
+    <span slot="data">{{getUserRoleDisplay()}}</span>
+  </app-info-row>
 </section>
 
 <section class="footer txt-right fade-in-right">
