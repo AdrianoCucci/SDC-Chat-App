@@ -2,9 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { DirectivesModule } from '../../directives/directives-module';
 
 import { TabMenu } from './tab-menu.component';
-const component = [TabMenu];
+const component = TabMenu;
 
 @NgModule({
   imports: [
@@ -12,7 +13,7 @@ const component = [TabMenu];
     RouterModule,
     FontAwesomeModule
   ],
-  exports: component,
-  declarations: component
+  exports: [component, DirectivesModule],
+  declarations: [component]
 })
 export class TabMenuModule { }
