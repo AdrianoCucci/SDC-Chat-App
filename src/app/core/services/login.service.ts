@@ -1,4 +1,5 @@
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
+import { EventsService } from "src/app/shared/modules/events/events.service";
 import { AuthResponse } from "../models/auth/auth-response";
 import { Role } from "../models/auth/role";
 import { User } from "../models/users/user";
@@ -11,22 +12,23 @@ import { StorageService } from "./storage/storage-service";
   providedIn: 'root'
 })
 export class LoginService {
-  public readonly onLogin = new EventEmitter<User>();
-  public readonly onLogout = new EventEmitter<void>();
-  public readonly onUserUpdate = new EventEmitter<User>();
-
   private readonly _storageKey: string = "auth";
 
   private _currentUser: User;
 
-  constructor(private _storageService: StorageService, private _encryptService: EncryptService, private _usersService: UsersService) { }
+  constructor(
+    private _storageService: StorageService,
+    private _encryptService: EncryptService,
+    private _usersService: UsersService,
+    private _eventsService: EventsService
+  ) { }
 
   public setCurrentUser(authResponse: AuthResponse, remember?: boolean): User {
     if(authResponse.isSuccess && authResponse.user != null) {
       this.setSavedLogin(authResponse, remember);
 
       this._currentUser = authResponse.user;
-      this.onLogin.emit(this._currentUser);
+      this.publishLogin();
     }
 
     return this._currentUser;
@@ -37,7 +39,7 @@ export class LoginService {
 
     if(savedLogin != null) {
       this._currentUser = savedLogin.user;
-      this.onLogin.emit(this._currentUser);
+      this.publishLogin();
     }
 
     return this.isLoggedIn;
@@ -54,7 +56,7 @@ export class LoginService {
       this.setSavedLogin(savedLogin, includeLocalStorage);
 
       this._currentUser = newUser;
-      this.onUserUpdate.emit(this._currentUser);
+      this.publishUserUpdate();
     }
 
     return canUpdate;
@@ -76,7 +78,7 @@ export class LoginService {
       this._storageService.forEachMedium((s: IStorageMedium) => s.delete(this._storageKey));
       this._currentUser = null;
 
-      this.onLogout.emit();
+      this.publishLogout();
     }
   }
 
@@ -116,6 +118,29 @@ export class LoginService {
     }
   }
 
+  private publishLogin(): void {
+    this._eventsService.publish({
+      source: this.constructor.name,
+      type: "login",
+      data: this._currentUser
+    });
+  }
+
+  private publishUserUpdate(): void {
+    this._eventsService.publish({
+      source: this.constructor.name,
+      type: "user-update",
+      data: this._currentUser
+    });
+  }
+
+  private publishLogout(): void {
+    this._eventsService.publish({
+      source: this.constructor.name,
+      type: "logout"
+    });
+  }
+
   public get user(): User {
     return this._currentUser;
   }
@@ -125,7 +150,7 @@ export class LoginService {
       this._currentUser = this.getSavedLogin()?.user;
 
       if(this._currentUser != null) {
-        this.onLogin.emit(this._currentUser);
+        this.publishLogin();
       }
     }
 

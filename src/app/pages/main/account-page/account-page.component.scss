@@ -55,18 +55,30 @@
           margin-bottom: 0.75rem;
         }
 
-        span.meta,
-        span.data {
-          display: block;
+        .meta,
+        .data {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
           flex: 1;
           padding: 1rem;
         }
 
-        span.meta {
+        .meta {
           background-color: var(--color-1);
           border-radius: 0 1000px 1000px 0;
           font-weight: 600;
+
+          .meta-summary {
+            margin: 0.25rem 0 0 0;
+            font-size: 0.85rem;
+            font-weight: initial;
+          }
         }
+      }
+
+      &.notification-settings .data > * {
+        padding: 0;
       }
     }
   }

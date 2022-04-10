@@ -1,78 +1,91 @@
 import { HttpResponse } from '@angular/common/http';
-import { EventEmitter } from '@angular/core';
-import { Socketio } from 'ngx-socketio2';
-import { Subscription, TeardownLogic } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
-import { subscribeMany } from 'src/app/shared/util/rxjs-utils';
+import { EventsService } from 'src/app/shared/modules/events/events.service';
 import { RoomPing } from '../../models/room-pings/room-ping';
 import { RoomPingState } from '../../models/room-pings/room-ping-state';
 import { Room } from '../../models/rooms/room';
 import { RoomsService } from '../api/rooms-service';
 import { AudioService } from '../audio/audio.service';
+import { LoginService } from '../login.service';
+import { WebSocketService } from './web-socket.service';
 
-export class RoomPingsController implements IDisposable {
-  public readonly onPingRequest = new EventEmitter<RoomPing>();
-  public readonly onPingResponse = new EventEmitter<RoomPing>();
-  public readonly onPingCancel = new EventEmitter<RoomPing>();
-
-  private readonly _socket: Socketio;
-  private readonly _roomsService: RoomsService;
-  private readonly _audioService: AudioService;
-
-  private _subscription: Subscription;
+@Injectable({
+  providedIn: 'root'
+})
+export class RoomPingsService implements IDisposable {
   private _pings: RoomPing[];
   private _rooms: PagedList<Room>;
 
-  constructor(socket: Socketio, roomsService: RoomsService, audioService: AudioService) {
-    this._socket = socket;
-    this._roomsService = roomsService;
-    this._audioService = audioService;
-
-    this._subscription = subscribeMany(this.getEventSubscriptions(this._socket));
+  constructor(
+    private _socketService: WebSocketService,
+    private _roomsService: RoomsService,
+    private _audioService: AudioService,
+    private _eventsService: EventsService
+  ) {
+    this.subscribeEvents();
   }
 
   public dispose(): void {
     this._pings = null;
     this._rooms = null;
-
-    this._subscription?.unsubscribe();
-    this._subscription = null;
   }
 
-  private getEventSubscriptions(socket: Socketio): TeardownLogic[] {
-    const events = this.events;
+  private subscribeEvents(): void {
+    const socket: WebSocketService = this._socketService;
+    const events = this.socketEvents;
+    const eventsService: EventsService = this._eventsService;
+    const eventsSource: string = this.constructor.name;
+    const audioService: AudioService = this._audioService;
 
-    const subscriptions: TeardownLogic[] = [
-      socket.on<RoomPing>(events.roomPingRequest).subscribe((roomPing: RoomPing) => {
-        this.addPing(roomPing);
-        this.onPingRequest.emit(roomPing);
+    socket.on<RoomPing>(events.roomPingRequest, (roomPing: RoomPing) => {
+      this.addPing(roomPing);
 
-        if(roomPing.room?.pingSound != null) {
-          this._audioService.play(roomPing.room.pingSound, true);
-        }
-      }),
+      eventsService.publish({
+        source: eventsSource,
+        type: events.roomPingRequest,
+        data: roomPing
+      });
 
-      socket.on<RoomPing>(events.roomPingResponse).subscribe((roomPing: RoomPing) => {
-        this.updatePing(roomPing.guid, roomPing);
-        this.onPingResponse.emit(roomPing);
+      if(roomPing.room?.pingSound != null) {
+        audioService.play(roomPing.room.pingSound);
+      }
+    });
 
-        if(roomPing.room?.pingSound != null) {
-          this._audioService.stop(roomPing.room.pingSound);
-        }
-      }),
+    socket.on<RoomPing>(events.roomPingResponse, (roomPing: RoomPing) => {
+      this.updatePing(roomPing.guid, roomPing);
 
-      socket.on<RoomPing>(events.roomPingCancel).subscribe((roomPing: RoomPing) => {
-        this.removePing(roomPing.guid);
-        this.onPingCancel.emit(roomPing);
+      eventsService.publish({
+        source: eventsSource,
+        type: events.roomPingResponse,
+        data: roomPing
+      });
 
-        if(roomPing.room?.pingSound != null) {
-          this._audioService.stop(roomPing.room.pingSound);
-        }
-      }),
-    ];
-    
-    return subscriptions;
+      if(roomPing.room?.pingSound != null) {
+        audioService.stop(roomPing.room.pingSound);
+      }
+    });
+
+    socket.on<RoomPing>(events.roomPingCancel, (roomPing: RoomPing) => {
+      this.removePing(roomPing.guid);
+
+      eventsService.publish({
+        source: eventsSource,
+        type: events.roomPingCancel,
+        data: roomPing
+      });
+
+      if(roomPing.room?.pingSound != null) {
+        audioService.stop(roomPing.room.pingSound);
+      }
+    });
+
+    eventsService.subscribe({
+      eventSources: LoginService.name,
+      eventTypes: "logout",
+      eventHandler: () => this.dispose()
+    });
   }
 
   public loadRooms(organizationId: number): Promise<PagedList<Room>> {
@@ -91,10 +104,10 @@ export class RoomPingsController implements IDisposable {
 
   public sendPingRequest(roomPing: RoomPing): Promise<RoomPing> {
     return new Promise<RoomPing>((resolve) => {
-      this._socket.emit(this.events.roomPingRequest, roomPing, (response: RoomPing) => {
-        this.addPing(response);
-        this.onPingRequest.emit(response);
+      const eventType: string = this.socketEvents.roomPingRequest;
 
+      this._socketService.emit(eventType, roomPing, (response: RoomPing) => {
+        this.addPing(response);
         resolve(response);
       });
     });
@@ -102,9 +115,10 @@ export class RoomPingsController implements IDisposable {
 
   public sendPingResponse(roomPing: RoomPing): Promise<RoomPing> {
     return new Promise<RoomPing>((resolve) => {
-      this._socket.emit(this.events.roomPingResponse, roomPing, (response: RoomPing) => {
-        this.addOrUpdatePing(response);
-        this.onPingResponse.emit(response);
+      const eventType: string = this.socketEvents.roomPingResponse;
+
+      this._socketService.emit(eventType, roomPing, (response: RoomPing) => {
+        this.upsertPing(response);
 
         if(response.room?.pingSound != null) {
           this._audioService.stop(response.room.pingSound);
@@ -117,15 +131,14 @@ export class RoomPingsController implements IDisposable {
 
   public cancelPingRequest(roomPing: RoomPing): void {
     if(roomPing != null) {
-      this.onPingCancel.emit(roomPing);
-      this._socket.emit(this.events.roomPingCancel, roomPing);
+      this._socketService.emit(this.socketEvents.roomPingCancel, roomPing);
       this.removePing(roomPing.guid);
     }
   }
 
   public getRequestingPings(): Promise<RoomPing[]> {
     return new Promise<RoomPing[]>((resolve) => {
-      this._socket.emit(this.events.getRoomPings, (response: RoomPing[]) => {
+      this._socketService.emit(this.socketEvents.getRoomPings, (response: RoomPing[]) => {
         this._pings = response;
         resolve(response);
       });
@@ -164,7 +177,7 @@ export class RoomPingsController implements IDisposable {
     return canUpdate;
   }
 
-  public addOrUpdatePing(roomPing: RoomPing): void {
+  public upsertPing(roomPing: RoomPing): void {
     if(!this.updatePing(roomPing.guid, roomPing)) {
       this.addPing(roomPing);
     }
@@ -187,7 +200,7 @@ export class RoomPingsController implements IDisposable {
     }
   }
 
-  public get events() {
+  public get socketEvents() {
     return {
       roomPingRequest: "room-ping-request",
       roomPingResponse: "room-ping-response",
