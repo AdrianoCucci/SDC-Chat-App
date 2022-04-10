@@ -41,6 +41,7 @@
   --content-background: var(--color-light);
   --content-color: unset;
   --content-border: unset;
+  --content-overflow: hidden;
 
   display: flex;
   flex-direction: column;
@@ -117,6 +118,7 @@
     background-color: var(--content-background);
     color: var(--content-color);
     border: var(--content-border);
+    overflow: var(--content-overflow);
   }
 
   &[menu-slot="bottom"] {
