@@ -1,0 +1,21 @@
+<a *ngIf="item" #rla="routerLinkActive" routerLinkActive [routerLink]="item.routerLink" [attr.id]="item.id"
+  [class]="item.cssClass" [ngClass]="['menu-button']" (click)="onClickInternal()">
+
+  <ng-container *ngIf="item.template == null || !templateOverwrite; else itemTemplate">
+    <div class="menu-button-main">
+      <fa-icon *ngIf="item.icon" class="icon" [icon]="getItemIconDefinition(item)"></fa-icon>
+      <span *ngIf="item.label" class="label">{{item.label}}</span>
+    </div>
+
+    <p *ngIf="item.description" class="menu-button-description">{{item.description}}</p>
+
+    <ng-container *ngIf="item.template != null">
+      <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #itemTemplate>
+    <ng-container *ngTemplateOutlet="item.template; context: { $implicit: item, isActive: rla.isActive }">
+    </ng-container>
+  </ng-template>
+</a>
