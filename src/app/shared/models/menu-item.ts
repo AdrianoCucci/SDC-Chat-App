@@ -1,9 +1,9 @@
 import { TemplateRef } from "@angular/core";
-import { IconDefinition } from "@fortawesome/fontawesome-common-types";
+import { CommonIcon } from "./common-icon.type";
 
 export interface MenuItem {
   label?: string;
-  icon?: IconDefinition;
+  icon?: CommonIcon;
   description?: string;
   routerLink?: string;
   routerLinkActive?: string;

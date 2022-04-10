@@ -57,6 +57,7 @@
           font-weight: var(--item-font-weight);
           text-decoration: none;
           transition: 0.16s;
+          cursor: pointer;
 
           .icon {
             margin: 0.5rem;
@@ -80,6 +81,7 @@
             opacity: 0.65;
             pointer-events: none;
             border-bottom-style: dashed;
+            cursor: initial;
           }
         }
       }

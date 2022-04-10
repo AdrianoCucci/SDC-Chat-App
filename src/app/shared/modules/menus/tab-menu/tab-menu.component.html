@@ -6,7 +6,7 @@
         (click)="onItemClickInternal(item)">
 
         <ng-container *ngIf="item.template == null || !templateOverwrite; else itemTemplate">
-          <fa-icon *ngIf="item.icon" class="icon" [icon]="item.icon"></fa-icon>
+          <fa-icon *ngIf="item.icon" class="icon" [icon]="getItemIconDefinition(item)"></fa-icon>
           <span *ngIf="item.label" class="label">{{item.label}}</span>
 
           <ng-container *ngIf="item.template != null">
