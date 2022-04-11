@@ -1,0 +1,60 @@
+@import "/src/theme/colors.scss";
+
+:host {
+  --description-margin: 0;
+  --description-padding: 0;
+  --description-background: inherit;
+  --description-color: inherit;
+  --description-font-size: 0.85em;
+  --description-font-weight: initial;
+
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 1rem;
+  background-color: unset;
+  color: var(--color-dark-tint-2);
+  transition: 0.16s;
+  cursor: pointer;
+
+  a.menu-button {
+    text-decoration: none;
+    color: inherit;
+
+    div.menu-button-main {
+      display: flex;
+      align-items: center;
+
+      .icon {
+        margin: 0.5rem;
+      }
+    }
+
+    p.menu-button-description {
+      margin: var(--description-margin);
+      padding: var(--description-padding);
+      background-color: var(--description-background);
+      color: var(--description-color);
+      font-size: var(--description-font-size);
+      font-weight: var(--description-font-weight);
+    }
+  }
+
+  &.active {
+    color: var(--color-2-shade-5);
+    font-weight: 600;
+  }
+
+  &.disabled {
+    opacity: 0.65;
+    pointer-events: none;
+    cursor: initial;
+  }
+}
+
+@include themeHighContrast() {
+  :host.active {
+    background-color: var(--color-black);
+    color: var(--color-white);
+  }
+}

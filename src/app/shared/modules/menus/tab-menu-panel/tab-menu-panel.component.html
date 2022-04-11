@@ -1,4 +1,4 @@
-<nav>
+<nav class="menu-bar">
   <ul>
     <li *ngFor="let item of menuItems;">
       <app-menu-button [item]="item" [templateOverwrite]="templateOverwrite" (onClick)="onItemClick.emit($event)">
@@ -6,3 +6,7 @@
     </li>
   </ul>
 </nav>
+
+<div class="menu-content">
+  <router-outlet></router-outlet>
+</div>

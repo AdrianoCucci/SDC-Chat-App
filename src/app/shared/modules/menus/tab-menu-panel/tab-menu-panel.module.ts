@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { MenuButtonModule } from '../menu-button/menu-button.module';
-import { DirectivesModule } from '../../directives/directives-module';
 
-import { TabMenu } from './tab-menu.component';
-const component = TabMenu;
+import { TabMenuPanelComponent } from './tab-menu-panel.component';
+const component = [TabMenuPanelComponent];
 
 @NgModule({
   imports: [
@@ -14,7 +13,7 @@ const component = TabMenu;
     RouterModule,
     MenuButtonModule
   ],
-  exports: [component, DirectivesModule],
-  declarations: [component]
+  exports: component,
+  declarations: component
 })
-export class TabMenuModule { }
+export class TabMenuPanelModule { }
