@@ -1,7 +1,7 @@
 export const environment = {
   app: {
     name: "SDC-Chat",
-    version: "1.0.0",
+    version: "1.1.0",
     tokenEncryptKey: "z[mr%KHw2g'A]~ET!djLgPG_B@rba4",
     logEvents: false
   },
