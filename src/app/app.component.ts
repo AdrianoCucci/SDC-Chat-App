@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { LoginService } from './core/services/login.service';
 import { EventNotificationsService } from './core/services/notifications/event-notifications-service';
-import { AccessibilityService } from './shared/modules/accessibility/accessibility.service';
+import { AccessibilityService } from './core/services/accessibility.service';
 import { Event } from './shared/modules/events/event.model';
 import { EventsService } from './shared/modules/events/events.service';
 

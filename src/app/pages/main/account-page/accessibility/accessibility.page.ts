@@ -3,7 +3,7 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faTextHeight, faCircleHalfStroke } from '@fortawesome/free-solid-svg-icons';
 import { AccessibilityPrefs } from 'src/app/core/models/user-prefs/accessibility-prefs.model';
 import { Pair } from 'src/app/shared/models/pair';
-import { AccessibilityService } from 'src/app/shared/modules/accessibility/accessibility.service';
+import { AccessibilityService } from 'src/app/core/services/accessibility.service';
 
 @Component({
   selector: 'app-accessibility',
