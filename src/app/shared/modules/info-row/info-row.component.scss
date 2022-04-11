@@ -29,6 +29,10 @@
       margin: 0.25rem 0 0 0;
       font-size: 0.85rem;
       font-weight: initial;
+
+      &:empty {
+        display: none;
+      }
     }
   }
 }
@@ -38,7 +42,7 @@
     background-color: var(--color-black);
     color: var(--color-white);
     border-bottom: solid var(--color-medium) 2px;
-    
+
     .meta {
       background-color: var(--color-medium);
       color: var(--color-white);

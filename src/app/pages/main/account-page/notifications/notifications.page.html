@@ -1,1 +1,28 @@
-<p>notifications works!</p>
+<section *ngIf="!hasNotificationsPermission" class="no-permissions-section m-b-14 fade-in-left">
+  <app-inline-alert class="block m-b-2" type="warn" header="Permission Required"
+    summary="You must grant permission to recieve notifications. Use the button below to grant permission."
+    [visible]="true">
+  </app-inline-alert>
+
+  <app-button text="Grant Permission" (click)="onRequestPermission()"></app-button>
+</section>
+
+<section class="info-section fade-in-left" [class.disabled]="!hasNotificationsPermission">
+  <app-info-row>
+    <span slot="meta">Chat Messages</span>
+    <span slot="meta-summary">Recieve notifications when new chat messages are posted.</span>
+    <app-input-toggle slot="data" [(value)]="prefs.chatMessages"></app-input-toggle>
+  </app-info-row>
+
+  <app-info-row>
+    <span slot="meta">RoomPings</span>
+    <span slot="meta-summary">Recieve notifications when rooms are pinged.</span>
+    <app-input-toggle slot="data" [(value)]="prefs.roomPings"></app-input-toggle>
+  </app-info-row>
+</section>
+
+<section class="footer flex flex-align-center flex-justify-end fade-in-right">
+  <app-loader class="m-r-4" [visible]="isSaving"></app-loader>
+  <app-button [text]="isSaving ? 'Saving...' : 'Save Changes'" icon="check" [disabled]="isSaving" (click)="onSave()">
+  </app-button>
+</section>
