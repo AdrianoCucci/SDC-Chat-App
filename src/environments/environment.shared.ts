@@ -1,3 +1,5 @@
+import { ManagerOptions, SocketOptions } from 'socket.io-client';
+
 export const environment = {
   app: {
     name: "SDC-Chat",
@@ -10,7 +12,7 @@ export const environment = {
     host: "http://localhost:3000",
     apiPath: "/sdc-chat-api",
 
-    socketConfig: {
+    socketConfig: <Partial<SocketOptions & ManagerOptions>>{
       path: "/sdc-chat-api/socket",
       autoConnect: false,
       reconnectionAttempts: 4
