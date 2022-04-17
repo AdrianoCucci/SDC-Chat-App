@@ -30,7 +30,6 @@
               "src/favicon.ico",
               "src/assets",
               "src/web.config",
-              "src/config.js",
               "src/manifest.webmanifest"
             ],
             "styles": [
