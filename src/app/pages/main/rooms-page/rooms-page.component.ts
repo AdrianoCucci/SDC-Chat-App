@@ -1,9 +1,9 @@
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Room } from 'src/app/core/models/rooms/room';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
 import { LoginService } from 'src/app/core/services/login.service';
-import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
+import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 import { Paginatable } from 'src/app/shared/models/pagination/paginatable';
 import { PageEvent } from 'src/app/shared/modules/table/page-event';
@@ -48,7 +48,7 @@ export class RoomsPage implements OnInit {
       this._rooms = response.body;
     }
     catch(error) {
-      this.loadError = parseHttpError(error as HttpErrorResponse, true) as string;
+      this.loadError = parseErrorMessage(error);
       this.errorVisible = true;
     }
     finally {
