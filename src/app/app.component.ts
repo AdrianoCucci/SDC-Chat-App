@@ -23,10 +23,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this._eventsService.subscribe({
       eventSources: LoginService.name,
       eventTypes: "login",
-      eventHandler: () => this._accessibilityService.loadPreferences()
+      eventHandler: () => {
+        this._accessibilityService.loadPreferences();
+        this._eventNotificationsService.registerEvents();
+      }
     });
-
-    this._eventNotificationsService.registerEvents();
 
     if(environment.app.logEvents && !environment.production) {
       this._eventsService.subscribeAll((event: Event) => console.log(event));

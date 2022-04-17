@@ -14,8 +14,7 @@ export const environment = {
 
     socketConfig: <Partial<SocketOptions & ManagerOptions>>{
       path: "/socket",
-      autoConnect: false,
-      reconnectionAttempts: 4
+      autoConnect: false
     }
   }
 };
