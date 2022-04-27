@@ -1,25 +1,32 @@
 <ng-container *ngIf="users">
   <span class="header">Users</span>
 
-  <div class="lists-wrapper">
-    <div *ngIf="getOnlineUsers() as users" class="users online">
-      <span class="list-header">Online</span>
+  <div class="content">
+    <div class="lists-wrapper">
+      <div *ngIf="getOnlineUsers() as users" class="users online">
+        <span class="list-header">Online</span>
 
-      <ul>
-        <li *ngFor="let user of users" class="user-item online">
-          <span class="display-name">{{getUserDisplayName(user)}}</span>
-        </li>
-      </ul>
+        <ul>
+          <li *ngFor="let user of users" class="user-item online">
+            <span class="display-name">{{getUserDisplayName(user)}}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div *ngIf="getOfflineUsers() as users" class="users offline">
+        <span class="list-header">Offline</span>
+
+        <ul>
+          <li *ngFor="let user of users" class="user-item offline">
+            <span class="display-name">{{getUserDisplayName(user)}}</span>
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
 
-    <div *ngIf="getOfflineUsers() as users" class="users offline">
-      <span class="list-header">Offline</span>
-
-      <ul>
-        <li *ngFor="let user of users" class="user-item offline">
-          <span class="display-name">{{getUserDisplayName(user)}}</span>
-        </li>
-      </ul>
-    </div>
+  <div class="footer">
+    <app-button class="toggle-button block" [icon]="collapsed ? 'chevron-right' : 'chevron-left'"
+      [title]="collapsed ? 'Show users' : 'Hide users'" (click)="collapsed = !collapsed"></app-button>
   </div>
 </ng-container>

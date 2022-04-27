@@ -37,14 +37,6 @@ export class TabMenu implements AfterViewInit {
     }
   }
 
-  onItemClickInternal(item: MenuItem): void {
-    this.onItemClick.emit(item);
-
-    if(item.onClick != null) {
-      item.onClick(item);
-    }
-  }
-
   public get hasMenuItems(): boolean {
     return this.menuItems?.length > 0 ?? false;
   }

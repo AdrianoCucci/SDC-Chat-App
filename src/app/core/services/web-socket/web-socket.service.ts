@@ -1,144 +1,116 @@
-import { HttpResponse } from "@angular/common/http";
-import { EventEmitter, Injectable } from "@angular/core";
+import { Injectable } from "@angular/core";
 import { Socketio } from "ngx-socketio2";
-import { Subscription, TeardownLogic } from "rxjs";
+import { Subscription } from "rxjs";
 import { IDisposable } from "src/app/shared/interfaces/i-disposable";
-import { PagedList } from "src/app/shared/models/pagination/paged-list";
-import { subscribeMany } from "src/app/shared/util/rxjs-utils";
-import { User } from "../../models/users/user";
-import { ChatMessagesService } from "../api/chat-messages.service";
-import { RoomsService } from "../api/rooms-service";
-import { UsersService } from "../api/users-service";
-import { AudioService } from "../audio/audio.service";
-import { ChatController } from "./chat-controller";
-import { RoomPingsController } from "./room-pings-controller";
+import { Event } from "src/app/shared/modules/events/event.model";
+import { EventsService } from "src/app/shared/modules/events/events.service";
+import { LoginService } from "../login.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebSocketService implements IDisposable {
-  public readonly onConnect = new EventEmitter<void>();
-  public readonly onDisconnect = new EventEmitter<void>();
-  public readonly onConnectError = new EventEmitter<any>();
-  public readonly onUserJoin = new EventEmitter<User>();
-  public readonly onUserLeave = new EventEmitter<User>();
-
-  public readonly chat: ChatController;
-  public readonly roomPings: RoomPingsController;
-
-  protected readonly _socket: Socketio;
-
   private _subscription: Subscription;
-  private _users: PagedList<User>;
-  private _clientUser: User;
+  private _didDisconnect: boolean = false;
 
-  constructor(
-    private _usersService: UsersService,
-    socket: Socketio,
-    messagesService: ChatMessagesService,
-    roomsService: RoomsService,
-    audioService: AudioService
-  ) {
-    this._socket = socket;
-
+  constructor(private _socket: Socketio, private _eventsService: EventsService) {
     if(this._socket == null) {
-      throw new Error("[WebSocketService] > [Socket] dependency is null");
+      throw new Error(`[${this.constructor.name}] > [Socket] dependency is null`);
     }
 
-    this._subscription = subscribeMany(this.getEventSubscriptions(socket));
-
-    this.chat = new ChatController(socket, messagesService, audioService);
-    this.roomPings = new RoomPingsController(socket, roomsService, audioService);
+    this.subsribeEvents();
   }
 
-  private getEventSubscriptions(socket: Socketio): TeardownLogic[] {
+  public dispose(): void {
+    this.disconnect();
+    
+    this._subscription?.unsubscribe();
+    this._subscription = undefined;
+  }
+
+  public on<T = any>(eventName: string, callback: (event: T) => void): void {
+    if(this._subscription == null) {
+      this._subscription = new Subscription();
+    }
+
+    this._subscription.add(this._socket.on<T>(eventName).subscribe((e: T) => callback(e)));
+  }
+
+  public emit<T = any>(eventName: string, payload: any, response?: (data: T) => void) {
+    response == null
+      ? this._socket.emit(eventName, payload)
+      : this._socket.emit(eventName, payload, (d: T) => response(d));
+  }
+
+  private subsribeEvents(): void {
     const events = this.socketEvents;
+    const eventsService: EventsService = this._eventsService;
+    const eventsSource: string = this.constructor.name;
 
-    const subscriptions: TeardownLogic[] = [
-      socket.on(events.connect).subscribe(() => this.onConnect.emit()),
-      socket.on(events.disconnect).subscribe(() => this.onDisconnect.emit()),
-      socket.on(events.connectError).subscribe((event: any) => this.onConnectError.emit(event)),
+    this.on(events.connect, () => {
+      eventsService.publish({
+        source: eventsSource,
+        type: events.connect,
+        data: { isReconnection: this._didDisconnect }
+      });
+    });
 
-      socket.on<User>(events.userJoin).subscribe((user: User) => {
-        this.updateUser(user);
-        this.onUserJoin.emit(user);
-      }),
+    this.on(events.disconnect, () => {
+      this._didDisconnect = true;
+      eventsService.publish({ source: eventsSource, type: events.disconnect });
+    });
 
-      socket.on<User>(events.userLeave).subscribe((user: User) => {
-        this.updateUser(user);
-        this.onUserLeave.emit(user);
-      })
-    ];
+    this.on(events.connectError.replace('-', '_'), (error: any) => {
+      this._didDisconnect = true;
 
-    return subscriptions;
-  }
+      eventsService.publish({
+        source: eventsSource,
+        type: events.connectError,
+        data: error,
+        severity: "error"
+      });
+    });
 
-  public loadUsers(organizationId: number): Promise<PagedList<User>> {
-    return new Promise<PagedList<User>>(async (resolve, reject) => {
-      try {
-        const response: HttpResponse<PagedList<User>> = await this._usersService.getAllUsers({ organizationId }).toPromise();
-        this._users = response.body;
-
-        resolve(this._users);
-      }
-      catch(error) {
-        reject(error);
-      }
+    eventsService.subscribe({
+      eventSources: LoginService.name,
+      eventTypes: "logout",
+      eventHandler: () => this.dispose()
     });
   }
 
-  public connect(clientUser: User): Promise<void> {
+  public connect(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if(!clientUser) {
-        reject("[clientUser] cannot be null");
-      }
-
-      const subscription = new Subscription();
       let interval: number;
+      let attempts: number = 1;
 
-      const onConnectSuccess = () => {
-        subscription.unsubscribe();
-        window.clearInterval(interval);
-        this.joinClientUser(clientUser);
+      const tryConnect = () => {
+        this._socket.connect();
 
-        resolve();
-      };
-
-      const onConnectFail = (error?: any) => {
-        subscription.unsubscribe();
-        window.clearInterval(interval);
-
-        reject(error);
-      };
-
-      const connect = () => {
         if(this.isConnected) {
-          onConnectSuccess();
+          window.clearInterval(interval);
+          resolve();
         }
-        else {
-          this._socket.connect();
+        else if(attempts >= 10) {
+          window.clearInterval(interval);
+
+          const event: Event<Error> = {
+            source: this.constructor.name,
+            type: this.socketEvents.connectError,
+            data: new Error(`Max connection attempts reached: (${attempts})`),
+            severity: "error"
+          };
+
+          this._eventsService.publish(event);
+          reject(event.data);
         }
       };
 
-      subscription.add(this.onConnect.subscribe(() => onConnectSuccess()));
-      subscription.add(this.onConnectError.subscribe((error: any) => onConnectFail(error)));
+      interval = window.setInterval(() => {
+        attempts++;
+        tryConnect();
+      }, 500);
 
-      interval = window.setInterval(() => connect(), 500);
-      connect();
-    });
-  }
-
-  private joinClientUser(clientUser: User): void {
-    this._socket.emit(this.socketEvents.userJoin, clientUser, (response: User) => {
-      this._clientUser = response;
-      const index: number = this.findUserIndex(this._clientUser.id);
-
-      if(index === -1) {
-        this.addUser(this._clientUser);
-      }
-      else {
-        this.updateUser(this._clientUser);
-      }
+      tryConnect();
     });
   }
 
@@ -146,53 +118,15 @@ export class WebSocketService implements IDisposable {
     this._socket.disconnect();
   }
 
-  public findUserIndex(userId: number): number {
-    return this._users?.data.findIndex((u: User) => u.id === userId) ?? -1;
-  }
-
-  public dispose(): void {
-    this._users = null;
-    this._clientUser = null;
-
-    this._subscription?.unsubscribe();
-    this._subscription = null;
-
-    this.chat.dispose();
-    this.roomPings.dispose();
-  }
-
-  private addUser(user: User): void {
-    if(this._users == null) {
-      this._users = { data: [user], pagination: null };
-    }
-    else {
-      this._users.data.push(user);
-    }
-  }
-
-  private updateUser(user: User): void {
-    const index: number = this._users?.data.findIndex((u: User) => u.id === user.id);
-
-    if(index !== -1) {
-      this._users.data[index] = user;
-    }
-  }
-
   public get socketEvents() {
     return {
       connect: "connect",
       disconnect: "disconnect",
-      connectError: "connect_error",
-      userJoin: "user-join",
-      userLeave: "user-leave",
+      connectError: "connect-error"
     }
   }
 
   public get isConnected(): boolean {
     return this._socket.connected;
-  }
-
-  public get users(): PagedList<User> {
-    return this._users;
   }
 }

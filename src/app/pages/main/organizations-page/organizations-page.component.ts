@@ -1,8 +1,8 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
-import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
+import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 import { Paginatable } from 'src/app/shared/models/pagination/paginatable';
 import { PageEvent } from 'src/app/shared/modules/table/page-event';
@@ -42,7 +42,7 @@ export class OrganizationsPage implements OnInit {
       this._organizations = response.body;
     }
     catch(error) {
-      this.loadError = parseHttpError(error as HttpErrorResponse, true) as string;
+      this.loadError = parseErrorMessage(error);
       this.errorVisible = true;
     }
     finally {

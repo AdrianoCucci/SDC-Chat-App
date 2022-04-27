@@ -1,0 +1,102 @@
+:host {
+  --panel-padding: 1rem;
+  --padding: 1rem;
+  --background: var(--color-2-shade-3);
+  --color: var(--color-2-contrast);
+  --border: solid var(--color-1-shade-2) 1px;
+  --border-radius: 0.5rem;
+  --box-shadow: var(--color-medium-shade-5) 0 2px 4px;
+
+  div.toast-panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: var(--panel-padding);
+    z-index: 10;
+    pointer-events: none;
+
+    div.toast {
+      position: absolute;
+      pointer-events: initial;
+
+      div.toast-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: var(--padding);
+        background-color: var(--background);
+        color: var(--color);
+        border: var(--border);
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        animation: intro 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+        fa-icon.toast-icon {
+          margin-right: 1rem;
+        }
+
+        app-button.dismiss-button {
+          --padding: 0;
+          margin-left: 1rem;
+          --background: none;
+        }
+
+        &.plain {
+          --background: var(--color-medium);
+          --color: var(--color-medium-contrast);
+          --border: solid var(--color-medium-tint-5) 1px;
+        }
+
+        &.success {
+          --background: var(--color-success);
+          --color: var(--color-success-contrast);
+          --border: solid var(--color-success-tint-5) 1px;
+        }
+
+        &.warn {
+          --background: var(--color-warn);
+          --color: var(--color-warn-contrast);
+          --border: solid var(--color-warn-tint-5) 1px;
+        }
+
+        &.error {
+          --background: var(--color-danger);
+          --color: var(--color-danger-contrast);
+          --border: solid var(--color-danger-tint-5) 1px;
+        }
+      }
+
+      &.dismissed {
+        pointer-events: none;
+
+        div.toast-content {
+          animation: dismiss 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+      }
+    }
+  }
+}
+
+@keyframes intro {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes dismiss {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}

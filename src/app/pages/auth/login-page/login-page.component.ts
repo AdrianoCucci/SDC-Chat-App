@@ -6,6 +6,7 @@ import { AuthResponse } from 'src/app/core/models/auth/auth-response';
 import { AuthService } from 'src/app/core/services/api/auth-service';
 import { LoginService } from 'src/app/core/services/login.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
+import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
 import { FormSubmitResult } from 'src/app/shared/modules/forms/form/form-submit-result';
 import { environment } from 'src/environments/environment';
 
@@ -67,23 +68,7 @@ export class LoginPage implements OnInit {
   }
 
   private onLoginFail(error: any): void {
-    if(error instanceof HttpErrorResponse) {
-      this._loginError = error.error.message ?? error.message;
-    }
-    else if(error instanceof DOMException) {
-      this._loginError = error.message;
-    }
-    else if(typeof error === "string") {
-      this._loginError = error;
-    }
-    else {
-      this._loginError = "An unknown error occurred";
-    }
-
-    if(!environment.production) {
-      console.error(error);
-    }
-
+    this._loginError = parseErrorMessage(error);
     this.errorVisible = true;
   }
 

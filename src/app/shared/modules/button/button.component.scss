@@ -5,6 +5,7 @@
   --border-radius: 0.25rem;
   --icon-transform: unset;
   --justify-content: center;
+  --disable-opacity: 0.75;
 
   display: inline-block;
   font: inherit;
@@ -80,6 +81,7 @@
 
   &.disabled {
     pointer-events: none;
+    opacity: var(--disable-opacity);
   }
 
   &.block {

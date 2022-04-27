@@ -3,7 +3,7 @@ import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
 import { User } from 'src/app/core/models/users/user';
-import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
 
 @Component({
   selector: 'app-active-ping-card',
@@ -16,7 +16,7 @@ export class ActivePingCard {
 
   @HostBinding("class.dismissing") private _dismissing: boolean = false;
 
-  constructor(private _socketService: WebSocketService) { }
+  constructor(private _roomPingsService: RoomPingsService) { }
 
   async onRespond(message?: string): Promise<void> {
     const roomPing: RoomPing = this.roomPing;
@@ -24,16 +24,16 @@ export class ActivePingCard {
     roomPing.responseMessage = message || "On my way!";
     roomPing.responseUserId = this.clientUser?.id;
 
-    this.roomPing = await this._socketService.roomPings.sendPingResponse(roomPing);
+    this.roomPing = await this._roomPingsService.sendPingResponse(roomPing);
   }
 
   onCancel() {
-    this._socketService.roomPings.cancelPingRequest(this.roomPing);
+    this._roomPingsService.cancelPingRequest(this.roomPing);
   }
 
   onDismiss(): void {
     this._dismissing = true;
-    setTimeout(() => this._socketService.roomPings.removePing(this.roomPing.guid), 160);
+    setTimeout(() => this._roomPingsService.removePing(this.roomPing.guid), 160);
   }
 
   public get room(): Room {

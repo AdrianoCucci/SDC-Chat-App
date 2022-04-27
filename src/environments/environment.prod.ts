@@ -1,5 +1,5 @@
-import { config } from "../config";
 import { environment as shared } from "./environment.shared";
+import { ManagerOptions, SocketOptions } from 'socket.io-client';
 
 export const environment = {
   ...shared,
@@ -8,6 +8,12 @@ export const environment = {
 
   server: {
     ...shared.server,
-    host: config.apiAddress
+    host: "https://api.chat.sorissodental.care",
+    apiPath: "",
+
+    socketConfig: <Partial<SocketOptions & ManagerOptions>>{
+      ...shared.server.socketConfig,
+      path: "/socket"
+    }
   }
 };

@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
@@ -7,7 +6,7 @@ import { UserRequest } from 'src/app/core/models/users/user-request';
 import { UsersService } from 'src/app/core/services/api/users-service';
 import { UserForm } from 'src/app/core/modules/forms/user-form/user-form.component';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
-import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
+import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { Pair } from 'src/app/shared/models/pair';
 import { AdminPassResetForm } from '../../forms/admin-pass-reset-form/admin-pass-reset-form.component';
@@ -165,7 +164,7 @@ export class UsersTable implements OnInit {
       this.users = this._table.queryDeleteRow((u: User) => u.id === user.id);
     }
     catch(error) {
-      this.errorDialogText = parseHttpError(error as HttpErrorResponse, true) as string;
+      this.errorDialogText = parseErrorMessage(error);
       this.errorDialogVisible = true;
     }
     finally {

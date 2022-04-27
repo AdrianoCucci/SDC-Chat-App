@@ -1,0 +1,51 @@
+@import "/src/theme/colors.scss";
+
+:host {
+  display: flex;
+  background-color: var(--color-1-tint-5);
+  border-bottom: solid var(--color-1) 2px;
+  border-radius: 0.25rem;
+  overflow: hidden;
+
+  &:not(:last-of-type) {
+    margin-bottom: 0.75rem;
+  }
+
+  .meta,
+  .data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding: 1rem;
+  }
+
+  .meta {
+    background-color: var(--color-1);
+    border-radius: 0 1000px 1000px 0;
+    font-weight: 600;
+
+    .meta-summary {
+      margin: 0.25rem 0 0 0;
+      font-size: 0.85rem;
+      font-weight: initial;
+
+      &:empty {
+        display: none;
+      }
+    }
+  }
+}
+
+@include themeHighContrast() {
+  :host {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border-bottom: solid var(--color-medium) 2px;
+
+    .meta {
+      background-color: var(--color-medium);
+      color: var(--color-white);
+    }
+  }
+}

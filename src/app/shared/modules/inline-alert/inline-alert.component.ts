@@ -1,7 +1,8 @@
 import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faExclamation, faExclamationCircle, faInfo, faQuestion } from '@fortawesome/free-solid-svg-icons';
-import { getCommonFaIcon } from '../../../shared/functions/get-common-fa-icon';
+import { getCommonIconDefinition } from '../../functions/get-common-icon-definition';
+import { CommonIcon } from '../../models/common-icon.type';
 
 @Component({
   selector: 'app-inline-alert',
@@ -57,12 +58,8 @@ export class InlineAlert {
   public get icon(): IconDefinition {
     return this._icon;
   }
-  @Input() public set icon(value: string | IconDefinition) {
-    if(typeof value === "string") {
-      value = getCommonFaIcon(value);
-    }
-
-    this._icon = value;
+  @Input() public set icon(value: CommonIcon) {
+    this._icon = getCommonIconDefinition(value);
   }
 
   public get visible(): boolean {

@@ -1,3 +1,13 @@
+export const ACCOUNT_PATHS = {
+  root: "account",
+  children: {
+    details: "details",
+    organization: "organization",
+    notifications: "notifications",
+    accessibility: "accessibility"
+  }
+}
+
 export const AUTH_PATHS = {
   root: "auth",
   children: {
@@ -8,7 +18,7 @@ export const AUTH_PATHS = {
 export const MAIN_PATHS = {
   root: "main",
   children: {
-    account: "account",
+    account: ACCOUNT_PATHS,
     organizations: "organizations",
     users: "users",
     rooms: "rooms",

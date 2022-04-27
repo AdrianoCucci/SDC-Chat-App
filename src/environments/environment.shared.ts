@@ -1,18 +1,20 @@
+import { ManagerOptions, SocketOptions } from 'socket.io-client';
+
 export const environment = {
   app: {
     name: "SDC-Chat",
-    version: "1.0.0",
-    tokenEncryptKey: "z[mr%KHw2g'A]~ET!djLgPG_B@rba4"
+    version: "1.1.0",
+    tokenEncryptKey: "z[mr%KHw2g'A]~ET!djLgPG_B@rba4",
+    logEvents: false
   },
 
   server: {
     host: "http://localhost:3000",
-    apiPath: "/sdc-chat-api",
+    apiPath: "",
 
-    socketConfig: {
-      path: "/sdc-chat-api/socket",
-      autoConnect: false,
-      reconnectionAttempts: 4
+    socketConfig: <Partial<SocketOptions & ManagerOptions>>{
+      path: "/socket",
+      autoConnect: false
     }
   }
 };

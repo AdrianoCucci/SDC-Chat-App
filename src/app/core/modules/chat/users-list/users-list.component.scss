@@ -3,9 +3,11 @@
 :host {
   --header-background: var(--color-1-shade-5);
   --header-color: var(--color-1-contrast);
+  --collapse-transition: 0.16s;
 
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   background-color: var(--color-1-tint-5);
   border-right: solid var(--header-background) 1px;
 
@@ -16,43 +18,79 @@
     color: var(--header-color);
     font-size: 1.25rem;
     font-weight: 600;
+    transition: var(--collapse-transition);
   }
 
-  div.lists-wrapper {
-    overflow: auto;
+  div.content {
+    flex: 1;
+    overflow: hidden;
+    transition: var(--collapse-transition);
 
-    div.users {
-      padding: 1rem;
+    div.lists-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
 
-      span.list-header {
-        display: block;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: solid var(--header-background) 1px;
-        font-size: 1.12rem;
-        font-weight: 600;
-      }
+      div.users {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
 
-      ul {
-        margin: 0;
-        padding: 0;
+        span.list-header {
+          display: block;
+          margin-bottom: 1rem;
+          padding: 1rem 1rem 0 1rem;
+          font-size: 1.12rem;
+          font-weight: 600;
+        }
 
-        li {
-          display: flex;
-          align-items: center;
-          padding-left: 0.5rem;
-          border-left: solid var(--header-background) 8px;
+        ul {
+          margin: 0;
+          padding: 0 1rem 1rem 1rem;
+          overflow: auto;
 
-          &:not(:last-of-type) {
-            margin-bottom: 0.75rem;
-          }
+          li {
+            display: flex;
+            align-items: center;
+            padding-left: 0.5rem;
+            border-left: solid var(--header-background) 8px;
 
-          &.offline {
-            border-left-color: transparent;
-            opacity: 0.5;
+            &:not(:last-of-type) {
+              margin-bottom: 0.75rem;
+            }
+
+            &.offline {
+              border-left-color: transparent;
+              opacity: 0.5;
+            }
           }
         }
       }
+    }
+  }
+
+  div.footer {
+    height: 62px;
+    transition: var(--collapse-transition);
+
+    app-button.toggle-button {
+      --background: var(--color-2-tint-3);
+      --border-radius: 0;
+      height: 100%;
+    }
+  }
+
+  &.collapsed {
+    span.header,
+    div.content {
+      flex: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    div.footer {
+      flex: 1;
     }
   }
 }

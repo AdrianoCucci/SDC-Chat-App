@@ -3,7 +3,8 @@ import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 import { ChatMessageListComponent } from 'src/app/core/modules/chat/chat-message-list/chat-message-list.component';
 import { LoginService } from 'src/app/core/services/login.service';
-import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { ChatService } from 'src/app/core/services/web-socket/chat.service';
+import { SocketUsersService } from 'src/app/core/services/web-socket/socket-users.service';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 
 @Component({
@@ -14,7 +15,7 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 export class ChatPage {
   private _isLoadingMessages: boolean = false;
 
-  constructor(private _socketService: WebSocketService, private _loginService: LoginService) { }
+  constructor(private _chatService: ChatService, private _socketUsersService: SocketUsersService, private _loginService: LoginService) { }
 
   async onLoadMoreMessages(list: ChatMessageListComponent): Promise<void> {
     if(!this._isLoadingMessages) {
@@ -25,7 +26,7 @@ export class ChatPage {
         const beforeDate = new Date(lastMessage.datePosted);
         beforeDate.setMilliseconds(beforeDate.getMilliseconds() - 1);
 
-        await this._socketService.chat.loadMessages(this.clientUser.organizationId, beforeDate, 50, true);
+        await this._chatService.loadMessages(this.clientUser.organizationId, beforeDate, 50, true);
       }
       catch(error) {
         console.error("ERROR:", error);
@@ -43,19 +44,19 @@ export class ChatPage {
     message.organizationId = clientUser.organizationId;
     message.senderUser = clientUser;
 
-    this._socketService.chat.sendMessage(message);
+    this._chatService.sendMessage(message);
   }
 
   onEditMessage(message: ChatMessage): void {
-    this._socketService.chat.sendMessageEdit(message);
+    this._chatService.sendMessageEdit(message);
   }
 
   onDeleteMessage(message: ChatMessage): void {
-    this._socketService.chat.sendMessageDelete(message);
+    this._chatService.sendMessageDelete(message);
   }
 
   public get messages(): ChatMessage[] {
-    return this._socketService.chat.messages;
+    return this._chatService.messages;
   }
 
   public get isLoadingMessages(): boolean {
@@ -63,7 +64,7 @@ export class ChatPage {
   }
 
   public get users(): PagedList<User> {
-    return this._socketService.users;
+    return this._socketUsersService.users;
   }
 
   public get clientUser(): User {

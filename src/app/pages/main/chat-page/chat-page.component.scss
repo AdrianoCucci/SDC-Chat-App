@@ -6,6 +6,12 @@
   app-users-list {
     flex: 1;
     min-width: 20rem;
+    transition: 0.16s;
+
+    &.collapsed {
+      flex: 0;
+      min-width: 2rem;
+    }
   }
 
   app-chat-message-list {

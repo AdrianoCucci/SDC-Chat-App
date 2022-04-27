@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { parseHttpError } from "src/app/shared/functions/parse-http-error";
+import { parseErrorMessage } from "src/app/shared/functions/parse-http-error";
 import { FormMode } from "src/app/shared/models/form-mode";
 import { FormSubmitResult } from "src/app/shared/modules/forms/form/form-submit-result";
 import { Form } from "src/app/shared/modules/forms/form/form.component";
@@ -17,7 +17,7 @@ export abstract class AppForm<TModel = any, TResult = any> {
   @ViewChild(Form) private readonly _form: Form;
 
   private _isSubmitting: boolean;
-  private _errors: string | string[];
+  private _error: string;
 
   public submit(): void {
     this._form?.submit();
@@ -25,14 +25,14 @@ export abstract class AppForm<TModel = any, TResult = any> {
 
   public clear(): void {
     this._form?.clearInputs();
-    this._errors = null;
+    this._error = null;
   }
 
   async onFormSubmit(result: FormSubmitResult): Promise<void> {
     if(result.isValid) {
       try {
         this._isSubmitting = true;
-        this._errors = null;
+        this._error = null;
 
         let resultModel: TResult;
 
@@ -50,7 +50,7 @@ export abstract class AppForm<TModel = any, TResult = any> {
         this.onSubmitSuccess.emit(resultModel);
       }
       catch(error) {
-        this._errors = parseHttpError(error as HttpErrorResponse);
+        this._error = parseErrorMessage(error);
       }
       finally {
         this._isSubmitting = false;
@@ -66,7 +66,7 @@ export abstract class AppForm<TModel = any, TResult = any> {
     return this._isSubmitting;
   }
 
-  public get errors(): string | string[] {
-    return this._errors;
+  public get error(): string {
+    return this._error;
   }
 }

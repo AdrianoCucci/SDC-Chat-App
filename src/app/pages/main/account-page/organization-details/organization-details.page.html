@@ -1,0 +1,30 @@
+<section class="info-section fade-in-left">
+  <app-info-row>
+    <span slot="meta">Name</span>
+    <span slot="data">{{organization.name || '(Not set)'}}</span>
+  </app-info-row>
+
+  <app-info-row>
+    <span slot="meta">Address</span>
+    <span slot="data">{{organization.fullAddress || '(Not set)'}}</span>
+  </app-info-row>
+
+  <app-info-row>
+    <span slot="meta">Email</span>
+    <span slot="data">{{organization.email || '(Not set)'}}</span>
+  </app-info-row>
+
+  <app-info-row>
+    <span slot="meta">Phone Number</span>
+    <span slot="data">{{organization.phoneNumber || '(Not set)'}}</span>
+  </app-info-row>
+</section>
+
+<ng-container *ngIf="allowEditOrganization">
+  <section class="footer txt-right fade-in-right">
+    <app-button class="m-r-2" text="Edit Organization" icon="pen" (click)="onEditOrganization()"></app-button>
+  </section>
+
+  <app-organization-form mode="edit" [dialog]="true" (onSubmitSuccess)="onOrganizationFormSuccess($event)">
+  </app-organization-form>
+</ng-container>

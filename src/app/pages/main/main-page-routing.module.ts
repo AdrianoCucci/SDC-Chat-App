@@ -13,7 +13,7 @@ const routes: Routes = [
     component: MainPage,
     children: [
       {
-        path: PATHS.children.account,
+        path: PATHS.children.account.root,
         loadChildren: () => import("./account-page/account-page.module").then(m => m.AccountPageModule)
       },
       {
