@@ -112,5 +112,8 @@
       }
     }
   },
-  "defaultProject": "SDC-Chat-App"
+  "defaultProject": "SDC-Chat-App",
+  "cli": {
+    "analytics": false
+  }
 }
