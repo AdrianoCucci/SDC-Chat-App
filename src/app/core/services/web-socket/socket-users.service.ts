@@ -1,5 +1,6 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 import { Event } from 'src/app/shared/modules/events/event.model';
@@ -21,7 +22,7 @@ export class SocketUsersService implements IDisposable {
     private _eventsService: EventsService,
     private _usersService: UsersService
   ) {
-    this.subsribeEvents();
+    this.subscribeEvents();
   }
 
   public dispose(): void {
@@ -29,7 +30,7 @@ export class SocketUsersService implements IDisposable {
     this._clientUser = null;
   }
 
-  private subsribeEvents(): void {
+  private subscribeEvents(): void {
     const socket: WebSocketService = this._socketService;
     const events = this.socketEvents;
     const eventsService: EventsService = this._eventsService;
@@ -58,9 +59,9 @@ export class SocketUsersService implements IDisposable {
     eventsService.subscribe({
       eventSources: WebSocketService.name,
       eventTypes: 'connect',
-      eventHandler: (event: Event) => {
+      eventHandler: async (event: Event) => {
         if (event.data.isReconnection && this._clientUser != null) {
-          this.joinClientUser(this._clientUser);
+          await this.joinClientUser(this._clientUser);
         }
       },
     });
@@ -87,25 +88,36 @@ export class SocketUsersService implements IDisposable {
     });
   }
 
-  public joinClientUser(clientUser: User): void {
-    if (clientUser == null) {
-      throw new Error('[clientUser] cannot be null');
-    }
-
-    this._socketService.emit(
-      this.socketEvents.userJoin,
-      clientUser,
-      (response: User) => {
-        this._clientUser = response;
-        const index: number = this.findUserIndex(this._clientUser.id);
-
-        if (index === -1) {
-          this.addUser(this._clientUser);
-        } else {
-          this.updateUser(this._clientUser);
-        }
+  public joinClientUser(clientUser: User): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      if (clientUser == null) {
+        reject('[clientUser] cannot be null');
       }
-    );
+
+      const timeout: number = window.setTimeout(
+        () => reject('Failed to join client user after 10 seconds'),
+        10000
+      );
+
+      this._socketService.emit(
+        this.socketEvents.userJoin,
+        clientUser,
+        (response: User) => {
+          window.clearTimeout(timeout);
+
+          this._clientUser = response;
+          const index: number = this.findUserIndex(this._clientUser.id);
+
+          if (index === -1) {
+            this.addUser(this._clientUser);
+          } else {
+            this.updateUser(this._clientUser);
+          }
+
+          resolve();
+        }
+      );
+    });
   }
 
   public findUserIndex(userId: number): number {

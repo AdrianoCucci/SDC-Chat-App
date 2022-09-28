@@ -13,22 +13,40 @@ export class SwNotificationsService {
   public showNotification(
     title: string,
     options?: NotificationOptions
-  ): Notification {
+  ): Notification | undefined {
     if (!this.hasPermission) {
-      throw new Error('Notifications permission has not been granted.');
+      return undefined;
     }
 
-    const notification = new Notification(title, {
-      timestamp: new Date().getTime(),
-      ...options,
-    });
+    const notification: Notification = this.createNotification(title, options);
     this.addNotification(notification);
 
     return notification;
   }
 
+  public showNotificationOrThrow(
+    title: string,
+    options?: NotificationOptions
+  ): Notification {
+    if (!this.hasPermission) {
+      throw new Error('Notifications permission has not been granted.');
+    }
+
+    return this.showNotification(title, options);
+  }
+
   public closeAllNotifications(): void {
     this._notifications.forEach((n: Notification) => n.close());
+  }
+
+  private createNotification(
+    title: string,
+    options?: NotificationOptions
+  ): Notification {
+    return new Notification(title, {
+      timestamp: new Date().getTime(),
+      ...options,
+    });
   }
 
   private addNotification(notification: Notification): void {

@@ -21,14 +21,14 @@ export class ChatService implements IDisposable {
     private _audioService: AudioService,
     private _eventsService: EventsService
   ) {
-    this.subsribeEvents();
+    this.subscribeEvents();
   }
 
   public dispose(): void {
     this._messages = null;
   }
 
-  private subsribeEvents(): void {
+  private subscribeEvents(): void {
     const socket: WebSocketService = this._socketService;
     const events = this.socketEvents;
     const eventsService: EventsService = this._eventsService;

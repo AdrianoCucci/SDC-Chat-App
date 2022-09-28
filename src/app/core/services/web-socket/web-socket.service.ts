@@ -1,10 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socketio2';
-import { Subscription } from 'rxjs';
+import {
+  defer,
+  fromEvent,
+  NEVER,
+  Observable,
+  of,
+  Subject,
+  Subscription,
+  throwError,
+} from 'rxjs';
 import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
 import { Event } from 'src/app/shared/modules/events/event.model';
 import { EventsService } from 'src/app/shared/modules/events/events.service';
 import { LoginService } from '../login.service';
+import { catchError, last, map, takeWhile, timeout } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +30,7 @@ export class WebSocketService implements IDisposable {
       );
     }
 
-    this.subsribeEvents();
+    this.subscribeEvents();
   }
 
   public dispose(): void {
@@ -50,7 +60,7 @@ export class WebSocketService implements IDisposable {
       : this._socket.emit(eventName, payload, (d: T) => response(d));
   }
 
-  private subsribeEvents(): void {
+  private subscribeEvents(): void {
     const events = this.socketEvents;
     const eventsService: EventsService = this._eventsService;
     const eventsSource: string = this.constructor.name;
@@ -87,37 +97,35 @@ export class WebSocketService implements IDisposable {
   }
 
   public connect(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      let interval: number;
-      let attempts: number = 1;
+    return new Promise<void>((resolve, reject) => {
+      this._socket.connect();
 
-      const tryConnect = () => {
-        this._socket.connect();
+      if (this.isConnected) {
+        resolve();
+      }
 
-        if (this.isConnected) {
-          window.clearInterval(interval);
+      const subscription: Subscription = this._socket
+        .on(this.socketEvents.connect)
+        .pipe(
+          timeout(10000),
+          catchError(() => {
+            const event: Event<Error> = {
+              source: this.constructor.name,
+              type: this.socketEvents.connectError,
+              data: new Error(`Connection attempt timed out after 10 seconds.`),
+              severity: 'error',
+            };
+
+            this._eventsService.publish(event);
+            reject(event.data);
+
+            return NEVER;
+          })
+        )
+        .subscribe(() => {
+          subscription.unsubscribe();
           resolve();
-        } else if (attempts >= 10) {
-          window.clearInterval(interval);
-
-          const event: Event<Error> = {
-            source: this.constructor.name,
-            type: this.socketEvents.connectError,
-            data: new Error(`Max connection attempts reached: (${attempts})`),
-            severity: 'error',
-          };
-
-          this._eventsService.publish(event);
-          reject(event.data);
-        }
-      };
-
-      interval = window.setInterval(() => {
-        attempts++;
-        tryConnect();
-      }, 500);
-
-      tryConnect();
+        });
     });
   }
 
