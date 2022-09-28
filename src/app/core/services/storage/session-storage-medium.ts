@@ -1,4 +1,4 @@
-import { IStorageMedium } from "./storage-medium.interface";
+import { IStorageMedium } from './storage-medium.interface';
 
 export class SessionStorageMedium implements IStorageMedium {
   public get(key: string): string {
@@ -9,7 +9,7 @@ export class SessionStorageMedium implements IStorageMedium {
     let value: T = null;
     const storedValue: string = this.get(key);
 
-    if(storedValue != null) {
+    if (storedValue != null) {
       value = JSON.parse(storedValue);
     }
 
@@ -21,7 +21,8 @@ export class SessionStorageMedium implements IStorageMedium {
   }
 
   public setToJSON(key: string, value: any): void {
-    const storedValue: string = typeof value === "string" ? value : JSON.stringify(value);
+    const storedValue: string =
+      typeof value === 'string' ? value : JSON.stringify(value);
     this.set(key, storedValue);
   }
 
@@ -32,7 +33,7 @@ export class SessionStorageMedium implements IStorageMedium {
   public delete(key: string): boolean {
     const canDelete: boolean = this.has(key);
 
-    if(canDelete) {
+    if (canDelete) {
       window.sessionStorage.removeItem(key);
     }
 

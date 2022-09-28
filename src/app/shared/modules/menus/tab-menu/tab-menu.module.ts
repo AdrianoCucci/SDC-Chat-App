@@ -9,12 +9,8 @@ import { TabMenu } from './tab-menu.component';
 const component = TabMenu;
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    MenuButtonModule
-  ],
+  imports: [CommonModule, RouterModule, MenuButtonModule],
   exports: [component, DirectivesModule],
-  declarations: [component]
+  declarations: [component],
 })
-export class TabMenuModule { }
+export class TabMenuModule {}

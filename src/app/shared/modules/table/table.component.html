@@ -1,24 +1,56 @@
-<ngx-datatable *ngIf="initialized" #table [rows]="rows" [columnMode]="columnMode" [headerHeight]="-1" [rowHeight]="-1"
-  [footerHeight]="1" [offset]="offset" [limit]="limit" [count]="count" [externalPaging]="pageHandler != null"
-  (page)="onPage($event)">
-
+<ngx-datatable
+  *ngIf="initialized"
+  #table
+  [rows]="rows"
+  [columnMode]="columnMode"
+  [headerHeight]="-1"
+  [rowHeight]="-1"
+  [footerHeight]="1"
+  [offset]="offset"
+  [limit]="limit"
+  [count]="count"
+  [externalPaging]="pageHandler != null"
+  (page)="onPage($event)"
+>
   <ng-container *ngFor="let cell of cells; index as i">
-    <ngx-datatable-column *ngIf="!cell.hidden" [name]="cell.name" [prop]="cell.prop" [headerClass]="cell.headerClass"
-      [cellClass]="cell.cellClass" [width]="cell.width" [minWidth]="cell.minWidth" [maxWidth]="cell.maxWidth"
-      [flexGrow]="cell.flexGrow">
-
-      <ng-template ngx-datatable-header-template let-sortFunc="sortFn" let-sortDir="sortDir">
+    <ngx-datatable-column
+      *ngIf="!cell.hidden"
+      [name]="cell.name"
+      [prop]="cell.prop"
+      [headerClass]="cell.headerClass"
+      [cellClass]="cell.cellClass"
+      [width]="cell.width"
+      [minWidth]="cell.minWidth"
+      [maxWidth]="cell.maxWidth"
+      [flexGrow]="cell.flexGrow"
+    >
+      <ng-template
+        ngx-datatable-header-template
+        let-sortFunc="sortFn"
+        let-sortDir="sortDir"
+      >
         <div class="cell cell-header">
           <div class="cell-header-name-wrapper">
-            <span class="cell-header-name">{{cell.name}}</span>
+            <span class="cell-header-name">{{ cell.name }}</span>
 
             <ng-container *ngIf="cell.filterable">
-              <ng-container *ngTemplateOutlet="filterInputTemplate; context: { $implicit: cell }"></ng-container>
+              <ng-container
+                *ngTemplateOutlet="
+                  filterInputTemplate;
+                  context: { $implicit: cell }
+                "
+              ></ng-container>
             </ng-container>
           </div>
 
-          <span *ngIf="cell.sortable" class="sort-action" role="button" [ngClass]="{'sort-active': sortDir != null}"
-            [ngSwitch]="sortDir" (click)="sortFunc()">
+          <span
+            *ngIf="cell.sortable"
+            class="sort-action"
+            role="button"
+            [ngClass]="{ 'sort-active': sortDir != null }"
+            [ngSwitch]="sortDir"
+            (click)="sortFunc()"
+          >
             <fa-icon *ngSwitchCase="'asc'" [icon]="sortAscIcon"></fa-icon>
             <fa-icon *ngSwitchCase="'desc'" [icon]="sortDescIcon"></fa-icon>
             <fa-icon *ngSwitchDefault [icon]="sortNoneIcon"></fa-icon>
@@ -27,17 +59,29 @@
       </ng-template>
 
       <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-        <div *ngIf="!cell.cellTemplate; else customCellTemplate" [ngSwitch]="cell.type" class="cell cell-data">
-          <app-input-toggle *ngSwitchCase="'boolean'" class="data-input" [value]="value"></app-input-toggle>
-          <span *ngSwitchDefault>{{value || '-'}}</span>
+        <div
+          *ngIf="!cell.cellTemplate; else customCellTemplate"
+          [ngSwitch]="cell.type"
+          class="cell cell-data"
+        >
+          <app-input-toggle
+            *ngSwitchCase="'boolean'"
+            class="data-input"
+            [value]="value"
+          ></app-input-toggle>
+          <span *ngSwitchDefault>{{ value || "-" }}</span>
         </div>
 
         <ng-template #customCellTemplate>
-          <ng-container *ngTemplateOutlet="cell.cellTemplate; context: { $implicit: cell, row: row, value: value }">
+          <ng-container
+            *ngTemplateOutlet="
+              cell.cellTemplate;
+              context: { $implicit: cell, row: row, value: value }
+            "
+          >
           </ng-container>
         </ng-template>
       </ng-template>
-
     </ngx-datatable-column>
   </ng-container>
 
@@ -47,23 +91,38 @@
     </ng-template>
 
     <ng-template ngx-datatable-cell-template let-row="row">
-      <ng-container *ngTemplateOutlet="rowActionsTemplate; context: { $implicit: row }"></ng-container>
+      <ng-container
+        *ngTemplateOutlet="rowActionsTemplate; context: { $implicit: row }"
+      ></ng-container>
     </ng-template>
   </ngx-datatable-column>
-
 </ngx-datatable>
 
 <ng-template #filterInputTemplate let-cell>
   <ng-container [ngSwitch]="cell.type">
-    <app-input-toggle *ngSwitchCase="'boolean'" class="filter-input" [tristate]="true"
-      (valueChange)="onFilter(cell, $event)">
+    <app-input-toggle
+      *ngSwitchCase="'boolean'"
+      class="filter-input"
+      [tristate]="true"
+      (valueChange)="onFilter(cell, $event)"
+    >
     </app-input-toggle>
 
-    <app-input-select *ngSwitchCase="'select'" class="filter-input" [options]="cell.selectOptions?.options"
-      [displayKey]="cell.selectOptions?.displayKey" [valueKey]="cell.selectOptions?.valueKey" [clearable]="true"
-      (valueChange)="onFilter(cell, $event)"></app-input-select>
+    <app-input-select
+      *ngSwitchCase="'select'"
+      class="filter-input"
+      [options]="cell.selectOptions?.options"
+      [displayKey]="cell.selectOptions?.displayKey"
+      [valueKey]="cell.selectOptions?.valueKey"
+      [clearable]="true"
+      (valueChange)="onFilter(cell, $event)"
+    ></app-input-select>
 
-    <app-input-text *ngSwitchDefault class="filter-input" [type]="cell.type || 'text'"
-      (valueChange)="onFilter(cell, $event)"></app-input-text>
+    <app-input-text
+      *ngSwitchDefault
+      class="filter-input"
+      [type]="cell.type || 'text'"
+      (valueChange)="onFilter(cell, $event)"
+    ></app-input-text>
   </ng-container>
 </ng-template>

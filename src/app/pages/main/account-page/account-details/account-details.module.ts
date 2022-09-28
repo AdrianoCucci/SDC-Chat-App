@@ -17,7 +17,7 @@ import { AccountDetailsPage } from './account-details.page';
     InfoRowModule,
     ButtonModule,
     AccountFormModule,
-    PassChangeFormModule
-  ]
+    PassChangeFormModule,
+  ],
 })
-export class AccountDetailsModule { }
+export class AccountDetailsModule {}

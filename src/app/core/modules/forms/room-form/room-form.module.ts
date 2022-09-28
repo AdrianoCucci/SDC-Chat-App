@@ -25,9 +25,9 @@ const component = [RoomForm];
     InputSelectModule,
     ButtonModule,
     LoaderModule,
-    InlineAlertModule
+    InlineAlertModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class RoomFormModule { }
+export class RoomFormModule {}

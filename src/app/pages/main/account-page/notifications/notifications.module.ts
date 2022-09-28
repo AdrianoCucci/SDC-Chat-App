@@ -19,7 +19,7 @@ import { NotificationsPage } from './notifications.page';
     InputToggleModule,
     ButtonModule,
     InlineAlertModule,
-    LoaderModule
-  ]
+    LoaderModule,
+  ],
 })
-export class NotificationsModule { }
+export class NotificationsModule {}

@@ -7,6 +7,6 @@ const component = [Popover];
 @NgModule({
   imports: [CommonModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class PopoverModule { }
+export class PopoverModule {}

@@ -1,4 +1,11 @@
-import { Component, ElementRef, HostBinding, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostBinding,
+  Input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { FormInput } from '../base/form-input';
 import { TextAreaValidations } from './text-area-validations';
 
@@ -6,17 +13,17 @@ import { TextAreaValidations } from './text-area-validations';
   selector: 'app-input-textarea',
   templateUrl: './input-textarea.component.html',
   styleUrls: ['./input-textarea.component.scss'],
-  providers: [{ provide: FormInput, useExisting: InputTextarea }]
+  providers: [{ provide: FormInput, useExisting: InputTextarea }],
 })
 export class InputTextarea extends FormInput<string> implements OnInit {
   @Input() public cols: number = 10;
   @Input() public rows: number = 1;
-  @Input() public placeholder: string = "";
-  @Input() @HostBinding("class.resizable") public resizable: boolean = false;
-  @Input() @HostBinding("class.auto-resize") public autoResize: boolean = false;
+  @Input() public placeholder: string = '';
+  @Input() @HostBinding('class.resizable') public resizable: boolean = false;
+  @Input() @HostBinding('class.auto-resize') public autoResize: boolean = false;
   @Input() public validations: TextAreaValidations = null;
 
-  @ViewChild("input") private readonly _inputRef: ElementRef;
+  @ViewChild('input') private readonly _inputRef: ElementRef;
 
   private _autoResizeLines: number;
 
@@ -34,8 +41,8 @@ export class InputTextarea extends FormInput<string> implements OnInit {
   }
 
   private updateAutoResize(value: string) {
-    if(this.autoResize) {
-      const lineCount: number = value ? value.split("\n").length : 1;
+    if (this.autoResize) {
+      const lineCount: number = value ? value.split('\n').length : 1;
       this._autoResizeLines = lineCount;
     }
   }
@@ -52,7 +59,8 @@ export class InputTextarea extends FormInput<string> implements OnInit {
     return this.validations?.maxLength;
   }
 
-  @HostBinding("style.--auto-resize-lines") public get autoResizeLines(): number {
+  @HostBinding('style.--auto-resize-lines')
+  public get autoResizeLines(): number {
     return this._autoResizeLines;
   }
 }

@@ -1,30 +1,59 @@
 <ng-container *ngIf="message">
   <div class="header">
-    <span class="sender">{{senderName}}</span>
+    <span class="sender">{{ senderName }}</span>
 
     <div class="header-end">
       <div *ngIf="isClientMessage && !editingActive" class="actions">
-        <app-button class="edit" icon="pen" title="Edit message" (click)="editingActive = true"></app-button>
-        <app-button class="delete" icon="trash" title="Delete message" (click)="onDeleteClick($event)">
+        <app-button
+          class="edit"
+          icon="pen"
+          title="Edit message"
+          (click)="editingActive = true"
+        ></app-button>
+        <app-button
+          class="delete"
+          icon="trash"
+          title="Delete message"
+          (click)="onDeleteClick($event)"
+        >
         </app-button>
       </div>
 
-      <span class="date">{{getMessageDateFormat(message)}}</span>
+      <span class="date">{{ getMessageDateFormat(message) }}</span>
     </div>
   </div>
 
   <div class="body">
-    <p *ngIf="!editingActive; else editTemplate" class="message-contents" [innerHTML]="displayContents"></p>
+    <p
+      *ngIf="!editingActive; else editTemplate"
+      class="message-contents"
+      [innerHTML]="displayContents"
+    ></p>
   </div>
 
   <ng-template #editTemplate>
-    <app-input-textarea #editInput class="edit-input block" [value]="message.contents" [autoResize]="true">
+    <app-input-textarea
+      #editInput
+      class="edit-input block"
+      [value]="message.contents"
+      [autoResize]="true"
+    >
     </app-input-textarea>
 
     <div class="edit-actions">
-      <app-button class="edit-action cancel" icon="times" title="Cancel" (click)="editingActive = false">
+      <app-button
+        class="edit-action cancel"
+        icon="times"
+        title="Cancel"
+        (click)="editingActive = false"
+      >
       </app-button>
-      <app-button class="edit-action save" icon="check" title="Save changes" (click)="onSaveEdit(editInput.value)">
+      <app-button
+        class="edit-action save"
+        icon="check"
+        title="Save changes"
+        (click)="onSaveEdit(editInput.value)"
+      >
       </app-button>
     </div>
   </ng-template>

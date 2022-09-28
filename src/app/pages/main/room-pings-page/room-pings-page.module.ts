@@ -19,7 +19,7 @@ import { RoomPingsPage } from './room-pings-page.component';
     ButtonModule,
     RoomPingsModule,
     FilterListModule,
-    InputTextModule
-  ]
+    InputTextModule,
+  ],
 })
-export class RoomPingsPageModule { }
+export class RoomPingsPageModule {}

@@ -21,7 +21,7 @@ import { AccessibilityPage } from './accessibility.page';
     InputTextModule,
     InputSelectModule,
     FontAwesomeModule,
-    LoaderModule
-  ]
+    LoaderModule,
+  ],
 })
-export class AccessibilityModule { }
+export class AccessibilityModule {}

@@ -1,16 +1,36 @@
-<app-rooms-table class="fade-in-up" [rooms]="rooms?.data" [organizationId]="organizationId" [pageHandler]="pageHandler">
+<app-rooms-table
+  class="fade-in-up"
+  [rooms]="rooms?.data"
+  [organizationId]="organizationId"
+  [pageHandler]="pageHandler"
+>
 </app-rooms-table>
 
-<app-loader [fullscreen]="true" [(visible)]="loadingVisible" text="Please wait..."></app-loader>
+<app-loader
+  [fullscreen]="true"
+  [(visible)]="loadingVisible"
+  text="Please wait..."
+></app-loader>
 
-<app-dialog class="error-dialog" [backdropDismiss]="true" [(visible)]="errorVisible">
+<app-dialog
+  class="error-dialog"
+  [backdropDismiss]="true"
+  [(visible)]="errorVisible"
+>
   <div slot="header">
     <span>Failed to Load Data</span>
   </div>
-  <p slot="body" class="flex flex-align-center flex-justify-center h-percent-100 m-0">
-    {{loadError}}
+  <p
+    slot="body"
+    class="flex flex-align-center flex-justify-center h-percent-100 m-0"
+  >
+    {{ loadError }}
   </p>
   <div slot="footer" class="txt-right">
-    <app-button class="text" text="OK" (click)="errorVisible = false"></app-button>
+    <app-button
+      class="text"
+      text="OK"
+      (click)="errorVisible = false"
+    ></app-button>
   </div>
 </app-dialog>

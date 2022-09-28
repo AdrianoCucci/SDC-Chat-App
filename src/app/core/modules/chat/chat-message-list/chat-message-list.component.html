@@ -1,8 +1,13 @@
 <div #messagesScrollWrapper class="messages-wrapper">
   <ul class="messages-list">
     <li *ngFor="let message of messages">
-      <app-chat-message [message]="message" [clientUser]="clientUser" class="message"
-        (onEdit)="onEditMessage.emit($event)" (onDelete)="onPromptDeleteMessage($event)">
+      <app-chat-message
+        [message]="message"
+        [clientUser]="clientUser"
+        class="message"
+        (onEdit)="onEditMessage.emit($event)"
+        (onDelete)="onPromptDeleteMessage($event)"
+      >
       </app-chat-message>
     </li>
   </ul>
@@ -16,8 +21,13 @@
 </div>
 
 <div class="input-wrapper">
-  <app-input-textarea #textInput class="user-input" placeholder="Type your message..." [autoResize]="true"
-    (keydown.enter)="onTextareaEnter(textInput)">
+  <app-input-textarea
+    #textInput
+    class="user-input"
+    placeholder="Type your message..."
+    [autoResize]="true"
+    (keydown.enter)="onTextareaEnter(textInput)"
+  >
   </app-input-textarea>
 </div>
 
@@ -25,7 +35,15 @@
   <div>Delete this message?</div>
 
   <div class="flex flex-justify-center m-t-1">
-    <app-button class="text" text="No" (click)="onDeletePromptCancel()"></app-button>
-    <app-button class="text" text="Yes" (click)="onDeletePromptConfirm()"></app-button>
+    <app-button
+      class="text"
+      text="No"
+      (click)="onDeletePromptCancel()"
+    ></app-button>
+    <app-button
+      class="text"
+      text="Yes"
+      (click)="onDeletePromptConfirm()"
+    ></app-button>
   </div>
 </app-popover>

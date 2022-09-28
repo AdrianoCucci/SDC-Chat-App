@@ -1,4 +1,4 @@
-import { FormInput } from "./form-input";
+import { FormInput } from './form-input';
 
 export interface FormInputValidations {
   required?: boolean;

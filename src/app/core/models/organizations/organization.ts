@@ -1,6 +1,6 @@
-import { ChatMessage } from "../messages/chat-message";
-import { Room } from "../rooms/room";
-import { User } from "../users/user";
+import { ChatMessage } from '../messages/chat-message';
+import { Room } from '../rooms/room';
+import { User } from '../users/user';
 
 export interface Organization {
   id: number;

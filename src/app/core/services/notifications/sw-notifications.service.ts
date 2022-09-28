@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SwNotificationsService {
   private _notifications: Notification[];
@@ -10,12 +10,18 @@ export class SwNotificationsService {
     return Notification.requestPermission();
   }
 
-  public showNotification(title: string, options?: NotificationOptions): Notification {
-    if(!this.hasPermission) {
-      throw new Error("Notifications permission has not been granted.");
+  public showNotification(
+    title: string,
+    options?: NotificationOptions
+  ): Notification {
+    if (!this.hasPermission) {
+      throw new Error('Notifications permission has not been granted.');
     }
 
-    const notification = new Notification(title, { timestamp: new Date().getTime(), ...options });
+    const notification = new Notification(title, {
+      timestamp: new Date().getTime(),
+      ...options,
+    });
     this.addNotification(notification);
 
     return notification;
@@ -26,7 +32,9 @@ export class SwNotificationsService {
   }
 
   private addNotification(notification: Notification): void {
-    this._notifications ? this._notifications.push(notification) : this._notifications = [notification];
+    this._notifications
+      ? this._notifications.push(notification)
+      : (this._notifications = [notification]);
     notification.onclose = () => this.removeNotification(notification);
   }
 
@@ -34,7 +42,7 @@ export class SwNotificationsService {
     const notifications: Notification[] = this._notifications;
     const index: number = notifications.indexOf(notification);
 
-    if(index !== -1) {
+    if (index !== -1) {
       notifications.splice(index, 1);
     }
   }
@@ -44,6 +52,6 @@ export class SwNotificationsService {
   }
 
   public get hasPermission(): boolean {
-    return this.permission === "granted";
+    return this.permission === 'granted';
   }
 }

@@ -1,4 +1,4 @@
-import { EventSeverity } from "./event-severity.type";
+import { EventSeverity } from './event-severity.type';
 
 export interface Event<T = any> {
   type: string;

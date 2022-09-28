@@ -4,7 +4,7 @@ import { Dialog } from '../dialog.component';
 @Component({
   selector: 'app-confirm-dialog',
   templateUrl: './confirm-dialog.component.html',
-  styleUrls: ['./confirm-dialog.component.scss']
+  styleUrls: ['./confirm-dialog.component.scss'],
 })
 export class ConfirmDialog extends Dialog {
   @Output() public readonly onCancel = new EventEmitter<any>();
@@ -12,8 +12,8 @@ export class ConfirmDialog extends Dialog {
 
   @Input() public dismissButton: boolean = true;
   @Input() public header: string;
-  @Input() public cancelText: string = "Cancel";
-  @Input() public confirmText: string = "Confirm";
+  @Input() public cancelText: string = 'Cancel';
+  @Input() public confirmText: string = 'Confirm';
 
   onCancelClick(): void {
     this.onCancel.emit(this.data);

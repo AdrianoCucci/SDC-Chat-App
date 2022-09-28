@@ -8,10 +8,6 @@ import { AccountPage } from './account-page.component';
 
 @NgModule({
   declarations: [AccountPage],
-  imports: [
-    CommonModule,
-    AccountPageRoutingModule,
-    TabMenuPanelModule
-  ]
+  imports: [CommonModule, AccountPageRoutingModule, TabMenuPanelModule],
 })
-export class AccountPageModule { }
+export class AccountPageModule {}

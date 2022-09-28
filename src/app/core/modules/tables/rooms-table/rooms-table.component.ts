@@ -17,30 +17,45 @@ import { RoomForm } from '../../forms/room-form/room-form.component';
 @Component({
   selector: 'app-rooms-table',
   templateUrl: './rooms-table.component.html',
-  styleUrls: ['./rooms-table.component.scss']
+  styleUrls: ['./rooms-table.component.scss'],
 })
 export class RoomsTable {
   @Input() public rooms: Room[];
   @Input() public organizationId: number;
   @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<Room>>;
 
-  public readonly pingSoundPairs: Pair<string, AudioSound>[] = enumToPairs(AudioSound, true);
+  public readonly pingSoundPairs: Pair<string, AudioSound>[] = enumToPairs(
+    AudioSound,
+    true
+  );
   public readonly cells: TableCell[] = [
-    { name: "Name", prop: "name", sortable: true, filterable: true },
-    { name: "Number", prop: "number", type: "number", sortable: true, filterable: true },
-    { name: "Description", prop: "description", width: 700, sortable: true, filterable: true },
+    { name: 'Name', prop: 'name', sortable: true, filterable: true },
     {
-      name: "Ping Sound",
-      prop: "pingSound",
+      name: 'Number',
+      prop: 'number',
+      type: 'number',
       sortable: true,
       filterable: true,
-      type: "select",
+    },
+    {
+      name: 'Description',
+      prop: 'description',
+      width: 700,
+      sortable: true,
+      filterable: true,
+    },
+    {
+      name: 'Ping Sound',
+      prop: 'pingSound',
+      sortable: true,
+      filterable: true,
+      type: 'select',
       selectOptions: {
         options: this.pingSoundPairs,
-        displayKey: "key",
-        valueKey: "value"
-      }
-    }
+        displayKey: 'key',
+        valueKey: 'value',
+      },
+    },
   ];
 
   public errorDialogVisible: boolean = false;
@@ -51,10 +66,17 @@ export class RoomsTable {
 
   private _isDeletingRoom: boolean = false;
 
-  constructor(private _roomsService: RoomsService, private _audioService: AudioService) { }
+  constructor(
+    private _roomsService: RoomsService,
+    private _audioService: AudioService
+  ) {}
 
   public getPingSoundName(audioSound: AudioSound) {
-    return this.pingSoundPairs.find((p: Pair<string, AudioSound>) => p.value === audioSound)?.key ?? null;
+    return (
+      this.pingSoundPairs.find(
+        (p: Pair<string, AudioSound>) => p.value === audioSound
+      )?.key ?? null
+    );
   }
 
   async onPlayPingSound(audioSound: AudioSound): Promise<void> {
@@ -63,24 +85,27 @@ export class RoomsTable {
 
   onAddRoom(): void {
     const request: RoomRequest = { organizationId: this.organizationId } as any;
-    this.showRoomForm(request, "add");
+    this.showRoomForm(request, 'add');
   }
 
   onEditRoom(room: Room): void {
     const request: RoomRequest = { ...room };
-    this.showRoomForm(request, "edit");
+    this.showRoomForm(request, 'edit');
   }
 
   onRoomFormSubmit(room: Room): void {
     this._roomForm.dialogVisible = false;
 
-    switch(this._roomForm.mode) {
-      case "add":
+    switch (this._roomForm.mode) {
+      case 'add':
         this.rooms = this._table.addRow(room);
         break;
 
-      case "edit":
-        this.rooms = this._table.querySetRow(room, (u: Room) => u.id === room.id);
+      case 'edit':
+        this.rooms = this._table.querySetRow(
+          room,
+          (u: Room) => u.id === room.id
+        );
         break;
     }
   }
@@ -91,12 +116,10 @@ export class RoomsTable {
 
       await this._roomsService.deleteRoom(room.id).toPromise();
       this.rooms = this._table.queryDeleteRow((u: Room) => u.id === room.id);
-    }
-    catch(error) {
+    } catch (error) {
       this.errorDialogText = parseErrorMessage(error);
       this.errorDialogVisible = true;
-    }
-    finally {
+    } finally {
       this._isDeletingRoom = false;
     }
   }

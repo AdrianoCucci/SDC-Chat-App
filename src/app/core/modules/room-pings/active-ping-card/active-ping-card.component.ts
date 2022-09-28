@@ -8,20 +8,20 @@ import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.se
 @Component({
   selector: 'app-active-ping-card',
   templateUrl: './active-ping-card.component.html',
-  styleUrls: ['./active-ping-card.component.scss']
+  styleUrls: ['./active-ping-card.component.scss'],
 })
 export class ActivePingCard {
   @Input() public roomPing: RoomPing;
   @Input() public clientUser: User;
 
-  @HostBinding("class.dismissing") private _dismissing: boolean = false;
+  @HostBinding('class.dismissing') private _dismissing: boolean = false;
 
-  constructor(private _roomPingsService: RoomPingsService) { }
+  constructor(private _roomPingsService: RoomPingsService) {}
 
   async onRespond(message?: string): Promise<void> {
     const roomPing: RoomPing = this.roomPing;
     roomPing.state = RoomPingState.Responded;
-    roomPing.responseMessage = message || "On my way!";
+    roomPing.responseMessage = message || 'On my way!';
     roomPing.responseUserId = this.clientUser?.id;
 
     this.roomPing = await this._roomPingsService.sendPingResponse(roomPing);
@@ -33,7 +33,10 @@ export class ActivePingCard {
 
   onDismiss(): void {
     this._dismissing = true;
-    setTimeout(() => this._roomPingsService.removePing(this.roomPing.guid), 160);
+    setTimeout(
+      () => this._roomPingsService.removePing(this.roomPing.guid),
+      160
+    );
   }
 
   public get room(): Room {
@@ -48,15 +51,17 @@ export class ActivePingCard {
     return this.roomPing?.responseUser;
   }
 
-  @HostBinding("class.requesting") public get isRequesting(): boolean {
+  @HostBinding('class.requesting') public get isRequesting(): boolean {
     return this.roomPing?.state === RoomPingState.Requesting;
   }
 
-  @HostBinding("class.client-request") public get isClientRequest(): boolean {
-    return this.isRequesting && this.clientUser?.id === this.roomPing.requestUserId;
+  @HostBinding('class.client-request') public get isClientRequest(): boolean {
+    return (
+      this.isRequesting && this.clientUser?.id === this.roomPing.requestUserId
+    );
   }
 
-  @HostBinding("class.responded") public get isResponded(): boolean {
+  @HostBinding('class.responded') public get isResponded(): boolean {
     return this.roomPing?.state === RoomPingState.Responded;
   }
 

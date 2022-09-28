@@ -12,7 +12,7 @@ import { AppForm } from '../app-form';
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss']
+  styleUrls: ['./user-form.component.scss'],
 })
 export class UserForm extends AppForm<UserRequest, User> implements OnInit {
   @Input() public organizationOptions: Organization[];
@@ -24,26 +24,30 @@ export class UserForm extends AppForm<UserRequest, User> implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.roleOptions) {
+    if (!this.roleOptions) {
       this.roleOptions = enumToPairs(Role, true);
     }
   }
 
   protected async onRequestAdd(model: UserRequest): Promise<User> {
-    if(model.organizationId == null && this.defaultOrganizationId != null) {
+    if (model.organizationId == null && this.defaultOrganizationId != null) {
       model.organizationId = this.defaultOrganizationId;
     }
 
-    const response: HttpResponse<User> = await this._usersService.addUser(model).toPromise();
+    const response: HttpResponse<User> = await this._usersService
+      .addUser(model)
+      .toPromise();
     return response.body;
   }
 
   protected async onRequestUpdate(model: UserRequest): Promise<User> {
-    if(model.organizationId == null && this.defaultOrganizationId != null) {
+    if (model.organizationId == null && this.defaultOrganizationId != null) {
       model.organizationId = this.defaultOrganizationId;
     }
 
-    const response: HttpResponse<User> = await this._usersService.updateUser(model.id, model).toPromise();
+    const response: HttpResponse<User> = await this._usersService
+      .updateUser(model.id, model)
+      .toPromise();
     return response.body;
   }
 }

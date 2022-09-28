@@ -1,24 +1,38 @@
 <ng-container *ngIf="initialized">
-
   <header>
-    <h1 class="app-name">{{appName}}</h1>
+    <h1 class="app-name">{{ appName }}</h1>
 
-    <app-main-menu class="main-menu" [menuItems]="mainMenuItems" [clientUser]="clientUser"></app-main-menu>
+    <app-main-menu
+      class="main-menu"
+      [menuItems]="mainMenuItems"
+      [clientUser]="clientUser"
+    ></app-main-menu>
 
     <div class="user-options">
-      <app-button class="user-options-button outline" [text]="userDisplayName"
-        (click)="poUserOptions.toggleVisible($event)">
+      <app-button
+        class="user-options-button outline"
+        [text]="userDisplayName"
+        (click)="poUserOptions.toggleVisible($event)"
+      >
       </app-button>
 
       <app-popover #poUserOptions [offsetX]="20">
         <ul class="user-options-list">
           <li>
-            <app-button class="block text" text="My Account" [routerLink]="accountPageRouterLink"
-              (click)="poUserOptions.hide()">
+            <app-button
+              class="block text"
+              text="My Account"
+              [routerLink]="accountPageRouterLink"
+              (click)="poUserOptions.hide()"
+            >
             </app-button>
           </li>
           <li>
-            <app-button class="block text" text="Logout" (click)="poUserOptions.hide(); logoutDialog.show()">
+            <app-button
+              class="block text"
+              text="Logout"
+              (click)="poUserOptions.hide(); logoutDialog.show()"
+            >
             </app-button>
           </li>
         </ul>
@@ -30,25 +44,48 @@
     <router-outlet></router-outlet>
   </main>
 
-  <app-confirm-dialog #logoutDialog header="Logout" cancelText="No" confirmText="Yes" [backdropDismiss]="true"
-    (onConfirm)="logout()">
+  <app-confirm-dialog
+    #logoutDialog
+    header="Logout"
+    cancelText="No"
+    confirmText="Yes"
+    [backdropDismiss]="true"
+    (onConfirm)="logout()"
+  >
     <span>Are you sure you want to logout?</span>
   </app-confirm-dialog>
 </ng-container>
 
-<app-loader [fullscreen]="true" text="Please wait..." [visible]="!initialized"></app-loader>
+<app-loader
+  [fullscreen]="true"
+  text="Please wait..."
+  [visible]="!initialized"
+></app-loader>
 
-<app-dialog *ngIf="initError" #errorDialog class="error-dialog" [backdropDismiss]="true" [visible]="true">
+<app-dialog
+  *ngIf="initError"
+  #errorDialog
+  class="error-dialog"
+  [backdropDismiss]="true"
+  [visible]="true"
+>
   <div slot="header">
     <span>Error Occurred</span>
   </div>
-  <p slot="body" class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
+  <p
+    slot="body"
+    class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0"
+  >
     <span>Failed to initialize server data.</span>
     <br />
-    <b>{{initError}}</b>
+    <b>{{ initError }}</b>
   </p>
   <div slot="footer" class="txt-right">
-    <app-button class="text" text="OK" (click)="errorDialog.hide()"></app-button>
+    <app-button
+      class="text"
+      text="OK"
+      (click)="errorDialog.hide()"
+    ></app-button>
   </div>
 </app-dialog>
 

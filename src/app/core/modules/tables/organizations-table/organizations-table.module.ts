@@ -21,9 +21,9 @@ const component = [OrganizationsTable];
     ButtonModule,
     DialogModule,
     ConfirmDialogModule,
-    LoaderModule
+    LoaderModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class OrganizationsTableModule { }
+export class OrganizationsTableModule {}

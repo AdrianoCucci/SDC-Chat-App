@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
  * A service that provides AES encryption and decryption for text.
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class EncryptService {
   /**

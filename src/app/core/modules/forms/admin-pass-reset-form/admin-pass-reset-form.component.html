@@ -1,29 +1,59 @@
 <ng-template #formTemplate>
   <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
-
-    <app-input-text class="block" name="username" label="Username" [readonly]="true" [value]="user?.username">
+    <app-input-text
+      class="block"
+      name="username"
+      label="Username"
+      [readonly]="true"
+      [value]="user?.username"
+    >
     </app-input-text>
 
-    <app-input-text class="block" type="password" name="password" label="Password" [validations]="{ required: true }"
-      [(value)]="model.newPassword">
+    <app-input-text
+      class="block"
+      type="password"
+      name="password"
+      label="Password"
+      [validations]="{ required: true }"
+      [(value)]="model.newPassword"
+    >
     </app-input-text>
 
     <div slot="footer" class="form-footer">
-      <app-inline-alert class="block" type="error" [summary]="error" [visible]="error != null"></app-inline-alert>
+      <app-inline-alert
+        class="block"
+        type="error"
+        [summary]="error"
+        [visible]="error != null"
+      ></app-inline-alert>
 
       <div class="txt-right">
-        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+        <app-button
+          class="text"
+          type="submit"
+          text="Submit"
+          icon="check"
+        ></app-button>
       </div>
     </div>
   </app-form>
 
-  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+  <app-loader
+    text="Submitting..."
+    [visible]="isSubmitting"
+    [fullscreen]="true"
+  ></app-loader>
 </ng-template>
 
 <app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
   <div slot="header" class="dialog-header" [ngSwitch]="mode">
     <span>Reset User Password</span>
-    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
+    <app-button
+      class="text"
+      icon="times"
+      title="Close"
+      (click)="dialogVisible = false"
+    ></app-button>
   </div>
 
   <div slot="body" class="dialog-body">

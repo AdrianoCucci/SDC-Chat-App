@@ -1,22 +1,37 @@
 <ng-container *ngIf="room != null">
   <div class="room-info">
-    <span class="name">{{room.name}}</span>
+    <span class="name">{{ room.name }}</span>
     <span *ngIf="room.number != null" class="number">
-      Room number: <b>{{room.number}}</b>
+      Room number: <b>{{ room.number }}</b>
     </span>
   </div>
 
-  <form *ngIf="!isPingRequesting; else requestingActionsTemplate" class="room-ping-actions request-actions"
-    (submit)="onRequest(message.value)">
+  <form
+    *ngIf="!isPingRequesting; else requestingActionsTemplate"
+    class="room-ping-actions request-actions"
+    (submit)="onRequest(message.value)"
+  >
     <app-input-text #message placeholder="Request message..."></app-input-text>
-    <app-button type="submit" [text]="message.value?.trim() ? 'Send request' : 'Need assistance!'"></app-button>
+    <app-button
+      type="submit"
+      [text]="message.value?.trim() ? 'Send request' : 'Need assistance!'"
+    ></app-button>
   </form>
 
   <ng-template #requestingActionsTemplate>
-    <form *ngIf="!isClientPingRequesting; else clientRequestingTemplate;" class="room-ping-actions response-actions"
-      (submit)="onResponse(message.value)">
-      <app-input-text #message placeholder="Response message..."></app-input-text>
-      <app-button type="submit" [text]="message.value?.trim() ? 'Send response' : 'On my way!'"></app-button>
+    <form
+      *ngIf="!isClientPingRequesting; else clientRequestingTemplate"
+      class="room-ping-actions response-actions"
+      (submit)="onResponse(message.value)"
+    >
+      <app-input-text
+        #message
+        placeholder="Response message..."
+      ></app-input-text>
+      <app-button
+        type="submit"
+        [text]="message.value?.trim() ? 'Send response' : 'On my way!'"
+      ></app-button>
     </form>
 
     <ng-template #clientRequestingTemplate>

@@ -7,12 +7,8 @@ import { Button } from './button.component';
 const component = [Button];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    FontAwesomeModule
-  ],
+  imports: [CommonModule, RouterModule, FontAwesomeModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class ButtonModule { }
+export class ButtonModule {}

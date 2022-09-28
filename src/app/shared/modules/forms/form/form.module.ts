@@ -6,11 +6,8 @@ import { Form } from './form.component';
 const component = [Form];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class FormModule { }
+export class FormModule {}

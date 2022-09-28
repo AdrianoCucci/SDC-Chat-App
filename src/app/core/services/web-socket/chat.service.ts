@@ -10,7 +10,7 @@ import { LoginService } from '../login.service';
 import { WebSocketService } from './web-socket.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatService implements IDisposable {
   private _messages: ChatMessage[];
@@ -41,8 +41,8 @@ export class ChatService implements IDisposable {
       eventsService.publish({
         source: eventsSource,
         type: events.message,
-        data: message
-      })
+        data: message,
+      });
     });
 
     socket.on<ChatMessage>(events.messageEdit, (message: ChatMessage) => {
@@ -51,8 +51,8 @@ export class ChatService implements IDisposable {
       eventsService.publish({
         source: eventsSource,
         type: events.messageEdit,
-        data: message
-      })
+        data: message,
+      });
     });
 
     socket.on<ChatMessage>(events.messageDelete, (message: ChatMessage) => {
@@ -61,37 +61,43 @@ export class ChatService implements IDisposable {
       eventsService.publish({
         source: eventsSource,
         type: events.messageDelete,
-        data: message
-      })
+        data: message,
+      });
     });
 
     eventsService.subscribe({
       eventSources: LoginService.name,
-      eventTypes: "logout",
-      eventHandler: () => this.dispose()
+      eventTypes: 'logout',
+      eventHandler: () => this.dispose(),
     });
   }
 
-  public loadMessages(organizationId: number, beforeDate: Date, take?: number, concat?: boolean): Promise<ChatMessage[]> {
+  public loadMessages(
+    organizationId: number,
+    beforeDate: Date,
+    take?: number,
+    concat?: boolean
+  ): Promise<ChatMessage[]> {
     return new Promise<ChatMessage[]>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<ChatMessage[]> = await this._messagesService.getAllMessagesBeforeDate({
-          organizationId,
-          datePosted: beforeDate.toISOString(),
-          take,
-          include: "senderUser"
-        }).toPromise();
+        const response: HttpResponse<ChatMessage[]> =
+          await this._messagesService
+            .getAllMessagesBeforeDate({
+              organizationId,
+              datePosted: beforeDate.toISOString(),
+              take,
+              include: 'senderUser',
+            })
+            .toPromise();
 
-        if(concat) {
+        if (concat) {
           this.concatMessages(response.body);
-        }
-        else {
+        } else {
           this._messages = response.body;
         }
 
         resolve(this._messages);
-      }
-      catch(error) {
+      } catch (error) {
         reject(error);
       }
     });
@@ -99,52 +105,62 @@ export class ChatService implements IDisposable {
 
   public sendMessage(message: ChatMessage): Promise<ChatMessage> {
     return new Promise((resolve) => {
-      if(message == null) {
+      if (message == null) {
         resolve(null);
       }
 
       this.addMessage(message);
 
-      this._socketService.emit(this.socketEvents.message, message, (response: ChatMessage) => {
-        Object.assign(message, response);
-        resolve(response);
-      });
+      this._socketService.emit(
+        this.socketEvents.message,
+        message,
+        (response: ChatMessage) => {
+          Object.assign(message, response);
+          resolve(response);
+        }
+      );
     });
   }
 
   public sendMessageEdit(message: ChatMessage): Promise<ChatMessage> {
     return new Promise((resolve) => {
-      if(message == null) {
+      if (message == null) {
         resolve(null);
       }
 
       this.updateMessage(message);
 
-      this._socketService.emit(this.socketEvents.messageEdit, message, (response: ChatMessage) => {
-        Object.assign(message, response);
-        resolve(response);
-      });
+      this._socketService.emit(
+        this.socketEvents.messageEdit,
+        message,
+        (response: ChatMessage) => {
+          Object.assign(message, response);
+          resolve(response);
+        }
+      );
     });
   }
 
   public sendMessageDelete(message: ChatMessage): void {
-    if(message != null) {
+    if (message != null) {
       this._socketService.emit(this.socketEvents.messageDelete, message);
       this.deleteMessage(message);
     }
   }
 
   private concatMessages(messages: ChatMessage[]): void {
-    if(this._messages == null) {
+    if (this._messages == null) {
       this._messages = messages;
-    }
-    else {
+    } else {
       const appended: ChatMessage[] = [];
 
-      for(let i = 0; i < messages.length; i++) {
+      for (let i = 0; i < messages.length; i++) {
         const message: ChatMessage = messages[i];
 
-        if(this._messages.findIndex((m: ChatMessage) => m.id === message.id) === -1) {
+        if (
+          this._messages.findIndex((m: ChatMessage) => m.id === message.id) ===
+          -1
+        ) {
           appended.push(message);
         }
       }
@@ -154,10 +170,9 @@ export class ChatService implements IDisposable {
   }
 
   private addMessage(message: ChatMessage): void {
-    if(this._messages == null) {
+    if (this._messages == null) {
       this._messages = [message];
-    }
-    else {
+    } else {
       this._messages.unshift(message);
     }
   }
@@ -165,7 +180,7 @@ export class ChatService implements IDisposable {
   private updateMessage(message: ChatMessage): void {
     const index: number = this.findMessageIndex(message);
 
-    if(index !== -1) {
+    if (index !== -1) {
       this._messages[index] = message;
     }
   }
@@ -173,20 +188,22 @@ export class ChatService implements IDisposable {
   private deleteMessage(message: ChatMessage): void {
     const index: number = this.findMessageIndex(message);
 
-    if(index !== -1) {
+    if (index !== -1) {
       this._messages.splice(index, 1);
     }
   }
 
   private findMessageIndex(message: ChatMessage): number {
-    return this._messages?.findIndex((c: ChatMessage) => c.id === message.id) ?? -1;
+    return (
+      this._messages?.findIndex((c: ChatMessage) => c.id === message.id) ?? -1
+    );
   }
 
   public get socketEvents() {
     return {
-      message: "message",
-      messageEdit: "message-edit",
-      messageDelete: "message-delete"
+      message: 'message',
+      messageEdit: 'message-edit',
+      messageDelete: 'message-delete',
     };
   }
 

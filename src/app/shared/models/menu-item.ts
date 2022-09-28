@@ -1,5 +1,5 @@
-import { TemplateRef } from "@angular/core";
-import { CommonIcon } from "./common-icon.type";
+import { TemplateRef } from '@angular/core';
+import { CommonIcon } from './common-icon.type';
 
 export interface MenuItem {
   label?: string;

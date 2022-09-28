@@ -23,7 +23,7 @@ import { LoginPage } from './login-page.component';
     ButtonModule,
     LoaderModule,
     DialogModule,
-    VersionModule
-  ]
+    VersionModule,
+  ],
 })
-export class LoginPageModule { }
+export class LoginPageModule {}

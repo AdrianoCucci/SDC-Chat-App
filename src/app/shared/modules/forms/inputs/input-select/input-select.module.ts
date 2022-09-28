@@ -15,9 +15,9 @@ const component = [InputSelect];
     FormsModule,
     ButtonModule,
     PopoverModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class InputSelectModule { }
+export class InputSelectModule {}

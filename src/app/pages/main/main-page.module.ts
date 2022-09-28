@@ -25,7 +25,7 @@ import { MainPage } from './main-page.component';
     DialogModule,
     ConfirmDialogModule,
     LoaderModule,
-    WebSocketAlertsOverlayModule
-  ]
+    WebSocketAlertsOverlayModule,
+  ],
 })
-export class MainPageModule { }
+export class MainPageModule {}

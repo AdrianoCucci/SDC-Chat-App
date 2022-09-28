@@ -13,31 +13,35 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-login-page',
   templateUrl: './login-page.component.html',
-  styleUrls: ['./login-page.component.scss']
+  styleUrls: ['./login-page.component.scss'],
 })
 export class LoginPage implements OnInit {
   public username: string;
   public password: string;
   public rememberLogin: boolean;
 
-  public errorVisible: boolean = false;;
+  public errorVisible: boolean = false;
 
   private _isLoggingIn: boolean = false;
   private _loginError: string;
 
-  constructor(private _authService: AuthService, private _loginService: LoginService, private _router: Router) { }
+  constructor(
+    private _authService: AuthService,
+    private _loginService: LoginService,
+    private _router: Router
+  ) {}
 
   ngOnInit(): void {
-    if(this._loginService.loadSavedLogin()) {
+    if (this._loginService.loadSavedLogin()) {
       this.navigateToMain();
     }
   }
 
   async onFormSubmit(result: FormSubmitResult): Promise<void> {
-    if(result.isValid) {
+    if (result.isValid) {
       const request: AuthRequest = {
         username: this.username,
-        password: this.password
+        password: this.password,
       };
 
       await this.submitRequest(request);
@@ -47,13 +51,13 @@ export class LoginPage implements OnInit {
   private async submitRequest(request: AuthRequest): Promise<void> {
     try {
       this._isLoggingIn = true;
-      const response: HttpResponse<AuthResponse> = await this._authService.login(request).toPromise();
+      const response: HttpResponse<AuthResponse> = await this._authService
+        .login(request)
+        .toPromise();
       this.onLoginSuccess(response.body);
-    }
-    catch(error) {
+    } catch (error) {
       this.onLoginFail(error);
-    }
-    finally {
+    } finally {
       this._isLoggingIn = false;
     }
   }

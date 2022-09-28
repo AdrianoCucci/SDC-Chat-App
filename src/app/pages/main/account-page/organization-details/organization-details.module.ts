@@ -15,7 +15,7 @@ import { OrganizationDetailsPage } from './organization-details.page';
     OrganizationDetailsRoutingModule,
     InfoRowModule,
     ButtonModule,
-    OrganizationFormModule
-  ]
+    OrganizationFormModule,
+  ],
 })
-export class OrganizationDetailsModule { }
+export class OrganizationDetailsModule {}

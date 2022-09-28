@@ -1,7 +1,11 @@
 <nav>
   <ul>
-    <li *ngFor="let item of menuItems;">
-      <app-menu-button [item]="item" [templateOverwrite]="templateOverwrite" (onClick)="onItemClick.emit($event)">
+    <li *ngFor="let item of menuItems">
+      <app-menu-button
+        [item]="item"
+        [templateOverwrite]="templateOverwrite"
+        (onClick)="onItemClick.emit($event)"
+      >
       </app-menu-button>
     </li>
   </ul>

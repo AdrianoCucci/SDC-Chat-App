@@ -1,40 +1,89 @@
 <ng-template #formTemplate>
   <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
-
     <div class="grid">
-      <app-input-text class="col-6" name="name" label="Name" [validations]="{ required: true }" [(value)]="model.name">
+      <app-input-text
+        class="col-6"
+        name="name"
+        label="Name"
+        [validations]="{ required: true }"
+        [(value)]="model.name"
+      >
       </app-input-text>
 
-      <app-input-text class="col-6" type="number" name="number" label="Number" [(value)]="model.number">
+      <app-input-text
+        class="col-6"
+        type="number"
+        name="number"
+        label="Number"
+        [(value)]="model.number"
+      >
       </app-input-text>
 
-      <app-input-textarea class="col-12" name="description" label="Description" [rows]="4"
-        [(value)]="model.description">
+      <app-input-textarea
+        class="col-12"
+        name="description"
+        label="Description"
+        [rows]="4"
+        [(value)]="model.description"
+      >
       </app-input-textarea>
 
-      <app-input-select *ngIf="pingSoundOptions" class="col-12" name="ping-sound" label="Ping Sound"
-        [options]="pingSoundOptions" displayKey="key" valueKey="value" [clearable]="true" [(value)]="model.pingSound">
-
-        <ng-template app-template="option" let-option let-isSelected="isSelected" let-selectCallback="selectCallback">
-          <li class="ping-sound-select-option" [ngClass]="{'selected': isSelected}">
-            <app-button icon="volume-up" title="Preview sound" (click)="onPreviewSound(option.value)"></app-button>
-            <span (click)="selectCallback()">{{option.key}}</span>
+      <app-input-select
+        *ngIf="pingSoundOptions"
+        class="col-12"
+        name="ping-sound"
+        label="Ping Sound"
+        [options]="pingSoundOptions"
+        displayKey="key"
+        valueKey="value"
+        [clearable]="true"
+        [(value)]="model.pingSound"
+      >
+        <ng-template
+          app-template="option"
+          let-option
+          let-isSelected="isSelected"
+          let-selectCallback="selectCallback"
+        >
+          <li
+            class="ping-sound-select-option"
+            [ngClass]="{ selected: isSelected }"
+          >
+            <app-button
+              icon="volume-up"
+              title="Preview sound"
+              (click)="onPreviewSound(option.value)"
+            ></app-button>
+            <span (click)="selectCallback()">{{ option.key }}</span>
           </li>
         </ng-template>
-
       </app-input-select>
     </div>
 
     <div slot="footer" class="form-footer">
-      <app-inline-alert class="block" type="error" [summary]="error" [visible]="error != null"></app-inline-alert>
+      <app-inline-alert
+        class="block"
+        type="error"
+        [summary]="error"
+        [visible]="error != null"
+      ></app-inline-alert>
 
       <div class="txt-right">
-        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+        <app-button
+          class="text"
+          type="submit"
+          text="Submit"
+          icon="check"
+        ></app-button>
       </div>
     </div>
   </app-form>
 
-  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+  <app-loader
+    text="Submitting..."
+    [visible]="isSubmitting"
+    [fullscreen]="true"
+  ></app-loader>
 </ng-template>
 
 <app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
@@ -42,7 +91,12 @@
     <span *ngSwitchCase="'add'">Add Room</span>
     <span *ngSwitchCase="'edit'">Update Room</span>
 
-    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
+    <app-button
+      class="text"
+      icon="times"
+      title="Close"
+      (click)="dialogVisible = false"
+    ></app-button>
   </div>
 
   <div slot="body" class="dialog-body">

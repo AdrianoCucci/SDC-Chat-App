@@ -1,1 +1,1 @@
-export type EventSeverity = "info" | "warning" | "error" | "critical";
+export type EventSeverity = 'info' | 'warning' | 'error' | 'critical';

@@ -1,20 +1,34 @@
 <div class="input-wrapper">
   <div class="select-wrapper">
-    <div class="select-box" (click)="optionsPopover.toggleVisible($event, popoverParent)">
-      <span *ngIf="placeholder && !hasValue" class="placeholder">{{placeholder}}</span>
+    <div
+      class="select-box"
+      (click)="optionsPopover.toggleVisible($event, popoverParent)"
+    >
+      <span *ngIf="placeholder && !hasValue" class="placeholder">{{
+        placeholder
+      }}</span>
 
       <div *ngIf="hasValue" class="value-wrapper">
         <ng-container *ngIf="valueTemplate == null; else valueTemplateWrapper">
-          <span *ngIf="displayValue != null && !multiple" class="value">{{displayValue}}</span>
+          <span *ngIf="displayValue != null && !multiple" class="value">{{
+            displayValue
+          }}</span>
 
           <ng-container *ngIf="multiple">
-            <span *ngFor="let item of displayValue" class="value">{{item}}</span>
+            <span *ngFor="let item of displayValue" class="value">{{
+              item
+            }}</span>
           </ng-container>
         </ng-container>
 
         <ng-template #valueTemplateWrapper>
           <div class="value">
-            <ng-container *ngTemplateOutlet="valueTemplate; context: { $implicit: value, selected: selected }">
+            <ng-container
+              *ngTemplateOutlet="
+                valueTemplate;
+                context: { $implicit: value, selected: selected }
+              "
+            >
             </ng-container>
           </div>
         </ng-template>
@@ -22,27 +36,44 @@
     </div>
 
     <div class="select-widgets">
-      <app-button *ngIf="clearable && hasValue" class="clear-button text" icon="times" title="Clear value"
-        (click)="value = null">
+      <app-button
+        *ngIf="clearable && hasValue"
+        class="clear-button text"
+        icon="times"
+        title="Clear value"
+        (click)="value = null"
+      >
       </app-button>
       <fa-icon class="drop-down-icon" [icon]="dropDownIcon"></fa-icon>
     </div>
 
-    <app-popover #optionsPopover class="select-options-popover" [autoAnchorX]="false" [offsetY]="2">
+    <app-popover
+      #optionsPopover
+      class="select-options-popover"
+      [autoAnchorX]="false"
+      [offsetY]="2"
+    >
       <ng-container *ngIf="hasOptions; else noOptionsTemplate">
         <ul class="popover-list select-options">
           <ng-container *ngFor="let option of options">
-
-            <li *ngIf="optionTemplate == null; else optionsTemplateWrapper" class="select-option"
-              [ngClass]="{'emphasized': isOptionSelected(option)}" (click)="onOptionSelect(option)">
-              <span class="option-name">{{getOptionDisplay(option)}}</span>
+            <li
+              *ngIf="optionTemplate == null; else optionsTemplateWrapper"
+              class="select-option"
+              [ngClass]="{ emphasized: isOptionSelected(option) }"
+              (click)="onOptionSelect(option)"
+            >
+              <span class="option-name">{{ getOptionDisplay(option) }}</span>
             </li>
 
             <ng-template #optionsTemplateWrapper>
-              <ng-container *ngTemplateOutlet="optionTemplate; context: getOptionTemplateContext(option)">
+              <ng-container
+                *ngTemplateOutlet="
+                  optionTemplate;
+                  context: getOptionTemplateContext(option)
+                "
+              >
               </ng-container>
             </ng-template>
-
           </ng-container>
         </ul>
       </ng-container>
@@ -57,10 +88,10 @@
 
   <label *ngIf="label" [for]="name">
     <span *ngIf="required">*&nbsp;</span>
-    <span>{{label}}</span>
+    <span>{{ label }}</span>
   </label>
 </div>
 
-<ul class="error-list" [ngClass]="{'visible': showErrors && hasErrors}">
-  <li *ngFor="let error of errors" class="error-message">{{error}}</li>
+<ul class="error-list" [ngClass]="{ visible: showErrors && hasErrors }">
+  <li *ngFor="let error of errors" class="error-message">{{ error }}</li>
 </ul>

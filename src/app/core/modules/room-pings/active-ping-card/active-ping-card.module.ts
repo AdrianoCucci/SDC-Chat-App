@@ -9,13 +9,8 @@ import { ActivePingCard } from './active-ping-card.component';
 const component = [ActivePingCard];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    InputTextModule,
-    ButtonModule
-  ],
+  imports: [CommonModule, FormsModule, InputTextModule, ButtonModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class ActivePingCardModule { }
+export class ActivePingCardModule {}

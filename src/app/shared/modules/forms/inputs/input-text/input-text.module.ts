@@ -6,11 +6,8 @@ import { InputText } from './input-text.component';
 const component = [InputText];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class InputTextModule { }
+export class InputTextModule {}

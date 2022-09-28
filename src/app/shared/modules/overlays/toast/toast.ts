@@ -1,7 +1,7 @@
-import { EventEmitter } from "@angular/core";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { getCommonIconDefinition } from "src/app/shared/functions/get-common-icon-definition";
-import { ToastOptions } from "./toast-options.model";
+import { EventEmitter } from '@angular/core';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+import { getCommonIconDefinition } from 'src/app/shared/functions/get-common-icon-definition';
+import { ToastOptions } from './toast-options.model';
 
 export class Toast {
   public readonly options: ToastOptions;
@@ -16,7 +16,7 @@ export class Toast {
     this.options = options ?? { duration: defaultDuration };
     options.duration = options.duration ?? defaultDuration;
 
-    if(this.options.duration > 0) {
+    if (this.options.duration > 0) {
       this.startDismissTimeout();
     }
   }
@@ -27,14 +27,17 @@ export class Toast {
     this.onDismiss.complete();
     this.stopDismissTimeout();
 
-    if(this.options.onDismiss) {
+    if (this.options.onDismiss) {
       this.options.onDismiss();
     }
   }
 
   private startDismissTimeout(): void {
     this.stopDismissTimeout();
-    this._dismissTimeout = window.setTimeout(() => this.dismiss(), this.options.duration);
+    this._dismissTimeout = window.setTimeout(
+      () => this.dismiss(),
+      this.options.duration
+    );
   }
 
   private stopDismissTimeout(): void {
@@ -43,7 +46,9 @@ export class Toast {
   }
 
   public get icon(): IconDefinition {
-    return this.options.icon ? getCommonIconDefinition(this.options.icon) : null;
+    return this.options.icon
+      ? getCommonIconDefinition(this.options.icon)
+      : null;
   }
 
   public get dismissed(): boolean {

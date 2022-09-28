@@ -1,5 +1,5 @@
-import { CommonIcon } from "src/app/shared/models/common-icon.type";
-import { ToastAlign } from "./toast-align.type";
+import { CommonIcon } from 'src/app/shared/models/common-icon.type';
+import { ToastAlign } from './toast-align.type';
 
 export interface ToastOptions {
   text?: string;
@@ -14,4 +14,4 @@ export interface ToastOptions {
   duration?: number;
   dismissButton?: boolean;
   onDismiss?: () => void;
-};
+}

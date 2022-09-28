@@ -8,31 +8,44 @@ const DEFAULT_PATH: string = PATHS.details;
 
 const routes: Routes = [
   {
-    path: "", component: AccountPage,
+    path: '',
+    component: AccountPage,
     children: [
       {
         path: DEFAULT_PATH,
-        loadChildren: () => import("./account-details/account-details.module").then(m => m.AccountDetailsModule)
+        loadChildren: () =>
+          import('./account-details/account-details.module').then(
+            (m) => m.AccountDetailsModule
+          ),
       },
       {
         path: PATHS.organization,
-        loadChildren: () => import("./organization-details/organization-details.module").then(m => m.OrganizationDetailsModule)
+        loadChildren: () =>
+          import('./organization-details/organization-details.module').then(
+            (m) => m.OrganizationDetailsModule
+          ),
       },
       {
         path: PATHS.notifications,
-        loadChildren: () => import("./notifications/notifications.module").then(m => m.NotificationsModule)
+        loadChildren: () =>
+          import('./notifications/notifications.module').then(
+            (m) => m.NotificationsModule
+          ),
       },
       {
         path: PATHS.accessibility,
-        loadChildren: () => import("./accessibility/accessibility.module").then(m => m.AccessibilityModule)
+        loadChildren: () =>
+          import('./accessibility/accessibility.module').then(
+            (m) => m.AccessibilityModule
+          ),
       },
-      { path: "**", pathMatch: "full", redirectTo: DEFAULT_PATH }
-    ]
-  }
+      { path: '**', pathMatch: 'full', redirectTo: DEFAULT_PATH },
+    ],
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AccountPageRoutingModule { }
+export class AccountPageRoutingModule {}

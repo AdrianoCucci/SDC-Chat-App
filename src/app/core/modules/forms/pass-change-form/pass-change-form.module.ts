@@ -19,9 +19,9 @@ const component = [PassChangeForm];
     InputTextModule,
     ButtonModule,
     LoaderModule,
-    InlineAlertModule
+    InlineAlertModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class PassChangeFormModule { }
+export class PassChangeFormModule {}

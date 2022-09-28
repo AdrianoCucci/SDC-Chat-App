@@ -1,6 +1,6 @@
-import { Room } from "../rooms/room";
-import { User } from "../users/user";
-import { RoomPingState } from "./room-ping-state";
+import { Room } from '../rooms/room';
+import { User } from '../users/user';
+import { RoomPingState } from './room-ping-state';
 
 export interface RoomPing {
   guid?: string;

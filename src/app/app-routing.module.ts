@@ -11,19 +11,23 @@ const routes: Routes = [
   {
     path: DEFAULT_PATH,
     canActivate: [MainRedirectGuard],
-    loadChildren: () => import("./pages/auth/auth-routing.module").then(m => m.AuthRoutingModule)
+    loadChildren: () =>
+      import('./pages/auth/auth-routing.module').then(
+        (m) => m.AuthRoutingModule
+      ),
   },
   {
     path: PATHS.main.root,
     canActivate: [AuthGuard],
-    loadChildren: () => import("./pages/main/main-page.module").then(m => m.MainPageModule)
+    loadChildren: () =>
+      import('./pages/main/main-page.module').then((m) => m.MainPageModule),
   },
-  { path: "", redirectTo: DEFAULT_PATH, pathMatch: "full" },
-  { path: "**", redirectTo: DEFAULT_PATH }
+  { path: '', redirectTo: DEFAULT_PATH, pathMatch: 'full' },
+  { path: '**', redirectTo: DEFAULT_PATH },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -13,49 +13,60 @@ import { OrganizationForm } from '../../forms/organization-form/organization-for
 @Component({
   selector: 'app-organizations-table',
   templateUrl: './organizations-table.component.html',
-  styleUrls: ['./organizations-table.component.scss']
+  styleUrls: ['./organizations-table.component.scss'],
 })
 export class OrganizationsTable {
   @Input() public organizations: Organization[];
-  @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<Organization>>;
+  @Input() public pageHandler: (
+    event: PageEvent
+  ) => Promise<PagedList<Organization>>;
 
   public readonly cells: TableCell[] = [
-    { name: "Name", prop: "name", sortable: true, filterable: true },
-    { name: "Address", prop: "fullAddress", sortable: true, filterable: true },
-    { name: "Email", prop: "email", sortable: true, filterable: true },
-    { name: "Phone Number", prop: "phoneNumber", sortable: true, filterable: true }
+    { name: 'Name', prop: 'name', sortable: true, filterable: true },
+    { name: 'Address', prop: 'fullAddress', sortable: true, filterable: true },
+    { name: 'Email', prop: 'email', sortable: true, filterable: true },
+    {
+      name: 'Phone Number',
+      prop: 'phoneNumber',
+      sortable: true,
+      filterable: true,
+    },
   ];
 
   public errorDialogVisible: boolean = false;
   public errorDialogText: string;
 
   @ViewChild(Table) private readonly _table: Table;
-  @ViewChild(OrganizationForm) private readonly _organizationForm: OrganizationForm;
+  @ViewChild(OrganizationForm)
+  private readonly _organizationForm: OrganizationForm;
 
   private _isDeletingOrganization: boolean = false;
 
-  constructor(private _orgsService: OrganizationsService) { }
+  constructor(private _orgsService: OrganizationsService) {}
 
   onAddOrganization(): void {
     const request: OrganizationRequest = {} as any;
-    this.showOrganizationForm(request, "add");
+    this.showOrganizationForm(request, 'add');
   }
 
   onEditOrganization(organization: Organization): void {
     const request: OrganizationRequest = { ...organization };
-    this.showOrganizationForm(request, "edit");
+    this.showOrganizationForm(request, 'edit');
   }
 
   onOrganizationFormSubmit(organization: Organization): void {
     this._organizationForm.dialogVisible = false;
 
-    switch(this._organizationForm.mode) {
-      case "add":
+    switch (this._organizationForm.mode) {
+      case 'add':
         this.organizations = this._table.addRow(organization);
         break;
 
-      case "edit":
-        this.organizations = this._table.querySetRow(organization, (u: Organization) => u.id === organization.id);
+      case 'edit':
+        this.organizations = this._table.querySetRow(
+          organization,
+          (u: Organization) => u.id === organization.id
+        );
         break;
     }
   }
@@ -65,13 +76,13 @@ export class OrganizationsTable {
       this._isDeletingOrganization = true;
 
       await this._orgsService.deleteOrganization(organization.id).toPromise();
-      this.organizations = this._table.queryDeleteRow((u: Organization) => u.id === organization.id);
-    }
-    catch(error) {
+      this.organizations = this._table.queryDeleteRow(
+        (u: Organization) => u.id === organization.id
+      );
+    } catch (error) {
       this.errorDialogText = parseErrorMessage(error);
       this.errorDialogVisible = true;
-    }
-    finally {
+    } finally {
       this._isDeletingOrganization = false;
     }
   }

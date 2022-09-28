@@ -1,47 +1,104 @@
 <ng-template #formTemplate>
   <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
-
     <div class="grid">
-      <app-input-text class="col-6" name="username" label="Username" [validations]="{ required: true }"
-        [(value)]="model.username">
+      <app-input-text
+        class="col-6"
+        name="username"
+        label="Username"
+        [validations]="{ required: true }"
+        [(value)]="model.username"
+      >
       </app-input-text>
 
-      <app-input-text class="col-6" name="display-name" label="Display Name" [(value)]="model.displayName">
+      <app-input-text
+        class="col-6"
+        name="display-name"
+        label="Display Name"
+        [(value)]="model.displayName"
+      >
       </app-input-text>
 
       <ng-container *ngIf="mode === 'add'">
-        <app-input-text #passInput class="col-6" type="password" name="password" label="Password"
-          [validations]="{ required: true }" [(value)]="model.password">
+        <app-input-text
+          #passInput
+          class="col-6"
+          type="password"
+          name="password"
+          label="Password"
+          [validations]="{ required: true }"
+          [(value)]="model.password"
+        >
         </app-input-text>
 
-        <app-input-text class="col-6" type="password" name="confirm-password" label="Confirm Password"
-          [validations]="{ required: true, matchInput: passInput }">
+        <app-input-text
+          class="col-6"
+          type="password"
+          name="confirm-password"
+          label="Confirm Password"
+          [validations]="{ required: true, matchInput: passInput }"
+        >
         </app-input-text>
       </ng-container>
 
-      <app-input-select class="col-6" name="role" label="Role" popoverParent="body" [options]="roleOptions"
-        displayKey="key" valueKey="value" [validations]="{ required: true }" [(value)]="model.role"></app-input-select>
+      <app-input-select
+        class="col-6"
+        name="role"
+        label="Role"
+        popoverParent="body"
+        [options]="roleOptions"
+        displayKey="key"
+        valueKey="value"
+        [validations]="{ required: true }"
+        [(value)]="model.role"
+      ></app-input-select>
 
-      <app-input-select *ngIf="organizationOptions != null" class="col-6" name="organization" label="Organization"
-        popoverParent="body" [options]="organizationOptions" displayKey="name" valueKey="id" [clearable]="true"
-        [(value)]="model.organizationId">
+      <app-input-select
+        *ngIf="organizationOptions != null"
+        class="col-6"
+        name="organization"
+        label="Organization"
+        popoverParent="body"
+        [options]="organizationOptions"
+        displayKey="name"
+        valueKey="id"
+        [clearable]="true"
+        [(value)]="model.organizationId"
+      >
       </app-input-select>
 
-      <app-input-toggle [class]="organizationOptions == null ? 'col-6' : 'col-12'" name="account-locked"
-        label="Account Locked" [(value)]="model.isLocked">
+      <app-input-toggle
+        [class]="organizationOptions == null ? 'col-6' : 'col-12'"
+        name="account-locked"
+        label="Account Locked"
+        [(value)]="model.isLocked"
+      >
       </app-input-toggle>
     </div>
 
     <div slot="footer" class="form-footer">
-      <app-inline-alert class="block" type="error" [summary]="error" [visible]="error != null"></app-inline-alert>
+      <app-inline-alert
+        class="block"
+        type="error"
+        [summary]="error"
+        [visible]="error != null"
+      ></app-inline-alert>
 
       <div class="txt-right">
-        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+        <app-button
+          class="text"
+          type="submit"
+          text="Submit"
+          icon="check"
+        ></app-button>
       </div>
     </div>
   </app-form>
 
-  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+  <app-loader
+    text="Submitting..."
+    [visible]="isSubmitting"
+    [fullscreen]="true"
+  ></app-loader>
 </ng-template>
 
 <app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
@@ -49,7 +106,12 @@
     <span *ngSwitchCase="'add'">Add User</span>
     <span *ngSwitchCase="'edit'">Update User</span>
 
-    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
+    <app-button
+      class="text"
+      icon="times"
+      title="Close"
+      (click)="dialogVisible = false"
+    ></app-button>
   </div>
 
   <div slot="body" class="dialog-body">

@@ -4,12 +4,14 @@ import { LoginService } from 'src/app/core/services/login.service';
 import { MAIN_PATHS } from '../app-paths';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MainRedirectGuard implements CanActivate {
-  constructor(private _loginService: LoginService, private _router: Router) { }
+  constructor(private _loginService: LoginService, private _router: Router) {}
 
   public canActivate(): boolean | UrlTree {
-    return this._loginService.isLoggedIn ? this._router.parseUrl(MAIN_PATHS.root) : true;
+    return this._loginService.isLoggedIn
+      ? this._router.parseUrl(MAIN_PATHS.root)
+      : true;
   }
 }

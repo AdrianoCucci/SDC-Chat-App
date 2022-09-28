@@ -1,9 +1,16 @@
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss']
+  styleUrls: ['./dialog.component.scss'],
 })
 export class Dialog implements OnInit {
   @Output() public readonly visibleChange = new EventEmitter<boolean>();
@@ -13,7 +20,7 @@ export class Dialog implements OnInit {
   @Input() public backdropDismiss: boolean = false;
   @Input() public data?: any;
 
-  @HostBinding("class.visible") private _visible: boolean = false;
+  @HostBinding('class.visible') private _visible: boolean = false;
   private _contentVisible: boolean = false;
 
   ngOnInit(): void {
@@ -21,7 +28,7 @@ export class Dialog implements OnInit {
   }
 
   onBackdropClick(): void {
-    if(this.backdropDismiss) {
+    if (this.backdropDismiss) {
       this.hide();
     }
   }
@@ -44,17 +51,16 @@ export class Dialog implements OnInit {
     return this._visible;
   }
   @Input() public set visible(value: boolean) {
-    if(this._visible !== value) {
+    if (this._visible !== value) {
       this._visible = value;
       this.visibleChange.emit(this._visible);
 
-      if(value) {
+      if (value) {
         this._contentVisible = true;
         this.onShow.emit();
-      }
-      else {
+      } else {
         this.onHide.emit();
-        setTimeout(() => this._contentVisible = false, 160);
+        setTimeout(() => (this._contentVisible = false), 160);
       }
     }
   }

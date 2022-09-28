@@ -1,22 +1,22 @@
-import { Injectable } from "@angular/core";
-import { AudioSound } from "src/app/shared/models/audio-sound";
-import { AudioPlayer } from "./audio-player";
+import { Injectable } from '@angular/core';
+import { AudioSound } from 'src/app/shared/models/audio-sound';
+import { AudioPlayer } from './audio-player';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AudioService {
   private readonly _player = new AudioPlayer();
-  private readonly _assetsPrefix: string = "assets/audio";
+  private readonly _assetsPrefix: string = 'assets/audio';
   private readonly _soundSourceMap = new Map<AudioSound, string>([
-    [AudioSound.ChatNotification, "chat_notification.wav"],
-    [AudioSound.RoomPing, "room_ping.wav"]
+    [AudioSound.ChatNotification, 'chat_notification.wav'],
+    [AudioSound.RoomPing, 'room_ping.wav'],
   ]);
 
   public async play(sound: AudioSound, loop: boolean = false): Promise<void> {
     const sourceFile: string = this._soundSourceMap.get(sound);
 
-    if(sourceFile != null) {
+    if (sourceFile != null) {
       const sourcePath: string = `${this._assetsPrefix}/${sourceFile}`;
       await this._player.play(sound, sourcePath, loop);
     }
@@ -25,7 +25,7 @@ export class AudioService {
   public async playOneShot(sound: AudioSound): Promise<void> {
     const sourceFile: string = this._soundSourceMap.get(sound);
 
-    if(sourceFile != null) {
+    if (sourceFile != null) {
       const sourcePath: string = `${this._assetsPrefix}/${sourceFile}`;
       await this._player.playOneShot(sourcePath);
     }

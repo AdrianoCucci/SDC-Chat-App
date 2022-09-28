@@ -19,9 +19,9 @@ const component = [AccountForm];
     InputTextModule,
     ButtonModule,
     LoaderModule,
-    InlineAlertModule
+    InlineAlertModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class AccountFormModule { }
+export class AccountFormModule {}

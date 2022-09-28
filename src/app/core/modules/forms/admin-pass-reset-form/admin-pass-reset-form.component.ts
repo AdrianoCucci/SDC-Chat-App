@@ -7,7 +7,7 @@ import { AppForm } from '../app-form';
 @Component({
   selector: 'app-admin-pass-reset-form',
   templateUrl: './admin-pass-reset-form.component.html',
-  styleUrls: ['./admin-pass-reset-form.component.scss']
+  styleUrls: ['./admin-pass-reset-form.component.scss'],
 })
 export class AdminPassResetForm extends AppForm<AdminPassResetRequest, void> {
   @Input() public user: User;

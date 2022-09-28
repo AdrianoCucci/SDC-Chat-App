@@ -10,13 +10,16 @@ import { PageEvent } from 'src/app/shared/modules/table/page-event';
 @Component({
   selector: 'app-organizations-page',
   templateUrl: './organizations-page.component.html',
-  styleUrls: ['./organizations-page.component.scss']
+  styleUrls: ['./organizations-page.component.scss'],
 })
 export class OrganizationsPage implements OnInit {
-  public readonly pageHandler = (event: PageEvent): Promise<PagedList<Organization>> => this.loadOrganizations({
-    take: event.limit,
-    skip: event.offset * event.limit
-  });
+  public readonly pageHandler = (
+    event: PageEvent
+  ): Promise<PagedList<Organization>> =>
+    this.loadOrganizations({
+      take: event.limit,
+      skip: event.offset * event.limit,
+    });
 
   public loadingVisible: boolean = false;
   public loadError: string;
@@ -24,28 +27,31 @@ export class OrganizationsPage implements OnInit {
 
   private _organizations: PagedList<Organization>;
 
-  constructor(private _orgsService: OrganizationsService) { }
+  constructor(private _orgsService: OrganizationsService) {}
 
   async ngOnInit(): Promise<void> {
     await this.loadOrganizations();
   }
 
-  private async loadOrganizations(pagination?: Paginatable): Promise<PagedList<Organization>> {
+  private async loadOrganizations(
+    pagination?: Paginatable
+  ): Promise<PagedList<Organization>> {
     try {
       this.loadingVisible = true;
 
-      const response: HttpResponse<PagedList<Organization>> = await this._orgsService.getAllOrganizations({
-        skip: pagination?.skip,
-        take: pagination?.take
-      }).toPromise();
+      const response: HttpResponse<PagedList<Organization>> =
+        await this._orgsService
+          .getAllOrganizations({
+            skip: pagination?.skip,
+            take: pagination?.take,
+          })
+          .toPromise();
 
       this._organizations = response.body;
-    }
-    catch(error) {
+    } catch (error) {
       this.loadError = parseErrorMessage(error);
       this.errorVisible = true;
-    }
-    finally {
+    } finally {
       this.loadingVisible = false;
     }
 

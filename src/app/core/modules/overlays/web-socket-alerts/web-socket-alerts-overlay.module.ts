@@ -5,10 +5,7 @@ import { ToastOverlayModule } from 'src/app/shared/modules/overlays/toast/toast-
 
 @NgModule({
   declarations: [WebSocketAlertsOverlay],
-  imports: [
-    CommonModule,
-    ToastOverlayModule
-  ],
-  exports: [WebSocketAlertsOverlay]
+  imports: [CommonModule, ToastOverlayModule],
+  exports: [WebSocketAlertsOverlay],
 })
-export class WebSocketAlertsOverlayModule { }
+export class WebSocketAlertsOverlayModule {}

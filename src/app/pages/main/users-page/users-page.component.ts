@@ -14,19 +14,21 @@ import { PageEvent } from 'src/app/shared/modules/table/page-event';
 @Component({
   selector: 'app-users-page',
   templateUrl: './users-page.component.html',
-  styleUrls: ['./users-page.component.scss']
+  styleUrls: ['./users-page.component.scss'],
 })
 export class UsersPage implements OnInit {
   public readonly clientUser: User;
 
-  public readonly pageHandler = async (event: PageEvent): Promise<PagedList<User>> => {
+  public readonly pageHandler = async (
+    event: PageEvent
+  ): Promise<PagedList<User>> => {
     await this.loadUsers({
       take: event.limit,
-      skip: event.offset * event.limit
+      skip: event.offset * event.limit,
     });
 
     return this._users;
-  }
+  };
 
   public loadingVisible: boolean = false;
   public loadError: string;
@@ -36,7 +38,11 @@ export class UsersPage implements OnInit {
   private _organizations: PagedList<Organization>;
   private _initialized: boolean = false;
 
-  constructor(private _usersService: UsersService, private _orgsService: OrganizationsService, loginService: LoginService) {
+  constructor(
+    private _usersService: UsersService,
+    private _orgsService: OrganizationsService,
+    loginService: LoginService
+  ) {
     this.clientUser = loginService.user;
   }
 
@@ -46,31 +52,34 @@ export class UsersPage implements OnInit {
 
       await Promise.all([
         this.loadUsers(),
-        this.adminFeatures ? this.loadOrganizations() : null
+        this.adminFeatures ? this.loadOrganizations() : null,
       ]);
-    }
-    catch(error) {
+    } catch (error) {
       this.loadError = parseErrorMessage(error);
       this.errorVisible = true;
-    }
-    finally {
+    } finally {
       this.loadingVisible = false;
       this._initialized = true;
     }
   }
 
   private async loadUsers(pagination?: Paginatable): Promise<void> {
-    const response: HttpResponse<PagedList<User>> = await this._usersService.getAllUsers({
-      organizationId: this.adminFeatures ? null : this.clientUser.organizationId,
-      skip: pagination?.skip,
-      take: pagination?.take
-    }).toPromise();
+    const response: HttpResponse<PagedList<User>> = await this._usersService
+      .getAllUsers({
+        organizationId: this.adminFeatures
+          ? null
+          : this.clientUser.organizationId,
+        skip: pagination?.skip,
+        take: pagination?.take,
+      })
+      .toPromise();
 
     this._users = response.body;
   }
 
   private async loadOrganizations(): Promise<void> {
-    const response: HttpResponse<PagedList<Organization>> = await this._orgsService.getAllOrganizations().toPromise();
+    const response: HttpResponse<PagedList<Organization>> =
+      await this._orgsService.getAllOrganizations().toPromise();
     this._organizations = response.body;
   }
 

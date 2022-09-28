@@ -6,6 +6,6 @@ import { VersionComponent } from './version.component';
 @NgModule({
   declarations: [VersionComponent],
   imports: [CommonModule],
-  exports: [VersionComponent]
+  exports: [VersionComponent],
 })
-export class VersionModule { }
+export class VersionModule {}

@@ -1,16 +1,22 @@
-import { HttpErrorResponse } from "@angular/common/http";
-import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
-import { parseErrorMessage } from "src/app/shared/functions/parse-http-error";
-import { FormMode } from "src/app/shared/models/form-mode";
-import { FormSubmitResult } from "src/app/shared/modules/forms/form/form-submit-result";
-import { Form } from "src/app/shared/modules/forms/form/form.component";
+import { HttpErrorResponse } from '@angular/common/http';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
+import { FormMode } from 'src/app/shared/models/form-mode';
+import { FormSubmitResult } from 'src/app/shared/modules/forms/form/form-submit-result';
+import { Form } from 'src/app/shared/modules/forms/form/form.component';
 
 @Component({ template: '' })
 export abstract class AppForm<TModel = any, TResult = any> {
   @Output() public readonly onSubmitSuccess = new EventEmitter<TResult>();
 
   @Input() public model: TModel;
-  @Input() public mode: FormMode = "add";
+  @Input() public mode: FormMode = 'add';
   @Input() public dialog: boolean = false;
   @Input() public dialogVisible: boolean = false;
 
@@ -29,30 +35,28 @@ export abstract class AppForm<TModel = any, TResult = any> {
   }
 
   async onFormSubmit(result: FormSubmitResult): Promise<void> {
-    if(result.isValid) {
+    if (result.isValid) {
       try {
         this._isSubmitting = true;
         this._error = null;
 
         let resultModel: TResult;
 
-        switch(this.mode) {
-          case "add":
+        switch (this.mode) {
+          case 'add':
             resultModel = await this.onRequestAdd(this.model);
             break;
-          case "edit":
+          case 'edit':
             resultModel = await this.onRequestUpdate(this.model);
             break;
           default:
-            throw new Error("Form [mode] property is not defined");
+            throw new Error('Form [mode] property is not defined');
         }
 
         this.onSubmitSuccess.emit(resultModel);
-      }
-      catch(error) {
+      } catch (error) {
         this._error = parseErrorMessage(error);
-      }
-      finally {
+      } finally {
         this._isSubmitting = false;
       }
     }

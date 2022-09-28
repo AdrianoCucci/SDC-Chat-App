@@ -21,11 +21,27 @@
 </section>
 
 <section class="footer txt-right fade-in-right">
-  <app-button class="m-r-2" text="Edit Account" icon="pen" (click)="onEditAccount()"></app-button>
-  <app-button text="Change Password" icon="key" (click)="onChangePassword()"></app-button>
+  <app-button
+    class="m-r-2"
+    text="Edit Account"
+    icon="pen"
+    (click)="onEditAccount()"
+  ></app-button>
+  <app-button
+    text="Change Password"
+    icon="key"
+    (click)="onChangePassword()"
+  ></app-button>
 </section>
 
-<app-account-form [dialog]="true" (onSubmitSuccess)="onAccountFormSuccess($event)"></app-account-form>
+<app-account-form
+  [dialog]="true"
+  (onSubmitSuccess)="onAccountFormSuccess($event)"
+></app-account-form>
 
-<app-pass-change-form #passChangeForm [dialog]="true" (onSubmitSuccess)="passChangeForm.dialogVisible = false">
+<app-pass-change-form
+  #passChangeForm
+  [dialog]="true"
+  (onSubmitSuccess)="passChangeForm.dialogVisible = false"
+>
 </app-pass-change-form>

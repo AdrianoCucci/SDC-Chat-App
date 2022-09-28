@@ -18,7 +18,7 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 @Component({
   selector: 'app-users-table',
   templateUrl: './users-table.component.html',
-  styleUrls: ['./users-table.component.scss']
+  styleUrls: ['./users-table.component.scss'],
 })
 export class UsersTable implements OnInit {
   @Input() public users: User[];
@@ -26,51 +26,63 @@ export class UsersTable implements OnInit {
   @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<User>>;
 
   private readonly _roleCell: TableCell = {
-    name: "Role",
-    prop: "role",
+    name: 'Role',
+    prop: 'role',
     sortable: true,
     filterable: true,
-    type: "select",
+    type: 'select',
     selectOptions: {
       options: [],
-      displayKey: "key",
-      valueKey: "value"
-    }
+      displayKey: 'key',
+      valueKey: 'value',
+    },
   };
 
   private readonly _organizationCell: TableCell = {
-    name: "Organization",
-    prop: "organizationId",
+    name: 'Organization',
+    prop: 'organizationId',
     sortable: true,
     filterable: true,
-    cellClass: "admin-cell",
-    type: "select",
+    cellClass: 'admin-cell',
+    type: 'select',
     selectOptions: {
-      displayKey: "name",
-      valueKey: "id"
-    }
+      displayKey: 'name',
+      valueKey: 'id',
+    },
   };
 
   public readonly cells: TableCell[] = [
-    { name: "Username", prop: "username", sortable: true, filterable: true },
-    { name: "Display Name", prop: "displayName", sortable: true, filterable: true },
+    { name: 'Username', prop: 'username', sortable: true, filterable: true },
+    {
+      name: 'Display Name',
+      prop: 'displayName',
+      sortable: true,
+      filterable: true,
+    },
     this._roleCell,
     this._organizationCell,
-    { name: "Account Locked", prop: "isLocked", sortable: true, type: "boolean", filterable: true }
+    {
+      name: 'Account Locked',
+      prop: 'isLocked',
+      sortable: true,
+      type: 'boolean',
+      filterable: true,
+    },
   ];
 
   public errorDialogVisible: boolean = false;
   public errorDialogText: string;
 
   @ViewChild(Table) private readonly _table: Table;
-  @ViewChild(AdminPassResetForm) private readonly _passResetForm: AdminPassResetForm;
+  @ViewChild(AdminPassResetForm)
+  private readonly _passResetForm: AdminPassResetForm;
   @ViewChild(UserForm) private readonly _userForm: UserForm;
 
   private _adminFeatures: boolean = false;
   private _organizations: Organization[];
   private _isDeletingUser: boolean = false;
 
-  constructor(private _usersService: UsersService) { }
+  constructor(private _usersService: UsersService) {}
 
   ngOnInit(): void {
     this.updateAdminState(this._adminFeatures);
@@ -81,23 +93,30 @@ export class UsersTable implements OnInit {
   }
 
   public getRoleName(role: Role): string {
-    return this.rolePairs.find((p: Pair<string, Role>) => p.value === role)?.key ?? '-';
+    return (
+      this.rolePairs.find((p: Pair<string, Role>) => p.value === role)?.key ??
+      '-'
+    );
   }
 
   public getOrganizationName(organizationId: number): string {
-    return this._organizations?.find((o: Organization) => o.id === organizationId)?.name ?? '-';
+    return (
+      this._organizations?.find((o: Organization) => o.id === organizationId)
+        ?.name ?? '-'
+    );
   }
 
   private updateAdminState(allowAdminFeatures: boolean): void {
     this.setAdminCellsHidden(!allowAdminFeatures);
-    this._roleCell.selectOptions.options = this.getRolePairs(allowAdminFeatures);
+    this._roleCell.selectOptions.options =
+      this.getRolePairs(allowAdminFeatures);
   }
 
   private setAdminCellsHidden(hidden: boolean) {
-    for(let i = 0; i < this.cells.length; i++) {
+    for (let i = 0; i < this.cells.length; i++) {
       const cell: TableCell = this.cells[i];
 
-      if(cell.cellClass === "admin-cell") {
+      if (cell.cellClass === 'admin-cell') {
         cell.hidden = hidden;
       }
     }
@@ -106,10 +125,12 @@ export class UsersTable implements OnInit {
   private getRolePairs(allowAdminFeatures: boolean): Pair<string, Role>[] {
     const pairs: Pair<string, Role>[] = enumToPairs(Role, true);
 
-    if(!allowAdminFeatures) {
-      const adminIndex: number = pairs.findIndex((p: Pair) => p.value === Role.Administrator);
+    if (!allowAdminFeatures) {
+      const adminIndex: number = pairs.findIndex(
+        (p: Pair) => p.value === Role.Administrator
+      );
 
-      if(adminIndex !== -1) {
+      if (adminIndex !== -1) {
         pairs.splice(adminIndex, 1);
       }
     }
@@ -122,36 +143,39 @@ export class UsersTable implements OnInit {
 
     setTimeout(() => {
       this._passResetForm.user = user;
-      this._passResetForm.model = { userId: user.id, newPassword: "" };
+      this._passResetForm.model = { userId: user.id, newPassword: '' };
       this._passResetForm.dialogVisible = true;
     });
   }
 
   onAddUser(): void {
     const request: UserRequest = {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
       role: this._adminFeatures ? null : Role.User,
     };
 
-    this.showUserForm(request, "add");
+    this.showUserForm(request, 'add');
   }
 
   onEditUser(user: UserRequest): void {
     const request: UserRequest = { ...user };
-    this.showUserForm(request, "edit");
+    this.showUserForm(request, 'edit');
   }
 
   onUserFormSubmit(user: User): void {
     this._userForm.dialogVisible = false;
 
-    switch(this._userForm.mode) {
-      case "add":
+    switch (this._userForm.mode) {
+      case 'add':
         this.users = this._table.addRow(user);
         break;
 
-      case "edit":
-        this.users = this._table.querySetRow(user, (u: User) => u.id === user.id);
+      case 'edit':
+        this.users = this._table.querySetRow(
+          user,
+          (u: User) => u.id === user.id
+        );
         break;
     }
   }
@@ -162,12 +186,10 @@ export class UsersTable implements OnInit {
 
       await this._usersService.deleteUser(user.id).toPromise();
       this.users = this._table.queryDeleteRow((u: User) => u.id === user.id);
-    }
-    catch(error) {
+    } catch (error) {
       this.errorDialogText = parseErrorMessage(error);
       this.errorDialogVisible = true;
-    }
-    finally {
+    } finally {
       this._isDeletingUser = false;
     }
   }

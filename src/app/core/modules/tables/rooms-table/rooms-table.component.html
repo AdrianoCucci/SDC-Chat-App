@@ -1,34 +1,67 @@
 <div class="header-actions">
-  <app-button text="Add Room" icon="door-open" (click)="onAddRoom()"></app-button>
+  <app-button
+    text="Add Room"
+    icon="door-open"
+    (click)="onAddRoom()"
+  ></app-button>
 </div>
 
 <app-table [cells]="cells" [data]="rooms" [pageHandler]="pageHandler">
   <ng-template app-template="pingSound" let-value="value">
-
-    <app-button *ngIf="getPingSoundName(value) as name; else defaultTemplate"
-      class="ping-sound-preview-button block text" [text]="name" icon="volume-up" (click)="onPlayPingSound(value)">
+    <app-button
+      *ngIf="getPingSoundName(value) as name; else defaultTemplate"
+      class="ping-sound-preview-button block text"
+      [text]="name"
+      icon="volume-up"
+      (click)="onPlayPingSound(value)"
+    >
     </app-button>
 
     <ng-template #defaultTemplate>-</ng-template>
-
   </ng-template>
 
   <ng-template app-template="table-row-actions" let-room>
     <div class="room-actions">
-      <app-button class="text edit-room" icon="pen" title="Edit Room" (click)="onEditRoom(room)"></app-button>
+      <app-button
+        class="text edit-room"
+        icon="pen"
+        title="Edit Room"
+        (click)="onEditRoom(room)"
+      ></app-button>
 
-      <app-button class="text danger delete-room" icon="trash" title="Delete Room" (click)="deleteDialog.show(room)">
+      <app-button
+        class="text danger delete-room"
+        icon="trash"
+        title="Delete Room"
+        (click)="deleteDialog.show(room)"
+      >
       </app-button>
     </div>
   </ng-template>
 </app-table>
 
-<app-room-form [dialog]="true" (onSubmitSuccess)="onRoomFormSubmit($event)"></app-room-form>
+<app-room-form
+  [dialog]="true"
+  (onSubmitSuccess)="onRoomFormSubmit($event)"
+></app-room-form>
 
-<app-confirm-dialog #deleteDialog header="Delete Room" cancelText="No" confirmText="Yes" [backdropDismiss]="true"
-  (onConfirm)="onDeleteRoom($event)">
+<app-confirm-dialog
+  #deleteDialog
+  header="Delete Room"
+  cancelText="No"
+  confirmText="Yes"
+  [backdropDismiss]="true"
+  (onConfirm)="onDeleteRoom($event)"
+>
   <span>Are you sure you want to delete room:</span>
-  <span>"<b>{{deleteDialog.data?.name}}</b>"?</span>
+  <span
+    >"<b>{{ deleteDialog.data?.name }}</b
+    >"?</span
+  >
 </app-confirm-dialog>
 
-<app-loader [fullscreen]="true" text="Deleting room..." [visible]="isDeletingRoom"></app-loader>
+<app-loader
+  [fullscreen]="true"
+  text="Deleting room..."
+  [visible]="isDeletingRoom"
+></app-loader>

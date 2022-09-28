@@ -1,7 +1,13 @@
-import { faBuilding, faComments, faDoorOpen, faExclamation, faUsers } from "@fortawesome/free-solid-svg-icons";
-import { Role } from "src/app/core/models/auth/role";
-import { MAIN_PATHS } from "../app-paths";
-import { MenuItem } from "../models/menu-item";
+import {
+  faBuilding,
+  faComments,
+  faDoorOpen,
+  faExclamation,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons';
+import { Role } from 'src/app/core/models/auth/role';
+import { MAIN_PATHS } from '../app-paths';
+import { MenuItem } from '../models/menu-item';
 
 export class MainMenuItemsMapper {
   public getMenuItemsByRole(...roles: Role[]): MenuItem[] {
@@ -9,7 +15,7 @@ export class MainMenuItemsMapper {
     let menuItems: MenuItem[] = [];
 
     itemsMap.forEach((values: MenuItem[], key: Role) => {
-      if(roles.includes(key)) {
+      if (roles.includes(key)) {
         menuItems = menuItems.concat(values);
       }
     });
@@ -21,7 +27,7 @@ export class MainMenuItemsMapper {
     const map = new Map<Role, MenuItem[]>([
       [Role.Administrator, this.getAdminMenuItems()],
       [Role.OrganizationAdmin, this.getOrganizationAdminMenuItems()],
-      [Role.User, this.getUserMenuItems()]
+      [Role.User, this.getUserMenuItems()],
     ]);
 
     return map;
@@ -33,17 +39,17 @@ export class MainMenuItemsMapper {
 
     return [
       {
-        id: "organizations",
+        id: 'organizations',
         routerLink: root + children.organizations,
-        label: "Organizations",
-        icon: faBuilding
+        label: 'Organizations',
+        icon: faBuilding,
       },
       {
-        id: "users",
+        id: 'users',
         routerLink: root + children.users,
-        label: "Users",
-        icon: faUsers
-      }
+        label: 'Users',
+        icon: faUsers,
+      },
     ];
   }
 
@@ -53,29 +59,29 @@ export class MainMenuItemsMapper {
 
     return [
       {
-        id: "chat",
+        id: 'chat',
         routerLink: root + children.chat,
-        label: "Chat",
-        icon: faComments
+        label: 'Chat',
+        icon: faComments,
       },
       {
-        id: "room-pings",
+        id: 'room-pings',
         routerLink: root + children.pings,
-        label: "Room Pings",
-        icon: faExclamation
+        label: 'Room Pings',
+        icon: faExclamation,
       },
       {
-        id: "rooms",
+        id: 'rooms',
         routerLink: root + children.rooms,
-        label: "Rooms",
-        icon: faDoorOpen
+        label: 'Rooms',
+        icon: faDoorOpen,
       },
       {
-        id: "users",
+        id: 'users',
         routerLink: root + children.users,
-        label: "Users",
-        icon: faUsers
-      }
+        label: 'Users',
+        icon: faUsers,
+      },
     ];
   }
 
@@ -85,17 +91,17 @@ export class MainMenuItemsMapper {
 
     return [
       {
-        id: "chat",
+        id: 'chat',
         routerLink: root + children.chat,
-        label: "Chat",
-        icon: faComments
+        label: 'Chat',
+        icon: faComments,
       },
       {
-        id: "room-pings",
+        id: 'room-pings',
         routerLink: root + children.pings,
-        label: "Room Pings",
-        icon: faExclamation
-      }
+        label: 'Room Pings',
+        icon: faExclamation,
+      },
     ];
   }
 }

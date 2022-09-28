@@ -8,11 +8,7 @@ import { ToastOverlay } from './toast.overlay';
 
 @NgModule({
   declarations: [ToastOverlay],
-  imports: [
-    CommonModule,
-    FontAwesomeModule,
-    ButtonModule
-  ],
-  exports: [ToastOverlay]
+  imports: [CommonModule, FontAwesomeModule, ButtonModule],
+  exports: [ToastOverlay],
 })
-export class ToastOverlayModule { }
+export class ToastOverlayModule {}

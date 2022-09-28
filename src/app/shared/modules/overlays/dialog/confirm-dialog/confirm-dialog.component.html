@@ -3,16 +3,29 @@
 
   <div class="dialog-content">
     <div class="dialog-header">
-      <span *ngIf="header" class="header-text">{{header}}</span>
-      <app-button *ngIf="dismissButton" class="text dismiss" icon="times" (click)="hide()"></app-button>
+      <span *ngIf="header" class="header-text">{{ header }}</span>
+      <app-button
+        *ngIf="dismissButton"
+        class="text dismiss"
+        icon="times"
+        (click)="hide()"
+      ></app-button>
     </div>
     <div class="dialog-body">
       <ng-content></ng-content>
     </div>
     <div class="dialog-footer">
-      <app-button class="text option option-cancel" [text]="cancelText" (click)="onCancelClick()"></app-button>
+      <app-button
+        class="text option option-cancel"
+        [text]="cancelText"
+        (click)="onCancelClick()"
+      ></app-button>
       <div class="divider"></div>
-      <app-button class="text option option-confirm" [text]="confirmText" (click)="onConfirmClick()"></app-button>
+      <app-button
+        class="text option option-confirm"
+        [text]="confirmText"
+        (click)="onConfirmClick()"
+      ></app-button>
     </div>
   </div>
 </ng-container>

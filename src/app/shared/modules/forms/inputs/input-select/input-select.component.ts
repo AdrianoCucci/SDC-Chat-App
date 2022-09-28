@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ContentChildren, HostBinding, Input, QueryList, TemplateRef, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  HostBinding,
+  Input,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+} from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 import { TemplateDirective } from '../../../directives/template.directive';
@@ -9,21 +18,22 @@ import { FormInput } from '../base/form-input';
   selector: 'app-input-select',
   templateUrl: './input-select.component.html',
   styleUrls: ['./input-select.component.scss'],
-  providers: [{ provide: FormInput, useExisting: InputSelect }]
+  providers: [{ provide: FormInput, useExisting: InputSelect }],
 })
 export class InputSelect extends FormInput implements AfterViewInit {
   @Input() public options: any[];
   @Input() public displayKey: string;
   @Input() public valueKey: string;
   @Input() public placeholder: string;
-  @Input() @HostBinding("class.clearable") public clearable: boolean = false;
-  @Input() @HostBinding("class.multiple") public multiple: boolean = false;
-  @Input() public popoverParent: HTMLElement | "body";
+  @Input() @HostBinding('class.clearable') public clearable: boolean = false;
+  @Input() @HostBinding('class.multiple') public multiple: boolean = false;
+  @Input() public popoverParent: HTMLElement | 'body';
 
   public readonly dropDownIcon: IconDefinition = faAngleDown;
 
   @ViewChild(Popover) private readonly _popover: Popover;
-  @ContentChildren(TemplateDirective) private readonly _templates: QueryList<TemplateDirective>;
+  @ContentChildren(TemplateDirective)
+  private readonly _templates: QueryList<TemplateDirective>;
 
   private _selected: any;
   private _displayValue: any;
@@ -35,10 +45,9 @@ export class InputSelect extends FormInput implements AfterViewInit {
 
     setTimeout(() => {
       this._templates.forEach((directive: TemplateDirective) => {
-        if(directive.name === "value") {
+        if (directive.name === 'value') {
           this._valueTemplate = directive.template;
-        }
-        else if(directive.name === "option") {
+        } else if (directive.name === 'option') {
           this._optionTemplate = directive.template;
         }
       });
@@ -50,17 +59,16 @@ export class InputSelect extends FormInput implements AfterViewInit {
       $implicit: option,
       options: this.options,
       isSelected: this.isOptionSelected(option),
-      selectCallback: () => this.onOptionSelect(option)
-    }
+      selectCallback: () => this.onOptionSelect(option),
+    };
   }
 
   public getOptionDisplay(item: any): any {
     let display: any = null;
 
-    if(this.displayKey) {
+    if (this.displayKey) {
       display = item != null ? item[this.displayKey] : null;
-    }
-    else {
+    } else {
       display = item;
     }
 
@@ -70,10 +78,9 @@ export class InputSelect extends FormInput implements AfterViewInit {
   public getOptionValue(item: any): any {
     let value: any = null;
 
-    if(this.valueKey) {
+    if (this.valueKey) {
       value = item != null ? item[this.valueKey] : null;
-    }
-    else {
+    } else {
       value = item;
     }
 
@@ -83,7 +90,7 @@ export class InputSelect extends FormInput implements AfterViewInit {
   public getOptionByValue(value: any): any {
     let option: any = null;
 
-    if(this.hasOptions) {
+    if (this.hasOptions) {
       option = this.options.find((o: any) => this.getOptionValue(o) === value);
     }
 
@@ -93,8 +100,10 @@ export class InputSelect extends FormInput implements AfterViewInit {
   public getOptionByDisplay(display: any): any {
     let option: any = null;
 
-    if(this.hasOptions) {
-      option = this.options.find((o: any) => this.getOptionDisplay(o) === display);
+    if (this.hasOptions) {
+      option = this.options.find(
+        (o: any) => this.getOptionDisplay(o) === display
+      );
     }
 
     return option;
@@ -104,10 +113,9 @@ export class InputSelect extends FormInput implements AfterViewInit {
     let selected: boolean = false;
     const optionValue: any = this.getOptionValue(option);
 
-    if(!this.multiple) {
+    if (!this.multiple) {
       selected = this._value === optionValue;
-    }
-    else if(Array.isArray(this._value)) {
+    } else if (Array.isArray(this._value)) {
       selected = this._value.includes(optionValue);
     }
 
@@ -117,23 +125,20 @@ export class InputSelect extends FormInput implements AfterViewInit {
   onOptionSelect(option: any): void {
     const optionValue: any = this.getOptionValue(option);
 
-    if(!this.multiple) {
+    if (!this.multiple) {
       this._popover.hide();
       this.value = optionValue;
-    }
-    else {
+    } else {
       this.value = this.updateMultiValues(this._value, optionValue);
     }
   }
 
   private updateMultiValues(values: any[], selectedValue: any): any[] {
-    if(values == null || !Array.isArray(values)) {
+    if (values == null || !Array.isArray(values)) {
       values = [selectedValue];
-    }
-    else if(values.includes(selectedValue)) {
+    } else if (values.includes(selectedValue)) {
       values.splice(values.indexOf(selectedValue), 1);
-    }
-    else {
+    } else {
       values.push(selectedValue);
     }
 
@@ -141,17 +146,15 @@ export class InputSelect extends FormInput implements AfterViewInit {
   }
 
   protected onValueSetting(newValue: any) {
-    if(newValue != null) {
-      if(!this.multiple) {
+    if (newValue != null) {
+      if (!this.multiple) {
         newValue = this.parseSettingValue(newValue);
-      }
-      else if(Array.isArray(newValue)) {
-        for(let i = 0; i < newValue.length; i++) {
+      } else if (Array.isArray(newValue)) {
+        for (let i = 0; i < newValue.length; i++) {
           newValue[i] = this.parseSettingValue(newValue[i]);
         }
       }
-    }
-    else {
+    } else {
       this._displayValue = null;
     }
 
@@ -162,13 +165,11 @@ export class InputSelect extends FormInput implements AfterViewInit {
   }
 
   private parseSettingValue(value: any): any {
-    if(!isNaN(value)) {
+    if (!isNaN(value)) {
       value = Number(value);
-    }
-    else if(value === "true") {
+    } else if (value === 'true') {
       value = true;
-    }
-    else if(value === "false") {
+    } else if (value === 'false') {
       value = false;
     }
 
@@ -178,13 +179,12 @@ export class InputSelect extends FormInput implements AfterViewInit {
   private updateSelected(value: any): any {
     let selected: any;
 
-    if(!this.multiple) {
+    if (!this.multiple) {
       selected = this.getOptionByValue(value);
-    }
-    else if(Array.isArray(value)) {
+    } else if (Array.isArray(value)) {
       const totalSelections: any[] = [];
 
-      for(let i = 0; i < value.length; i++) {
+      for (let i = 0; i < value.length; i++) {
         const option: any = this.getOptionByValue(value[i]);
         totalSelections.push(option);
       }
@@ -198,13 +198,12 @@ export class InputSelect extends FormInput implements AfterViewInit {
   private updateDisplayValue(selected: any): void {
     let displayValue: any;
 
-    if(!this.multiple) {
+    if (!this.multiple) {
       displayValue = selected != null ? this.getOptionDisplay(selected) : null;
-    }
-    else if(Array.isArray(selected)) {
+    } else if (Array.isArray(selected)) {
       const displays: any[] = [];
 
-      for(let i = 0; i < selected.length; i++) {
+      for (let i = 0; i < selected.length; i++) {
         const display: any = this.getOptionDisplay(selected[i]);
         displays.push(display);
       }
@@ -224,7 +223,9 @@ export class InputSelect extends FormInput implements AfterViewInit {
   }
 
   public get hasSelected(): boolean {
-    return this._selected != null && Array.isArray(this._selected) ? this._selected.length > 0 : true;
+    return this._selected != null && Array.isArray(this._selected)
+      ? this._selected.length > 0
+      : true;
   }
 
   public get displayValue(): any {
