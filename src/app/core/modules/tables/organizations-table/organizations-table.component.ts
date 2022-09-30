@@ -1,9 +1,8 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, ViewChild } from '@angular/core';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { OrganizationRequest } from 'src/app/core/models/organizations/organization-request';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
-import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
+import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 import { PageEvent } from 'src/app/shared/modules/table/page-event';
@@ -69,7 +68,7 @@ export class OrganizationsTable {
       this.organizations = this._table.queryDeleteRow((u: Organization) => u.id === organization.id);
     }
     catch(error) {
-      this.errorDialogText = parseHttpError(error as HttpErrorResponse, true) as string;
+      this.errorDialogText = parseErrorMessage(error);
       this.errorDialogVisible = true;
     }
     finally {

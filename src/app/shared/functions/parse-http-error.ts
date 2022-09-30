@@ -1,14 +1,26 @@
 import { HttpErrorResponse } from "@angular/common/http";
 
-export const parseHttpError = (httpError: HttpErrorResponse, noArray: boolean = false): string | string[] => {
-  let message: any = httpError.error.message;
+export const parseErrorMessage = (error: any, fallbackMessage?: string): string => {
+  fallbackMessage = fallbackMessage ?? "An unknown error has occurred";
+  let message: string;
 
-  if(!message) {
-    message = httpError.message;
+  try {
+    if(error instanceof HttpErrorResponse) {
+      message = error.error.message ?? error.message;
+    }
+    else if(error instanceof DOMException) {
+      message = error.message;
+    }
+    else if(typeof error === "string") {
+      message = error;
+    }
+    else {
+      message = fallbackMessage;
+    }
   }
-  else if(noArray && Array.isArray(message)) {
-    message = "A server error has occurred";
+  catch(error) {
+    message = fallbackMessage;
   }
 
-  return message;
+  return Array.isArray(message) ? message.join(",") : message;
 }

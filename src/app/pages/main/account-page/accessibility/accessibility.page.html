@@ -1,0 +1,28 @@
+<section class="info-section fade-in-left">
+  <app-info-row>
+    <span slot="meta">
+      <fa-icon class="m-r-2" [icon]="fontSizeIcon"></fa-icon>
+      <span>Font Size (px)</span>
+    </span>
+
+    <app-input-text slot="data" class="option-value" type="number" [validations]="{ min: 16, max: 50 }"
+      [(value)]="service.fontSize"></app-input-text>
+  </app-info-row>
+
+  <app-info-row>
+    <span slot="meta">
+      <fa-icon class="m-r-2" [icon]="themeIcon"></fa-icon>
+      <span>Theme</span>
+    </span>
+
+    <app-input-select slot="data" class="option-value" [options]="themeOptions" displayKey="key" valueKey="value"
+      popoverParent="body" [(value)]="service.theme">
+    </app-input-select>
+  </app-info-row>
+</section>
+
+<section class="footer flex flex-align-center flex-justify-end fade-in-right">
+  <app-loader class="m-r-4" [visible]="isSaving"></app-loader>
+  <app-button [text]="isSaving ? 'Saving...' : 'Save Changes'" icon="check" [disabled]="isSaving" (click)="onSave()">
+  </app-button>
+</section>

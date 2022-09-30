@@ -1,11 +1,10 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Input, ViewChild } from '@angular/core';
 import { Room } from 'src/app/core/models/rooms/room';
 import { RoomRequest } from 'src/app/core/models/rooms/room-request';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
 import { AudioService } from 'src/app/core/services/audio/audio.service';
 import { enumToPairs } from 'src/app/shared/functions/enum-to-pairs';
-import { parseHttpError } from 'src/app/shared/functions/parse-http-error';
+import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
@@ -94,7 +93,7 @@ export class RoomsTable {
       this.rooms = this._table.queryDeleteRow((u: Room) => u.id === room.id);
     }
     catch(error) {
-      this.errorDialogText = parseHttpError(error as HttpErrorResponse, true) as string;
+      this.errorDialogText = parseErrorMessage(error);
       this.errorDialogVisible = true;
     }
     finally {
