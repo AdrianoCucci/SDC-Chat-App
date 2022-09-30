@@ -11,26 +11,33 @@ import { AppForm } from '../app-form';
 @Component({
   selector: 'app-room-form',
   templateUrl: './room-form.component.html',
-  styleUrls: ['./room-form.component.scss']
+  styleUrls: ['./room-form.component.scss'],
 })
 export class RoomForm extends AppForm<RoomRequest, Room> {
   @Input() public organizationId: number;
   @Input() public pingSoundOptions: Pair<string, AudioSound>[];
 
-  constructor(private _roomsService: RoomsService, private _audioService: AudioService) {
+  constructor(
+    private _roomsService: RoomsService,
+    private _audioService: AudioService
+  ) {
     super();
   }
 
   protected async onRequestAdd(model: RoomRequest): Promise<Room> {
     model.organizationId = this.organizationId;
-    const response: HttpResponse<Room> = await this._roomsService.addRoom(model).toPromise();
+    const response: HttpResponse<Room> = await this._roomsService
+      .addRoom(model)
+      .toPromise();
 
     return response.body;
   }
 
   protected async onRequestUpdate(model: RoomRequest): Promise<Room> {
     model.organizationId = this.organizationId;
-    const response: HttpResponse<Room> = await this._roomsService.updateRoom(model.id, model).toPromise();
+    const response: HttpResponse<Room> = await this._roomsService
+      .updateRoom(model.id, model)
+      .toPromise();
 
     return response.body;
   }

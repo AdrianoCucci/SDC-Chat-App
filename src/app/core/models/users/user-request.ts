@@ -1,4 +1,4 @@
-import { Role } from "../auth/role";
+import { Role } from '../auth/role';
 
 export interface UserRequest {
   id?: number;

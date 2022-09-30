@@ -17,7 +17,7 @@ import { RoomsPage } from './rooms-page.component';
     RoomsTableModule,
     LoaderModule,
     DialogModule,
-    ButtonModule
-  ]
+    ButtonModule,
+  ],
 })
-export class RoomsPageModule { }
+export class RoomsPageModule {}

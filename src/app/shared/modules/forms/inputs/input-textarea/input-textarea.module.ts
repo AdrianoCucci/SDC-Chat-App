@@ -6,11 +6,8 @@ import { InputTextarea } from './input-textarea.component';
 const component = [InputTextarea];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class InputTextareaModule { }
+export class InputTextareaModule {}

@@ -1,14 +1,29 @@
 <div class="input-wrapper">
-  <input #input [type]="type" [name]="name" [attr.id]="name" [title]="label" [required]="required" [disabled]="disabled"
-    [readonly]="readonly" [placeholder]="placeholder" [pattern]="pattern" [min]="min" [max]="max"
-    [attr.minlength]="minLength" [attr.maxlength]="maxLength" (blur)="validateIfDirty()" [(ngModel)]="value">
+  <input
+    #input
+    [type]="type"
+    [name]="name"
+    [attr.id]="name"
+    [title]="label"
+    [required]="required"
+    [disabled]="disabled"
+    [readonly]="readonly"
+    [placeholder]="placeholder"
+    [pattern]="pattern"
+    [min]="min"
+    [max]="max"
+    [attr.minlength]="minLength"
+    [attr.maxlength]="maxLength"
+    (blur)="validateIfDirty()"
+    [(ngModel)]="value"
+  />
 
   <label *ngIf="label" [for]="name">
     <span *ngIf="required">*&nbsp;</span>
-    <span>{{label}}</span>
+    <span>{{ label }}</span>
   </label>
 </div>
 
-<ul class="error-list" [ngClass]="{'visible': showErrors && hasErrors}">
-  <li *ngFor="let error of errors" class="error-message">{{error}}</li>
+<ul class="error-list" [ngClass]="{ visible: showErrors && hasErrors }">
+  <li *ngFor="let error of errors" class="error-message">{{ error }}</li>
 </ul>

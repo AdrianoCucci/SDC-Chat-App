@@ -7,11 +7,8 @@ import { MainMenu } from './main-menu.component';
 const component = [MainMenu];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TabMenuModule,
-  ],
+  imports: [CommonModule, TabMenuModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class MainMenuModule { }
+export class MainMenuModule {}

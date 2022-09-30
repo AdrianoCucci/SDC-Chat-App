@@ -1,4 +1,4 @@
-import { TableColumn } from "@swimlane/ngx-datatable";
+import { TableColumn } from '@swimlane/ngx-datatable';
 
 export interface TableCell extends TableColumn {
   type?: CellValueType;
@@ -7,10 +7,17 @@ export interface TableCell extends TableColumn {
   selectOptions?: CellSelectOptions;
 }
 
-type CellValueType = "text" | "number" | "boolean" | "date" | "time" | "datetime-local" | "select";
+type CellValueType =
+  | 'text'
+  | 'number'
+  | 'boolean'
+  | 'date'
+  | 'time'
+  | 'datetime-local'
+  | 'select';
 
 interface CellSelectOptions {
   options?: any[];
   displayKey?: string;
-  valueKey?: string;  
+  valueKey?: string;
 }

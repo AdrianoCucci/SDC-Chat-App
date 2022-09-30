@@ -17,7 +17,7 @@ import { UsersPage } from './users-page.component';
     UsersTableModule,
     LoaderModule,
     DialogModule,
-    ButtonModule
-  ]
+    ButtonModule,
+  ],
 })
-export class UsersPageModule { }
+export class UsersPageModule {}

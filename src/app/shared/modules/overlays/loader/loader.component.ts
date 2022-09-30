@@ -1,4 +1,12 @@
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnInit,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 
 @Component({
   selector: 'app-loader',
@@ -10,11 +18,11 @@ export class Loader implements OnInit {
   @Output() public readonly onShow = new EventEmitter<void>();
   @Output() public readonly onHide = new EventEmitter<void>();
 
-  @Input() @HostBinding("class.fullscreen") public fullscreen: boolean = false;
+  @Input() @HostBinding('class.fullscreen') public fullscreen: boolean = false;
   @Input() public text: string;
   @Input() public template: TemplateRef<any>;
 
-  @HostBinding("class.visible") private _visible: boolean = false;
+  @HostBinding('class.visible') private _visible: boolean = false;
   private _contentVisible: boolean = false;
 
   ngOnInit(): void {
@@ -37,17 +45,16 @@ export class Loader implements OnInit {
     return this._visible;
   }
   @Input() public set visible(value: boolean) {
-    if(this._visible !== value) {
+    if (this._visible !== value) {
       this._visible = value;
       this.visibleChange.emit(this._visible);
 
-      if(value) {
+      if (value) {
         this._contentVisible = true;
         this.onShow.emit();
-      }
-      else {
+      } else {
         this.onHide.emit();
-        setTimeout(() => this._contentVisible = false, 160);
+        setTimeout(() => (this._contentVisible = false), 160);
       }
     }
   }

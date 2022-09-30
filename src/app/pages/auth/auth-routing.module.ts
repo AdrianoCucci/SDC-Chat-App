@@ -8,14 +8,15 @@ const DEFAULT_PATH: string = PATHS.children.login;
 const routes: Routes = [
   {
     path: DEFAULT_PATH,
-    loadChildren: () => import("./login-page/login-page.module").then(m => m.LoginPageModule)
+    loadChildren: () =>
+      import('./login-page/login-page.module').then((m) => m.LoginPageModule),
   },
-  { path: "", redirectTo: DEFAULT_PATH, pathMatch: "full" },
-  { path: "**", redirectTo: DEFAULT_PATH }
+  { path: '', redirectTo: DEFAULT_PATH, pathMatch: 'full' },
+  { path: '**', redirectTo: DEFAULT_PATH },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AuthRoutingModule { }
+export class AuthRoutingModule {}

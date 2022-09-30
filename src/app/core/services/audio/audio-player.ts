@@ -1,22 +1,30 @@
-import { AudioSound } from "src/app/shared/models/audio-sound";
+import { AudioSound } from 'src/app/shared/models/audio-sound';
 
 export class AudioPlayer {
   public maxDistinctInstances: number;
   public maxSameInstances: number;
 
-  private readonly _audioInstanceMap = new Map<AudioSound, HTMLAudioElement[]>();
+  private readonly _audioInstanceMap = new Map<
+    AudioSound,
+    HTMLAudioElement[]
+  >();
   private _oneShotAudio: HTMLAudioElement;
   private _oneShotReady: boolean = true;
 
   public constructor(maxDistinctInstances?: number, maxSameInstances?: number) {
-    this.maxDistinctInstances = maxDistinctInstances != null ? maxDistinctInstances : 20;
+    this.maxDistinctInstances =
+      maxDistinctInstances != null ? maxDistinctInstances : 20;
     this.maxSameInstances = maxSameInstances != null ? maxSameInstances : 5;
   }
 
-  public async play(sound: AudioSound, source: string, loop: boolean = false): Promise<void> {
+  public async play(
+    sound: AudioSound,
+    source: string,
+    loop: boolean = false
+  ): Promise<void> {
     const audio: HTMLAudioElement = this.createAudioInstance(sound);
 
-    if(audio != null) {
+    if (audio != null) {
       audio.src = source;
       audio.loop = loop;
 
@@ -26,19 +34,20 @@ export class AudioPlayer {
   }
 
   public async playOneShot(source: string): Promise<void> {
-    if(this._oneShotReady) {
-      if(this._oneShotAudio == null) {
+    if (this._oneShotReady) {
+      if (this._oneShotAudio == null) {
         this._oneShotAudio = new Audio(source);
-      }
-      else {
+      } else {
         this._oneShotAudio.pause();
         this._oneShotAudio.src = source;
       }
 
       this._oneShotReady = false;
-      await this._oneShotAudio.play().finally(() => this._oneShotReady = true);
+      await this._oneShotAudio
+        .play()
+        .finally(() => (this._oneShotReady = true));
 
-      this._oneShotAudio.onended = () => this._oneShotAudio = null;
+      this._oneShotAudio.onended = () => (this._oneShotAudio = null);
     }
   }
 
@@ -58,13 +67,15 @@ export class AudioPlayer {
     let newInstance: HTMLAudioElement = null;
     let instances: HTMLAudioElement[] = this._audioInstanceMap.get(sound);
 
-    if(instances == null && this._audioInstanceMap.size < this.maxDistinctInstances) {
+    if (
+      instances == null &&
+      this._audioInstanceMap.size < this.maxDistinctInstances
+    ) {
       newInstance = new Audio();
       instances = [newInstance];
 
       this._audioInstanceMap.set(sound, instances);
-    }
-    else if(instances.length < this.maxSameInstances) {
+    } else if (instances.length < this.maxSameInstances) {
       newInstance = new Audio();
       instances.push(newInstance);
     }
@@ -75,13 +86,13 @@ export class AudioPlayer {
   private removeAudio(sound: AudioSound): void {
     const instances: HTMLAudioElement[] = this._audioInstanceMap.get(sound);
 
-    if(instances?.length > 0) {
+    if (instances?.length > 0) {
       const oldestInstance: HTMLAudioElement = instances[0];
       oldestInstance.pause();
 
       instances.splice(0, 1);
 
-      if(instances.length === 0) {
+      if (instances.length === 0) {
         this._audioInstanceMap.delete(sound);
       }
     }
@@ -90,8 +101,8 @@ export class AudioPlayer {
   private removeAllAudioOfType(sound: AudioSound): void {
     const instances: HTMLAudioElement[] = this._audioInstanceMap.get(sound);
 
-    if(instances != null) {
-      for(let i = 0; i < instances.length; i++) {
+    if (instances != null) {
+      for (let i = 0; i < instances.length; i++) {
         instances[i].pause();
       }
 
@@ -101,7 +112,7 @@ export class AudioPlayer {
 
   private clearAllAudio(): void {
     this._audioInstanceMap.forEach((instances: HTMLAudioElement[]) => {
-      for(let i = 0; i < instances.length; i++) {
+      for (let i = 0; i < instances.length; i++) {
         instances[i].pause();
       }
     });
@@ -110,7 +121,7 @@ export class AudioPlayer {
   }
 
   private onAudioEnd(audio: HTMLAudioElement, sound: AudioSound): void {
-    if(!audio.loop) {
+    if (!audio.loop) {
       this.removeAudio(sound);
     }
   }

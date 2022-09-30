@@ -17,7 +17,7 @@ import { OrganizationsPage } from './organizations-page.component';
     OrganizationsTableModule,
     LoaderModule,
     DialogModule,
-    ButtonModule
-  ]
+    ButtonModule,
+  ],
 })
-export class OrganizationsPageModule { }
+export class OrganizationsPageModule {}

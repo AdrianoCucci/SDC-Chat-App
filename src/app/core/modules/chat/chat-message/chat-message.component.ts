@@ -1,5 +1,12 @@
 import { DatePipe } from '@angular/common';
-import { Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 import { isToday } from 'src/app/shared/util/date-utils';
@@ -7,26 +14,26 @@ import { isToday } from 'src/app/shared/util/date-utils';
 @Component({
   selector: 'app-chat-message',
   templateUrl: './chat-message.component.html',
-  styleUrls: ['./chat-message.component.scss']
+  styleUrls: ['./chat-message.component.scss'],
 })
 export class ChatMessageComponent implements OnInit {
   @Output() public readonly onEdit = new EventEmitter<ChatMessage>();
   @Output() public readonly onDelete = new EventEmitter<DeleteEventArgs>();
 
   @Input() public clientUser: User;
-  @HostBinding("class.editing") public editingActive: boolean = false;
+  @HostBinding('class.editing') public editingActive: boolean = false;
 
   private _message: ChatMessage;
   private _displayContents: string;
 
-  constructor(private _datePipe: DatePipe) { }
+  constructor(private _datePipe: DatePipe) {}
 
   ngOnInit(): void {
     this._displayContents = this.parseMessageContents(this._message?.contents);
   }
 
   private parseMessageContents(contents: string): string {
-    if(contents) {
+    if (contents) {
       contents = contents.replace(/\n/g, '<br/>');
     }
 
@@ -37,12 +44,12 @@ export class ChatMessageComponent implements OnInit {
     const datePosted = new Date(message.datePosted);
 
     return isToday(datePosted)
-      ? `Today at: ${this._datePipe.transform(datePosted, "h:mm a")}`
-      : this._datePipe.transform(datePosted, "dd/MM/yyyy");
+      ? `Today at: ${this._datePipe.transform(datePosted, 'h:mm a')}`
+      : this._datePipe.transform(datePosted, 'dd/MM/yyyy');
   }
 
   onSaveEdit(contents: string): void {
-    if(contents && (this._message?.contents !== contents ?? false)) {
+    if (contents && (this._message?.contents !== contents ?? false)) {
       this._message.contents = contents;
       this._displayContents = this.parseMessageContents(this._message.contents);
 
@@ -72,11 +79,10 @@ export class ChatMessageComponent implements OnInit {
     let name: string;
     const sender: User = this.sender;
 
-    if(sender != null) {
+    if (sender != null) {
       name = sender.displayName ?? sender.username;
-    }
-    else {
-      name = "User";
+    } else {
+      name = 'User';
     }
 
     return name;
@@ -86,7 +92,7 @@ export class ChatMessageComponent implements OnInit {
     return this._displayContents;
   }
 
-  @HostBinding("class.client-message") public get isClientMessage(): boolean {
+  @HostBinding('class.client-message') public get isClientMessage(): boolean {
     return this.message?.senderUserId === this.clientUser?.id ?? false;
   }
 }

@@ -8,20 +8,31 @@ import { AppForm } from '../app-form';
 @Component({
   selector: 'app-organization-form',
   templateUrl: './organization-form.component.html',
-  styleUrls: ['./organization-form.component.scss']
+  styleUrls: ['./organization-form.component.scss'],
 })
-export class OrganizationForm extends AppForm<OrganizationRequest, Organization> {
+export class OrganizationForm extends AppForm<
+  OrganizationRequest,
+  Organization
+> {
   constructor(private _orgsService: OrganizationsService) {
     super();
   }
 
-  protected async onRequestAdd(model: OrganizationRequest): Promise<Organization> {
-    const response: HttpResponse<Organization> = await this._orgsService.addOrganization(model).toPromise();
+  protected async onRequestAdd(
+    model: OrganizationRequest
+  ): Promise<Organization> {
+    const response: HttpResponse<Organization> = await this._orgsService
+      .addOrganization(model)
+      .toPromise();
     return response.body;
   }
 
-  protected async onRequestUpdate(model: OrganizationRequest): Promise<Organization> {
-    const response: HttpResponse<Organization> = await this._orgsService.updateOrganization(model.id, model).toPromise();
+  protected async onRequestUpdate(
+    model: OrganizationRequest
+  ): Promise<Organization> {
+    const response: HttpResponse<Organization> = await this._orgsService
+      .updateOrganization(model.id, model)
+      .toPromise();
     return response.body;
   }
 }

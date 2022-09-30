@@ -7,11 +7,8 @@ import { ConfirmDialog } from './confirm-dialog.component';
 const component = [ConfirmDialog];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ButtonModule
-  ],
+  imports: [CommonModule, ButtonModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class ConfirmDialogModule { }
+export class ConfirmDialogModule {}

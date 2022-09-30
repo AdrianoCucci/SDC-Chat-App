@@ -10,28 +10,36 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
-  styleUrls: ['./chat-page.component.scss']
+  styleUrls: ['./chat-page.component.scss'],
 })
 export class ChatPage {
   private _isLoadingMessages: boolean = false;
 
-  constructor(private _chatService: ChatService, private _socketUsersService: SocketUsersService, private _loginService: LoginService) { }
+  constructor(
+    private _chatService: ChatService,
+    private _socketUsersService: SocketUsersService,
+    private _loginService: LoginService
+  ) {}
 
   async onLoadMoreMessages(list: ChatMessageListComponent): Promise<void> {
-    if(!this._isLoadingMessages) {
+    if (!this._isLoadingMessages) {
       this._isLoadingMessages = true;
 
       try {
-        const lastMessage: ChatMessage = list.messages[list.messages.length - 1];
+        const lastMessage: ChatMessage =
+          list.messages[list.messages.length - 1];
         const beforeDate = new Date(lastMessage.datePosted);
         beforeDate.setMilliseconds(beforeDate.getMilliseconds() - 1);
 
-        await this._chatService.loadMessages(this.clientUser.organizationId, beforeDate, 50, true);
-      }
-      catch(error) {
-        console.error("ERROR:", error);
-      }
-      finally {
+        await this._chatService.loadMessages(
+          this.clientUser.organizationId,
+          beforeDate,
+          50,
+          true
+        );
+      } catch (error) {
+        console.error('ERROR:', error);
+      } finally {
         this._isLoadingMessages = false;
       }
     }

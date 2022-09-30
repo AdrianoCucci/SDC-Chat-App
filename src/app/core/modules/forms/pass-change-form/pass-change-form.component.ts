@@ -6,7 +6,7 @@ import { AppForm } from '../app-form';
 @Component({
   selector: 'app-pass-change-form',
   templateUrl: './pass-change-form.component.html',
-  styleUrls: ['./pass-change-form.component.scss']
+  styleUrls: ['./pass-change-form.component.scss'],
 })
 export class PassChangeForm extends AppForm<PassResetRequest, void> {
   constructor(private _authService: AuthService) {

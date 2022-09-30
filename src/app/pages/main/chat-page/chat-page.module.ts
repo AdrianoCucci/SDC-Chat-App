@@ -8,10 +8,6 @@ import { ChatPage } from './chat-page.component';
 
 @NgModule({
   declarations: [ChatPage],
-  imports: [
-    CommonModule,
-    ChatPageRoutingModule,
-    ChatModule
-  ]
+  imports: [CommonModule, ChatPageRoutingModule, ChatModule],
 })
-export class ChatPageModule { }
+export class ChatPageModule {}

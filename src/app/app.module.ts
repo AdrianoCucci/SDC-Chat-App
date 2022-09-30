@@ -19,16 +19,20 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     HttpClientModule,
     SocketioModule.forRoot({
       url: environment.server.host,
-      options: environment.server.socketConfig
+      options: environment.server.socketConfig,
     }),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
-      registrationStrategy: 'registerWhenStable:30000'
-    })
+      registrationStrategy: 'registerWhenStable:30000',
+    }),
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

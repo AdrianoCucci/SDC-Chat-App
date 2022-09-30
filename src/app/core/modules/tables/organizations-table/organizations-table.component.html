@@ -1,38 +1,77 @@
 <div class="header-actions">
-  <app-button text="Add Organization" icon="building" (click)="onAddOrganization()"></app-button>
+  <app-button
+    text="Add Organization"
+    icon="building"
+    (click)="onAddOrganization()"
+  ></app-button>
 </div>
 
 <app-table [cells]="cells" [data]="organizations" [pageHandler]="pageHandler">
   <ng-template app-template="table-row-actions" let-organization>
     <div class="organization-actions">
-      <app-button class="text edit-organization" icon="pen" title="Edit Organization"
-        (click)="onEditOrganization(organization)"></app-button>
+      <app-button
+        class="text edit-organization"
+        icon="pen"
+        title="Edit Organization"
+        (click)="onEditOrganization(organization)"
+      ></app-button>
 
-      <app-button class="text danger delete-organization" icon="trash" title="Delete Organization"
-        (click)="deleteDialog.show(organization)">
+      <app-button
+        class="text danger delete-organization"
+        icon="trash"
+        title="Delete Organization"
+        (click)="deleteDialog.show(organization)"
+      >
       </app-button>
     </div>
   </ng-template>
 </app-table>
 
-<app-organization-form [dialog]="true" (onSubmitSuccess)="onOrganizationFormSubmit($event)"></app-organization-form>
+<app-organization-form
+  [dialog]="true"
+  (onSubmitSuccess)="onOrganizationFormSubmit($event)"
+></app-organization-form>
 
-<app-confirm-dialog #deleteDialog header="Delete Organization" cancelText="No" confirmText="Yes"
-  [backdropDismiss]="true" (onConfirm)="onDeleteOrganization($event)">
+<app-confirm-dialog
+  #deleteDialog
+  header="Delete Organization"
+  cancelText="No"
+  confirmText="Yes"
+  [backdropDismiss]="true"
+  (onConfirm)="onDeleteOrganization($event)"
+>
   <span>Are you sure you want to delete organization:</span>
-  <span>"<b>{{deleteDialog.data?.name}}</b>"?</span>
+  <span
+    >"<b>{{ deleteDialog.data?.name }}</b
+    >"?</span
+  >
 </app-confirm-dialog>
 
-<app-loader [fullscreen]="true" text="Deleting organization..." [visible]="isDeletingOrganization"></app-loader>
+<app-loader
+  [fullscreen]="true"
+  text="Deleting organization..."
+  [visible]="isDeletingOrganization"
+></app-loader>
 
-<app-dialog class="delete-error-dialog" [backdropDismiss]="true" [(visible)]="errorDialogVisible">
+<app-dialog
+  class="delete-error-dialog"
+  [backdropDismiss]="true"
+  [(visible)]="errorDialogVisible"
+>
   <div slot="header">
     <span>Failed to Delete Organization</span>
   </div>
-  <p slot="body" class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0">
-    {{errorDialogText}}
+  <p
+    slot="body"
+    class="flex flex-col flex-align-center flex-justify-center h-percent-100 m-0"
+  >
+    {{ errorDialogText }}
   </p>
   <div slot="footer" class="txt-right">
-    <app-button class="text" text="OK" (click)="errorDialogVisible = false"></app-button>
+    <app-button
+      class="text"
+      text="OK"
+      (click)="errorDialogVisible = false"
+    ></app-button>
   </div>
 </app-dialog>

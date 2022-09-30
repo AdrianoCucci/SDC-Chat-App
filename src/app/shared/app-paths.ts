@@ -1,33 +1,33 @@
 export const ACCOUNT_PATHS = {
-  root: "account",
+  root: 'account',
   children: {
-    details: "details",
-    organization: "organization",
-    notifications: "notifications",
-    accessibility: "accessibility"
-  }
-}
+    details: 'details',
+    organization: 'organization',
+    notifications: 'notifications',
+    accessibility: 'accessibility',
+  },
+};
 
 export const AUTH_PATHS = {
-  root: "auth",
+  root: 'auth',
   children: {
-    login: "login"
-  }
-}
+    login: 'login',
+  },
+};
 
 export const MAIN_PATHS = {
-  root: "main",
+  root: 'main',
   children: {
     account: ACCOUNT_PATHS,
-    organizations: "organizations",
-    users: "users",
-    rooms: "rooms",
-    chat: "chat",
-    pings: "pings"
-  }
-}
+    organizations: 'organizations',
+    users: 'users',
+    rooms: 'rooms',
+    chat: 'chat',
+    pings: 'pings',
+  },
+};
 
 export const APP_PATHS = {
   auth: AUTH_PATHS,
-  main: MAIN_PATHS
-}
+  main: MAIN_PATHS,
+};

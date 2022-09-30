@@ -1,28 +1,51 @@
 <div class="input-wrapper">
-  <div #boxOuter class="box-outer" role="checkbox" [tabindex]="!disabled && !readonly ? 0 : -1" (click)="onClick()"
-    (keyup.enter)="onClick()" (keyup.space)="onClick()" (blur)="validateIfDirty()">
-
-    <div *ngIf="!tristate; else tristateTemplate" class="box-inner" [ngClass]="{'fill-background': value}">
+  <div
+    #boxOuter
+    class="box-outer"
+    role="checkbox"
+    [tabindex]="!disabled && !readonly ? 0 : -1"
+    (click)="onClick()"
+    (keyup.enter)="onClick()"
+    (keyup.space)="onClick()"
+    (blur)="validateIfDirty()"
+  >
+    <div
+      *ngIf="!tristate; else tristateTemplate"
+      class="box-inner"
+      [ngClass]="{ 'fill-background': value }"
+    >
       <fa-icon *ngIf="value === true" [icon]="checkIcon"></fa-icon>
     </div>
 
     <ng-template #tristateTemplate>
-      <div class="box-inner" [ngClass]="{'fill-background': value != null}">
+      <div class="box-inner" [ngClass]="{ 'fill-background': value != null }">
         <fa-icon *ngIf="value === true" [icon]="checkIcon"></fa-icon>
         <fa-icon *ngIf="value === false" [icon]="timesIcon"></fa-icon>
       </div>
     </ng-template>
   </div>
 
-  <input type="hidden" [name]="name" [attr.id]="name" [required]="required" [disabled]="disabled" [readonly]="readonly"
-    [(ngModel)]="value">
+  <input
+    type="hidden"
+    [name]="name"
+    [attr.id]="name"
+    [required]="required"
+    [disabled]="disabled"
+    [readonly]="readonly"
+    [(ngModel)]="value"
+  />
 
-  <label *ngIf="label" [for]="name" tabindex="-1" (click)="onClick(); boxOuter.focus();">
+  <label
+    *ngIf="label"
+    [for]="name"
+    tabindex="-1"
+    (click)="onClick(); boxOuter.focus()"
+  >
     <span *ngIf="required">*&nbsp;</span>
-    <span>{{label}}</span>
+    <span>{{ label }}</span>
   </label>
 </div>
 
-<ul class="error-list" [ngClass]="{'visible': showErrors && hasErrors}">
-  <li *ngFor="let error of errors" class="error-message">{{error}}</li>
+<ul class="error-list" [ngClass]="{ visible: showErrors && hasErrors }">
+  <li *ngFor="let error of errors" class="error-message">{{ error }}</li>
 </ul>

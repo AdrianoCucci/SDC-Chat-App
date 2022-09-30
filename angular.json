@@ -32,9 +32,7 @@
               "src/web.config",
               "src/manifest.webmanifest"
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": [],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
@@ -103,14 +101,15 @@
               "src/assets",
               "src/manifest.webmanifest"
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
+            "styles": ["src/styles.scss"],
             "scripts": []
           }
         }
       }
     }
   },
-  "defaultProject": "SDC-Chat-App"
+  "defaultProject": "SDC-Chat-App",
+  "cli": {
+    "analytics": false
+  }
 }

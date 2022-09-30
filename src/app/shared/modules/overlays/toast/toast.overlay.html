@@ -1,16 +1,37 @@
 <div class="toast-panel">
-  <div *ngFor="let toast of toasts; index as i" #toastEl class="toast" [class.dismissed]="toast.dismissed"
-    [style]="getToastAlign(toast, i, toastEl)">
+  <div
+    *ngFor="let toast of toasts; index as i"
+    #toastEl
+    class="toast"
+    [class.dismissed]="toast.dismissed"
+    [style]="getToastAlign(toast, i, toastEl)"
+  >
+    <div
+      class="toast-content"
+      [ngClass]="toast.options.class"
+      [ngStyle]="toast.options.style"
+    >
+      <fa-icon
+        *ngIf="toast.icon"
+        class="toast-icon"
+        [icon]="toast.icon"
+        [ngClass]="toast.options.iconClass"
+      ></fa-icon>
 
-    <div class="toast-content" [ngClass]="toast.options.class" [ngStyle]="toast.options.style">
-      <fa-icon *ngIf="toast.icon" class="toast-icon" [icon]="toast.icon" [ngClass]="toast.options.iconClass"></fa-icon>
+      <span
+        *ngIf="toast.options.text"
+        class="toast-text"
+        [ngClass]="toast.options.textClass"
+        >{{toast.options.text}}</span
+      >
 
-      <span *ngIf="toast.options.text" class="toast-text"
-        [ngClass]="toast.options.textClass">{{toast.options.text}}</span>
-
-      <app-button *ngIf="toast.options.dismissButton" class="dismiss-button text" icon="times"
-        [ngClass]="toast.options.dismissButtonClass" (click)="toast.dismiss()"></app-button>
+      <app-button
+        *ngIf="toast.options.dismissButton"
+        class="dismiss-button text"
+        icon="times"
+        [ngClass]="toast.options.dismissButtonClass"
+        (click)="toast.dismiss()"
+      ></app-button>
     </div>
-
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { PaginateMeta } from "./paginate-meta";
+import { PaginateMeta } from './paginate-meta';
 
 export interface PagedList<T = any> {
   readonly data: T[];

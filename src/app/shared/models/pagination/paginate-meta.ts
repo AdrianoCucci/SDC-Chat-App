@@ -1,4 +1,4 @@
-import { Paginatable } from "./paginatable";
+import { Paginatable } from './paginatable';
 
 export interface PaginateMeta extends Paginatable {
   readonly skip?: number;

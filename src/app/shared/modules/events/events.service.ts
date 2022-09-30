@@ -1,22 +1,22 @@
-import { Injectable } from "@angular/core";
-import { EventHandler } from "./event-handler.type";
-import { EventSubscription } from "./event-subscription.model";
-import { Event } from "./event.model";
+import { Injectable } from '@angular/core';
+import { EventHandler } from './event-handler.type';
+import { EventSubscription } from './event-subscription.model';
+import { Event } from './event.model';
 
 @Injectable({ providedIn: 'root' })
 export class EventsService {
   private readonly _subscriptions: EventSubscription[] = [];
 
   public subscribe(subscription: EventSubscription): EventSubscription {
-    if(!subscription) {
-      throw new Error("[subscription] must have a value");
+    if (!subscription) {
+      throw new Error('[subscription] must have a value');
     }
-    if(subscription.eventHandler == null) {
-      throw new Error("[subscription] must have an [eventHandler] value");
+    if (subscription.eventHandler == null) {
+      throw new Error('[subscription] must have an [eventHandler] value');
     }
 
     const currentSubscriptions: EventSubscription[] = this._subscriptions;
-    if(!currentSubscriptions.includes(subscription)) {
+    if (!currentSubscriptions.includes(subscription)) {
       currentSubscriptions.push(subscription);
     }
 
@@ -32,7 +32,7 @@ export class EventsService {
     const index: number = currentSubscriptions.indexOf(subscription);
     const canUnsubscribe: boolean = index !== -1;
 
-    if(canUnsubscribe) {
+    if (canUnsubscribe) {
       currentSubscriptions.splice(index, 1);
     }
 
@@ -48,15 +48,15 @@ export class EventsService {
   }
 
   public publish<T = any>(event: Event<T>): void {
-    if(!event) {
-      throw new Error("[event] must have a value");
+    if (!event) {
+      throw new Error('[event] must have a value');
     }
 
-    event.severity = event.severity ?? "info";
+    event.severity = event.severity ?? 'info';
     event.timestamp = event.timestamp ?? new Date();
 
     this._subscriptions.forEach((e: EventSubscription) => {
-      if(this.canInvokeEventSubscription(e, event)) {
+      if (this.canInvokeEventSubscription(e, event)) {
         e.eventHandler(event);
       }
     });
@@ -65,14 +65,19 @@ export class EventsService {
   private compareInvokeFilter(value: any | any[], comparedValue: any): boolean {
     let result: boolean = true;
 
-    if(value != null) {
-      result = Array.isArray(value) ? value.includes(comparedValue) : value === comparedValue;
+    if (value != null) {
+      result = Array.isArray(value)
+        ? value.includes(comparedValue)
+        : value === comparedValue;
     }
 
     return result;
   }
 
-  private canInvokeEventSubscription(subscription: EventSubscription, event: Event): boolean {
+  private canInvokeEventSubscription(
+    subscription: EventSubscription,
+    event: Event
+  ): boolean {
     const result: boolean =
       this.compareInvokeFilter(subscription.eventSources, event.source) &&
       this.compareInvokeFilter(subscription.eventTypes, event.type) &&

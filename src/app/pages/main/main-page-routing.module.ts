@@ -9,50 +9,66 @@ const PATHS = APP_PATHS.main;
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     component: MainPage,
     children: [
       {
         path: PATHS.children.account.root,
-        loadChildren: () => import("./account-page/account-page.module").then(m => m.AccountPageModule)
+        loadChildren: () =>
+          import('./account-page/account-page.module').then(
+            (m) => m.AccountPageModule
+          ),
       },
       {
         path: PATHS.children.organizations,
         canActivate: [RoleGuard],
         data: { roles: [Role.Administrator] },
-        loadChildren: () => import("./organizations-page/organizations-page.module").then(m => m.OrganizationsPageModule)
+        loadChildren: () =>
+          import('./organizations-page/organizations-page.module').then(
+            (m) => m.OrganizationsPageModule
+          ),
       },
       {
         path: PATHS.children.users,
         canActivate: [RoleGuard],
         data: { roles: [Role.Administrator, Role.OrganizationAdmin] },
-        loadChildren: () => import("./users-page/users-page.module").then(m => m.UsersPageModule)
+        loadChildren: () =>
+          import('./users-page/users-page.module').then(
+            (m) => m.UsersPageModule
+          ),
       },
       {
         path: PATHS.children.rooms,
         canActivate: [RoleGuard],
         data: { roles: [Role.OrganizationAdmin] },
-        loadChildren: () => import("./rooms-page/rooms-page.module").then(m => m.RoomsPageModule)
+        loadChildren: () =>
+          import('./rooms-page/rooms-page.module').then(
+            (m) => m.RoomsPageModule
+          ),
       },
       {
         path: PATHS.children.chat,
         canActivate: [RoleGuard],
         data: { roles: [Role.OrganizationAdmin, Role.User] },
-        loadChildren: () => import("./chat-page/chat-page.module").then(m => m.ChatPageModule)
+        loadChildren: () =>
+          import('./chat-page/chat-page.module').then((m) => m.ChatPageModule),
       },
       {
         path: PATHS.children.pings,
         canActivate: [RoleGuard],
         data: { roles: [Role.OrganizationAdmin, Role.User] },
-        loadChildren: () => import("./room-pings-page/room-pings-page.module").then(m => m.RoomPingsPageModule)
-      }
-    ]
+        loadChildren: () =>
+          import('./room-pings-page/room-pings-page.module').then(
+            (m) => m.RoomPingsPageModule
+          ),
+      },
+    ],
   },
-  { path: "**", redirectTo: "" }
+  { path: '**', redirectTo: '' },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class MainPageRoutingModule { }
+export class MainPageRoutingModule {}

@@ -6,43 +6,57 @@ import { InputTextValidations } from './input-text-validations';
   selector: 'app-input-text',
   templateUrl: './input-text.component.html',
   styleUrls: ['./input-text.component.scss'],
-  providers: [{ provide: FormInput, useExisting: InputText }]
+  providers: [{ provide: FormInput, useExisting: InputText }],
 })
 export class InputText extends FormInput {
-  @Input() public type: string = "text";
-  @Input() public placeholder: string = "";
+  @Input() public type: string = 'text';
+  @Input() public placeholder: string = '';
   @Input() public validations: InputTextValidations = null;
 
-  @ViewChild("input") private readonly _inputRef: ElementRef;
+  @ViewChild('input') private readonly _inputRef: ElementRef;
 
   public clearErrors(): void {
     super.clearErrors();
-    this._nativeInput.classList.remove("ng-dirty", "ng-invalid");
+    this._nativeInput.classList.remove('ng-dirty', 'ng-invalid');
   }
 
-  protected onValidate(value: string, validations: InputTextValidations, errors: string[], inputName: string): void {
-    if(validations.pattern && value.match(validations.pattern) == null) {
+  protected onValidate(
+    value: string,
+    validations: InputTextValidations,
+    errors: string[],
+    inputName: string
+  ): void {
+    if (validations.pattern && value.match(validations.pattern) == null) {
       errors.push(`${inputName} is an invalid format.`);
     }
-    if(validations.minLength != null && value.trim().length < validations.minLength) {
-      errors.push(`${inputName} requires at least ${validations.minLength} characters`);
+    if (
+      validations.minLength != null &&
+      value.trim().length < validations.minLength
+    ) {
+      errors.push(
+        `${inputName} requires at least ${validations.minLength} characters`
+      );
     }
-    if(validations.maxLength != null && value.trim().length > validations.maxLength) {
-      errors.push(`${inputName} cannot exceed ${validations.maxLength} characters`);
+    if (
+      validations.maxLength != null &&
+      value.trim().length > validations.maxLength
+    ) {
+      errors.push(
+        `${inputName} cannot exceed ${validations.maxLength} characters`
+      );
     }
   }
 
   protected onValueSetting(newValue: any): any {
-    if(this.type === "number" && newValue != null) {
-      if(newValue === "" || Number.isNaN(newValue)) {
+    if (this.type === 'number' && newValue != null) {
+      if (newValue === '' || Number.isNaN(newValue)) {
         newValue = null;
-      }
-      else {
+      } else {
         newValue = this.clampMinMaxValue(Number(newValue));
       }
     }
 
-    if(this._nativeInput) {
+    if (this._nativeInput) {
       this._nativeInput.value = `${newValue}`;
     }
 
@@ -50,10 +64,10 @@ export class InputText extends FormInput {
   }
 
   private clampMinMaxValue(value: number): number {
-    if(this.min != null) {
+    if (this.min != null) {
       value = value < this.min ? this.min : value;
     }
-    if(this.max != null) {
+    if (this.max != null) {
       value = value > this.max ? this.max : value;
     }
 

@@ -5,6 +5,6 @@ import { InfoRowComponent } from './info-row.component';
 @NgModule({
   declarations: [InfoRowComponent],
   imports: [CommonModule],
-  exports: [InfoRowComponent]
+  exports: [InfoRowComponent],
 })
-export class InfoRowModule { }
+export class InfoRowModule {}

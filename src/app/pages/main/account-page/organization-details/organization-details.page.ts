@@ -8,12 +8,13 @@ import { LoginService } from 'src/app/core/services/login.service';
 @Component({
   selector: 'app-organization-details',
   templateUrl: './organization-details.page.html',
-  styleUrls: ['./organization-details.page.scss']
+  styleUrls: ['./organization-details.page.scss'],
 })
 export class OrganizationDetailsPage {
-  @ViewChild(OrganizationForm) private readonly _organizationForm: OrganizationForm;
+  @ViewChild(OrganizationForm)
+  private readonly _organizationForm: OrganizationForm;
 
-  constructor(private _loginService: LoginService) { }
+  constructor(private _loginService: LoginService) {}
 
   onEditOrganization(): void {
     this._organizationForm.clear();

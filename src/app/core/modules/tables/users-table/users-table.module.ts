@@ -23,9 +23,9 @@ const component = [UsersTable];
     AdminPassResetFormModule,
     DialogModule,
     ConfirmDialogModule,
-    LoaderModule
+    LoaderModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class UsersTableModule { }
+export class UsersTableModule {}

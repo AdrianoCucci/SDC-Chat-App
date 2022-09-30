@@ -8,12 +8,8 @@ import { InputToggle } from './input-toggle.component';
 const component = [InputToggle];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    FontAwesomeModule
-  ],
+  imports: [CommonModule, FormsModule, FontAwesomeModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class InputToggleModule { }
+export class InputToggleModule {}

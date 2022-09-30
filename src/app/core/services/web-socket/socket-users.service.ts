@@ -1,23 +1,28 @@
-import { HttpResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { IDisposable } from "src/app/shared/interfaces/i-disposable";
-import { PagedList } from "src/app/shared/models/pagination/paged-list";
-import { Event } from "src/app/shared/modules/events/event.model";
-import { EventsService } from "src/app/shared/modules/events/events.service";
-import { User } from "../../models/users/user";
-import { UsersService } from "../api/users-service";
-import { LoginService } from "../login.service";
-import { WebSocketService } from "./web-socket.service";
+import { HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
+import { PagedList } from 'src/app/shared/models/pagination/paged-list';
+import { Event } from 'src/app/shared/modules/events/event.model';
+import { EventsService } from 'src/app/shared/modules/events/events.service';
+import { User } from '../../models/users/user';
+import { UsersService } from '../api/users-service';
+import { LoginService } from '../login.service';
+import { WebSocketService } from './web-socket.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SocketUsersService implements IDisposable {
   private _users: PagedList<User>;
   private _clientUser: User;
 
-  constructor(private _socketService: WebSocketService, private _eventsService: EventsService, private _usersService: UsersService) {
-    this.subsribeEvents();
+  constructor(
+    private _socketService: WebSocketService,
+    private _eventsService: EventsService,
+    private _usersService: UsersService
+  ) {
+    this.subscribeEvents();
   }
 
   public dispose(): void {
@@ -25,7 +30,7 @@ export class SocketUsersService implements IDisposable {
     this._clientUser = null;
   }
 
-  private subsribeEvents(): void {
+  private subscribeEvents(): void {
     const socket: WebSocketService = this._socketService;
     const events = this.socketEvents;
     const eventsService: EventsService = this._eventsService;
@@ -37,7 +42,7 @@ export class SocketUsersService implements IDisposable {
       eventsService.publish({
         source: eventsSource,
         type: events.userJoin,
-        data: user
+        data: user,
       });
     });
 
@@ -47,56 +52,71 @@ export class SocketUsersService implements IDisposable {
       eventsService.publish({
         source: eventsSource,
         type: events.userLeave,
-        data: user
+        data: user,
       });
     });
 
     eventsService.subscribe({
       eventSources: WebSocketService.name,
-      eventTypes: "connect",
-      eventHandler: (event: Event) => {
-        if(event.data.isReconnection && this._clientUser != null) {
-          this.joinClientUser(this._clientUser);
+      eventTypes: 'connect',
+      eventHandler: async (event: Event) => {
+        if (event.data.isReconnection && this._clientUser != null) {
+          await this.joinClientUser(this._clientUser);
         }
-      }
+      },
     });
 
     eventsService.subscribe({
       eventSources: LoginService.name,
-      eventTypes: "logout",
-      eventHandler: () => this.dispose()
+      eventTypes: 'logout',
+      eventHandler: () => this.dispose(),
     });
   }
 
   public loadUsers(organizationId: number): Promise<PagedList<User>> {
     return new Promise<PagedList<User>>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<PagedList<User>> = await this._usersService.getAllUsers({ organizationId }).toPromise();
+        const response: HttpResponse<PagedList<User>> = await this._usersService
+          .getAllUsers({ organizationId })
+          .toPromise();
         this._users = response.body;
 
         resolve(this._users);
-      }
-      catch(error) {
+      } catch (error) {
         reject(error);
       }
     });
   }
 
-  public joinClientUser(clientUser: User): void {
-    if(clientUser == null) {
-      throw new Error("[clientUser] cannot be null");
-    }
-
-    this._socketService.emit(this.socketEvents.userJoin, clientUser, (response: User) => {
-      this._clientUser = response;
-      const index: number = this.findUserIndex(this._clientUser.id);
-
-      if(index === -1) {
-        this.addUser(this._clientUser);
+  public joinClientUser(clientUser: User): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      if (clientUser == null) {
+        reject('[clientUser] cannot be null');
       }
-      else {
-        this.updateUser(this._clientUser);
-      }
+
+      const timeout: number = window.setTimeout(
+        () => reject('Failed to join client user after 10 seconds'),
+        10000
+      );
+
+      this._socketService.emit(
+        this.socketEvents.userJoin,
+        clientUser,
+        (response: User) => {
+          window.clearTimeout(timeout);
+
+          this._clientUser = response;
+          const index: number = this.findUserIndex(this._clientUser.id);
+
+          if (index === -1) {
+            this.addUser(this._clientUser);
+          } else {
+            this.updateUser(this._clientUser);
+          }
+
+          resolve();
+        }
+      );
     });
   }
 
@@ -105,27 +125,28 @@ export class SocketUsersService implements IDisposable {
   }
 
   private addUser(user: User): void {
-    if(this._users == null) {
+    if (this._users == null) {
       this._users = { data: [user], pagination: null };
-    }
-    else {
+    } else {
       this._users.data.push(user);
     }
   }
 
   private updateUser(user: User): void {
-    const index: number = this._users?.data.findIndex((u: User) => u.id === user.id);
+    const index: number = this._users?.data.findIndex(
+      (u: User) => u.id === user.id
+    );
 
-    if(index !== -1) {
+    if (index !== -1) {
       this._users.data[index] = user;
     }
   }
 
   public get socketEvents() {
     return {
-      userJoin: "user-join",
-      userLeave: "user-leave",
-    }
+      userJoin: 'user-join',
+      userLeave: 'user-leave',
+    };
   }
 
   public get users(): PagedList<User> {

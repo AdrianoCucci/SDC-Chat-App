@@ -1,37 +1,72 @@
 <ng-template #formTemplate>
   <app-form *ngIf="model != null" (onSubmit)="onFormSubmit($event)">
     <div class="grid">
-
-      <app-input-text class="col-12" type="password" name="current-password" label="Current Password"
-        [validations]="{ required: true }" [(value)]="model.currentPassword">
+      <app-input-text
+        class="col-12"
+        type="password"
+        name="current-password"
+        label="Current Password"
+        [validations]="{ required: true }"
+        [(value)]="model.currentPassword"
+      >
       </app-input-text>
 
-      <app-input-text #newPass class="col-6" type="password" name="new-password" label="New Password"
-        [validations]="{ required: true }" [(value)]="model.newPassword">
+      <app-input-text
+        #newPass
+        class="col-6"
+        type="password"
+        name="new-password"
+        label="New Password"
+        [validations]="{ required: true }"
+        [(value)]="model.newPassword"
+      >
       </app-input-text>
 
-      <app-input-text class="col-6" type="password" name="confirm-password" label="Confirm Password"
-        [validations]="{ required: true, matchInput: newPass }">
+      <app-input-text
+        class="col-6"
+        type="password"
+        name="confirm-password"
+        label="Confirm Password"
+        [validations]="{ required: true, matchInput: newPass }"
+      >
       </app-input-text>
-      
     </div>
 
     <div slot="footer" class="form-footer">
-      <app-inline-alert class="block" type="error" [summary]="error" [visible]="error != null"></app-inline-alert>
+      <app-inline-alert
+        class="block"
+        type="error"
+        [summary]="error"
+        [visible]="error != null"
+      ></app-inline-alert>
 
       <div class="txt-right">
-        <app-button class="text" type="submit" text="Submit" icon="check"></app-button>
+        <app-button
+          class="text"
+          type="submit"
+          text="Submit"
+          icon="check"
+        ></app-button>
       </div>
     </div>
   </app-form>
 
-  <app-loader text="Submitting..." [visible]="isSubmitting" [fullscreen]="true"></app-loader>
+  <app-loader
+    text="Submitting..."
+    [visible]="isSubmitting"
+    [fullscreen]="true"
+  ></app-loader>
 </ng-template>
 
 <app-dialog *ngIf="dialog; else formTemplate" [(visible)]="dialogVisible">
   <div slot="header" class="dialog-header" [ngSwitch]="mode">
     <span>Change Password</span>
-    <app-button class="text" icon="times" title="Close" (click)="dialogVisible = false"></app-button>
+    <app-button
+      class="text"
+      icon="times"
+      title="Close"
+      (click)="dialogVisible = false"
+    ></app-button>
   </div>
 
   <div slot="body" class="dialog-body">

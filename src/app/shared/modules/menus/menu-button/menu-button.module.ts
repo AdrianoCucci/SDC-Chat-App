@@ -8,12 +8,8 @@ import { MenuButtonComponent } from './menu-button.component';
 const component = [MenuButtonComponent];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    FontAwesomeModule
-  ],
+  imports: [CommonModule, RouterModule, FontAwesomeModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class MenuButtonModule { }
+export class MenuButtonModule {}

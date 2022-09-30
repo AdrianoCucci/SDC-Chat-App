@@ -1,33 +1,44 @@
-import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostBinding,
+  Input,
+  Output,
+} from '@angular/core';
 import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faExclamation, faExclamationCircle, faInfo, faQuestion } from '@fortawesome/free-solid-svg-icons';
+import {
+  faExclamation,
+  faExclamationCircle,
+  faInfo,
+  faQuestion,
+} from '@fortawesome/free-solid-svg-icons';
 import { getCommonIconDefinition } from '../../functions/get-common-icon-definition';
 import { CommonIcon } from '../../models/common-icon.type';
 
 @Component({
   selector: 'app-inline-alert',
   templateUrl: './inline-alert.component.html',
-  styleUrls: ['./inline-alert.component.scss']
+  styleUrls: ['./inline-alert.component.scss'],
 })
 export class InlineAlert {
   @Output() public readonly visibleChange = new EventEmitter<boolean>();
   @Output() public readonly onShow = new EventEmitter<void>();
   @Output() public readonly onHide = new EventEmitter<void>();
 
-  @Input() @HostBinding("class") public type: AlertType = "plain";
+  @Input() @HostBinding('class') public type: AlertType = 'plain';
   @Input() public header: string;
   @Input() public summary: string | string[];
   @Input() public closeable: boolean = false;
 
   private readonly _typeIconMap = new Map<AlertType, IconDefinition>([
-    ["question", faQuestion],
-    ["info", faInfo],
-    ["warn", faExclamation],
-    ["error", faExclamationCircle]
+    ['question', faQuestion],
+    ['info', faInfo],
+    ['warn', faExclamation],
+    ['error', faExclamationCircle],
   ]);
 
   private _icon: IconDefinition;
-  @HostBinding("class.visible") private _visible: boolean = false;
+  @HostBinding('class.visible') private _visible: boolean = false;
   private _contentVisible: boolean = false;
   private _visibleTimeout: number;
 
@@ -66,19 +77,21 @@ export class InlineAlert {
     return this._visible;
   }
   @Input() public set visible(value: boolean) {
-    if(this._visible !== value) {
+    if (this._visible !== value) {
       this._visible = value;
       this.visibleChange.emit(this._visible);
 
       window.clearTimeout(this._visibleTimeout);
 
-      if(this._visible) {
+      if (this._visible) {
         this._contentVisible = true;
         this.onShow.emit();
-      }
-      else {
+      } else {
         this.onHide.emit();
-        this._visibleTimeout = window.setTimeout(() => this._contentVisible = false, 160);
+        this._visibleTimeout = window.setTimeout(
+          () => (this._contentVisible = false),
+          160
+        );
       }
     }
   }
@@ -88,4 +101,4 @@ export class InlineAlert {
   }
 }
 
-export type AlertType = "plain" | "question" | "info" | "warn" | "error";
+export type AlertType = 'plain' | 'question' | 'info' | 'warn' | 'error';

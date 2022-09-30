@@ -6,30 +6,28 @@ import { CommonIcon } from '../../models/common-icon.type';
 @Component({
   selector: 'app-button',
   templateUrl: './button.component.html',
-  styleUrls: ['./button.component.scss']
+  styleUrls: ['./button.component.scss'],
 })
 export class Button {
-  @Input() public type: string = "button";
+  @Input() public type: string = 'button';
   @Input() public text: string;
   @Input() public href: string;
   @Input() public routerLink: string | any[];
   @Input() public routerLinkActive: string;
-  @Input() public iconPos: "start" | "end";
-  @Input() @HostBinding("class.disabled") public disabled: boolean = false;
+  @Input() public iconPos: 'start' | 'end';
+  @Input() @HostBinding('class.disabled') public disabled: boolean = false;
 
   private _icon: IconDefinition;
 
   public get renderType(): RenderType {
     let type: RenderType;
 
-    if(this.routerLink) {
-      type = "router-link";
-    }
-    else if(this.href) {
-      type = "anchor";
-    }
-    else {
-      type = "button";
+    if (this.routerLink) {
+      type = 'router-link';
+    } else if (this.href) {
+      type = 'anchor';
+    } else {
+      type = 'button';
     }
 
     return type;
@@ -43,4 +41,4 @@ export class Button {
   }
 }
 
-type RenderType = "button" | "router-link" | "anchor";
+type RenderType = 'button' | 'router-link' | 'anchor';

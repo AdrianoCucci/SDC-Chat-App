@@ -9,13 +9,8 @@ import { RoomPingCard } from './room-ping-card.component';
 const component = [RoomPingCard];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    InputTextModule,
-    ButtonModule
-  ],
+  imports: [CommonModule, FormsModule, InputTextModule, ButtonModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class RoomPingCardModule { }
+export class RoomPingCardModule {}

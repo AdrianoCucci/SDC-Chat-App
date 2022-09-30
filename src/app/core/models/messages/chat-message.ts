@@ -1,5 +1,5 @@
-import { Organization } from "../organizations/organization";
-import { User } from "../users/user";
+import { Organization } from '../organizations/organization';
+import { User } from '../users/user';
 
 export interface ChatMessage {
   id?: number;

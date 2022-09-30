@@ -7,6 +7,6 @@ const component = [Dialog];
 @NgModule({
   imports: [CommonModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class DialogModule { }
+export class DialogModule {}

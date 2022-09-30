@@ -22,9 +22,18 @@
 
 <ng-container *ngIf="allowEditOrganization">
   <section class="footer txt-right fade-in-right">
-    <app-button class="m-r-2" text="Edit Organization" icon="pen" (click)="onEditOrganization()"></app-button>
+    <app-button
+      class="m-r-2"
+      text="Edit Organization"
+      icon="pen"
+      (click)="onEditOrganization()"
+    ></app-button>
   </section>
 
-  <app-organization-form mode="edit" [dialog]="true" (onSubmitSuccess)="onOrganizationFormSuccess($event)">
+  <app-organization-form
+    mode="edit"
+    [dialog]="true"
+    (onSubmitSuccess)="onOrganizationFormSuccess($event)"
+  >
   </app-organization-form>
 </ng-container>

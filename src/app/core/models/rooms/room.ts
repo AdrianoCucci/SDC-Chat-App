@@ -1,5 +1,5 @@
-import { AudioSound } from "src/app/shared/models/audio-sound";
-import { Organization } from "../organizations/organization";
+import { AudioSound } from 'src/app/shared/models/audio-sound';
+import { Organization } from '../organizations/organization';
 
 export interface Room {
   id: number;

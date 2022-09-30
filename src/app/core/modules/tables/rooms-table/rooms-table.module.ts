@@ -19,9 +19,9 @@ const component = [RoomsTable];
     DirectivesModule,
     ButtonModule,
     ConfirmDialogModule,
-    LoaderModule
+    LoaderModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class RoomsTableModule { }
+export class RoomsTableModule {}

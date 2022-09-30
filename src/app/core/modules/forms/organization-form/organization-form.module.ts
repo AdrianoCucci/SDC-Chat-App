@@ -19,9 +19,9 @@ const component = [OrganizationForm];
     InputTextModule,
     ButtonModule,
     LoaderModule,
-    InlineAlertModule
+    InlineAlertModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class OrganizationFormModule { }
+export class OrganizationFormModule {}

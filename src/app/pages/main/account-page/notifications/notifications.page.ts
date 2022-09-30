@@ -7,12 +7,12 @@ import { UserPrefsService } from 'src/app/core/services/user-prefs.service';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.page.html',
-  styleUrls: ['./notifications.page.scss']
+  styleUrls: ['./notifications.page.scss'],
 })
 export class NotificationsPage implements OnInit {
   public prefs: NotificationPrefs = {};
 
-  private readonly _notificationsPrefsKey: string = "notifications";
+  private readonly _notificationsPrefsKey: string = 'notifications';
   private _isSaving: boolean;
 
   constructor(
@@ -20,24 +20,28 @@ export class NotificationsPage implements OnInit {
     private _notifsService: SwNotificationsService,
     private _eventNotifsService: EventNotificationsService,
     private _changeDetector: ChangeDetectorRef
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadNotificationPrefs();
   }
 
   private loadNotificationPrefs(): void {
-    const prefs: NotificationPrefs = this._userPrefsService.getPreference(this._notificationsPrefsKey);
+    const prefs: NotificationPrefs = this._userPrefsService.getPreference(
+      this._notificationsPrefsKey
+    );
     this.prefs = prefs ?? this.prefs;
   }
 
   async onSave(): Promise<void> {
     try {
       this._isSaving = true;
-      await this._userPrefsService.setPreference(this._notificationsPrefsKey, this.prefs);
+      await this._userPrefsService.setPreference(
+        this._notificationsPrefsKey,
+        this.prefs
+      );
       this._eventNotifsService.registerEvents();
-    }
-    finally {
+    } finally {
       this._isSaving = false;
     }
   }

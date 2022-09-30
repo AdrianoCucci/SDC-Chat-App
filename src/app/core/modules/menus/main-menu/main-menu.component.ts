@@ -12,7 +12,7 @@ import { EventsService } from 'src/app/shared/modules/events/events.service';
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.scss']
+  styleUrls: ['./main-menu.component.scss'],
 })
 export class MainMenu implements OnInit, OnDestroy {
   @Input() public menuItems: MenuItem[];
@@ -22,7 +22,11 @@ export class MainMenu implements OnInit, OnDestroy {
   private _newMessagesCount: number = 0;
   private _eventSubscription: EventSubscription;
 
-  constructor(private _router: Router, private _roomPingsService: RoomPingsService, private _eventsService: EventsService) { }
+  constructor(
+    private _router: Router,
+    private _roomPingsService: RoomPingsService,
+    private _eventsService: EventsService
+  ) {}
 
   ngOnInit(): void {
     this.initMenuItems(this.menuItems);
@@ -35,11 +39,11 @@ export class MainMenu implements OnInit, OnDestroy {
   }
 
   private initMenuItems(menuItems: MenuItem[]) {
-    if(menuItems?.length > 0) {
-      this._chatItem = menuItems.find((m: MenuItem) => m.id === "chat");
+    if (menuItems?.length > 0) {
+      this._chatItem = menuItems.find((m: MenuItem) => m.id === 'chat');
 
-      if(this._chatItem != null) {
-        this._chatItem.onClick = () => this._newMessagesCount = 0;
+      if (this._chatItem != null) {
+        this._chatItem.onClick = () => (this._newMessagesCount = 0);
       }
     }
   }
@@ -47,17 +51,17 @@ export class MainMenu implements OnInit, OnDestroy {
   private subscribeEvents(): EventSubscription {
     return this._eventsService.subscribe({
       eventSources: ChatService.name,
-      eventTypes: "message",
+      eventTypes: 'message',
       eventHandler: () => {
-        if(!this.isChatItemActive) {
+        if (!this.isChatItemActive) {
           this._newMessagesCount++;
         }
-      }
+      },
     });
   }
 
   public getDisplayCount(count: number) {
-    return count > 99 ? "99+" : count.toString();
+    return count > 99 ? '99+' : count.toString();
   }
 
   public get isChatItemActive(): boolean {
@@ -71,8 +75,10 @@ export class MainMenu implements OnInit, OnDestroy {
   public get roomPingRequestsCount(): number {
     let count: number = 0;
 
-    if(this.clientUser != null) {
-      const predicate = (r: RoomPing) => r.requestUserId !== this.clientUser.id && r.state === RoomPingState.Requesting;
+    if (this.clientUser != null) {
+      const predicate = (r: RoomPing) =>
+        r.requestUserId !== this.clientUser.id &&
+        r.state === RoomPingState.Requesting;
       count = this._roomPingsService.pings?.filter(predicate).length ?? 0;
     }
 

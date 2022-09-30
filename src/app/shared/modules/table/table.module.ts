@@ -17,9 +17,9 @@ const component = [Table];
     InputTextModule,
     InputToggleModule,
     InputSelectModule,
-    FontAwesomeModule
+    FontAwesomeModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class TableModule { }
+export class TableModule {}

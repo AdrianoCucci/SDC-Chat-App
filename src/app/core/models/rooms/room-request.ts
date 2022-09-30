@@ -1,4 +1,4 @@
-import { AudioSound } from "src/app/shared/models/audio-sound";
+import { AudioSound } from 'src/app/shared/models/audio-sound';
 
 export interface RoomRequest {
   id?: number;

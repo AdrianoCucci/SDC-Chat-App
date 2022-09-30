@@ -11,15 +11,16 @@ import { PageEvent } from 'src/app/shared/modules/table/page-event';
 @Component({
   selector: 'app-rooms-page',
   templateUrl: './rooms-page.component.html',
-  styleUrls: ['./rooms-page.component.scss']
+  styleUrls: ['./rooms-page.component.scss'],
 })
 export class RoomsPage implements OnInit {
   public readonly organizationId: number;
 
-  public readonly pageHandler = (event: PageEvent): Promise<PagedList<Room>> => this.loadRooms({
-    take: event.limit,
-    skip: event.offset * event.limit
-  });
+  public readonly pageHandler = (event: PageEvent): Promise<PagedList<Room>> =>
+    this.loadRooms({
+      take: event.limit,
+      skip: event.offset * event.limit,
+    });
 
   public loadingVisible: boolean = false;
   public loadError: string;
@@ -39,19 +40,19 @@ export class RoomsPage implements OnInit {
     try {
       this.loadingVisible = true;
 
-      const response: HttpResponse<PagedList<Room>> = await this._roomsService.getAllRooms({
-        organizationId: this.organizationId,
-        skip: pagination?.skip,
-        take: pagination?.take
-      }).toPromise();
+      const response: HttpResponse<PagedList<Room>> = await this._roomsService
+        .getAllRooms({
+          organizationId: this.organizationId,
+          skip: pagination?.skip,
+          take: pagination?.take,
+        })
+        .toPromise();
 
       this._rooms = response.body;
-    }
-    catch(error) {
+    } catch (error) {
       this.loadError = parseErrorMessage(error);
       this.errorVisible = true;
-    }
-    finally {
+    } finally {
       this.loadingVisible = false;
     }
 

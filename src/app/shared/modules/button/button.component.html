@@ -1,17 +1,32 @@
 <ng-template #buttonTemplate>
-  <button [type]="type" [disabled]="disabled"
-    [ngClass]="{'icon-start': iconPos !== 'end', 'icon-end': iconPos === 'end'}">
+  <button
+    [type]="type"
+    [disabled]="disabled"
+    [ngClass]="{
+      'icon-start': iconPos !== 'end',
+      'icon-end': iconPos === 'end'
+    }"
+  >
     <fa-icon *ngIf="icon" class="button-icon" [icon]="icon"></fa-icon>
-    <span *ngIf="text" class="button-text">{{text}}</span>
+    <span *ngIf="text" class="button-text">{{ text }}</span>
   </button>
 </ng-template>
 
 <ng-container [ngSwitch]="renderType">
-  <a *ngSwitchCase="'router-link'" [routerLink]="routerLink" [routerLinkActive]="routerLinkActive || ''">
+  <a
+    *ngSwitchCase="'router-link'"
+    [routerLink]="routerLink"
+    [routerLinkActive]="routerLinkActive || ''"
+  >
     <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
   </a>
 
-  <a *ngSwitchCase="'anchor'" [href]="href" target="_blank" rel="noopener noreferrer">
+  <a
+    *ngSwitchCase="'anchor'"
+    [href]="href"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
     <ng-container *ngTemplateOutlet="buttonTemplate"></ng-container>
   </a>
 

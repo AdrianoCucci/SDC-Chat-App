@@ -1,1 +1,1 @@
-export type ToastAlign = "start" | "center" | "end";
+export type ToastAlign = 'start' | 'center' | 'end';

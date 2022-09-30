@@ -14,7 +14,7 @@ import { UsersListComponent } from './users-list/users-list.component';
 const components = [
   ChatMessageListComponent,
   ChatMessageComponent,
-  UsersListComponent
+  UsersListComponent,
 ];
 
 @NgModule({
@@ -24,10 +24,10 @@ const components = [
     ButtonModule,
     PopoverModule,
     FontAwesomeModule,
-    LoaderModule
+    LoaderModule,
   ],
   providers: [DatePipe],
   exports: components,
-  declarations: components
+  declarations: components,
 })
-export class ChatModule { }
+export class ChatModule {}

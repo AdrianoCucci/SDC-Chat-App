@@ -12,7 +12,7 @@ import { LoginService } from '../login.service';
 import { WebSocketService } from './web-socket.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class RoomPingsService implements IDisposable {
   private _pings: RoomPing[];
@@ -45,10 +45,10 @@ export class RoomPingsService implements IDisposable {
       eventsService.publish({
         source: eventsSource,
         type: events.roomPingRequest,
-        data: roomPing
+        data: roomPing,
       });
 
-      if(roomPing.room?.pingSound != null) {
+      if (roomPing.room?.pingSound != null) {
         audioService.play(roomPing.room.pingSound);
       }
     });
@@ -59,10 +59,10 @@ export class RoomPingsService implements IDisposable {
       eventsService.publish({
         source: eventsSource,
         type: events.roomPingResponse,
-        data: roomPing
+        data: roomPing,
       });
 
-      if(roomPing.room?.pingSound != null) {
+      if (roomPing.room?.pingSound != null) {
         audioService.stop(roomPing.room.pingSound);
       }
     });
@@ -73,30 +73,31 @@ export class RoomPingsService implements IDisposable {
       eventsService.publish({
         source: eventsSource,
         type: events.roomPingCancel,
-        data: roomPing
+        data: roomPing,
       });
 
-      if(roomPing.room?.pingSound != null) {
+      if (roomPing.room?.pingSound != null) {
         audioService.stop(roomPing.room.pingSound);
       }
     });
 
     eventsService.subscribe({
       eventSources: LoginService.name,
-      eventTypes: "logout",
-      eventHandler: () => this.dispose()
+      eventTypes: 'logout',
+      eventHandler: () => this.dispose(),
     });
   }
 
   public loadRooms(organizationId: number): Promise<PagedList<Room>> {
     return new Promise<PagedList<Room>>(async (resolve, reject) => {
       try {
-        const response: HttpResponse<PagedList<Room>> = await this._roomsService.getAllRooms({ organizationId }).toPromise();
+        const response: HttpResponse<PagedList<Room>> = await this._roomsService
+          .getAllRooms({ organizationId })
+          .toPromise();
         this._rooms = response.body;
 
         resolve(this._rooms);
-      }
-      catch(error) {
+      } catch (error) {
         reject(error);
       }
     });
@@ -120,7 +121,7 @@ export class RoomPingsService implements IDisposable {
       this._socketService.emit(eventType, roomPing, (response: RoomPing) => {
         this.upsertPing(response);
 
-        if(response.room?.pingSound != null) {
+        if (response.room?.pingSound != null) {
           this._audioService.stop(response.room.pingSound);
         }
 
@@ -130,7 +131,7 @@ export class RoomPingsService implements IDisposable {
   }
 
   public cancelPingRequest(roomPing: RoomPing): void {
-    if(roomPing != null) {
+    if (roomPing != null) {
       this._socketService.emit(this.socketEvents.roomPingCancel, roomPing);
       this.removePing(roomPing.guid);
     }
@@ -138,10 +139,13 @@ export class RoomPingsService implements IDisposable {
 
   public getRequestingPings(): Promise<RoomPing[]> {
     return new Promise<RoomPing[]>((resolve) => {
-      this._socketService.emit(this.socketEvents.getRoomPings, (response: RoomPing[]) => {
-        this._pings = response;
-        resolve(response);
-      });
+      this._socketService.emit(
+        this.socketEvents.getRoomPings,
+        (response: RoomPing[]) => {
+          this._pings = response;
+          resolve(response);
+        }
+      );
     });
   }
 
@@ -158,10 +162,9 @@ export class RoomPingsService implements IDisposable {
   }
 
   public addPing(roomPing: RoomPing): void {
-    if(this._pings == null) {
+    if (this._pings == null) {
       this._pings = [roomPing];
-    }
-    else {
+    } else {
       this._pings.push(roomPing);
     }
   }
@@ -170,7 +173,7 @@ export class RoomPingsService implements IDisposable {
     const index: number = this.findPingIndex(guid);
     const canUpdate: boolean = index !== -1;
 
-    if(canUpdate) {
+    if (canUpdate) {
       this._pings[index] = roomPing;
     }
 
@@ -178,7 +181,7 @@ export class RoomPingsService implements IDisposable {
   }
 
   public upsertPing(roomPing: RoomPing): void {
-    if(!this.updatePing(roomPing.guid, roomPing)) {
+    if (!this.updatePing(roomPing.guid, roomPing)) {
       this.addPing(roomPing);
     }
   }
@@ -187,7 +190,7 @@ export class RoomPingsService implements IDisposable {
     const index: number = this.findPingIndex(guid);
     const canRemove: boolean = index !== -1;
 
-    if(canRemove) {
+    if (canRemove) {
       this._pings.splice(index, 1);
     }
 
@@ -195,17 +198,19 @@ export class RoomPingsService implements IDisposable {
   }
 
   public removeAllRespondedPings(): void {
-    if(this.hasPings) {
-      this._pings = this._pings.filter((r: RoomPing) => r.state !== RoomPingState.Responded);
+    if (this.hasPings) {
+      this._pings = this._pings.filter(
+        (r: RoomPing) => r.state !== RoomPingState.Responded
+      );
     }
   }
 
   public get socketEvents() {
     return {
-      roomPingRequest: "room-ping-request",
-      roomPingResponse: "room-ping-response",
-      roomPingCancel: "room-ping-cancel",
-      getRoomPings: "get-room-pings"
+      roomPingRequest: 'room-ping-request',
+      roomPingResponse: 'room-ping-response',
+      roomPingCancel: 'room-ping-cancel',
+      getRoomPings: 'get-room-pings',
     };
   }
 

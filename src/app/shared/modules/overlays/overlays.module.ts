@@ -4,10 +4,6 @@ import { PopoverModule } from './popover/popover.module';
 import { LoaderModule } from './loader/loader.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    PopoverModule,
-    LoaderModule
-  ]
+  imports: [CommonModule, PopoverModule, LoaderModule],
 })
-export class OverlaysModule { }
+export class OverlaysModule {}

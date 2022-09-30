@@ -1,18 +1,18 @@
-import { Injectable } from "@angular/core";
-import { EventsService } from "src/app/shared/modules/events/events.service";
-import { AuthResponse } from "../models/auth/auth-response";
-import { Role } from "../models/auth/role";
-import { User } from "../models/users/user";
-import { UsersService } from "./api/users-service";
-import { EncryptService } from "./encrypt-service";
-import { IStorageMedium } from "./storage/storage-medium.interface";
-import { StorageService } from "./storage/storage-service";
+import { Injectable } from '@angular/core';
+import { EventsService } from 'src/app/shared/modules/events/events.service';
+import { AuthResponse } from '../models/auth/auth-response';
+import { Role } from '../models/auth/role';
+import { User } from '../models/users/user';
+import { UsersService } from './api/users-service';
+import { EncryptService } from './encrypt-service';
+import { IStorageMedium } from './storage/storage-medium.interface';
+import { StorageService } from './storage/storage-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
-  private readonly _storageKey: string = "auth";
+  private readonly _storageKey: string = 'auth';
 
   private _currentUser: User;
 
@@ -21,10 +21,10 @@ export class LoginService {
     private _encryptService: EncryptService,
     private _usersService: UsersService,
     private _eventsService: EventsService
-  ) { }
+  ) {}
 
   public setCurrentUser(authResponse: AuthResponse, remember?: boolean): User {
-    if(authResponse.isSuccess && authResponse.user != null) {
+    if (authResponse.isSuccess && authResponse.user != null) {
       this.setSavedLogin(authResponse, remember);
 
       this._currentUser = authResponse.user;
@@ -37,7 +37,7 @@ export class LoginService {
   public loadSavedLogin(): boolean {
     const savedLogin: AuthResponse = this.getSavedLogin();
 
-    if(savedLogin != null) {
+    if (savedLogin != null) {
       this._currentUser = savedLogin.user;
       this.publishLogin();
     }
@@ -48,11 +48,13 @@ export class LoginService {
   public updateCurrentUser(newUser: User): boolean {
     const canUpdate: boolean = this.isLoggedIn;
 
-    if(canUpdate) {
+    if (canUpdate) {
       const savedLogin: AuthResponse = this.getSavedLogin();
       savedLogin.user = newUser;
 
-      const includeLocalStorage: boolean = this._storageService.local.has(this._storageKey);
+      const includeLocalStorage: boolean = this._storageService.local.has(
+        this._storageKey
+      );
       this.setSavedLogin(savedLogin, includeLocalStorage);
 
       this._currentUser = newUser;
@@ -65,7 +67,7 @@ export class LoginService {
   public userHasRole(...roles: Role[]): boolean {
     let hasRole: boolean = false;
 
-    if(this.isLoggedIn && roles != null) {
+    if (this.isLoggedIn && roles != null) {
       hasRole = roles.includes(this._currentUser.role);
     }
 
@@ -73,9 +75,13 @@ export class LoginService {
   }
 
   public logout(): void {
-    if(this.isLoggedIn) {
-      this._usersService.updateUser(this._currentUser.id, { isOnline: false }).toPromise();
-      this._storageService.forEachMedium((s: IStorageMedium) => s.delete(this._storageKey));
+    if (this.isLoggedIn) {
+      this._usersService
+        .updateUser(this._currentUser.id, { isOnline: false })
+        .toPromise();
+      this._storageService.forEachMedium((s: IStorageMedium) =>
+        s.delete(this._storageKey)
+      );
       this._currentUser = null;
 
       this.publishLogout();
@@ -85,7 +91,7 @@ export class LoginService {
   public getAuthToken(): string {
     let token: string = null;
 
-    if(this.isLoggedIn) {
+    if (this.isLoggedIn) {
       token = this.getSavedLogin()?.token;
     }
 
@@ -98,7 +104,7 @@ export class LoginService {
     this._storageService.forEachMedium((s: IStorageMedium) => {
       const authData: string = s.get(this._storageKey);
 
-      if(authData) {
+      if (authData) {
         const decryptedData: string = this._encryptService.decrypt(authData);
         savedLogin = JSON.parse(decryptedData);
         return;
@@ -108,12 +114,17 @@ export class LoginService {
     return savedLogin;
   }
 
-  private setSavedLogin(data: AuthResponse, includeLocalStorage?: boolean): void {
-    const savedData: string = this._encryptService.encrypt(JSON.stringify(data));
+  private setSavedLogin(
+    data: AuthResponse,
+    includeLocalStorage?: boolean
+  ): void {
+    const savedData: string = this._encryptService.encrypt(
+      JSON.stringify(data)
+    );
 
     this._storageService.session.set(this._storageKey, savedData);
 
-    if(includeLocalStorage) {
+    if (includeLocalStorage) {
       this._storageService.local.set(this._storageKey, savedData);
     }
   }
@@ -121,23 +132,23 @@ export class LoginService {
   private publishLogin(): void {
     this._eventsService.publish({
       source: this.constructor.name,
-      type: "login",
-      data: this._currentUser
+      type: 'login',
+      data: this._currentUser,
     });
   }
 
   private publishUserUpdate(): void {
     this._eventsService.publish({
       source: this.constructor.name,
-      type: "user-update",
-      data: this._currentUser
+      type: 'user-update',
+      data: this._currentUser,
     });
   }
 
   private publishLogout(): void {
     this._eventsService.publish({
       source: this.constructor.name,
-      type: "logout"
+      type: 'logout',
     });
   }
 
@@ -146,10 +157,10 @@ export class LoginService {
   }
 
   public get isLoggedIn(): boolean {
-    if(this._currentUser == null) {
+    if (this._currentUser == null) {
       this._currentUser = this.getSavedLogin()?.user;
 
-      if(this._currentUser != null) {
+      if (this._currentUser != null) {
         this.publishLogin();
       }
     }

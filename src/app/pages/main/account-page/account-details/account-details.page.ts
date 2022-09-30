@@ -10,18 +10,21 @@ import { Pair } from 'src/app/shared/models/pair';
 @Component({
   selector: 'app-account-details',
   templateUrl: './account-details.page.html',
-  styleUrls: ['./account-details.page.scss']
+  styleUrls: ['./account-details.page.scss'],
 })
 export class AccountDetailsPage {
   public readonly rolePairs: Pair<string, Role>[] = enumToPairs(Role, true);
-  
+
   @ViewChild(AccountForm) private readonly _accountForm: AccountForm;
   @ViewChild(PassChangeForm) private readonly _passChangeForm: PassChangeForm;
 
-  constructor(private _loginService: LoginService) { }
+  constructor(private _loginService: LoginService) {}
 
   public getUserRoleDisplay() {
-    return this.rolePairs.find((p: Pair) => p.value === this.user.role)?.key ?? undefined;
+    return (
+      this.rolePairs.find((p: Pair) => p.value === this.user.role)?.key ??
+      undefined
+    );
   }
 
   onEditAccount(): void {
@@ -45,8 +48,8 @@ export class AccountDetailsPage {
     setTimeout(() => {
       this._passChangeForm.model = {
         userId: this.user.id,
-        currentPassword: "",
-        newPassword: ""
+        currentPassword: '',
+        newPassword: '',
       };
 
       this._passChangeForm.dialogVisible = true;

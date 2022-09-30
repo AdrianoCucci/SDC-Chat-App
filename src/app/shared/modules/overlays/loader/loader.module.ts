@@ -7,6 +7,6 @@ const component = [Loader];
 @NgModule({
   imports: [CommonModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class LoaderModule { }
+export class LoaderModule {}

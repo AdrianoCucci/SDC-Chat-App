@@ -1,30 +1,45 @@
 <div *ngIf="room != null" class="room-info">
-  <span class="room-name">{{room.name}}</span>
+  <span class="room-name">{{ room.name }}</span>
   <span *ngIf="room.number != null" class="room-number">
-    Room number: <b>{{room.number}}</b>
+    Room number: <b>{{ room.number }}</b>
   </span>
 </div>
 
 <div class="state-info request">
   <span *ngIf="requestUser != null" class="state-user request">
-    {{requestUser.displayName || requestUser.username}}
+    {{ requestUser.displayName || requestUser.username }}
   </span>
-  <p class="state-message request">{{roomPing.requestMessage}}</p>
+  <p class="state-message request">{{ roomPing.requestMessage }}</p>
 </div>
 
 <div *ngIf="isResponded" class="state-info response">
   <span *ngIf="responseUser != null" class="state-user response">
-    {{responseUser.displayName || responseUser.username}}
+    {{ responseUser.displayName || responseUser.username }}
   </span>
-  <p class="state-message response">{{roomPing.responseMessage}}</p>
+  <p class="state-message response">{{ roomPing.responseMessage }}</p>
 </div>
 
 <div class="actions">
-  <form *ngIf="!isResponded && !isClientRequest" class="response-form" (submit)="onRespond(message.value)">
+  <form
+    *ngIf="!isResponded && !isClientRequest"
+    class="response-form"
+    (submit)="onRespond(message.value)"
+  >
     <app-input-text #message placeholder="Response message..."></app-input-text>
-    <app-button type="submit" [text]="message.value?.trim() ? 'Send response' : 'On my way!'"></app-button>
+    <app-button
+      type="submit"
+      [text]="message.value?.trim() ? 'Send response' : 'On my way!'"
+    ></app-button>
   </form>
 
-  <app-button *ngIf="isClientRequest" text="Cancel" (click)="onCancel()"></app-button>
-  <app-button *ngIf="isResponded" text="Dismiss" (click)="onDismiss()"></app-button>
+  <app-button
+    *ngIf="isClientRequest"
+    text="Cancel"
+    (click)="onCancel()"
+  ></app-button>
+  <app-button
+    *ngIf="isResponded"
+    text="Dismiss"
+    (click)="onDismiss()"
+  ></app-button>
 </div>

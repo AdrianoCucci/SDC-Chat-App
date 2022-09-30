@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
 @Component({
   selector: 'app-main-page',
   templateUrl: './main-page.component.html',
-  styleUrls: ['./main-page.component.scss']
+  styleUrls: ['./main-page.component.scss'],
 })
 export class MainPage implements OnInit, OnDestroy {
   public readonly mainMenuItems: MenuItem[];
@@ -36,8 +36,10 @@ export class MainPage implements OnInit, OnDestroy {
     private _roomPingsService: RoomPingsService,
     private _audioService: AudioService
   ) {
-    if(this.clientUser != null) {
-      this.mainMenuItems = new MainMenuItemsMapper().getMenuItemsByRole(this.clientUser.role);
+    if (this.clientUser != null) {
+      this.mainMenuItems = new MainMenuItemsMapper().getMenuItemsByRole(
+        this.clientUser.role
+      );
     }
   }
 
@@ -46,20 +48,22 @@ export class MainPage implements OnInit, OnDestroy {
 
     await this.initRouterEvents(this._subscription);
 
-    if(this.clientUser.role !== Role.Administrator && this.clientUser.organizationId != null) {
+    if (
+      this.clientUser.role !== Role.Administrator &&
+      this.clientUser.organizationId != null
+    ) {
       try {
         await this.initSocketClientData(this.clientUser);
-      }
-      catch(error) {
-        switch(typeof error) {
-          case "string":
+      } catch (error) {
+        switch (typeof error) {
+          case 'string':
             this._initError = error;
             break;
-          case "object":
+          case 'object':
             this._initError = error.toString();
             break;
           default:
-            this._initError = "An unknown error occurred";
+            this._initError = 'An unknown error occurred';
             break;
         }
       }
@@ -78,20 +82,22 @@ export class MainPage implements OnInit, OnDestroy {
   private async initRouterEvents(subscription: Subscription): Promise<void> {
     const rootPath: string = `/${MAIN_PATHS.root}`;
 
-    if(this._router.url === rootPath) {
+    if (this._router.url === rootPath) {
       await this.navigateToFirstMenuItem();
     }
 
-    subscription.add(this._router.events.subscribe(async (event: Event) => {
-      if(event instanceof NavigationStart && event.url === rootPath) {
-        await this.navigateToFirstMenuItem();
-      }
-    }));
+    subscription.add(
+      this._router.events.subscribe(async (event: Event) => {
+        if (event instanceof NavigationStart && event.url === rootPath) {
+          await this.navigateToFirstMenuItem();
+        }
+      })
+    );
   }
 
   private async initSocketClientData(clientUser: User): Promise<void> {
     await this._socketService.connect();
-    this._socketUsersService.joinClientUser(clientUser);
+    await this._socketUsersService.joinClientUser(clientUser);
 
     const organizationId: number = clientUser.organizationId;
 
@@ -102,18 +108,20 @@ export class MainPage implements OnInit, OnDestroy {
       this._socketUsersService.loadUsers(organizationId),
       this._chatService.loadMessages(organizationId, messagesBeforeDate, 50),
       this._roomPingsService.loadRooms(organizationId),
-      this._roomPingsService.getRequestingPings()
+      this._roomPingsService.getRequestingPings(),
     ]);
   }
 
   public logout(): void {
     this._loginService.logout();
-    this._router.navigateByUrl("");
+    this._router.navigateByUrl('');
   }
 
   private async navigateToFirstMenuItem(): Promise<void> {
-    if(this.mainMenuItems?.length > 0) {
-      await this._router.navigateByUrl(this.mainMenuItems[0].routerLink, { replaceUrl: true });
+    if (this.mainMenuItems?.length > 0) {
+      await this._router.navigateByUrl(this.mainMenuItems[0].routerLink, {
+        replaceUrl: true,
+      });
     }
   }
 
@@ -130,7 +138,9 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   public get userDisplayName(): string {
-    return this._loginService.user?.displayName || this._loginService.user?.username;
+    return (
+      this._loginService.user?.displayName || this._loginService.user?.username
+    );
   }
 
   public get accountPageRouterLink(): string {

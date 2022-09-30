@@ -10,10 +10,13 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 @Component({
   selector: 'app-room-pings-page',
   templateUrl: './room-pings-page.component.html',
-  styleUrls: ['./room-pings-page.component.scss']
+  styleUrls: ['./room-pings-page.component.scss'],
 })
 export class RoomPingsPage {
-  constructor(private _roomPingsService: RoomPingsService, private _loginService: LoginService) { }
+  constructor(
+    private _roomPingsService: RoomPingsService,
+    private _loginService: LoginService
+  ) {}
 
   public get clientUser(): User {
     return this._loginService.user;

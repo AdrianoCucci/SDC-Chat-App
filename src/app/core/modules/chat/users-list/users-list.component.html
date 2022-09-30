@@ -8,7 +8,7 @@
 
         <ul>
           <li *ngFor="let user of users" class="user-item online">
-            <span class="display-name">{{getUserDisplayName(user)}}</span>
+            <span class="display-name">{{ getUserDisplayName(user) }}</span>
           </li>
         </ul>
       </div>
@@ -18,7 +18,7 @@
 
         <ul>
           <li *ngFor="let user of users" class="user-item offline">
-            <span class="display-name">{{getUserDisplayName(user)}}</span>
+            <span class="display-name">{{ getUserDisplayName(user) }}</span>
           </li>
         </ul>
       </div>
@@ -26,7 +26,11 @@
   </div>
 
   <div class="footer">
-    <app-button class="toggle-button block" [icon]="collapsed ? 'chevron-right' : 'chevron-left'"
-      [title]="collapsed ? 'Show users' : 'Hide users'" (click)="collapsed = !collapsed"></app-button>
+    <app-button
+      class="toggle-button block"
+      [icon]="collapsed ? 'chevron-right' : 'chevron-left'"
+      [title]="collapsed ? 'Show users' : 'Hide users'"
+      (click)="collapsed = !collapsed"
+    ></app-button>
   </div>
 </ng-container>

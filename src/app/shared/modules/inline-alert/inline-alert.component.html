@@ -1,18 +1,32 @@
 <ng-container *ngIf="contentVisible">
-  <fa-icon *ngIf="(icon || getTypeIcon()) as i" class="alert-icon" [icon]="i"></fa-icon>
+  <fa-icon
+    *ngIf="icon || getTypeIcon() as i"
+    class="alert-icon"
+    [icon]="i"
+  ></fa-icon>
 
   <div class="alert-text">
     <div class="alert-header">
-      <span class="header-text">{{header}}</span>
-      <app-button *ngIf="closeable" class="close-button text" icon="times" (click)="hide()"></app-button>
+      <span class="header-text">{{ header }}</span>
+      <app-button
+        *ngIf="closeable"
+        class="close-button text"
+        icon="times"
+        (click)="hide()"
+      ></app-button>
     </div>
 
     <ng-container *ngIf="summary">
-      <p *ngIf="!isSummaryArray(); else summaryArrayTemplate" class="alert-summary">{{summary}}</p>
+      <p
+        *ngIf="!isSummaryArray(); else summaryArrayTemplate"
+        class="alert-summary"
+      >
+        {{ summary }}
+      </p>
 
       <ng-template #summaryArrayTemplate>
         <ul class="alert-summary">
-          <li *ngFor="let item of summary">{{item}}</li>
+          <li *ngFor="let item of summary">{{ item }}</li>
         </ul>
       </ng-template>
     </ng-container>

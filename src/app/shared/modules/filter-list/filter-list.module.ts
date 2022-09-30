@@ -7,6 +7,6 @@ const component = [FilterList];
 @NgModule({
   imports: [CommonModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class FilterListModule { }
+export class FilterListModule {}

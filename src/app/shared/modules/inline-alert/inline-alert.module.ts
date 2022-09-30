@@ -8,12 +8,8 @@ import { InlineAlert } from './inline-alert.component';
 const component = [InlineAlert];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    ButtonModule,
-    FontAwesomeModule
-  ],
+  imports: [CommonModule, ButtonModule, FontAwesomeModule],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class InlineAlertModule { }
+export class InlineAlertModule {}

@@ -23,9 +23,9 @@ const component = [UserForm];
     InputToggleModule,
     ButtonModule,
     LoaderModule,
-    InlineAlertModule
+    InlineAlertModule,
   ],
   exports: component,
-  declarations: component
+  declarations: component,
 })
-export class UserFormModule { }
+export class UserFormModule {}
