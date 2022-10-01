@@ -1,4 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { Observable, defer, throwError } from 'rxjs';
+import { finalize, catchError, map, tap } from 'rxjs/operators';
 import { Room } from 'src/app/core/models/rooms/room';
 import { RoomRequest } from 'src/app/core/models/rooms/room-request';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
@@ -22,7 +24,9 @@ import { RoomForm } from '../../forms/room-form/room-form.component';
 export class RoomsTable {
   @Input() public rooms: Room[];
   @Input() public organizationId: number;
-  @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<Room>>;
+  @Input() public pageHandler: (
+    event: PageEvent
+  ) => Observable<PagedList<Room>>;
 
   public readonly pingSoundPairs: Pair<string, AudioSound>[] = enumToPairs(
     AudioSound,
@@ -110,18 +114,8 @@ export class RoomsTable {
     }
   }
 
-  async onDeleteRoom(room: Room): Promise<void> {
-    try {
-      this._isDeletingRoom = true;
-
-      await this._roomsService.deleteRoom(room.id).toPromise();
-      this.rooms = this._table.queryDeleteRow((u: Room) => u.id === room.id);
-    } catch (error) {
-      this.errorDialogText = parseErrorMessage(error);
-      this.errorDialogVisible = true;
-    } finally {
-      this._isDeletingRoom = false;
-    }
+  onDeleteRoom(room: Room): void {
+    this.deleteRoom(room).subscribe();
   }
 
   private showRoomForm(model: RoomRequest, mode: FormMode) {
@@ -135,6 +129,27 @@ export class RoomsTable {
       this._roomForm.pingSoundOptions = this.pingSoundPairs;
 
       this._roomForm.dialogVisible = true;
+    });
+  }
+
+  private deleteRoom(room: Room): Observable<void> {
+    return defer((): Observable<void> => {
+      this._isDeletingRoom = true;
+
+      return this._roomsService.deleteRoom(room.id).pipe(
+        finalize(() => (this._isDeletingRoom = false)),
+        catchError((error: any) => {
+          this.errorDialogText = parseErrorMessage(error);
+          this.errorDialogVisible = true;
+          return throwError(error);
+        }),
+        map(() => null),
+        tap(() => {
+          this.rooms = this._table.queryDeleteRow(
+            (r: Room) => r.id === room.id
+          );
+        })
+      );
     });
   }
 

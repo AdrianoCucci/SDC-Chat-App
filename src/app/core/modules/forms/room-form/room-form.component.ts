@@ -1,5 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Room } from 'src/app/core/models/rooms/room';
 import { RoomRequest } from 'src/app/core/models/rooms/room-request';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
@@ -24,22 +26,20 @@ export class RoomForm extends AppForm<RoomRequest, Room> {
     super();
   }
 
-  protected async onRequestAdd(model: RoomRequest): Promise<Room> {
+  protected override onRequestAdd(model: RoomRequest): Observable<Room> {
     model.organizationId = this.organizationId;
-    const response: HttpResponse<Room> = await this._roomsService
-      .addRoom(model)
-      .toPromise();
 
-    return response.body;
+    return this._roomsService
+      .addRoom(model)
+      .pipe(map((response: HttpResponse<Room>) => response.body));
   }
 
-  protected async onRequestUpdate(model: RoomRequest): Promise<Room> {
+  protected override onRequestUpdate(model: RoomRequest): Observable<Room> {
     model.organizationId = this.organizationId;
-    const response: HttpResponse<Room> = await this._roomsService
-      .updateRoom(model.id, model)
-      .toPromise();
 
-    return response.body;
+    return this._roomsService
+      .updateRoom(model.id, model)
+      .pipe(map((response: HttpResponse<Room>) => response.body));
   }
 
   async onPreviewSound(audioSound: AudioSound): Promise<void> {

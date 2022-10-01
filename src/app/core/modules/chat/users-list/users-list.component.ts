@@ -50,8 +50,10 @@ export class UsersListComponent implements OnInit {
       this._collapsed = value;
 
       this._collapsed
-        ? this._userPrefsService.setPreference(this._prefsKey, this._collapsed)
-        : this._userPrefsService.deletePreference(this._prefsKey);
+        ? this._userPrefsService
+            .setPreference(this._prefsKey, this._collapsed)
+            .subscribe()
+        : this._userPrefsService.deletePreference(this._prefsKey).subscribe();
     }
   }
 }

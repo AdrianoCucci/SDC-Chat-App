@@ -1,13 +1,13 @@
 <app-users-list
   class="fade-in-left"
-  [users]="users?.data"
+  [users]="users$ | async"
   [clientUser]="clientUser"
 ></app-users-list>
 
 <app-chat-message-list
   class="fade-in-up"
   #list
-  [messages]="messages"
+  [messages]="messages$ | async"
   [clientUser]="clientUser"
   [listLoaderVisible]="isLoadingMessages"
   (onAddMessage)="onAddMessage($event)"

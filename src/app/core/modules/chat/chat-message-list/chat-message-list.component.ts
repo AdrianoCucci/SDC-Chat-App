@@ -56,7 +56,7 @@ export class ChatMessageListComponent implements AfterViewInit, OnDestroy {
   }
 
   onTextareaEnter(textArea: InputTextarea): void {
-    const value: string = textArea.value.trim();
+    const value: string | undefined = textArea.value?.trim();
 
     if (value) {
       this.sendMessage(value);

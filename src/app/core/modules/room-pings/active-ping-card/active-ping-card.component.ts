@@ -1,4 +1,6 @@
-import { Component, HostBinding, Input } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map, takeUntil, tap } from 'rxjs/operators';
 import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
@@ -10,25 +12,43 @@ import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.se
   templateUrl: './active-ping-card.component.html',
   styleUrls: ['./active-ping-card.component.scss'],
 })
-export class ActivePingCard {
+export class ActivePingCard implements OnInit {
   @Input() public roomPing: RoomPing;
   @Input() public clientUser: User;
+
+  public readonly roomPing$: Observable<RoomPing> =
+    this._roomPingsService.pings$.pipe(
+      map((value: RoomPing[]) =>
+        value.find((r: RoomPing) => r.roomId === this.room?.id)
+      ),
+      tap((value: RoomPing | undefined) => (this.roomPing = value))
+    );
 
   @HostBinding('class.dismissing') private _dismissing: boolean = false;
 
   constructor(private _roomPingsService: RoomPingsService) {}
 
-  async onRespond(message?: string): Promise<void> {
-    const roomPing: RoomPing = this.roomPing;
-    roomPing.state = RoomPingState.Responded;
-    roomPing.responseMessage = message || 'On my way!';
-    roomPing.responseUserId = this.clientUser?.id;
-
-    this.roomPing = await this._roomPingsService.sendPingResponse(roomPing);
+  ngOnInit(): void {
+    this.roomPing$
+      .pipe(takeUntil(this._roomPingsService.disposed$))
+      .subscribe();
   }
 
-  onCancel() {
-    this._roomPingsService.cancelPingRequest(this.roomPing);
+  onRespond(message?: string): void {
+    this._roomPingsService
+      .sendPingResponse({
+        ...this.roomPing,
+        state: RoomPingState.Responded,
+        responseMessage: message?.trim() || 'On my way!',
+        responseUserId: this.clientUser?.id,
+      })
+      .subscribe((response: RoomPing) => (this.roomPing = response));
+  }
+
+  onCancel(): void {
+    this._roomPingsService
+      .cancelPingRequest(this.roomPing)
+      .subscribe(() => (this.roomPing = null));
   }
 
   onDismiss(): void {

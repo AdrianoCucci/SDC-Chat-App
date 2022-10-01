@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AdminPassResetRequest } from 'src/app/core/models/auth/admin-pass-reset-request';
 import { User } from 'src/app/core/models/users/user';
 import { AuthService } from 'src/app/core/services/api/auth-service';
@@ -16,11 +18,15 @@ export class AdminPassResetForm extends AppForm<AdminPassResetRequest, void> {
     super();
   }
 
-  protected async onRequestAdd(model: AdminPassResetRequest): Promise<void> {
-    await this.onRequestUpdate(model);
+  protected override onRequestAdd(
+    model: AdminPassResetRequest
+  ): Observable<void> {
+    return this.onRequestUpdate(model);
   }
 
-  protected async onRequestUpdate(model: AdminPassResetRequest): Promise<void> {
-    await this._authService.adminResetPassword(model).toPromise();
+  protected override onRequestUpdate(
+    model: AdminPassResetRequest
+  ): Observable<void> {
+    return this._authService.adminResetPassword(model).pipe(map(() => null));
   }
 }

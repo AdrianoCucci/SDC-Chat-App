@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import {
   Component,
   EventEmitter,
@@ -6,6 +5,8 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
+import { defer, NEVER, Observable } from 'rxjs';
+import { catchError, finalize, first, tap } from 'rxjs/operators';
 import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
 import { FormMode } from 'src/app/shared/models/form-mode';
 import { FormSubmitResult } from 'src/app/shared/modules/forms/form/form-submit-result';
@@ -34,37 +35,45 @@ export abstract class AppForm<TModel = any, TResult = any> {
     this._error = null;
   }
 
-  async onFormSubmit(result: FormSubmitResult): Promise<void> {
-    if (result.isValid) {
-      try {
-        this._isSubmitting = true;
-        this._error = null;
+  onFormSubmit(result: FormSubmitResult): void {
+    if (!result.isValid) {
+      return;
+    }
 
-        let resultModel: TResult;
+    this.sendSubmissionRequest(this.model).subscribe();
+  }
 
-        switch (this.mode) {
-          case 'add':
-            resultModel = await this.onRequestAdd(this.model);
-            break;
-          case 'edit':
-            resultModel = await this.onRequestUpdate(this.model);
-            break;
-          default:
-            throw new Error('Form [mode] property is not defined');
-        }
+  private sendSubmissionRequest(requestModel: TModel): Observable<void> {
+    return defer<void>(() => {
+      this._isSubmitting = true;
+      this._error = null;
 
-        this.onSubmitSuccess.emit(resultModel);
-      } catch (error) {
-        this._error = parseErrorMessage(error);
-      } finally {
-        this._isSubmitting = false;
-      }
+      return this.getRequestObservable(requestModel).pipe(
+        first(),
+        tap((result: TResult) => this.onSubmitSuccess.emit(result)),
+        finalize(() => (this._isSubmitting = false)),
+        catchError((error: any) => {
+          this._error = parseErrorMessage(error);
+          return NEVER;
+        })
+      );
+    });
+  }
+
+  private getRequestObservable(model: TModel): Observable<TResult> {
+    switch (this.mode) {
+      case 'add':
+        return this.onRequestAdd(model);
+      case 'edit':
+        return this.onRequestUpdate(model);
+      default:
+        throw new Error('Form [mode] property is not defined');
     }
   }
 
-  protected abstract onRequestAdd(model: TModel): Promise<TResult>;
+  protected abstract onRequestAdd(model: TModel): Observable<TResult>;
 
-  protected abstract onRequestUpdate(model: TModel): Promise<TResult>;
+  protected abstract onRequestUpdate(model: TModel): Observable<TResult>;
 
   public get isSubmitting(): boolean {
     return this._isSubmitting;

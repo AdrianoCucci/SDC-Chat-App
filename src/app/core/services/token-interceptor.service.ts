@@ -5,7 +5,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoginService } from './login.service';
 
@@ -23,23 +23,23 @@ export class TokenInterceptorService implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     return this.requestIsToAPI(request)
-      ? from(this.handleApiRequest(request, next))
+      ? this.handleApiRequest(request, next)
       : next.handle(request);
   }
 
-  private async handleApiRequest(
+  private handleApiRequest(
     request: HttpRequest<any>,
     next: HttpHandler
-  ): Promise<HttpEvent<any>> {
+  ): Observable<HttpEvent<any>> {
     const token: string = this._loginService.getAuthToken();
 
-    if ((token != null) != null) {
+    if (token) {
       request = request.clone({
         setHeaders: { Authorization: `Bearer ${token}` },
       });
     }
 
-    return next.handle(request).toPromise();
+    return next.handle(request);
   }
 
   private requestIsToAPI(request: HttpRequest<any>): boolean {

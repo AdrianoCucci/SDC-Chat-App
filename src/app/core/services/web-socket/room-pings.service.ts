@@ -1,6 +1,8 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
+import { BehaviorSubject, merge, Observable, Subject } from 'rxjs';
+import { map, takeUntil, tap } from 'rxjs/operators';
+import { emptyPagedList } from 'src/app/shared/functions/empty-paged-list';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 import { EventsService } from 'src/app/shared/modules/events/events.service';
 import { RoomPing } from '../../models/room-pings/room-ping';
@@ -8,15 +10,30 @@ import { RoomPingState } from '../../models/room-pings/room-ping-state';
 import { Room } from '../../models/rooms/room';
 import { RoomsService } from '../api/rooms-service';
 import { AudioService } from '../audio/audio.service';
-import { LoginService } from '../login.service';
 import { WebSocketService } from './web-socket.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class RoomPingsService implements IDisposable {
-  private _pings: RoomPing[];
-  private _rooms: PagedList<Room>;
+export class RoomPingsService {
+  public readonly disposed$: Observable<void> =
+    this._socketService.disposed$.pipe(
+      tap(() => {
+        this._roomPingRequest$.complete();
+        this._roomPingResponse$.complete();
+        this._roomPingCancel$.complete();
+        this._pings$.complete();
+        this._rooms$.complete();
+      })
+    );
+
+  private readonly _roomPingRequest$ = new Subject<RoomPing>();
+  private readonly _roomPingResponse$ = new Subject<RoomPing>();
+  private readonly _roomPingCancel$ = new Subject<RoomPing>();
+  private readonly _pings$ = new BehaviorSubject<RoomPing[]>([]);
+  private readonly _rooms$ = new BehaviorSubject<PagedList<Room>>(
+    emptyPagedList<Room>()
+  );
 
   constructor(
     private _socketService: WebSocketService,
@@ -27,145 +44,120 @@ export class RoomPingsService implements IDisposable {
     this.subscribeEvents();
   }
 
-  public dispose(): void {
-    this._pings = null;
-    this._rooms = null;
-  }
-
   private subscribeEvents(): void {
-    const socket: WebSocketService = this._socketService;
-    const events = this.socketEvents;
-    const eventsService: EventsService = this._eventsService;
-    const eventsSource: string = this.constructor.name;
-    const audioService: AudioService = this._audioService;
+    merge(
+      this._socketService.on(this.socketEvents.roomPingRequest).pipe(
+        tap((value: RoomPing) => {
+          this.addPing(value);
 
-    socket.on<RoomPing>(events.roomPingRequest, (roomPing: RoomPing) => {
-      this.addPing(roomPing);
+          this._eventsService.publish({
+            source: this.constructor.name,
+            type: this.socketEvents.roomPingRequest,
+            data: value,
+          });
 
-      eventsService.publish({
-        source: eventsSource,
-        type: events.roomPingRequest,
-        data: roomPing,
-      });
+          if (value.room?.pingSound != null) {
+            this._audioService.play(value.room.pingSound);
+          }
 
-      if (roomPing.room?.pingSound != null) {
-        audioService.play(roomPing.room.pingSound);
-      }
-    });
+          this._roomPingRequest$.next();
+        })
+      ),
 
-    socket.on<RoomPing>(events.roomPingResponse, (roomPing: RoomPing) => {
-      this.updatePing(roomPing.guid, roomPing);
+      this._socketService.on(this.socketEvents.roomPingResponse).pipe(
+        tap((value: RoomPing) => {
+          this.updatePing(value.guid, value);
 
-      eventsService.publish({
-        source: eventsSource,
-        type: events.roomPingResponse,
-        data: roomPing,
-      });
+          this._eventsService.publish({
+            source: this.constructor.name,
+            type: this.socketEvents.roomPingCancel,
+            data: value,
+          });
 
-      if (roomPing.room?.pingSound != null) {
-        audioService.stop(roomPing.room.pingSound);
-      }
-    });
+          if (value.room?.pingSound != null) {
+            this._audioService.stop(value.room.pingSound);
+          }
 
-    socket.on<RoomPing>(events.roomPingCancel, (roomPing: RoomPing) => {
-      this.removePing(roomPing.guid);
+          this._roomPingResponse$.next();
+        })
+      ),
 
-      eventsService.publish({
-        source: eventsSource,
-        type: events.roomPingCancel,
-        data: roomPing,
-      });
+      this._socketService.on(this.socketEvents.roomPingCancel).pipe(
+        tap((value: RoomPing) => {
+          this.removePing(value.guid);
 
-      if (roomPing.room?.pingSound != null) {
-        audioService.stop(roomPing.room.pingSound);
-      }
-    });
+          this._eventsService.publish({
+            source: this.constructor.name,
+            type: this.socketEvents.roomPingCancel,
+            data: value,
+          });
 
-    eventsService.subscribe({
-      eventSources: LoginService.name,
-      eventTypes: 'logout',
-      eventHandler: () => this.dispose(),
-    });
+          if (value.room?.pingSound != null) {
+            this._audioService.stop(value.room.pingSound);
+          }
+
+          this._roomPingCancel$.next(value);
+        })
+      )
+    )
+      .pipe(takeUntil(this.disposed$))
+      .subscribe();
   }
 
-  public loadRooms(organizationId: number): Promise<PagedList<Room>> {
-    return new Promise<PagedList<Room>>(async (resolve, reject) => {
-      try {
-        const response: HttpResponse<PagedList<Room>> = await this._roomsService
-          .getAllRooms({ organizationId })
-          .toPromise();
-        this._rooms = response.body;
-
-        resolve(this._rooms);
-      } catch (error) {
-        reject(error);
-      }
-    });
+  public loadRooms(organizationId: number): Observable<PagedList<Room>> {
+    return this._roomsService.getAllRooms({ organizationId }).pipe(
+      map((response: HttpResponse<PagedList<Room>>) => response.body),
+      tap((rooms: PagedList<Room>) => this._rooms$.next(rooms))
+    );
   }
 
-  public sendPingRequest(roomPing: RoomPing): Promise<RoomPing> {
-    return new Promise<RoomPing>((resolve) => {
-      const eventType: string = this.socketEvents.roomPingRequest;
-
-      this._socketService.emit(eventType, roomPing, (response: RoomPing) => {
-        this.addPing(response);
-        resolve(response);
-      });
-    });
+  public sendPingRequest(roomPing: RoomPing): Observable<RoomPing> {
+    return this._socketService
+      .emit<RoomPing>(this.socketEvents.roomPingRequest, roomPing)
+      .pipe(tap((response: RoomPing) => this.addPing(response)));
   }
 
-  public sendPingResponse(roomPing: RoomPing): Promise<RoomPing> {
-    return new Promise<RoomPing>((resolve) => {
-      const eventType: string = this.socketEvents.roomPingResponse;
+  public sendPingResponse(roomPing: RoomPing): Observable<RoomPing> {
+    return this._socketService
+      .emit<RoomPing>(this.socketEvents.roomPingResponse, roomPing)
+      .pipe(
+        tap((response: RoomPing) => {
+          this.upsertPing(response);
 
-      this._socketService.emit(eventType, roomPing, (response: RoomPing) => {
-        this.upsertPing(response);
-
-        if (response.room?.pingSound != null) {
-          this._audioService.stop(response.room.pingSound);
-        }
-
-        resolve(response);
-      });
-    });
-  }
-
-  public cancelPingRequest(roomPing: RoomPing): void {
-    if (roomPing != null) {
-      this._socketService.emit(this.socketEvents.roomPingCancel, roomPing);
-      this.removePing(roomPing.guid);
-    }
-  }
-
-  public getRequestingPings(): Promise<RoomPing[]> {
-    return new Promise<RoomPing[]>((resolve) => {
-      this._socketService.emit(
-        this.socketEvents.getRoomPings,
-        (response: RoomPing[]) => {
-          this._pings = response;
-          resolve(response);
-        }
+          if (response.room?.pingSound != null) {
+            this._audioService.stop(response.room.pingSound);
+          }
+        })
       );
-    });
   }
 
-  public findPing(guid: string): RoomPing {
-    return this._pings?.find((r: RoomPing) => r.guid === guid) ?? null;
+  public cancelPingRequest(roomPing: RoomPing): Observable<void> {
+    return this._socketService
+      .emit<void>(this.socketEvents.roomPingCancel, roomPing)
+      .pipe(tap(() => this.removePing(roomPing.guid)));
+  }
+
+  public getRequestingPings(): Observable<RoomPing[]> {
+    return this._socketService
+      .emit<RoomPing[]>(this.socketEvents.getRoomPings)
+      .pipe(tap((response: RoomPing[]) => this._pings$.next(response)));
+  }
+
+  public findPing(guid: string): RoomPing | undefined {
+    return this._pings$.value.find((r: RoomPing) => r.guid === guid);
   }
 
   public findPingIndex(guid: string): number {
-    return this._pings?.findIndex((r: RoomPing) => r.guid === guid) ?? -1;
+    return this._pings$.value.findIndex((r: RoomPing) => r.guid === guid);
   }
 
   public findPings(predicate: (roomPing: RoomPing) => boolean): RoomPing[] {
-    return this._pings?.filter(predicate) ?? [];
+    return this._pings$.value.filter(predicate);
   }
 
   public addPing(roomPing: RoomPing): void {
-    if (this._pings == null) {
-      this._pings = [roomPing];
-    } else {
-      this._pings.push(roomPing);
+    if (!this.findPing(roomPing.guid)) {
+      this._pings$.next([...this._pings$.value, roomPing]);
     }
   }
 
@@ -174,7 +166,8 @@ export class RoomPingsService implements IDisposable {
     const canUpdate: boolean = index !== -1;
 
     if (canUpdate) {
-      this._pings[index] = roomPing;
+      this._pings$.value[index] = roomPing;
+      this._pings$.next(this._pings$.value);
     }
 
     return canUpdate;
@@ -191,7 +184,8 @@ export class RoomPingsService implements IDisposable {
     const canRemove: boolean = index !== -1;
 
     if (canRemove) {
-      this._pings.splice(index, 1);
+      this._pings$.value.splice(index, 1);
+      this._pings$.next(this._pings$.value);
     }
 
     return canRemove;
@@ -199,9 +193,11 @@ export class RoomPingsService implements IDisposable {
 
   public removeAllRespondedPings(): void {
     if (this.hasPings) {
-      this._pings = this._pings.filter(
+      const pings: RoomPing[] = this._pings$.value.filter(
         (r: RoomPing) => r.state !== RoomPingState.Responded
       );
+
+      this._pings$.next(pings);
     }
   }
 
@@ -214,19 +210,31 @@ export class RoomPingsService implements IDisposable {
     };
   }
 
-  public get pings(): RoomPing[] {
-    return this._pings;
+  public get roomPingRequest$(): Observable<RoomPing> {
+    return this._roomPingRequest$.asObservable();
+  }
+
+  public get roomPingResponse$(): Observable<RoomPing> {
+    return this._roomPingResponse$.asObservable();
+  }
+
+  public get roomPingCancel$(): Observable<RoomPing> {
+    return this._roomPingCancel$.asObservable();
+  }
+
+  public get pings$(): Observable<RoomPing[]> {
+    return this._pings$.asObservable();
+  }
+
+  public get rooms$(): Observable<PagedList<Room>> {
+    return this._rooms$.asObservable();
   }
 
   public get hasPings(): boolean {
-    return this._pings?.length > 0 ?? false;
-  }
-
-  public get rooms(): PagedList<Room> {
-    return this._rooms;
+    return this._pings$.value.length > 0;
   }
 
   public get hasRooms(): boolean {
-    return this._rooms?.data?.length > 0 ?? false;
+    return this._rooms$.value.data.length > 0;
   }
 }

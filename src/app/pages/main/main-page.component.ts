@@ -1,14 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Event, NavigationStart, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { concat, Subject } from 'rxjs';
+import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import { Role } from 'src/app/core/models/auth/role';
 import { User } from 'src/app/core/models/users/user';
 import { AudioService } from 'src/app/core/services/audio/audio.service';
 import { LoginService } from 'src/app/core/services/login.service';
-import { ChatService } from 'src/app/core/services/web-socket/chat.service';
-import { RoomPingsService } from 'src/app/core/services/web-socket/room-pings.service';
-import { SocketUsersService } from 'src/app/core/services/web-socket/socket-users.service';
-import { WebSocketService } from 'src/app/core/services/web-socket/web-socket.service';
+import { SocketClientDataInitializerService } from 'src/app/core/services/web-socket/socket-client-data-initializer.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
 import { MenuItem } from 'src/app/shared/models/menu-item';
 import { MainMenuItemsMapper } from 'src/app/shared/util/main-menu-items-mapper';
@@ -23,17 +21,14 @@ export class MainPage implements OnInit, OnDestroy {
   public readonly mainMenuItems: MenuItem[];
   public readonly appName: string = environment.app.name;
 
-  private _subscription: Subscription;
+  private readonly _destroyed$ = new Subject<void>();
   private _initialized: boolean = false;
   private _initError: string;
 
   constructor(
     private _loginService: LoginService,
     private _router: Router,
-    private _socketService: WebSocketService,
-    private _socketUsersService: SocketUsersService,
-    private _chatService: ChatService,
-    private _roomPingsService: RoomPingsService,
+    private _socketClientInitService: SocketClientDataInitializerService,
     private _audioService: AudioService
   ) {
     if (this.clientUser != null) {
@@ -44,72 +39,48 @@ export class MainPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
-    this._subscription = new Subscription();
-
-    await this.initRouterEvents(this._subscription);
+    await this.initRouterEvents();
 
     if (
-      this.clientUser.role !== Role.Administrator &&
-      this.clientUser.organizationId != null
+      this.clientUser.role === Role.Administrator ||
+      this.clientUser.organizationId == null
     ) {
-      try {
-        await this.initSocketClientData(this.clientUser);
-      } catch (error) {
-        switch (typeof error) {
-          case 'string':
-            this._initError = error;
-            break;
-          case 'object':
-            this._initError = error.toString();
-            break;
-          default:
-            this._initError = 'An unknown error occurred';
-            break;
-        }
-      }
+      this._initialized = true;
+      return;
     }
 
-    this._initialized = true;
+    concat(
+      this._socketClientInitService.initSocketClientData(this.clientUser).pipe(
+        finalize(() => (this._initialized = true)),
+        catchError((error: string) => (this._initError = error))
+      ),
+      this._socketClientInitService.monitorReconnection(this.clientUser)
+    )
+      .pipe(takeUntil(this._destroyed$))
+      .subscribe();
   }
 
   ngOnDestroy(): void {
     this._audioService.stopAllAudio();
 
-    this._subscription.unsubscribe();
-    this._subscription = null;
+    this._destroyed$.next();
+    this._destroyed$.complete();
   }
 
-  private async initRouterEvents(subscription: Subscription): Promise<void> {
+  private async initRouterEvents(): Promise<void> {
     const rootPath: string = `/${MAIN_PATHS.root}`;
 
     if (this._router.url === rootPath) {
       await this.navigateToFirstMenuItem();
     }
 
-    subscription.add(
-      this._router.events.subscribe(async (event: Event) => {
+    this._router.events
+      .pipe(takeUntil(this._destroyed$))
+      .subscribe(async (event: Event) => {
         if (event instanceof NavigationStart && event.url === rootPath) {
           await this.navigateToFirstMenuItem();
         }
-      })
-    );
-  }
-
-  private async initSocketClientData(clientUser: User): Promise<void> {
-    await this._socketService.connect();
-    await this._socketUsersService.joinClientUser(clientUser);
-
-    const organizationId: number = clientUser.organizationId;
-
-    const messagesBeforeDate = new Date();
-    messagesBeforeDate.setHours(messagesBeforeDate.getHours() + 24);
-
-    await Promise.all([
-      this._socketUsersService.loadUsers(organizationId),
-      this._chatService.loadMessages(organizationId, messagesBeforeDate, 50),
-      this._roomPingsService.loadRooms(organizationId),
-      this._roomPingsService.getRequestingPings(),
-    ]);
+      });
   }
 
   public logout(): void {

@@ -1,5 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { OrganizationRequest } from 'src/app/core/models/organizations/organization-request';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
@@ -18,21 +20,19 @@ export class OrganizationForm extends AppForm<
     super();
   }
 
-  protected async onRequestAdd(
+  protected override onRequestAdd(
     model: OrganizationRequest
-  ): Promise<Organization> {
-    const response: HttpResponse<Organization> = await this._orgsService
+  ): Observable<Organization> {
+    return this._orgsService
       .addOrganization(model)
-      .toPromise();
-    return response.body;
+      .pipe(map((response: HttpResponse<Organization>) => response.body));
   }
 
-  protected async onRequestUpdate(
+  protected override onRequestUpdate(
     model: OrganizationRequest
-  ): Promise<Organization> {
-    const response: HttpResponse<Organization> = await this._orgsService
+  ): Observable<Organization> {
+    return this._orgsService
       .updateOrganization(model.id, model)
-      .toPromise();
-    return response.body;
+      .pipe(map((response: HttpResponse<Organization>) => response.body));
   }
 }

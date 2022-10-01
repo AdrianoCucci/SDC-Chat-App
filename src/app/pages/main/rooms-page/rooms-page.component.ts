@@ -1,5 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Observable, defer, throwError } from 'rxjs';
+import { finalize, catchError, map, tap } from 'rxjs/operators';
 import { Room } from 'src/app/core/models/rooms/room';
 import { RoomsService } from 'src/app/core/services/api/rooms-service';
 import { LoginService } from 'src/app/core/services/login.service';
@@ -16,7 +18,9 @@ import { PageEvent } from 'src/app/shared/modules/table/page-event';
 export class RoomsPage implements OnInit {
   public readonly organizationId: number;
 
-  public readonly pageHandler = (event: PageEvent): Promise<PagedList<Room>> =>
+  public readonly pageHandler = (
+    event: PageEvent
+  ): Observable<PagedList<Room>> =>
     this.loadRooms({
       take: event.limit,
       skip: event.offset * event.limit,
@@ -32,31 +36,33 @@ export class RoomsPage implements OnInit {
     this.organizationId = loginService.user.organizationId;
   }
 
-  async ngOnInit(): Promise<void> {
-    await this.loadRooms();
+  ngOnInit(): void {
+    this.loadRooms().subscribe();
   }
 
-  private async loadRooms(pagination?: Paginatable): Promise<PagedList<Room>> {
-    try {
+  private loadRooms(pagination?: Paginatable): Observable<PagedList<Room>> {
+    return defer((): Observable<PagedList<Room>> => {
       this.loadingVisible = true;
+      this.errorVisible = false;
 
-      const response: HttpResponse<PagedList<Room>> = await this._roomsService
+      return this._roomsService
         .getAllRooms({
           organizationId: this.organizationId,
           skip: pagination?.skip,
           take: pagination?.take,
         })
-        .toPromise();
+        .pipe(
+          finalize(() => (this.loadingVisible = false)),
+          catchError((error: any) => {
+            this.loadError = parseErrorMessage(error);
+            this.errorVisible = true;
 
-      this._rooms = response.body;
-    } catch (error) {
-      this.loadError = parseErrorMessage(error);
-      this.errorVisible = true;
-    } finally {
-      this.loadingVisible = false;
-    }
-
-    return this._rooms;
+            return throwError(error);
+          }),
+          map((value: HttpResponse<PagedList<Room>>) => value.body),
+          tap((value: PagedList<Room>) => (this._rooms = value))
+        );
+    });
   }
 
   public get rooms(): PagedList<Room> {

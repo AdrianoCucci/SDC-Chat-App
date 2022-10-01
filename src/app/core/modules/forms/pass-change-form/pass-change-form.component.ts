@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { PassResetRequest } from 'src/app/core/models/auth/pass-reset-request';
 import { AuthService } from 'src/app/core/services/api/auth-service';
 import { AppForm } from '../app-form';
@@ -13,11 +15,13 @@ export class PassChangeForm extends AppForm<PassResetRequest, void> {
     super();
   }
 
-  protected async onRequestAdd(model: PassResetRequest): Promise<void> {
-    await this.onRequestUpdate(model);
+  protected override onRequestAdd(model: PassResetRequest): Observable<void> {
+    return this.onRequestUpdate(model);
   }
 
-  protected async onRequestUpdate(model: PassResetRequest): Promise<void> {
-    await this._authService.resetPassword(model).toPromise();
+  protected override onRequestUpdate(
+    model: PassResetRequest
+  ): Observable<void> {
+    return this._authService.resetPassword(model).pipe(map(() => null));
   }
 }

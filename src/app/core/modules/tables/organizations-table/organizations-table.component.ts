@@ -1,4 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
+import { defer, Observable, throwError } from 'rxjs';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { OrganizationRequest } from 'src/app/core/models/organizations/organization-request';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
@@ -19,7 +21,7 @@ export class OrganizationsTable {
   @Input() public organizations: Organization[];
   @Input() public pageHandler: (
     event: PageEvent
-  ) => Promise<PagedList<Organization>>;
+  ) => Observable<PagedList<Organization>>;
 
   public readonly cells: TableCell[] = [
     { name: 'Name', prop: 'name', sortable: true, filterable: true },
@@ -71,29 +73,41 @@ export class OrganizationsTable {
     }
   }
 
-  async onDeleteOrganization(organization: Organization): Promise<void> {
-    try {
-      this._isDeletingOrganization = true;
-
-      await this._orgsService.deleteOrganization(organization.id).toPromise();
-      this.organizations = this._table.queryDeleteRow(
-        (u: Organization) => u.id === organization.id
-      );
-    } catch (error) {
-      this.errorDialogText = parseErrorMessage(error);
-      this.errorDialogVisible = true;
-    } finally {
-      this._isDeletingOrganization = false;
-    }
+  onDeleteOrganization(organization: Organization): void {
+    this.deleteOrganization(organization).subscribe();
   }
 
-  private showOrganizationForm(model: OrganizationRequest, mode: FormMode) {
+  private showOrganizationForm(
+    model: OrganizationRequest,
+    mode: FormMode
+  ): void {
     this._organizationForm.clear();
 
     setTimeout(() => {
       this._organizationForm.model = model;
       this._organizationForm.mode = mode;
       this._organizationForm.dialogVisible = true;
+    });
+  }
+
+  private deleteOrganization(organization: Organization): Observable<void> {
+    return defer((): Observable<void> => {
+      this._isDeletingOrganization = true;
+
+      return this._orgsService.deleteOrganization(organization.id).pipe(
+        finalize(() => (this._isDeletingOrganization = false)),
+        catchError((error: any) => {
+          this.errorDialogText = parseErrorMessage(error);
+          this.errorDialogVisible = true;
+          return throwError(error);
+        }),
+        map(() => null),
+        tap(() => {
+          this.organizations = this._table.queryDeleteRow(
+            (o: Organization) => o.id === organization.id
+          );
+        })
+      );
     });
   }
 

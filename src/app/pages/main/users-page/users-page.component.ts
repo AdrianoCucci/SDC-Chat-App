@@ -1,5 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { defer, forkJoin, merge, Observable, throwError } from 'rxjs';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
@@ -19,15 +21,13 @@ import { PageEvent } from 'src/app/shared/modules/table/page-event';
 export class UsersPage implements OnInit {
   public readonly clientUser: User;
 
-  public readonly pageHandler = async (
+  public readonly pageHandler = (
     event: PageEvent
-  ): Promise<PagedList<User>> => {
-    await this.loadUsers({
+  ): Observable<PagedList<User>> => {
+    return this.loadUsers({
       take: event.limit,
       skip: event.offset * event.limit,
     });
-
-    return this._users;
   };
 
   public loadingVisible: boolean = false;
@@ -46,25 +46,38 @@ export class UsersPage implements OnInit {
     this.clientUser = loginService.user;
   }
 
-  async ngOnInit(): Promise<void> {
-    try {
-      this.loadingVisible = true;
-
-      await Promise.all([
-        this.loadUsers(),
-        this.adminFeatures ? this.loadOrganizations() : null,
-      ]);
-    } catch (error) {
-      this.loadError = parseErrorMessage(error);
-      this.errorVisible = true;
-    } finally {
-      this.loadingVisible = false;
-      this._initialized = true;
-    }
+  ngOnInit(): void {
+    this.loadAllData()
+      .pipe(tap(() => (this._initialized = true)))
+      .subscribe();
   }
 
-  private async loadUsers(pagination?: Paginatable): Promise<void> {
-    const response: HttpResponse<PagedList<User>> = await this._usersService
+  private loadAllData(): Observable<void> {
+    return defer((): Observable<void> => {
+      this.loadingVisible = true;
+      this.errorVisible = false;
+
+      const observables: Observable<any>[] = [this.loadUsers()];
+
+      if (this.adminFeatures) {
+        observables.push(this.loadOrganizations());
+      }
+
+      return forkJoin(observables).pipe(
+        finalize(() => (this.loadingVisible = false)),
+        catchError((error: any) => {
+          this.loadError = parseErrorMessage(error);
+          this.errorVisible = true;
+
+          return throwError(error);
+        }),
+        map(() => null)
+      );
+    });
+  }
+
+  private loadUsers(pagination?: Paginatable): Observable<PagedList<User>> {
+    return this._usersService
       .getAllUsers({
         organizationId: this.adminFeatures
           ? null
@@ -72,15 +85,17 @@ export class UsersPage implements OnInit {
         skip: pagination?.skip,
         take: pagination?.take,
       })
-      .toPromise();
-
-    this._users = response.body;
+      .pipe(
+        map((value: HttpResponse<PagedList<User>>) => value.body),
+        tap((value: PagedList<User>) => (this._users = value))
+      );
   }
 
-  private async loadOrganizations(): Promise<void> {
-    const response: HttpResponse<PagedList<Organization>> =
-      await this._orgsService.getAllOrganizations().toPromise();
-    this._organizations = response.body;
+  private loadOrganizations(): Observable<PagedList<Organization>> {
+    return this._orgsService.getAllOrganizations().pipe(
+      map((value: HttpResponse<PagedList<Organization>>) => value.body),
+      tap((value: PagedList<Organization>) => (this._organizations = value))
+    );
   }
 
   public get initialized(): boolean {

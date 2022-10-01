@@ -13,6 +13,8 @@ import {
   faSortAmountUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { ColumnMode } from '@swimlane/ngx-datatable';
+import { Observable } from 'rxjs';
+import { filter, first, tap } from 'rxjs/operators';
 import { PagedList } from '../../models/pagination/paged-list';
 import { TemplateDirective } from '../directives/template.directive';
 import { PageEvent } from './page-event';
@@ -30,7 +32,7 @@ export class Table implements AfterViewInit {
   @Input() public serverPaging: boolean = false;
   @Input() public offset: number = 0;
   @Input() public limit: number = 20;
-  @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<any>>;
+  @Input() public pageHandler: (event: PageEvent) => Observable<PagedList<any>>;
 
   public readonly sortNoneIcon: IconDefinition = faSort;
   public readonly sortAscIcon: IconDefinition = faSortAmountUp;
@@ -282,17 +284,26 @@ export class Table implements AfterViewInit {
     this._filteredData = this.applyActiveFilters(this.data);
   }
 
-  async onPage(event: PageEvent): Promise<void> {
-    if (this.pageHandler != null) {
-      const response: PagedList<any> = await this.pageHandler(event);
-
-      if (response && response.data && response.pagination) {
-        this._count = response.pagination.totalItemsCount;
-        this.data = response.data;
-        this.offset = response.pagination.skip;
-        this.limit = response.pagination.take;
-      }
+  onPage(event: PageEvent): void {
+    if (!this.pageHandler) {
+      return;
     }
+
+    this.pageHandler(event)
+      .pipe(
+        first(),
+        filter(
+          (value: PagedList<any>) =>
+            !!value && !!value.data && !!value.pagination
+        ),
+        tap((value: PagedList<any>) => {
+          this._count = value.pagination.totalItemsCount;
+          this.data = value.data;
+          this.offset = value.pagination.skip;
+          this.limit = value.pagination.take;
+        })
+      )
+      .subscribe();
   }
 
   private applyActiveFilters(data: any[]): any[] {
