@@ -47,8 +47,8 @@ export class InputTextarea extends FormInput<string> implements OnInit {
     }
   }
 
-  private get input(): HTMLTextAreaElement {
-    return this._inputRef?.nativeElement ?? null;
+  public get input(): HTMLTextAreaElement {
+    return this._inputRef?.nativeElement;
   }
 
   public get minLength(): number {

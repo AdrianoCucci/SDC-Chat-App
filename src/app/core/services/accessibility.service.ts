@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { defer, Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize, map, tap } from 'rxjs/operators';
 import { AccessibilityPrefs } from 'src/app/core/models/user-prefs/accessibility-prefs.model';
 import { UserPrefsService } from 'src/app/core/services/user-prefs.service';
 
@@ -33,7 +33,11 @@ export class AccessibilityService {
 
       return this._userPrefsService
         .setPreference(this._prefsKey, this._prefs)
-        .pipe(finalize(() => (this._isSavingPrefs = false)));
+        .pipe(
+          map((value: Record<string, any>) => value[this._prefsKey]),
+          tap((value: Record<string, any>) => this.updateDOM(value)),
+          finalize(() => (this._isSavingPrefs = false))
+        );
     });
   }
 
@@ -43,16 +47,14 @@ export class AccessibilityService {
     );
 
     if (prefs) {
-      this._prefs = prefs;
-      this.updateDOM();
+      this.setPreferences(prefs);
     } else {
       this.loadDefaultPreferences();
     }
   }
 
   public loadDefaultPreferences(): void {
-    this._prefs = { theme: 'default' };
-    this.updateDOM();
+    this.setPreferences({ theme: 'default' });
   }
 
   public updateDOM(prefs?: AccessibilityPrefs): void {

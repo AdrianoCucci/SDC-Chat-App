@@ -27,6 +27,7 @@ export class Popover implements OnInit, IVisibilityChangeable {
   @Input() public anchorY: 'top' | 'bottom';
   @Input() public autoAnchorX: boolean = true;
   @Input() public autoAnchorY: boolean = true;
+  @Input() public backgroundColor?: string;
 
   @HostBinding('class.visible') private _visible: boolean = false;
 
@@ -114,6 +115,10 @@ export class Popover implements OnInit, IVisibilityChangeable {
     target: HTMLElement,
     parent?: PopoverParent
   ): void {
+    if (!host || !target) {
+      return;
+    }
+
     const targetRect: DOMRect = target.getBoundingClientRect();
 
     const halfWindowWidth: number = window.innerWidth / 2;
@@ -216,4 +221,4 @@ export class Popover implements OnInit, IVisibilityChangeable {
   }
 }
 
-type PopoverParent = HTMLElement | 'body';
+export type PopoverParent = HTMLElement | 'body';

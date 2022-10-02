@@ -4,6 +4,7 @@
       <app-chat-message
         [message]="message"
         [clientUser]="clientUser"
+        [keywords]="keywords"
         class="message"
         (onEdit)="onEditMessage.emit($event)"
         (onDelete)="onPromptDeleteMessage($event)"
@@ -20,18 +21,17 @@
   </div>
 </div>
 
-<div class="input-wrapper">
-  <app-input-textarea
-    #textInput
-    class="user-input"
-    placeholder="Type your message..."
-    [autoResize]="true"
-    (keydown.enter)="onTextareaEnter(textInput)"
-  >
-  </app-input-textarea>
-</div>
+<app-chat-input
+  #chatInput
+  [keywords]="keywords"
+  (onPostMessage)="onInputPostMessage($event, chatInput)"
+></app-chat-input>
 
-<app-popover class="w-min-rem-12 delete-message-popover" [offsetY]="10">
+<app-popover
+  #messageDeletePopover
+  class="w-min-rem-12 delete-message-popover"
+  [offsetY]="10"
+>
   <div>Delete this message?</div>
 
   <div class="flex flex-justify-center m-t-1">

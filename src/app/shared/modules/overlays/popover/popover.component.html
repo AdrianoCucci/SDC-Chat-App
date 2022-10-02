@@ -1,3 +1,7 @@
-<div *ngIf="contentVisible" class="popover-content">
+<div
+  *ngIf="contentVisible"
+  class="popover-content"
+  [style.backgroundColor]="backgroundColor"
+>
   <ng-content></ng-content>
 </div>

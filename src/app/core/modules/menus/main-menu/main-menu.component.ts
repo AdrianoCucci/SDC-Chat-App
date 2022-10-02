@@ -17,8 +17,18 @@ export class MainMenu implements OnInit, OnDestroy {
   @Input() public menuItems: MenuItem[];
   @Input() public clientUser: User;
 
-  public readonly roomPingRequestsCount$: Observable<number> =
-    this._roomPingsService.pings$.pipe(
+  public readonly roomPingRequestsCount$: Observable<number>;
+
+  public newMessagesCount: number = 0;
+  public roomPingRequestsCount: number = 0;
+
+  private readonly _destroyed$ = new Subject<void>();
+
+  constructor(
+    private _chatService: ChatService,
+    roomPingsService: RoomPingsService
+  ) {
+    this.roomPingRequestsCount$ = roomPingsService.pings$.pipe(
       map((value: RoomPing[]) => {
         const predicate = (r: RoomPing) =>
           r.requestUserId !== this.clientUser.id &&
@@ -28,16 +38,7 @@ export class MainMenu implements OnInit, OnDestroy {
       }),
       tap((value: number) => (this.roomPingRequestsCount = value))
     );
-
-  public newMessagesCount: number = 0;
-  public roomPingRequestsCount: number = 0;
-
-  private readonly _destroyed$ = new Subject<void>();
-
-  constructor(
-    private _chatService: ChatService,
-    private _roomPingsService: RoomPingsService
-  ) {}
+  }
 
   ngOnInit(): void {
     merge(
