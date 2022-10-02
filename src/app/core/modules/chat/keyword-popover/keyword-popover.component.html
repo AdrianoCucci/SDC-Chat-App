@@ -1,0 +1,17 @@
+<app-popover
+  *ngIf="keywords"
+  [offsetY]="1"
+  [backgroundColor]="'var(--color-1-tint-4)'"
+  class="keyword-popover"
+>
+  <div *ngIf="header" class="txt-bold p-2">{{ header }}</div>
+
+  <ul class="popover-list w-min-rem-18 h-max-rem-12 overflow-auto">
+    <li
+      *ngFor="let keyword of keywords.values"
+      (click)="onKeywordSelect.emit(keyword)"
+    >
+      {{ (keywords.prefix || "") + keyword }}
+    </li>
+  </ul>
+</app-popover>

@@ -1,4 +1,8 @@
 :host {
+  --keyword-background: unset;
+  --keyword-color: unset;
+  --keyword-weight: 600;
+
   display: flex;
   flex-direction: column;
 
@@ -49,11 +53,17 @@
   div.body {
     p.message-contents {
       margin: 0;
+
+      ::ng-deep span.keyword {
+        background-color: var(--keyword-background);
+        color: var(--keyword-color);
+        font-weight: var(--keyword-weight);
+      }
     }
   }
 
-  app-input-textarea.edit-input {
-    padding: 0.25rem 3px 0.75rem 3px;
+  app-chat-input.edit-input ::ng-deep app-input-textarea {
+    padding: 0.25rem 0 0.75rem 0;
   }
 
   div.edit-actions {

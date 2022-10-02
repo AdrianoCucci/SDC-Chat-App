@@ -15,24 +15,25 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
   styleUrls: ['./room-pings-page.component.scss'],
 })
 export class RoomPingsPage {
-  public readonly rooms$: Observable<Room[]> =
-    this._roomPingsService.rooms$.pipe(
+  public readonly rooms$: Observable<Room[]>;
+  public readonly activePings$: Observable<RoomPing[]>;
+
+  constructor(
+    private _roomPingsService: RoomPingsService,
+    private _loginService: LoginService
+  ) {
+    this.rooms$ = this._roomPingsService.rooms$.pipe(
       map((value: PagedList<Room>) => value.data)
     );
 
-  public readonly activePings$: Observable<RoomPing[]> =
-    this._roomPingsService.pings$.pipe(
+    this.activePings$ = this._roomPingsService.pings$.pipe(
       map((value: RoomPing[]) =>
         value
           .filter((r: RoomPing) => r.state !== RoomPingState.Idle)
           .sort((a: RoomPing, b: RoomPing) => a.state - b.state)
       )
     );
-
-  constructor(
-    private _roomPingsService: RoomPingsService,
-    private _loginService: LoginService
-  ) {}
+  }
 
   public get clientUser(): User {
     return this._loginService.user;

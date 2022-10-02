@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { Keywords } from 'src/app/core/models/chat/keywords';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 import { ChatMessageListComponent } from 'src/app/core/modules/chat/chat-message-list/chat-message-list.component';
@@ -15,13 +16,10 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
   styleUrls: ['./chat-page.component.scss'],
 })
 export class ChatPage implements OnInit {
-  public readonly users$: Observable<User[]> =
-    this._socketUsersService.users$.pipe(
-      map((value: PagedList<User>) => value.data)
-    );
+  public readonly users$: Observable<User[]>;
+  public readonly messages$: Observable<ChatMessage[]>;
 
-  public readonly messages$: Observable<ChatMessage[]> =
-    this._chatService.messages$;
+  public readonly keywords: Keywords = { values: [], prefix: '@' };
 
   private _isLoadingMessages: boolean = false;
 
@@ -29,7 +27,19 @@ export class ChatPage implements OnInit {
     private _chatService: ChatService,
     private _socketUsersService: SocketUsersService,
     private _loginService: LoginService
-  ) {}
+  ) {
+    this.users$ = this._socketUsersService.users$.pipe(
+      map((value: PagedList<User>) => value.data),
+      tap(
+        (value: User[]) =>
+          (this.keywords.values = value.map(
+            (u: User) => u.displayName || u.username
+          ))
+      )
+    );
+
+    this.messages$ = this._chatService.messages$;
+  }
 
   ngOnInit(): void {
     this.onUserInteraction();

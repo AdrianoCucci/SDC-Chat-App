@@ -32,13 +32,12 @@
   </div>
 
   <ng-template #editTemplate>
-    <app-input-textarea
+    <app-chat-input
       #editInput
-      class="edit-input block"
-      [value]="message.contents"
-      [autoResize]="true"
-    >
-    </app-input-textarea>
+      class="edit-input"
+      [initialValue]="message.contents"
+      [keywords]="keywords"
+    ></app-chat-input>
 
     <div class="edit-actions">
       <app-button

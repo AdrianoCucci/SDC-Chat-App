@@ -9,10 +9,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { faComments, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { Keywords } from 'src/app/core/models/chat/keywords';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
 import { InputTextarea } from 'src/app/shared/modules/forms/inputs/input-textarea/input-textarea.component';
 import { Popover } from 'src/app/shared/modules/overlays/popover/popover.component';
+import { ChatInputComponent } from '../chat-input/chat-input.component';
 import { DeleteEventArgs } from '../chat-message/chat-message.component';
 
 @Component({
@@ -29,12 +31,14 @@ export class ChatMessageListComponent implements AfterViewInit, OnDestroy {
   public readonly noMessagesIcon: IconDefinition = faComments;
 
   @Input() public messages: ChatMessage[];
+  @Input() public keywords?: Keywords;
+  @Input() public keywordPrefix?: string;
   @Input() public clientUser: User;
   @Input() public listLoaderVisible: boolean = false;
 
   @ViewChild('messagesScrollWrapper')
   private readonly _messagesScrollWrapperRef: ElementRef;
-  @ViewChild(Popover) private readonly _deletePopover: Popover;
+  @ViewChild('messageDeletePopover') private readonly _deletePopover: Popover;
 
   private readonly _scrollTopLoadThreshold: number = 100;
 
@@ -55,20 +59,13 @@ export class ChatMessageListComponent implements AfterViewInit, OnDestroy {
     scrollWrapper.onscroll = null;
   }
 
-  onTextareaEnter(textArea: InputTextarea): void {
-    const value: string | undefined = textArea.value?.trim();
-
-    if (value) {
-      this.sendMessage(value);
-    }
+  onInputPostMessage(message: string, input: ChatInputComponent): void {
+    this.sendMessage(message);
 
     setTimeout(() => {
-      textArea.clear();
-      textArea.focus();
-
-      if (value) {
-        this.scrollToBottom();
-      }
+      input.clear();
+      input.focus();
+      this.scrollToBottom();
     });
   }
 

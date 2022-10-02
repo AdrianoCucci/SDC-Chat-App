@@ -16,16 +16,7 @@ import { WebSocketService } from './web-socket.service';
   providedIn: 'root',
 })
 export class RoomPingsService {
-  public readonly disposed$: Observable<void> =
-    this._socketService.disposed$.pipe(
-      tap(() => {
-        this._roomPingRequest$.complete();
-        this._roomPingResponse$.complete();
-        this._roomPingCancel$.complete();
-        this._pings$.complete();
-        this._rooms$.complete();
-      })
-    );
+  public readonly disposed$: Observable<void>;
 
   private readonly _roomPingRequest$ = new Subject<RoomPing>();
   private readonly _roomPingResponse$ = new Subject<RoomPing>();
@@ -41,6 +32,16 @@ export class RoomPingsService {
     private _audioService: AudioService,
     private _eventsService: EventsService
   ) {
+    this.disposed$ = this._socketService.disposed$.pipe(
+      tap(() => {
+        this._roomPingRequest$.complete();
+        this._roomPingResponse$.complete();
+        this._roomPingCancel$.complete();
+        this._pings$.complete();
+        this._rooms$.complete();
+      })
+    );
+
     this.subscribeEvents();
   }
 

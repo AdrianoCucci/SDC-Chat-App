@@ -8,7 +8,9 @@
   --message-color-client: var(--color-1-contrast);
   --message-background-client-hover: var(--color-1-tint-3);
   --message-color-client-hover: var(--color-1-contrast);
-  --input-wrapper-background: var(--color-2);
+  --message-background-client-mention: var(--color-success-tint-5);
+  --message-color-client-mention: var(--color-success-contrast);
+  --input-background: var(--color-2);
 
   display: flex;
   flex-direction: column;
@@ -35,6 +37,8 @@
         animation: messageIntro 0.25s;
 
         app-chat-message {
+          --keyword-color: var(--color-2-shade-5);
+
           padding: 1rem;
           margin-bottom: 1rem;
           border-radius: 0.25rem;
@@ -50,6 +54,11 @@
               background-color: var(--message-background-client-hover);
               color: var(--message-color-client-hover);
             }
+          }
+
+          &:not(.client-message).client-mention {
+            background-color: var(--message-background-client-mention);
+            color: var(--message-color-client-mention);
           }
         }
       }
@@ -79,17 +88,8 @@
     }
   }
 
-  div.input-wrapper {
-    display: flex;
-    flex-shrink: 0;
-    background-color: var(--input-wrapper-background);
-
-    app-input-textarea.user-input {
-      flex-grow: 1;
-      margin: 0;
-      --border: none;
-      --border-radius: 0.5rem;
-    }
+  app-chat-input {
+    background-color: var(--input-background);
   }
 }
 

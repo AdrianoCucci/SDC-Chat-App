@@ -1,0 +1,15 @@
+:host {
+  display: flex;
+  flex-shrink: 0;
+
+  app-input-textarea {
+    flex-grow: 1;
+    margin: 0;
+    --border: none;
+    --border-radius: 0.5rem;
+  }
+
+  ul.popover-list {
+    overflow: auto;
+  }
+}

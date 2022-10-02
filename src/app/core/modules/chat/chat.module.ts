@@ -10,10 +10,14 @@ import { LoaderModule } from 'src/app/shared/modules/overlays/loader/loader.modu
 import { ChatMessageListComponent } from './chat-message-list/chat-message-list.component';
 import { ChatMessageComponent } from './chat-message/chat-message.component';
 import { UsersListComponent } from './users-list/users-list.component';
+import { ChatInputComponent } from './chat-input/chat-input.component';
+import { KeywordPopoverComponent } from './keyword-popover/keyword-popover.component';
 
 const components = [
   ChatMessageListComponent,
   ChatMessageComponent,
+  ChatInputComponent,
+  KeywordPopoverComponent,
   UsersListComponent,
 ];
 

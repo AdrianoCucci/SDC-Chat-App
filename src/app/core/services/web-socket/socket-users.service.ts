@@ -21,15 +21,7 @@ import { WebSocketService } from './web-socket.service';
   providedIn: 'root',
 })
 export class SocketUsersService {
-  public readonly disposed$: Observable<void> =
-    this._socketService.disposed$.pipe(
-      tap(() => {
-        this._userJoin$.complete();
-        this._userLeave$.complete();
-        this._users$.complete();
-        this._clientUser$.complete();
-      })
-    );
+  public readonly disposed$: Observable<void>;
 
   private readonly _userJoin$ = new Subject<User>();
   private readonly _userLeave$ = new Subject<User>();
@@ -47,6 +39,15 @@ export class SocketUsersService {
     private _eventsService: EventsService,
     private _usersService: UsersService
   ) {
+    this.disposed$ = this._socketService.disposed$.pipe(
+      tap(() => {
+        this._userJoin$.complete();
+        this._userLeave$.complete();
+        this._users$.complete();
+        this._clientUser$.complete();
+      })
+    );
+
     this.subscribeEvents();
   }
 

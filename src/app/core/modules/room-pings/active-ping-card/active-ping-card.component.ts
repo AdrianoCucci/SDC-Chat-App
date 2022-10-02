@@ -16,17 +16,18 @@ export class ActivePingCard implements OnInit {
   @Input() public roomPing: RoomPing;
   @Input() public clientUser: User;
 
-  public readonly roomPing$: Observable<RoomPing> =
-    this._roomPingsService.pings$.pipe(
+  public readonly roomPing$: Observable<RoomPing>;
+
+  @HostBinding('class.dismissing') private _dismissing: boolean = false;
+
+  constructor(private _roomPingsService: RoomPingsService) {
+    this.roomPing$ = this._roomPingsService.pings$.pipe(
       map((value: RoomPing[]) =>
         value.find((r: RoomPing) => r.roomId === this.room?.id)
       ),
       tap((value: RoomPing | undefined) => (this.roomPing = value))
     );
-
-  @HostBinding('class.dismissing') private _dismissing: boolean = false;
-
-  constructor(private _roomPingsService: RoomPingsService) {}
+  }
 
   ngOnInit(): void {
     this.roomPing$

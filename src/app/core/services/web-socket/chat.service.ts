@@ -13,16 +13,7 @@ import { WebSocketService } from './web-socket.service';
   providedIn: 'root',
 })
 export class ChatService {
-  public readonly disposed$: Observable<void> =
-    this._socketService.disposed$.pipe(
-      tap(() => {
-        this._messageCreated$.complete();
-        this._messageUpdated$.complete();
-        this._messageDeleted$.complete();
-        this._messages$.complete();
-        this._newMessages$.complete();
-      })
-    );
+  public readonly disposed$: Observable<void>;
 
   private readonly _messageCreated$ = new Subject<ChatMessage>();
   private readonly _messageUpdated$ = new Subject<ChatMessage>();
@@ -36,6 +27,16 @@ export class ChatService {
     private _audioService: AudioService,
     private _eventsService: EventsService
   ) {
+    this.disposed$ = this._socketService.disposed$.pipe(
+      tap(() => {
+        this._messageCreated$.complete();
+        this._messageUpdated$.complete();
+        this._messageDeleted$.complete();
+        this._messages$.complete();
+        this._newMessages$.complete();
+      })
+    );
+
     this.subscribeEvents();
   }
 
@@ -60,6 +61,8 @@ export class ChatService {
       this._socketService.on(this.socketEvents.messageEdit).pipe(
         tap((value: ChatMessage) => {
           this.updateMessage(value);
+          this._audioService.play(AudioSound.ChatNotification);
+
           this._eventsService.publish({
             source: this.constructor.name,
             type: this.socketEvents.messageEdit,
