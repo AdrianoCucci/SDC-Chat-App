@@ -1,15 +1,28 @@
 <app-popover
   *ngIf="keywords"
   [offsetY]="1"
-  [backgroundColor]="'var(--color-1-tint-4)'"
+  [hideOnEscape]="true"
+  [backgroundColor]="'var(--color-light-shade-2)'"
   class="keyword-popover"
+  (onShow)="onShow.emit()"
+  (onHide)="onHide.emit()"
 >
   <div *ngIf="header" class="txt-bold p-2">{{ header }}</div>
 
-  <ul class="popover-list w-min-rem-18 h-max-rem-12 overflow-auto">
+  <ul
+    #list
+    tabindex="-1"
+    class="popover-list w-min-rem-18 h-max-rem-12 overflow-auto p-10"
+    (keydown.arrowDown)="onListArrowKeyDown()"
+    (keydown.arrowUp)="onListArrowKeyUp()"
+  >
     <li
-      *ngFor="let keyword of keywords.values"
+      #listItem
+      *ngFor="let keyword of filteredKeywords"
+      tabindex="0"
+      (keydown.enter)="onKeywordSelect.emit(keyword)"
       (click)="onKeywordSelect.emit(keyword)"
+      (focus)="onListItemFocus(listItem)"
     >
       {{ (keywords.prefix || "") + keyword }}
     </li>

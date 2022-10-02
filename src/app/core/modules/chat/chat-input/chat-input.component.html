@@ -2,9 +2,10 @@
   [value]="initialValue"
   placeholder="Type your message..."
   [autoResize]="true"
+  (input)="onInput($event)"
   (keydown.enter)="onEnterKeydown()"
   (keydown.escape)="onEscapeKeyDown()"
-  (input)="onInput($event)"
+  (keydown.tab)="onTabKeyDown()"
 >
 </app-input-textarea>
 
@@ -12,4 +13,5 @@
   [keywords]="keywords"
   [header]="'Mention Someone:'"
   (onKeywordSelect)="onPopoverKeywordSelect($event)"
+  (onHide)="onPopoverHide()"
 ></app-keyword-popover>

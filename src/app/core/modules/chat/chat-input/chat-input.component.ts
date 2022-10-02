@@ -24,7 +24,7 @@ export class ChatInputComponent {
   @ViewChild(KeywordPopoverComponent)
   private readonly _keywordPopover: KeywordPopoverComponent;
 
-  private _lastCaratPosition: number = 0;
+  private _keywordCaratPosition: number = 0;
 
   public focus(): void {
     this._input?.focus();
@@ -42,13 +42,11 @@ export class ChatInputComponent {
 
     const inputEvent = event as InputEvent;
     const data: string = inputEvent.data;
-    const element = inputEvent.target as HTMLTextAreaElement;
 
     if (data === keywordPrefix) {
-      this._keywordPopover.show(element, 'body');
-      this._lastCaratPosition = this.getCaretPosition();
-    } else {
-      this._keywordPopover.hide();
+      this.onKeywordPrefixInput();
+    } else if (this._keywordPopover.visible) {
+      this.updateKeywordPopoverFilter();
     }
   }
 
@@ -64,30 +62,57 @@ export class ChatInputComponent {
     this._keywordPopover.hide();
   }
 
+  onTabKeyDown(): void {
+    if (this._keywordPopover.visible) {
+      this._keywordPopover.focus();
+    }
+  }
+
   onPopoverKeywordSelect(keyword: string): void {
-    this._input.value = this.insertKeyword(
-      this._input.value,
-      keyword,
-      this._lastCaratPosition
+    this.insertKeyword(keyword);
+    setTimeout(() => this._keywordPopover.hide());
+  }
+
+  onPopoverHide(): void {
+    this.focus();
+  }
+
+  private onKeywordPrefixInput(): void {
+    this._keywordPopover.keywordFilter = undefined;
+    this._keywordPopover.show(this._input.input, 'body');
+    this._keywordCaratPosition = this.getCaretPosition();
+  }
+
+  private updateKeywordPopoverFilter(): void {
+    const caratPosition: number = this.getCaretPosition();
+    if (caratPosition < this._keywordCaratPosition) {
+      return;
+    }
+
+    this._keywordPopover.keywordFilter = this._input.value.substring(
+      this._keywordCaratPosition,
+      this.getCaretPosition()
     );
 
-    this._keywordPopover.hide();
-    this.focus();
-    setTimeout(() =>
-      this.setCaretPosition(this._lastCaratPosition + keyword.length)
-    );
+    if (!this._keywordPopover.hasKeywordSuggestions) {
+      this._keywordPopover.hide();
+    }
   }
 
   private getCaretPosition(): number {
     return this._input.input.selectionStart;
   }
 
-  private setCaretPosition(value: number): void {
-    this._input.input.setSelectionRange(value, value, 'none');
-  }
+  private insertKeyword(keyword: string): void {
+    const currentValue: string = this._input.value;
+    const insertPosition: number = this._keywordCaratPosition;
 
-  private insertKeyword(text: string, keyword: string, index: number): string {
-    return text.substring(0, index) + keyword + text.substring(index);
+    const insertedValue: string =
+      currentValue.substring(0, insertPosition) +
+      keyword +
+      currentValue.substring(insertPosition + keyword.length);
+
+    this._input.value = insertedValue;
   }
 
   public get value(): string {

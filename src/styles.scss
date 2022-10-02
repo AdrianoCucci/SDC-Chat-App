@@ -24,7 +24,7 @@ body {
 
 app-popover ul.popover-list {
   margin: 0;
-  padding: 0;
+  padding: 4px;
 
   li {
     display: block;
@@ -35,7 +35,8 @@ app-popover ul.popover-list {
     border-radius: var(--border-radius);
     transition: 0.16s;
 
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: var(--color-light);
     }
 

@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   HostBinding,
+  HostListener,
   Input,
   OnInit,
   Output,
@@ -27,6 +28,7 @@ export class Popover implements OnInit, IVisibilityChangeable {
   @Input() public anchorY: 'top' | 'bottom';
   @Input() public autoAnchorX: boolean = true;
   @Input() public autoAnchorY: boolean = true;
+  @Input() public hideOnEscape: boolean = false;
   @Input() public backgroundColor?: string;
 
   @HostBinding('class.visible') private _visible: boolean = false;
@@ -72,23 +74,23 @@ export class Popover implements OnInit, IVisibilityChangeable {
     }
   }
 
+  public realign(): Promise<void> {
+    return this.alignToTarget(
+      this._nativeElement,
+      this._currentTarget,
+      this.parent
+    );
+  }
+
   private updateContentVisible(visible: boolean): void {
     window.clearTimeout(this._currentTimeout);
 
     if (visible) {
+      this.setParent(this._nativeElement, this.parent);
       this._contentVisible = true;
 
       this._currentTimeout = window.setTimeout(() => {
-        this.setParent(this._nativeElement, this.parent);
-
-        for (let i = 0; i < 2; i++) {
-          this.alignToTarget(
-            this._nativeElement,
-            this._currentTarget,
-            this.parent
-          );
-        }
-
+        this.realign().then(() => this.realign());
         this.setEventHandlersEnabled(true);
       });
     } else {
@@ -114,48 +116,56 @@ export class Popover implements OnInit, IVisibilityChangeable {
     host: HTMLElement,
     target: HTMLElement,
     parent?: PopoverParent
-  ): void {
-    if (!host || !target) {
-      return;
-    }
+  ): Promise<void> {
+    return new Promise<void>((resolve) =>
+      setTimeout(() => {
+        if (!host || !target) {
+          resolve();
+          return;
+        }
 
-    const targetRect: DOMRect = target.getBoundingClientRect();
+        const targetRect: DOMRect = target.getBoundingClientRect();
 
-    const halfWindowWidth: number = window.innerWidth / 2;
-    const halfWindowHeight: number = window.innerHeight / 2;
+        const halfWindowWidth: number = window.innerWidth / 2;
+        const halfWindowHeight: number = window.innerHeight / 2;
 
-    const anchorTop: boolean = targetRect.y < halfWindowHeight;
-    const anchorLeft: boolean = targetRect.x < halfWindowWidth;
+        const anchorTop: boolean = targetRect.y < halfWindowHeight;
+        const anchorLeft: boolean = targetRect.x < halfWindowWidth;
 
-    const offsetX: number = this.offsetX || 0;
-    const offsetY: number = this.offsetY || 0;
+        const offsetX: number = this.offsetX || 0;
+        const offsetY: number = this.offsetY || 0;
 
-    let styleTop: string, styleLeft: string;
+        let styleTop: string, styleLeft: string;
 
-    if (parent === 'body' || parent === document.body) {
-      styleTop = anchorTop
-        ? `${targetRect.bottom + offsetY}px`
-        : `${targetRect.top - host.offsetHeight - offsetY}px`;
-      styleLeft = anchorLeft
-        ? `${targetRect.x + offsetX}px`
-        : `${targetRect.x + targetRect.width - host.offsetWidth - offsetX}px`;
+        if (parent === 'body' || parent === document.body) {
+          styleTop = anchorTop
+            ? `${targetRect.bottom + offsetY}px`
+            : `${targetRect.top - host.offsetHeight - offsetY}px`;
+          styleLeft = anchorLeft
+            ? `${targetRect.x + offsetX}px`
+            : `${
+                targetRect.x + targetRect.width - host.offsetWidth - offsetX
+              }px`;
 
-      if (this.inheritTargetWidth) {
-        host.style.width = `${target.clientWidth}px`;
-      }
-    } else {
-      styleTop = anchorTop
-        ? `calc(100% + ${offsetY}px)`
-        : `-${host.offsetHeight + offsetY}px`;
-      styleLeft = anchorLeft
-        ? `${offsetX}px`
-        : `calc(100% - ${host.offsetWidth + offsetX}px)`;
-    }
+          if (this.inheritTargetWidth) {
+            host.style.width = `${target.clientWidth}px`;
+          }
+        } else {
+          styleTop = anchorTop
+            ? `calc(100% + ${offsetY}px)`
+            : `-${host.offsetHeight + offsetY}px`;
+          styleLeft = anchorLeft
+            ? `${offsetX}px`
+            : `calc(100% - ${host.offsetWidth + offsetX}px)`;
+        }
 
-    host.style.top = styleTop;
-    host.style.left = styleLeft;
+        host.style.top = styleTop;
+        host.style.left = styleLeft;
 
-    this.updateAnchors(anchorTop, anchorLeft);
+        this.updateAnchors(anchorTop, anchorLeft);
+        resolve();
+      })
+    );
   }
 
   private updateAnchors(anchorTop: boolean, anchorLeft: boolean): void {
@@ -193,6 +203,13 @@ export class Popover implements OnInit, IVisibilityChangeable {
       this.alignToTarget(this._nativeElement, this._currentTarget, this.parent);
     }
   };
+
+  @HostListener('keydown.escape')
+  onEscapeKeyDown(): void {
+    if (this.hideOnEscape) {
+      this.hide();
+    }
+  }
 
   public get visible(): boolean {
     return this._visible;
