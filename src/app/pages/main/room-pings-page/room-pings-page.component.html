@@ -12,7 +12,7 @@
   <app-filter-list
     #list
     class="rooms-list fade-in-up"
-    [items]="rooms?.data"
+    [items]="rooms$ | async"
     [keywordFields]="['name', 'number']"
   >
     <ng-template app-template let-room>
@@ -25,13 +25,16 @@
   </app-filter-list>
 </section>
 
-<section class="active-pings" [ngClass]="{ visible: activePings?.length > 0 }">
+<section
+  class="active-pings"
+  [class.visible]="(activePings$ | async)?.length > 0"
+>
   <div class="section-header">
     <h2>Active Pings</h2>
   </div>
 
   <ul class="active-pings-list">
-    <li *ngFor="let ping of activePings" class="active-ping">
+    <li *ngFor="let ping of activePings$ | async" class="active-ping">
       <app-active-ping-card
         [roomPing]="ping"
         [clientUser]="clientUser"

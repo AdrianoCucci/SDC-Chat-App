@@ -1,5 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Role } from 'src/app/core/models/auth/role';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { User } from 'src/app/core/models/users/user';
@@ -29,25 +31,23 @@ export class UserForm extends AppForm<UserRequest, User> implements OnInit {
     }
   }
 
-  protected async onRequestAdd(model: UserRequest): Promise<User> {
+  protected override onRequestAdd(model: UserRequest): Observable<User> {
     if (model.organizationId == null && this.defaultOrganizationId != null) {
       model.organizationId = this.defaultOrganizationId;
     }
 
-    const response: HttpResponse<User> = await this._usersService
+    return this._usersService
       .addUser(model)
-      .toPromise();
-    return response.body;
+      .pipe(map((response: HttpResponse<User>) => response.body));
   }
 
-  protected async onRequestUpdate(model: UserRequest): Promise<User> {
+  protected override onRequestUpdate(model: UserRequest): Observable<User> {
     if (model.organizationId == null && this.defaultOrganizationId != null) {
       model.organizationId = this.defaultOrganizationId;
     }
 
-    const response: HttpResponse<User> = await this._usersService
+    return this._usersService
       .updateUser(model.id, model)
-      .toPromise();
-    return response.body;
+      .pipe(map((response: HttpResponse<User>) => response.body));
   }
 }

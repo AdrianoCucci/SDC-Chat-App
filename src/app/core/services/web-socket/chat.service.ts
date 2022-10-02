@@ -1,19 +1,34 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { IDisposable } from 'src/app/shared/interfaces/i-disposable';
+import { BehaviorSubject, defer, merge, Observable, of, Subject } from 'rxjs';
+import { map, takeUntil, tap } from 'rxjs/operators';
 import { AudioSound } from 'src/app/shared/models/audio-sound';
 import { EventsService } from 'src/app/shared/modules/events/events.service';
 import { ChatMessage } from '../../models/messages/chat-message';
 import { ChatMessagesService } from '../api/chat-messages.service';
 import { AudioService } from '../audio/audio.service';
-import { LoginService } from '../login.service';
 import { WebSocketService } from './web-socket.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ChatService implements IDisposable {
-  private _messages: ChatMessage[];
+export class ChatService {
+  public readonly disposed$: Observable<void> =
+    this._socketService.disposed$.pipe(
+      tap(() => {
+        this._messageCreated$.complete();
+        this._messageUpdated$.complete();
+        this._messageDeleted$.complete();
+        this._messages$.complete();
+        this._newMessages$.complete();
+      })
+    );
+
+  private readonly _messageCreated$ = new Subject<ChatMessage>();
+  private readonly _messageUpdated$ = new Subject<ChatMessage>();
+  private readonly _messageDeleted$ = new Subject<ChatMessage>();
+  private readonly _messages$ = new BehaviorSubject<ChatMessage[]>([]);
+  private readonly _newMessages$ = new BehaviorSubject<ChatMessage[]>([]);
 
   constructor(
     private _socketService: WebSocketService,
@@ -24,52 +39,52 @@ export class ChatService implements IDisposable {
     this.subscribeEvents();
   }
 
-  public dispose(): void {
-    this._messages = null;
-  }
-
   private subscribeEvents(): void {
-    const socket: WebSocketService = this._socketService;
-    const events = this.socketEvents;
-    const eventsService: EventsService = this._eventsService;
-    const eventsSource: string = this.constructor.name;
+    merge(
+      this._socketService.on(this.socketEvents.message).pipe(
+        tap((value: ChatMessage) => {
+          this.addMessage(value);
+          this._audioService.play(AudioSound.ChatNotification);
 
-    socket.on<ChatMessage>(events.message, (message: ChatMessage) => {
-      this.addMessage(message);
-      this._audioService.play(AudioSound.ChatNotification);
+          this._eventsService.publish({
+            source: this.constructor.name,
+            type: this.socketEvents.message,
+            data: value,
+          });
 
-      eventsService.publish({
-        source: eventsSource,
-        type: events.message,
-        data: message,
-      });
-    });
+          this._messageCreated$.next(value);
+          this._newMessages$.next([...this._newMessages$.value, value]);
+        })
+      ),
 
-    socket.on<ChatMessage>(events.messageEdit, (message: ChatMessage) => {
-      this.updateMessage(message);
+      this._socketService.on(this.socketEvents.messageEdit).pipe(
+        tap((value: ChatMessage) => {
+          this.updateMessage(value);
+          this._eventsService.publish({
+            source: this.constructor.name,
+            type: this.socketEvents.messageEdit,
+            data: value,
+          });
 
-      eventsService.publish({
-        source: eventsSource,
-        type: events.messageEdit,
-        data: message,
-      });
-    });
+          this._messageUpdated$.next(value);
+        })
+      ),
 
-    socket.on<ChatMessage>(events.messageDelete, (message: ChatMessage) => {
-      this.deleteMessage(message);
+      this._socketService.on(this.socketEvents.messageDelete).pipe(
+        tap((value: ChatMessage) => {
+          this.deleteMessage(value);
+          this._eventsService.publish({
+            source: this.constructor.name,
+            type: this.socketEvents.messageDelete,
+            data: value,
+          });
 
-      eventsService.publish({
-        source: eventsSource,
-        type: events.messageDelete,
-        data: message,
-      });
-    });
-
-    eventsService.subscribe({
-      eventSources: LoginService.name,
-      eventTypes: 'logout',
-      eventHandler: () => this.dispose(),
-    });
+          this._messageDeleted$.next(value);
+        })
+      )
+    )
+      .pipe(takeUntil(this.disposed$))
+      .subscribe();
   }
 
   public loadMessages(
@@ -77,103 +92,83 @@ export class ChatService implements IDisposable {
     beforeDate: Date,
     take?: number,
     concat?: boolean
-  ): Promise<ChatMessage[]> {
-    return new Promise<ChatMessage[]>(async (resolve, reject) => {
-      try {
-        const response: HttpResponse<ChatMessage[]> =
-          await this._messagesService
-            .getAllMessagesBeforeDate({
-              organizationId,
-              datePosted: beforeDate.toISOString(),
-              take,
-              include: 'senderUser',
-            })
-            .toPromise();
-
-        if (concat) {
-          this.concatMessages(response.body);
-        } else {
-          this._messages = response.body;
-        }
-
-        resolve(this._messages);
-      } catch (error) {
-        reject(error);
-      }
-    });
+  ): Observable<ChatMessage[]> {
+    return this._messagesService
+      .getAllMessagesBeforeDate({
+        organizationId,
+        datePosted: beforeDate.toISOString(),
+        take,
+        include: 'senderUser',
+      })
+      .pipe(
+        map((response: HttpResponse<ChatMessage[]>) => response.body),
+        tap((messages: ChatMessage[]) => {
+          if (concat) {
+            this.concatMessages(messages);
+          } else {
+            this._messages$.next(messages);
+          }
+        })
+      );
   }
 
-  public sendMessage(message: ChatMessage): Promise<ChatMessage> {
-    return new Promise((resolve) => {
-      if (message == null) {
-        resolve(null);
-      }
+  public sendMessage(message: ChatMessage): Observable<ChatMessage> {
+    if (!message) {
+      return of(message);
+    }
 
+    return defer((): Observable<ChatMessage> => {
       this.addMessage(message);
 
-      this._socketService.emit(
-        this.socketEvents.message,
-        message,
-        (response: ChatMessage) => {
-          Object.assign(message, response);
-          resolve(response);
-        }
-      );
+      return this._socketService
+        .emit<ChatMessage>(this.socketEvents.message, message)
+        .pipe(tap((response: ChatMessage) => Object.assign(message, response)));
     });
   }
 
-  public sendMessageEdit(message: ChatMessage): Promise<ChatMessage> {
-    return new Promise((resolve) => {
-      if (message == null) {
-        resolve(null);
-      }
+  public sendMessageEdit(message: ChatMessage): Observable<ChatMessage> {
+    if (!message) {
+      return of(message);
+    }
 
+    return defer((): Observable<ChatMessage> => {
       this.updateMessage(message);
 
-      this._socketService.emit(
-        this.socketEvents.messageEdit,
-        message,
-        (response: ChatMessage) => {
-          Object.assign(message, response);
-          resolve(response);
-        }
-      );
+      return this._socketService
+        .emit<ChatMessage>(this.socketEvents.messageEdit, message)
+        .pipe(tap((response: ChatMessage) => Object.assign(message, response)));
     });
   }
 
-  public sendMessageDelete(message: ChatMessage): void {
-    if (message != null) {
-      this._socketService.emit(this.socketEvents.messageDelete, message);
-      this.deleteMessage(message);
+  public sendMessageDelete(message: ChatMessage): Observable<void> {
+    if (!message) {
+      return of(null);
     }
+
+    return defer((): Observable<void> => {
+      return this._socketService
+        .emit<void>(this.socketEvents.messageDelete, message)
+        .pipe(tap(() => this.deleteMessage(message)));
+    });
+  }
+
+  public clearNewMessages(): void {
+    this._newMessages$.next([]);
   }
 
   private concatMessages(messages: ChatMessage[]): void {
-    if (this._messages == null) {
-      this._messages = messages;
-    } else {
-      const appended: ChatMessage[] = [];
+    const appended: ChatMessage[] = messages.filter(
+      (c: ChatMessage) => !this.findMessage(c.id)
+    );
 
-      for (let i = 0; i < messages.length; i++) {
-        const message: ChatMessage = messages[i];
-
-        if (
-          this._messages.findIndex((m: ChatMessage) => m.id === message.id) ===
-          -1
-        ) {
-          appended.push(message);
-        }
-      }
-
-      this._messages = this._messages.concat(appended);
-    }
+    const result: ChatMessage[] = this._messages$.value.concat(appended);
+    this._messages$.next(result);
   }
 
   private addMessage(message: ChatMessage): void {
-    if (this._messages == null) {
-      this._messages = [message];
-    } else {
-      this._messages.unshift(message);
+    if (!this.findMessage(message.id)) {
+      this._messages$.value.unshift(message);
+      this._messages$.next(this._messages$.value);
     }
   }
 
@@ -181,7 +176,8 @@ export class ChatService implements IDisposable {
     const index: number = this.findMessageIndex(message);
 
     if (index !== -1) {
-      this._messages[index] = message;
+      this._messages$.value[index] = message;
+      this._messages$.next(this._messages$.value);
     }
   }
 
@@ -189,13 +185,18 @@ export class ChatService implements IDisposable {
     const index: number = this.findMessageIndex(message);
 
     if (index !== -1) {
-      this._messages.splice(index, 1);
+      this._messages$.value.splice(index, 1);
+      this._messages$.next(this._messages$.value);
     }
   }
 
+  private findMessage(id: number): ChatMessage | undefined {
+    return this._messages$.value.find((c: ChatMessage) => c.id === id);
+  }
+
   private findMessageIndex(message: ChatMessage): number {
-    return (
-      this._messages?.findIndex((c: ChatMessage) => c.id === message.id) ?? -1
+    return this._messages$.value.findIndex(
+      (c: ChatMessage) => c.id === message.id
     );
   }
 
@@ -207,7 +208,27 @@ export class ChatService implements IDisposable {
     };
   }
 
-  public get messages(): ChatMessage[] {
-    return this._messages;
+  public get messageCreated$(): Observable<ChatMessage> {
+    return this._messageCreated$.asObservable();
+  }
+
+  public get messageUpdated$(): Observable<ChatMessage> {
+    return this._messageUpdated$.asObservable();
+  }
+
+  public get messageDeleted$(): Observable<ChatMessage> {
+    return this._messageDeleted$.asObservable();
+  }
+
+  public get messages$(): Observable<ChatMessage[]> {
+    return this._messages$.asObservable();
+  }
+
+  public get newMessages$(): Observable<ChatMessage[]> {
+    return this._newMessages$.asObservable();
+  }
+
+  public get newMessagesCount$(): Observable<number> {
+    return this._newMessages$.pipe(map((value: ChatMessage[]) => value.length));
   }
 }

@@ -14,6 +14,8 @@ import { TableCell } from 'src/app/shared/modules/table/table-cell';
 import { Table } from 'src/app/shared/modules/table/table.component';
 import { PageEvent } from 'src/app/shared/modules/table/page-event';
 import { PagedList } from 'src/app/shared/models/pagination/paged-list';
+import { Observable, defer, throwError } from 'rxjs';
+import { finalize, catchError, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-users-table',
@@ -23,7 +25,9 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
 export class UsersTable implements OnInit {
   @Input() public users: User[];
   @Input() public clientUser: User;
-  @Input() public pageHandler: (event: PageEvent) => Promise<PagedList<User>>;
+  @Input() public pageHandler: (
+    event: PageEvent
+  ) => Observable<PagedList<User>>;
 
   private readonly _roleCell: TableCell = {
     name: 'Role',
@@ -180,18 +184,8 @@ export class UsersTable implements OnInit {
     }
   }
 
-  async onDeleteUser(user: User): Promise<void> {
-    try {
-      this._isDeletingUser = true;
-
-      await this._usersService.deleteUser(user.id).toPromise();
-      this.users = this._table.queryDeleteRow((u: User) => u.id === user.id);
-    } catch (error) {
-      this.errorDialogText = parseErrorMessage(error);
-      this.errorDialogVisible = true;
-    } finally {
-      this._isDeletingUser = false;
-    }
+  onDeleteUser(user: User): void {
+    this.deleteUser(user).subscribe();
   }
 
   private showUserForm(model: UserRequest, mode: FormMode) {
@@ -201,6 +195,27 @@ export class UsersTable implements OnInit {
       this._userForm.model = model;
       this._userForm.mode = mode;
       this._userForm.dialogVisible = true;
+    });
+  }
+
+  private deleteUser(user: User): Observable<void> {
+    return defer((): Observable<void> => {
+      this._isDeletingUser = true;
+
+      return this._usersService.deleteUser(user.id).pipe(
+        finalize(() => (this._isDeletingUser = false)),
+        catchError((error: any) => {
+          this.errorDialogText = parseErrorMessage(error);
+          this.errorDialogVisible = true;
+          return throwError(error);
+        }),
+        map(() => null),
+        tap(() => {
+          this.users = this._table.queryDeleteRow(
+            (r: User) => r.id === user.id
+          );
+        })
+      );
     });
   }
 

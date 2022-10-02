@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { defer, Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
 import { AccessibilityPrefs } from 'src/app/core/models/user-prefs/accessibility-prefs.model';
 import { UserPrefsService } from 'src/app/core/services/user-prefs.service';
 
@@ -25,13 +27,14 @@ export class AccessibilityService {
     this.updateDOM();
   }
 
-  public async savePreferences(): Promise<void> {
-    try {
+  public savePreferences(): Observable<Record<string, any>> {
+    return defer((): Observable<Record<string, any>> => {
       this._isSavingPrefs = true;
-      await this._userPrefsService.setPreference(this._prefsKey, this._prefs);
-    } finally {
-      this._isSavingPrefs = false;
-    }
+
+      return this._userPrefsService
+        .setPreference(this._prefsKey, this._prefs)
+        .pipe(finalize(() => (this._isSavingPrefs = false)));
+    });
   }
 
   public loadPreferences(): void {

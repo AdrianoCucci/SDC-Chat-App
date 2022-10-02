@@ -1,6 +1,8 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { defer, NEVER, Observable } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { AuthRequest } from 'src/app/core/models/auth/auth-request';
 import { AuthResponse } from 'src/app/core/models/auth/auth-response';
 import { AuthService } from 'src/app/core/services/api/auth-service';
@@ -8,7 +10,6 @@ import { LoginService } from 'src/app/core/services/login.service';
 import { MAIN_PATHS } from 'src/app/shared/app-paths';
 import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
 import { FormSubmitResult } from 'src/app/shared/modules/forms/form/form-submit-result';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login-page',
@@ -37,29 +38,29 @@ export class LoginPage implements OnInit {
     }
   }
 
-  async onFormSubmit(result: FormSubmitResult): Promise<void> {
+  onFormSubmit(result: FormSubmitResult): void {
     if (result.isValid) {
       const request: AuthRequest = {
         username: this.username,
         password: this.password,
       };
 
-      await this.submitRequest(request);
+      this.login(request).subscribe();
     }
   }
 
-  private async submitRequest(request: AuthRequest): Promise<void> {
-    try {
+  private login(request: AuthRequest): Observable<void> {
+    return defer<void>(() => {
       this._isLoggingIn = true;
-      const response: HttpResponse<AuthResponse> = await this._authService
-        .login(request)
-        .toPromise();
-      this.onLoginSuccess(response.body);
-    } catch (error) {
-      this.onLoginFail(error);
-    } finally {
-      this._isLoggingIn = false;
-    }
+
+      return this._authService.login(request).pipe(
+        tap((response: HttpResponse<AuthResponse>) =>
+          this.onLoginSuccess(response.body)
+        ),
+        finalize(() => (this._isLoggingIn = false)),
+        catchError((error: any) => this.onLoginFail(error))
+      );
+    });
   }
 
   private onLoginSuccess(response: AuthResponse): void {
@@ -71,9 +72,11 @@ export class LoginPage implements OnInit {
     this._router.navigateByUrl(MAIN_PATHS.root);
   }
 
-  private onLoginFail(error: any): void {
+  private onLoginFail(error: any): Observable<never> {
     this._loginError = parseErrorMessage(error);
     this.errorVisible = true;
+
+    return NEVER;
   }
 
   public get isLoggingIn(): boolean {

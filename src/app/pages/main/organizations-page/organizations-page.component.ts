@@ -1,5 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { defer, Observable, throwError } from 'rxjs';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { Organization } from 'src/app/core/models/organizations/organization';
 import { OrganizationsService } from 'src/app/core/services/api/organizations-service';
 import { parseErrorMessage } from 'src/app/shared/functions/parse-http-error';
@@ -15,7 +17,7 @@ import { PageEvent } from 'src/app/shared/modules/table/page-event';
 export class OrganizationsPage implements OnInit {
   public readonly pageHandler = (
     event: PageEvent
-  ): Promise<PagedList<Organization>> =>
+  ): Observable<PagedList<Organization>> =>
     this.loadOrganizations({
       take: event.limit,
       skip: event.offset * event.limit,
@@ -29,33 +31,34 @@ export class OrganizationsPage implements OnInit {
 
   constructor(private _orgsService: OrganizationsService) {}
 
-  async ngOnInit(): Promise<void> {
-    await this.loadOrganizations();
+  ngOnInit(): void {
+    this.loadOrganizations().subscribe();
   }
 
-  private async loadOrganizations(
+  private loadOrganizations(
     pagination?: Paginatable
-  ): Promise<PagedList<Organization>> {
-    try {
+  ): Observable<PagedList<Organization>> {
+    return defer((): Observable<PagedList<Organization>> => {
       this.loadingVisible = true;
+      this.errorVisible = false;
 
-      const response: HttpResponse<PagedList<Organization>> =
-        await this._orgsService
-          .getAllOrganizations({
-            skip: pagination?.skip,
-            take: pagination?.take,
-          })
-          .toPromise();
+      return this._orgsService
+        .getAllOrganizations({
+          skip: pagination?.skip,
+          take: pagination?.take,
+        })
+        .pipe(
+          finalize(() => (this.loadingVisible = false)),
+          catchError((error: any) => {
+            this.loadError = parseErrorMessage(error);
+            this.errorVisible = true;
 
-      this._organizations = response.body;
-    } catch (error) {
-      this.loadError = parseErrorMessage(error);
-      this.errorVisible = true;
-    } finally {
-      this.loadingVisible = false;
-    }
-
-    return this._organizations;
+            return throwError(error);
+          }),
+          map((value: HttpResponse<PagedList<Organization>>) => value.body),
+          tap((value: PagedList<Organization>) => (this._organizations = value))
+        );
+    });
   }
 
   public get organizations(): PagedList<Organization> {

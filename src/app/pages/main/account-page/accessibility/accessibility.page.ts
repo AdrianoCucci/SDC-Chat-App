@@ -7,6 +7,7 @@ import {
 import { AccessibilityPrefs } from 'src/app/core/models/user-prefs/accessibility-prefs.model';
 import { Pair } from 'src/app/shared/models/pair';
 import { AccessibilityService } from 'src/app/core/services/accessibility.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-accessibility',
@@ -35,9 +36,11 @@ export class AccessibilityPage implements OnInit, OnDestroy {
     }
   }
 
-  async onSave(): Promise<void> {
-    await this.service.savePreferences();
-    this._currentPrefs = this.service.getPreferences();
+  onSave(): void {
+    this.service
+      .savePreferences()
+      .pipe(tap((value: Record<string, any>) => (this._currentPrefs = value)))
+      .subscribe();
   }
 
   public get isSaving(): boolean {

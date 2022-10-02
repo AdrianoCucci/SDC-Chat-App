@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { RoomPing } from 'src/app/core/models/room-pings/room-ping';
 import { RoomPingState } from 'src/app/core/models/room-pings/room-ping-state';
 import { Room } from 'src/app/core/models/rooms/room';
@@ -13,6 +15,20 @@ import { PagedList } from 'src/app/shared/models/pagination/paged-list';
   styleUrls: ['./room-pings-page.component.scss'],
 })
 export class RoomPingsPage {
+  public readonly rooms$: Observable<Room[]> =
+    this._roomPingsService.rooms$.pipe(
+      map((value: PagedList<Room>) => value.data)
+    );
+
+  public readonly activePings$: Observable<RoomPing[]> =
+    this._roomPingsService.pings$.pipe(
+      map((value: RoomPing[]) =>
+        value
+          .filter((r: RoomPing) => r.state !== RoomPingState.Idle)
+          .sort((a: RoomPing, b: RoomPing) => a.state - b.state)
+      )
+    );
+
   constructor(
     private _roomPingsService: RoomPingsService,
     private _loginService: LoginService
@@ -20,19 +36,5 @@ export class RoomPingsPage {
 
   public get clientUser(): User {
     return this._loginService.user;
-  }
-
-  public get rooms(): PagedList<Room> {
-    return this._roomPingsService.rooms;
-  }
-
-  public get hasRooms(): boolean {
-    return this._roomPingsService.hasRooms;
-  }
-
-  public get activePings(): RoomPing[] {
-    return this._roomPingsService
-      .findPings((r: RoomPing) => r.state !== RoomPingState.Idle)
-      .sort((a: RoomPing, b: RoomPing) => a.state - b.state);
   }
 }

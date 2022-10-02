@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 export abstract class WebApiService {
@@ -17,10 +18,9 @@ export abstract class WebApiService {
     url: string,
     responseType?: string
   ): Observable<HttpResponse<T>> {
-    return this._httpClient.get<T>(
-      this.getFullUrl(url),
-      this.getHttpOptions(responseType)
-    ) as Observable<HttpResponse<T>>;
+    return this._httpClient
+      .get<T>(this.getFullUrl(url), this.getHttpOptions(responseType))
+      .pipe(first()) as Observable<HttpResponse<T>>;
   }
 
   protected post<T = any>(
@@ -28,11 +28,9 @@ export abstract class WebApiService {
     body: any,
     responseType?: string
   ): Observable<HttpResponse<T>> {
-    return this._httpClient.post<T>(
-      this.getFullUrl(url),
-      body,
-      this.getHttpOptions(responseType)
-    ) as Observable<HttpResponse<T>>;
+    return this._httpClient
+      .post<T>(this.getFullUrl(url), body, this.getHttpOptions(responseType))
+      .pipe(first()) as Observable<HttpResponse<T>>;
   }
 
   protected put<T = any>(
@@ -40,21 +38,18 @@ export abstract class WebApiService {
     body: any,
     responseType?: string
   ): Observable<HttpResponse<T>> {
-    return this._httpClient.put<T>(
-      this.getFullUrl(url),
-      body,
-      this.getHttpOptions(responseType)
-    ) as Observable<HttpResponse<T>>;
+    return this._httpClient
+      .put<T>(this.getFullUrl(url), body, this.getHttpOptions(responseType))
+      .pipe(first()) as Observable<HttpResponse<T>>;
   }
 
   protected delete<T = any>(
     url: string,
     responseType?: string
   ): Observable<HttpResponse<T>> {
-    return this._httpClient.delete<T>(
-      this.getFullUrl(url),
-      this.getHttpOptions(responseType)
-    ) as Observable<HttpResponse<T>>;
+    return this._httpClient
+      .delete<T>(this.getFullUrl(url), this.getHttpOptions(responseType))
+      .pipe(first()) as Observable<HttpResponse<T>>;
   }
 
   private getHttpOptions(responseType?: string): any {
