@@ -12,7 +12,6 @@ import { faComments, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { Keywords } from 'src/app/core/models/chat/keywords';
 import { ChatMessage } from 'src/app/core/models/messages/chat-message';
 import { User } from 'src/app/core/models/users/user';
-import { InputTextarea } from 'src/app/shared/modules/forms/inputs/input-textarea/input-textarea.component';
 import { Popover } from 'src/app/shared/modules/overlays/popover/popover.component';
 import { ChatInputComponent } from '../chat-input/chat-input.component';
 import { DeleteEventArgs } from '../chat-message/chat-message.component';
